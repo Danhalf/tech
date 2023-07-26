@@ -24,8 +24,8 @@ const Login: React.FC<Props> = ({ onLogin }) => {
   };
 
   const validationSchema = Yup.object().shape({
-    username: Yup.string().required('This field is required!'),
-    password: Yup.string().required('This field is required!'),
+    username: Yup.string().trim().required('This field is required!'),
+    password: Yup.string().trim().required('This field is required!'),
   });
 
   const handleLogin = (formValue: { username: string; password: string }) => {
@@ -53,34 +53,58 @@ const Login: React.FC<Props> = ({ onLogin }) => {
   };
 
   return (
-    <div className="authCard">
+    <div className="d-flex flex-column-fluid justify-content-center align-items-center mt-30 mt-lg-0 min-vh-100 bg-white">
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleLogin}>
-        <Form>
-          <div className="group">
-            <label htmlFor="username">Username</label>
-            <Field name="username" type="text" className="form-control" />
-            <ErrorMessage name="username" component="div" className="alert-danger" />
-          </div>
-          <div className="group">
-            <label htmlFor="password">Password</label>
-
-            <Field name="password" type="password" className="form-control" />
-            <ErrorMessage name="password" component="div" className="alert alert-danger" />
-          </div>
-
-          <div className="group">
-            <button type="submit" className="btn-login" disabled={loading}>
-              {loading && <span className="spinner-border spinner-border-sm"></span>}
-              <span>Login</span>
-            </button>
-          </div>
-
-          {message && (
-            <div className="alert-danger" role="alert">
-              {message}
+        {({ errors, touched, getFieldProps }) => (
+          <Form className="form w-25">
+            <div className="text-center mb-11">
+              <h3 className="text-dark fw-bolder mb-3">Sign In</h3>
             </div>
-          )}
-        </Form>
+            <div className="form-group fv-plugins-icon-container">
+              <label className="form-label fs-6 font-weight-bold text-dark mb-0">Username</label>
+              <input
+                {...getFieldProps('username')}
+                placeholder="Username"
+                type="text"
+                className={`form-control bg-transparent w-100 ${
+                  touched.username && errors.username ? 'is-invalid' : touched.username ? 'is-valid' : ''
+                }`}
+              />
+              <ErrorMessage name="username" component="div" className="text-sm fv-plugins-message-container" />
+            </div>
+            <div className="fv-row mb-3">
+              <label className="form-label font-weight-bold text-dark fs-6 mb-0">Password</label>
+
+              <input
+                {...getFieldProps('password')}
+                placeholder="Password"
+                type="password"
+                className={`form-control bg-transparent w-100 ${
+                  touched.password && errors.password ? 'is-invalid' : touched.password ? 'is-valid' : ''
+                }`}
+              />
+              <ErrorMessage name="password" component="div" className="text-sm fv-plugins-message-container" />
+            </div>
+
+            <div className="d-grid mb-10">
+              <button type="submit" className="btn btn-primary font-weight-bold px-9 py-2 my-3 w-25 w-100" disabled={loading}>
+                {!loading && <span className="indicator-label">Login</span>}
+                {loading && (
+                  <span className="indicator-progress" style={{ display: 'block' }}>
+                    Please wait...
+                    <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
+                  </span>
+                )}
+              </button>
+            </div>
+
+            {message && (
+              <div className="alert-danger" role="alert">
+                {message}
+              </div>
+            )}
+          </Form>
+        )}
       </Formik>
     </div>
   );
