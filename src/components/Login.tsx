@@ -55,7 +55,7 @@ const Login: React.FC<Props> = ({ onLogin }) => {
   return (
     <div className="d-flex flex-column-fluid justify-content-center align-items-center mt-30 mt-lg-0 min-vh-100 bg-white">
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleLogin}>
-        {({ errors, touched, getFieldProps, status }) => (
+        {({ errors, touched, getFieldProps }) => (
           <Form className="form w-25">
             <div className="text-center mb-11">
               <h3 className="text-dark fw-bolder mb-3">Sign In</h3>
