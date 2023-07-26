@@ -44,10 +44,10 @@ const Login: React.FC<Props> = ({ onLogin }) => {
         return response.data;
       },
       (error) => {
-        const resMessage = (error.response && error.response.data && error.response.data.message) || error.message || error.toString();
-
+        if (typeof error === 'object' && error !== null) {
+          setMessage(error?.['response']?.['data']?.['error']);
+        }
         setLoading(false);
-        setMessage(resMessage);
       }
     );
   };
@@ -55,11 +55,16 @@ const Login: React.FC<Props> = ({ onLogin }) => {
   return (
     <div className="d-flex flex-column-fluid justify-content-center align-items-center mt-30 mt-lg-0 min-vh-100 bg-white">
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleLogin}>
-        {({ errors, touched, getFieldProps }) => (
+        {({ errors, touched, getFieldProps, status }) => (
           <Form className="form w-25">
             <div className="text-center mb-11">
               <h3 className="text-dark fw-bolder mb-3">Sign In</h3>
             </div>
+            {message && (
+              <div className="mb-lg-15 alert alert-danger">
+                <div className="alert-text font-weight-bold">{message}</div>
+              </div>
+            )}
             <div className="form-group fv-plugins-icon-container">
               <label className="form-label fs-6 font-weight-bold text-dark mb-0">Username</label>
               <input
@@ -97,12 +102,6 @@ const Login: React.FC<Props> = ({ onLogin }) => {
                 )}
               </button>
             </div>
-
-            {message && (
-              <div className="alert-danger" role="alert">
-                {message}
-              </div>
-            )}
           </Form>
         )}
       </Formik>
