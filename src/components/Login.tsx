@@ -1,112 +1,141 @@
-import React, { useState } from 'react';
-import { NavigateFunction, useNavigate } from 'react-router-dom';
-import { Formik, Field, Form, ErrorMessage } from 'formik';
-import * as Yup from 'yup';
+import clsx from 'clsx'
+import { useFormik } from 'formik'
+import React, { useState } from 'react'
+import * as Yup from 'yup'
 
-import './styles/login.css';
+import { login } from '../common/auth.service'
+import { useNavigate } from 'react-router-dom'
 
-import { login } from '../services/auth.service';
+interface LoginCredentials {
+    username: string
+    password: string
+}
 
-type Props = { onLogin: () => void };
+const loginSchema = Yup.object().shape({
+    username: Yup.string().trim().required('Username is required'),
+    password: Yup.string().trim().required('Password is required'),
+})
 
-const Login: React.FC<Props> = ({ onLogin }) => {
-  let navigate: NavigateFunction = useNavigate();
-
-  const [loading, setLoading] = useState<boolean>(false);
-  const [message, setMessage] = useState<string>('');
-
-  const initialValues: {
-    username: string;
-    password: string;
-  } = {
+const initialValues: LoginCredentials = {
     username: '',
     password: '',
-  };
+}
 
-  const validationSchema = Yup.object().shape({
-    username: Yup.string().trim().required('This field is required!'),
-    password: Yup.string().trim().required('This field is required!'),
-  });
+export function Login() {
+    const [loading, setLoading] = useState(false)
+    const navigate = useNavigate()
 
-  const handleLogin = (formValue: { username: string; password: string }) => {
-    const { username, password } = formValue;
+    const formik = useFormik({
+        initialValues,
+        validationSchema: loginSchema,
+        onSubmit: async (values, { setStatus, setSubmitting }) => {
+            setLoading(true)
 
-    setMessage('');
-    setLoading(true);
-    const prms = login(username, password);
-    prms.then(
-      (response) => {
-        if (response.data.token) {
-          localStorage.setItem('user', JSON.stringify(response.data));
-        }
-        navigate('/');
-        onLogin();
-        return response.data;
-      },
-      (error) => {
-        if (typeof error === 'object' && error !== null) {
-          setMessage(error?.['response']?.['data']?.['error']);
-        }
-        setLoading(false);
-      }
-    );
-  };
+            login(values.username, values.password)
+                .then((response) => {
+                    setStatus(false)
+                    localStorage.setItem('admss-admin-user', JSON.stringify(response))
+                    navigate('/dashboard')
+                })
+                .catch((err) => {
+                    setStatus(err.response.data.error)
+                })
+                .finally(() => {
+                    setSubmitting(false)
+                    setLoading(false)
+                })
+        },
+    })
+    return (
+        <div className='d-flex flex-column flex-lg-row-fluid w-lg-50 p-10 order-2 order-lg-1'>
+            <div className='d-flex flex-center flex-column flex-lg-row-fluid'>
+                <div className='w-lg-500px p-10'>
+                    <form className='form w-100' onSubmit={formik.handleSubmit} noValidate>
+                        <div className='text-center mb-11'>
+                            <h1 className='text-dark fw-bolder mb-3'>Sign In</h1>
+                        </div>
 
-  return (
-    <div className="d-flex flex-column-fluid justify-content-center align-items-center mt-30 mt-lg-0 min-vh-100 bg-white">
-      <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={handleLogin}>
-        {({ errors, touched, getFieldProps }) => (
-          <Form className="form w-25">
-            <div className="text-center mb-11">
-              <h3 className="text-dark fw-bolder mb-3">Sign In</h3>
+                        {formik.status && (
+                            <div className='mb-lg-15 alert alert-danger'>
+                                <div className='alert-text font-weight-bold'>{formik.status}</div>
+                            </div>
+                        )}
+
+                        <div className='fv-row mb-8'>
+                            <label className='form-label fs-6 fw-bolder text-dark'>Username</label>
+                            <input
+                                placeholder='Username'
+                                {...formik.getFieldProps('username')}
+                                className={clsx(
+                                    'form-control bg-transparent',
+                                    {
+                                        'is-invalid':
+                                            formik.touched.username && formik.errors.username,
+                                    },
+                                    {
+                                        'is-valid':
+                                            formik.touched.username && !formik.errors.username,
+                                    }
+                                )}
+                                type='text'
+                                name='username'
+                                autoComplete='off'
+                            />
+                            {formik.touched.username && formik.errors.username && (
+                                <div className='fv-plugins-message-container'>
+                                    <span role='alert'>{formik.errors.username}</span>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className='fv-row mb-8'>
+                            <label className='form-label fw-bolder text-dark fs-6 mb-0'>
+                                Password
+                            </label>
+                            <input
+                                type='password'
+                                placeholder='Password'
+                                autoComplete='off'
+                                {...formik.getFieldProps('password')}
+                                className={clsx(
+                                    'form-control bg-transparent',
+                                    {
+                                        'is-invalid':
+                                            formik.touched.password && formik.errors.password,
+                                    },
+                                    {
+                                        'is-valid':
+                                            formik.touched.password && !formik.errors.password,
+                                    }
+                                )}
+                            />
+                            {formik.touched.password && formik.errors.password && (
+                                <div className='fv-plugins-message-container'>
+                                    <div className='fv-help-block'>
+                                        <span role='alert'>{formik.errors.password}</span>
+                                    </div>
+                                </div>
+                            )}
+                        </div>
+
+                        <div className='d-grid'>
+                            <button
+                                type='submit'
+                                className='btn btn-primary'
+                                disabled={formik.isSubmitting || !formik.isValid || loading}
+                            >
+                                {!loading && <span className='indicator-label'>Continue</span>}
+                                {loading && (
+                                    <span className='indicator-progress d-block'>
+                                        Please wait...
+                                        <span className='spinner-border spinner-border-sm align-middle ms-2'></span>
+                                    </span>
+                                )}
+                            </button>
+                        </div>
+                    </form>
+                </div>
             </div>
-            {message && (
-              <div className="mb-lg-15 alert alert-danger">
-                <div className="alert-text font-weight-bold">{message}</div>
-              </div>
-            )}
-            <div className="form-group fv-plugins-icon-container">
-              <label className="form-label fs-6 font-weight-bold text-dark mb-0">Username</label>
-              <input
-                {...getFieldProps('username')}
-                placeholder="Username"
-                type="text"
-                className={`form-control bg-transparent w-100 ${
-                  touched.username && errors.username ? 'is-invalid' : touched.username ? 'is-valid' : ''
-                }`}
-              />
-              <ErrorMessage name="username" component="div" className="text-sm fv-plugins-message-container" />
-            </div>
-            <div className="fv-row mb-3">
-              <label className="form-label font-weight-bold text-dark fs-6 mb-0">Password</label>
-
-              <input
-                {...getFieldProps('password')}
-                placeholder="Password"
-                type="password"
-                className={`form-control bg-transparent w-100 ${
-                  touched.password && errors.password ? 'is-invalid' : touched.password ? 'is-valid' : ''
-                }`}
-              />
-              <ErrorMessage name="password" component="div" className="text-sm fv-plugins-message-container" />
-            </div>
-
-            <div className="d-grid mb-10">
-              <button type="submit" className="btn btn-primary font-weight-bold px-9 py-2 my-3 w-25 w-100" disabled={loading}>
-                {!loading && <span className="indicator-label">Login</span>}
-                {loading && (
-                  <span className="indicator-progress" style={{ display: 'block' }}>
-                    Please wait...
-                    <span className="spinner-border spinner-border-sm align-middle ms-2"></span>
-                  </span>
-                )}
-              </button>
-            </div>
-          </Form>
-        )}
-      </Formik>
-    </div>
-  );
-};
-
-export default Login;
+        </div>
+    )
+}
