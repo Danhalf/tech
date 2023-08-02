@@ -1,5 +1,5 @@
 import { useParams } from 'react-router-dom'
-import React, { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
     getServiceAlerts,
     getServiceAudit,
@@ -9,6 +9,21 @@ import {
     Microservice,
 } from './service'
 import clsx from 'clsx'
+
+interface IServerData {
+    info: string
+    status: string
+    timestamp: string
+    value?: string
+}
+
+enum Tabs {
+    State = 'State',
+    Logs = 'Logs',
+    Audit = 'Audit',
+    Alerts = 'Alerts',
+    Counters = 'Counters',
+}
 
 export function MicroserviceCard() {
     const { uid } = useParams()
@@ -48,6 +63,73 @@ export function MicroserviceCard() {
             })
         }
     }, [uid])
+
+    const renderDataAsKeyValue = (data: string) => {
+        return JSON.parse(data).map((element: IServerData) => {
+            return (
+                <div className='card card-custom my-2 col-lg-3 flex-nowrap'>
+                    <div className='card-body'>
+                        <div className='table-responsive'>
+                            <table className='table align-middle table-row-dashed fs-6 gy-5 no-footer'>
+                                <tbody className='text-gray-600 fw-bold pb-0'>
+                                    {Object.entries(element).map(([key, value]) => {
+                                        const title = key.replace(
+                                            /^[^a-zа-яё]*([a-zа-яё])/i,
+                                            (letter) => letter.toUpperCase()
+                                        )
+                                        return (
+                                            <div key={`${key}-${value}`}>
+                                                <span className='text-dark fw-bold  fs-6'>
+                                                    {title}:
+                                                </span>
+                                                <span className='text-muted d-block fw-semibold mb-6'>
+                                                    {value}
+                                                </span>
+                                            </div>
+                                        )
+                                    })}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            )
+        })
+    }
+
+    const dataWrapper = (title: string, data: string) => (
+        <>
+            <div className='card card-custom mb-6'>
+                <div className='h1 card-header align-items-center justify-content-center pt-6 text-info'>
+                    {title} as JSON view
+                </div>
+                <div className='card-body'>
+                    <pre className='fs-4'>{data}</pre>
+                </div>
+            </div>
+            <div className='card card-custom '>
+                <div className='h1 card-header align-items-center justify-content-center text-info'>
+                    {title}
+                </div>
+                <div className='card-body'>
+                    <div className='d-flex flex-wrap justify-content-between gap-1'>
+                        {renderDataAsKeyValue(data)}
+                    </div>
+                </div>
+            </div>
+        </>
+    )
+
+    const renderTab = (tabName: string, tabIndex: number, tabContent: string) => (
+        <div
+            className={clsx('tab-pane', { active: tab === tabName })}
+            id={`kt_tab_pane_${tabIndex}`}
+            role='tabpanel'
+        >
+            {tabContent && dataWrapper(tabName, tabContent)}
+        </div>
+    )
+
     return (
         <div className='row g-5 g-xl-10 mb-5 mb-xl-10'>
             <div className='col-12'>
@@ -58,183 +140,159 @@ export function MicroserviceCard() {
                     <div className='card-body d-flex flex-column justify-content-end pb-0'>
                         <ul className='nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder flex-nowrap'>
                             <li className='nav-item'>
-                                <a
+                                <button
                                     className={clsx(`nav-link text-active-primary cursor-pointer`, {
-                                        active: tab === 'State',
+                                        active: tab === Tabs.State,
                                     })}
-                                    onClick={() => setTab('State')}
+                                    onClick={() => setTab(Tabs.State)}
                                     role='tab'
                                 >
-                                    State
-                                </a>
+                                    {Tabs.State}
+                                </button>
                             </li>
                             <li className='nav-item'>
-                                <a
+                                <button
                                     className={clsx(`nav-link text-active-primary cursor-pointer`, {
-                                        active: tab === 'Logs',
+                                        active: tab === Tabs.Logs,
                                     })}
-                                    onClick={() => setTab('Logs')}
+                                    onClick={() => setTab(Tabs.Logs)}
                                     role='tab'
                                 >
-                                    Logs
-                                </a>
+                                    {Tabs.Logs}
+                                </button>
                             </li>
                             <li className='nav-item'>
-                                <a
+                                <button
                                     className={clsx(`nav-link text-active-primary cursor-pointer`, {
-                                        active: tab === 'Audit',
+                                        active: tab === Tabs.Audit,
                                     })}
-                                    onClick={() => setTab('Audit')}
+                                    onClick={() => setTab(Tabs.Audit)}
                                     role='tab'
                                 >
-                                    Audit
-                                </a>
+                                    {Tabs.Audit}
+                                </button>
                             </li>
                             <li className='nav-item'>
-                                <a
+                                <button
                                     className={clsx(`nav-link text-active-primary cursor-pointer`, {
-                                        active: tab === 'Alerts',
+                                        active: tab === Tabs.Alerts,
                                     })}
-                                    onClick={() => setTab('Alerts')}
+                                    onClick={() => setTab(Tabs.Alerts)}
                                     role='tab'
                                 >
-                                    Alerts
-                                </a>
+                                    {Tabs.Alerts}
+                                </button>
                             </li>
                             <li className='nav-item'>
-                                <a
+                                <button
                                     className={clsx(`nav-link cursor-pointer`, {
-                                        active: tab === 'Counters',
+                                        active: tab === Tabs.Counters,
                                     })}
-                                    onClick={() => setTab('Counters')}
+                                    onClick={() => setTab(Tabs.Counters)}
                                     role='tab'
                                 >
-                                    Counters
-                                </a>
+                                    {Tabs.Counters}
+                                </button>
                             </li>
                         </ul>
                     </div>
                 </div>
 
-                <div className='card card-custom'>
-                    <div className='card-body'>
-                        <div className='tab-content' id='myTabContent'>
-                            <div
-                                className={clsx('tab-pane', { active: tab === 'State' })}
-                                id='kt_tab_pane_1'
-                                role='tabpanel'
-                            >
-                                <div className='d-flex align-items-center mb-7'>
-                                    <div className='flex-grow-1'>
-                                        <span className='text-dark fw-bold  fs-6'>Heartbit</span>
-                                        <span className='text-muted d-block fw-semibold'>
-                                            {microserviceData?.heartbit}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className='d-flex align-items-center mb-7'>
-                                    <div className='flex-grow-1'>
-                                        <span className='text-dark fw-bold  fs-6'>Index</span>
-                                        <span className='text-muted d-block fw-semibold'>
-                                            {microserviceData?.index}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className='d-flex align-items-center mb-7'>
-                                    <div className='flex-grow-1'>
-                                        <span className='text-dark fw-bold  fs-6'>IP address</span>
-                                        <span className='text-muted d-block fw-semibold'>
-                                            {microserviceData?.ipv4}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className='d-flex align-items-center mb-7'>
-                                    <div className='flex-grow-1'>
-                                        <span className='text-dark fw-bold  fs-6'>Port</span>
-                                        <span className='text-muted d-block fw-semibold'>
-                                            {microserviceData?.port}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className='d-flex align-items-center mb-7'>
-                                    <div className='flex-grow-1'>
-                                        <span className='text-dark fw-bold  fs-6'>Started</span>
-                                        <span className='text-muted d-block fw-semibold'>
-                                            {microserviceData?.started}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className='d-flex align-items-center mb-7'>
-                                    <div className='flex-grow-1'>
-                                        <span className='text-dark fw-bold  fs-6'>Status</span>
-                                        <span className='text-muted d-block fw-semibold'>
-                                            {microserviceData?.status}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className='d-flex align-items-center mb-7'>
-                                    <div className='flex-grow-1'>
-                                        <span className='text-dark fw-bold  fs-6'>Type</span>
-                                        <span className='text-muted d-block fw-semibold'>
-                                            {microserviceData?.type}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className='d-flex align-items-center mb-7'>
-                                    <div className='flex-grow-1'>
-                                        <span className='text-dark fw-bold  fs-6'>Type i</span>
-                                        <span className='text-muted d-block fw-semibold'>
-                                            {microserviceData?.type_i}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className='d-flex align-items-center mb-7'>
-                                    <div className='flex-grow-1'>
-                                        <span className='text-dark fw-bold  fs-6'>UID</span>
-                                        <span className='text-muted d-block fw-semibold'>
-                                            {microserviceData?.uid}
-                                        </span>
-                                    </div>
-                                </div>
-                                <div className='d-flex align-items-center mb-7'>
-                                    <div className='flex-grow-1'>
-                                        <span className='text-dark fw-bold  fs-6'>Version</span>
-                                        <span className='text-muted d-block fw-semibold'>
-                                            {microserviceData?.version}
-                                        </span>
-                                    </div>
-                                </div>
+                <div className='tab-content' id='myTabContent'>
+                    <div
+                        className={clsx('tab-pane', { active: tab === Tabs.State })}
+                        id='kt_tab_pane_1'
+                        role='tabpanel'
+                    >
+                        <div className='d-flex align-items-center mb-20'>
+                            <pre className='fs-4'>{JSON.stringify(microserviceData, null, 2)}</pre>
+                        </div>
+                        <div className='d-flex align-items-center mb-7'>
+                            <div className='flex-grow-1'>
+                                <span className='text-dark fw-bold  fs-6'>Heartbit</span>
+                                <span className='text-muted d-block fw-semibold'>
+                                    {microserviceData?.heartbit}
+                                </span>
                             </div>
-                            <div
-                                className={clsx('tab-pane', { active: tab === 'Logs' })}
-                                id='kt_tab_pane_2'
-                                role='tabpanel'
-                            >
-                                <pre className='fs-4'>{logs}</pre>
+                        </div>
+                        <div className='d-flex align-items-center mb-7'>
+                            <div className='flex-grow-1'>
+                                <span className='text-dark fw-bold  fs-6'>Index</span>
+                                <span className='text-muted d-block fw-semibold'>
+                                    {microserviceData?.index}
+                                </span>
                             </div>
-                            <div
-                                className={clsx('tab-pane', { active: tab === 'Audit' })}
-                                id='kt_tab_pane_3'
-                                role='tabpanel'
-                            >
-                                <pre className='fs-4'>{audit}</pre>
+                        </div>
+                        <div className='d-flex align-items-center mb-7'>
+                            <div className='flex-grow-1'>
+                                <span className='text-dark fw-bold  fs-6'>IP address</span>
+                                <span className='text-muted d-block fw-semibold'>
+                                    {microserviceData?.ipv4}
+                                </span>
                             </div>
-                            <div
-                                className={clsx('tab-pane', { active: tab === 'Alerts' })}
-                                id='kt_tab_pane_3'
-                                role='tabpanel'
-                            >
-                                <pre className='fs-4'>{alerts}</pre>
+                        </div>
+                        <div className='d-flex align-items-center mb-7'>
+                            <div className='flex-grow-1'>
+                                <span className='text-dark fw-bold  fs-6'>Port</span>
+                                <span className='text-muted d-block fw-semibold'>
+                                    {microserviceData?.port}
+                                </span>
                             </div>
-                            <div
-                                className={clsx('tab-pane', { active: tab === 'Counters' })}
-                                id='kt_tab_pane_3'
-                                role='tabpanel'
-                            >
-                                <pre className='fs-4'>{counters}</pre>
+                        </div>
+                        <div className='d-flex align-items-center mb-7'>
+                            <div className='flex-grow-1'>
+                                <span className='text-dark fw-bold  fs-6'>Started</span>
+                                <span className='text-muted d-block fw-semibold'>
+                                    {microserviceData?.started}
+                                </span>
+                            </div>
+                        </div>
+                        <div className='d-flex align-items-center mb-7'>
+                            <div className='flex-grow-1'>
+                                <span className='text-dark fw-bold  fs-6'>Status</span>
+                                <span className='text-muted d-block fw-semibold'>
+                                    {microserviceData?.status}
+                                </span>
+                            </div>
+                        </div>
+                        <div className='d-flex align-items-center mb-7'>
+                            <div className='flex-grow-1'>
+                                <span className='text-dark fw-bold  fs-6'>Type</span>
+                                <span className='text-muted d-block fw-semibold'>
+                                    {microserviceData?.type}
+                                </span>
+                            </div>
+                        </div>
+                        <div className='d-flex align-items-center mb-7'>
+                            <div className='flex-grow-1'>
+                                <span className='text-dark fw-bold  fs-6'>Type i</span>
+                                <span className='text-muted d-block fw-semibold'>
+                                    {microserviceData?.type_i}
+                                </span>
+                            </div>
+                        </div>
+                        <div className='d-flex align-items-center mb-7'>
+                            <div className='flex-grow-1'>
+                                <span className='text-dark fw-bold  fs-6'>UID</span>
+                                <span className='text-muted d-block fw-semibold'>
+                                    {microserviceData?.uid}
+                                </span>
+                            </div>
+                        </div>
+                        <div className='d-flex align-items-center mb-7'>
+                            <div className='flex-grow-1'>
+                                <span className='text-dark fw-bold  fs-6'>Version</span>
+                                <span className='text-muted d-block fw-semibold'>
+                                    {microserviceData?.version}
+                                </span>
                             </div>
                         </div>
                     </div>
+
+                    {renderTab(Tabs.Logs, 2, logs)}
+                    {renderTab(Tabs.Audit, 3, audit)}
+                    {renderTab(Tabs.Alerts, 4, alerts)}
+                    {renderTab(Tabs.Counters, 5, counters)}
                 </div>
             </div>
         </div>
