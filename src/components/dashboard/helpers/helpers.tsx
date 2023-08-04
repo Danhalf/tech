@@ -77,9 +77,9 @@ const getRows = (data: IMicroserviceServerData[]) => {
     )
 }
 
-const renderTable = (data: IMicroserviceServerData[]) => {
+const renderTable = (data: IMicroserviceServerData[] | any[]) => {
     return (
-        <div className='table-responsive'>
+        <div className='w-100 table-responsive table-responsive-horizontal'>
             <table
                 className={clsx(`table table-row-dashed table-row-gray-300 gy-7`, {
                     'table-striped': data.length > 5,
@@ -114,18 +114,9 @@ const renderList = (data: any, checkbox: boolean = false) => {
 
         if (typeof value === 'object' && value !== null) {
             if (Array.isArray(value)) {
-                return (
-                    <div key={`${key}-${index}`}>
-                        <div className='ms-6'>{renderTable(value)}</div>
-                    </div>
-                )
+                return <div key={`${key}-${index}`}>{renderTable(value)}</div>
             }
-            return (
-                <div key={`${key}-${index}`}>
-                    <span className='text-dark fw-bold fs-6'>{title}:</span>
-                    <div className='ms-6'>{renderList(value)}</div>
-                </div>
-            )
+            return <div key={`${key}-${index}`}>{renderList(value)}</div>
         } else {
             const activeCheckbox = checkbox && (Number(value) === 0 || Number(value) === 1)
             return (
@@ -165,7 +156,7 @@ const dataWrapper = (title: string, data: string, checkbox: boolean = false) => 
                     <pre className='fs-4'>{data}</pre>
                 </div>
             </div>
-            <div className='card card-custom '>
+            <div className='card card-custom'>
                 <div className='card-header'>
                     <h3 className='card-title fw-bolder text-dark'>{title}</h3>
                 </div>
@@ -184,7 +175,7 @@ export const TabContent = ({
     checkbox = false,
 }: ITabValues) => (
     <div
-        className={clsx('tab-pane', { active: activeTab === tabName })}
+        className={clsx('tab-pane vw-90 mx-auto', { active: activeTab === tabName })}
         id={`kt_tab_pane_${tabIndex}`}
         role='tabpanel'
     >

@@ -88,10 +88,29 @@ export function UserCard() {
             })
         }
     }, [id])
+
+    const mutateJson = (jsonString: string, fieldName: string): string => {
+        try {
+            const jsonObject = JSON.parse(jsonString)
+
+            if (typeof jsonObject === 'object' && jsonObject !== null) {
+                const fieldValue = jsonObject[fieldName]
+                delete jsonObject[fieldName]
+
+                const updatedJsonObject = { [fieldName]: fieldValue, ...jsonObject }
+                return JSON.stringify(updatedJsonObject, null, 2)
+            }
+        } catch (error) {
+            console.error('Invalid JSON string:', error)
+        }
+
+        return jsonString
+    }
+
     return (
         <div className='row g-5 g-xl-10 mb-5 mb-xl-10'>
             <div className='col-12'>
-                <div className='card card-custom mb-5'>
+                <div className='card card-custom mb-5 vw-90 mx-auto'>
                     <div className='card-header'>
                         <h3 className='card-title fw-bolder text-dark'>User Card</h3>
                     </div>
@@ -256,20 +275,20 @@ export function UserCard() {
                         activeTab={activeTab}
                         tabName={Tabs.Locations}
                         tabIndex={3}
-                        tabContent={locationsJSON}
+                        tabContent={mutateJson(locationsJSON, 'status')}
                     />
                     <TabContent
                         activeTab={activeTab}
                         tabName={Tabs.UserPermissions}
                         tabIndex={4}
-                        tabContent={userPermissionsJSON}
+                        tabContent={mutateJson(userPermissionsJSON, 'useruid')}
                         checkbox={true}
                     />
                     <TabContent
                         activeTab={activeTab}
                         tabName={Tabs.Settings}
                         tabIndex={5}
-                        tabContent={userSettingsJSON}
+                        tabContent={mutateJson(userSettingsJSON, 'status')}
                     />
                     <TabContent
                         activeTab={activeTab}
@@ -299,7 +318,7 @@ export function UserCard() {
                         activeTab={activeTab}
                         tabName={Tabs.Permissions}
                         tabIndex={10}
-                        tabContent={permissionsJSON}
+                        tabContent={mutateJson(permissionsJSON, 'status')}
                     />
                     <TabContent
                         activeTab={activeTab}
