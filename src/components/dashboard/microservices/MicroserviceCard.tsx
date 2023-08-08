@@ -9,15 +9,17 @@ import {
     Microservice,
 } from './service'
 import clsx from 'clsx'
-import { TabContent } from '../helpers/helpers'
+import { TabContent, TabNavigate } from '../helpers/helpers'
 
-enum Tabs {
+enum MicroserviceTabs {
     State = 'State',
     Logs = 'Logs',
     Audit = 'Audit',
     Alerts = 'Alerts',
     Counters = 'Counters',
 }
+
+const microserviceTabsArray: string[] = Object.values(MicroserviceTabs) as string[]
 
 export function MicroserviceCard() {
     const { uid } = useParams()
@@ -58,6 +60,10 @@ export function MicroserviceCard() {
         }
     }, [uid])
 
+    const handleTabClick = (tab: string) => {
+        setActiveTab(tab);
+    };
+
     return (
         <div className='row g-5 g-xl-10 mb-5 mb-xl-10'>
             <div className='col-12'>
@@ -67,75 +73,23 @@ export function MicroserviceCard() {
                     </div>
                     <div className='card-body d-flex flex-column justify-content-end pb-0'>
                         <ul className='nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder flex-nowrap'>
-                            <li className='nav-item'>
-                                <button
-                                    className={clsx(`nav-link text-active-primary cursor-pointer`, {
-                                        active: activeTab === Tabs.State,
-                                    })}
-                                    onClick={() => setActiveTab(Tabs.State)}
-                                    role='tab'
-                                >
-                                    {Tabs.State}
-                                </button>
-                            </li>
-                            <li className='nav-item'>
-                                <button
-                                    className={clsx(`nav-link text-active-primary cursor-pointer`, {
-                                        active: activeTab === Tabs.Logs,
-                                    })}
-                                    onClick={() => setActiveTab(Tabs.Logs)}
-                                    role='tab'
-                                >
-                                    {Tabs.Logs}
-                                </button>
-                            </li>
-                            <li className='nav-item'>
-                                <button
-                                    className={clsx(`nav-link text-active-primary cursor-pointer`, {
-                                        active: activeTab === Tabs.Audit,
-                                    })}
-                                    onClick={() => setActiveTab(Tabs.Audit)}
-                                    role='tab'
-                                >
-                                    {Tabs.Audit}
-                                </button>
-                            </li>
-                            <li className='nav-item'>
-                                <button
-                                    className={clsx(`nav-link text-active-primary cursor-pointer`, {
-                                        active: activeTab === Tabs.Alerts,
-                                    })}
-                                    onClick={() => setActiveTab(Tabs.Alerts)}
-                                    role='tab'
-                                >
-                                    {Tabs.Alerts}
-                                </button>
-                            </li>
-                            <li className='nav-item'>
-                                <button
-                                    className={clsx(`nav-link cursor-pointer`, {
-                                        active: activeTab === Tabs.Counters,
-                                    })}
-                                    onClick={() => setActiveTab(Tabs.Counters)}
-                                    role='tab'
-                                >
-                                    {Tabs.Counters}
-                                </button>
-                            </li>
+                            {
+                                microserviceTabsArray.map(tab => <TabNavigate key={tab} activeTab={activeTab} tab={tab} onTabClick={handleTabClick} />)
+                            }
                         </ul>
                     </div>
                 </div>
 
                 <div className='tab-content' id='myTabContent'>
                     <div
-                        className={clsx('tab-pane', { active: activeTab === Tabs.State })}
+                        className={clsx('tab-pane', { active: activeTab === MicroserviceTabs.State })}
                         id='kt_tab_pane_1'
                         role='tabpanel'
                     >
                         <div className='card card-custom mb-6'>
                             <div className='card-header'>
                                 <h3 className='card-title fw-bolder text-dark'>
-                                    {Tabs.State} as JSON view
+                                    {MicroserviceTabs.State} as JSON view
                                 </h3>
                             </div>
                             <div className='card-body'>
@@ -148,7 +102,7 @@ export function MicroserviceCard() {
                         </div>
                         <div className='card card-custom mb-6'>
                             <div className='card-header'>
-                                <h3 className='card-title fw-bolder text-dark'>{Tabs.State}</h3>
+                                <h3 className='card-title fw-bolder text-dark'>{MicroserviceTabs.State}</h3>
                             </div>
                             <div className='card-body'>
                                 <div className='d-flex align-items-center mb-7'>
@@ -236,25 +190,25 @@ export function MicroserviceCard() {
                     </div>
                     <TabContent
                         activeTab={activeTab}
-                        tabName={Tabs.Logs}
+                        tabName={MicroserviceTabs.Logs}
                         tabIndex={2}
                         tabContent={logs}
                     />
                     <TabContent
                         activeTab={activeTab}
-                        tabName={Tabs.Audit}
+                        tabName={MicroserviceTabs.Audit}
                         tabIndex={3}
                         tabContent={audit}
                     />
                     <TabContent
                         activeTab={activeTab}
-                        tabName={Tabs.Alerts}
+                        tabName={MicroserviceTabs.Alerts}
                         tabIndex={4}
                         tabContent={alerts}
                     />
                     <TabContent
                         activeTab={activeTab}
-                        tabName={Tabs.Counters}
+                        tabName={MicroserviceTabs.Counters}
                         tabIndex={5}
                         tabContent={counters}
                     />

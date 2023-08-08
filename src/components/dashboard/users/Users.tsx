@@ -2,6 +2,15 @@ import { useEffect, useState } from 'react'
 import { deleteUser, getDeletedUsers, getUsers, undeleteUser, User } from './user.service'
 import { Link } from 'react-router-dom'
 import clsx from 'clsx'
+import { TabNavigate } from '../helpers/helpers'
+
+enum UsersTabs {
+    Users = "Users",
+    DeletedUsers = "Deleted users"
+}
+
+
+const usersTabsArray: string[] = Object.values(UsersTabs) as string[]
 
 export default function Users() {
     const [users, setUsers] = useState<User[]>([])
@@ -53,40 +62,25 @@ export default function Users() {
         })
     }
 
+    const handleTabClick = (tab: string) => {
+        setActiveTab(tab);
+    };
+
     return (
         <>
             <div className="card">
                 <div className='card-header d-flex flex-column justify-content-end pb-0'>
                     <ul className='nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder flex-nowrap'>
-                        <li className='nav-item'>
-                            <button
-                                className={clsx(`nav-link text-active-primary cursor-pointer`, {
-                                    active: activeTab === 'Users',
-                                })}
-                                onClick={() => setActiveTab('Users')}
-                                role='tab'
-                            >
-                                Users
-                            </button>
-                        </li>
-                        <li className='nav-item'>
-                            <button
-                                className={clsx(`nav-link text-active-primary cursor-pointer`, {
-                                    active: activeTab === 'Deleted users',
-                                })}
-                                onClick={() => setActiveTab('Deleted users')}
-                                role='tab'
-                            >
-                                Deleted users
-                            </button>
-                        </li>
+                        {
+                            usersTabsArray.map(tab => <TabNavigate key={tab} activeTab={activeTab} tab={tab} onTabClick={handleTabClick} />)
+                        }
                     </ul>
                 </div>
 
                 <div className='tab-content' id='myTabContentInner'>
                     <div
                         className={clsx('tab-pane vw-90 mx-auto', {
-                            active: activeTab === 'Users',
+                            active: activeTab === UsersTabs.Users,
                         })}
                         id={`kt_tab_pane_${1}`}
                         role='tabpanel'
@@ -136,7 +130,7 @@ export default function Users() {
                 <div className='tab-content' id='myTabContentInner'>
                     <div
                         className={clsx('tab-pane vw-90 mx-auto', {
-                            active: activeTab === 'Deleted users',
+                            active: activeTab === UsersTabs.DeletedUsers,
                         })}
                         id={`kt_tab_pane_${2}`}
                         role='tabpanel'

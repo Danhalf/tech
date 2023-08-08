@@ -46,6 +46,20 @@ const renderList = (data: any, checkbox: boolean = false) => {
     })
 }
 
+export const TabNavigate = ({ activeTab, tab, onTabClick }: { activeTab: string; tab: string; onTabClick: (tab: string) => void }) => (
+    <li className='nav-item'>
+        <button
+            className={clsx(`nav-link text-active-primary cursor-pointer`, {
+                active: activeTab === tab,
+            })}
+            onClick={() => onTabClick(tab)}
+            role='tab'
+        >
+            {tab}
+        </button>
+    </li>
+)
+
 const TabDataWrapper = ({
     title,
     data,
