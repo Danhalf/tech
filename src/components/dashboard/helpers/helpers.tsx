@@ -107,7 +107,7 @@ const TabDataWrapper = ({
                                 className={clsx('tab-pane vw-90 mx-auto', {
                                     active: activeTab === 'JSON view',
                                 })}
-                                id={`kt_tab_pane_${1}`}
+                                id='kt_tab_pane_json'
                                 role='tabpanel'
                             >
                                 <div className='card-body'>
@@ -118,7 +118,7 @@ const TabDataWrapper = ({
                                 className={clsx('tab-pane vw-90 mx-auto', {
                                     active: activeTab === 'General view',
                                 })}
-                                id={`kt_tab_pane_${1}`}
+                                id='kt_tab_pane_general'
                                 role='tabpanel'
                             >
                                 <div className='card-body'>
