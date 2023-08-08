@@ -11,7 +11,7 @@ export function Dashboard(){
           <div className="app-main flex-column flex-row-fluid">
             <div className="d-flex flex-column flex-column-fluid">
               <div className="app-content flex-column-fluid py-3 py-lg-6">
-                <div className="app-container container-fluid">
+                <div className="container">
                   <Outlet />
                 </div>
               </div>

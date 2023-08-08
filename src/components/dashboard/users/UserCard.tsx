@@ -32,6 +32,8 @@ enum Tabs {
     UserTypes = 'User types',
 }
 
+const tabsArray: string[] = Object.values(Tabs) as string[]
+
 export function UserCard() {
     const { id } = useParams()
     const [activeTab, setActiveTab] = useState('Profile')
@@ -105,6 +107,20 @@ export function UserCard() {
         return jsonString
     }
 
+    const TabNavigate = ({ activeTab, tab }: { activeTab: string; tab: string }) => (
+        <li className='nav-item'>
+            <button
+                className={clsx(`nav-link text-active-primary cursor-pointer`, {
+                    active: activeTab === tab,
+                })}
+                onClick={() => setActiveTab(activeTab)}
+                role='tab'
+            >
+                {tab}
+            </button>
+        </li>
+    )
+
     return (
         <div className='row g-5 g-xl-10 mb-5 mb-xl-10'>
             <div className='col-12'>
@@ -114,138 +130,9 @@ export function UserCard() {
                     </div>
                     <div className='card-body d-flex flex-column justify-content-end pb-0'>
                         <ul className='nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder flex-nowrap'>
-                            <li className='nav-item'>
-                                <button
-                                    className={clsx(`nav-link text-active-primary cursor-pointer`, {
-                                        active: activeTab === Tabs.Profile,
-                                    })}
-                                    onClick={() => setActiveTab(Tabs.Profile)}
-                                    role='tab'
-                                >
-                                    {Tabs.Profile}
-                                </button>
-                            </li>
-                            <li className='nav-item'>
-                                <button
-                                    className={clsx(`nav-link text-active-primary cursor-pointer`, {
-                                        active: activeTab === Tabs.ExtendedInfo,
-                                    })}
-                                    onClick={() => setActiveTab(Tabs.ExtendedInfo)}
-                                    role='tab'
-                                >
-                                    {Tabs.ExtendedInfo}
-                                </button>
-                            </li>
-                            <li className='nav-item'>
-                                <button
-                                    className={clsx(`nav-link text-active-primary cursor-pointer`, {
-                                        active: activeTab === Tabs.ShortInfo,
-                                    })}
-                                    onClick={() => setActiveTab(Tabs.ShortInfo)}
-                                    role='tab'
-                                >
-                                    {Tabs.ShortInfo}
-                                </button>
-                            </li>
-                            <li className='nav-item'>
-                                <button
-                                    className={clsx(`nav-link text-active-primary cursor-pointer`, {
-                                        active: activeTab === Tabs.Locations,
-                                    })}
-                                    onClick={() => setActiveTab(Tabs.Locations)}
-                                    role='tab'
-                                >
-                                    {Tabs.Locations}
-                                </button>
-                            </li>
-                            <li className='nav-item'>
-                                <button
-                                    className={clsx(`nav-link text-active-primary cursor-pointer`, {
-                                        active: activeTab === Tabs.UserPermissions,
-                                    })}
-                                    onClick={() => setActiveTab(Tabs.UserPermissions)}
-                                    role='tab'
-                                >
-                                    {Tabs.UserPermissions}
-                                </button>
-                            </li>
-                            <li className='nav-item'>
-                                <button
-                                    className={clsx(`nav-link cursor-pointer`, {
-                                        active: activeTab === Tabs.Settings,
-                                    })}
-                                    onClick={() => setActiveTab(Tabs.Settings)}
-                                    role='tab'
-                                >
-                                    {Tabs.Settings}
-                                </button>
-                            </li>
-                            <li className='nav-item'>
-                                <button
-                                    className={clsx(`nav-link cursor-pointer`, {
-                                        active: activeTab === Tabs.Sessions,
-                                    })}
-                                    onClick={() => setActiveTab(Tabs.Sessions)}
-                                    role='tab'
-                                >
-                                    {Tabs.Sessions}
-                                </button>
-                            </li>
-                            <li className='nav-item'>
-                                <button
-                                    className={clsx(`nav-link cursor-pointer`, {
-                                        active: activeTab === Tabs.Logins,
-                                    })}
-                                    onClick={() => setActiveTab(Tabs.Logins)}
-                                    role='tab'
-                                >
-                                    {Tabs.Logins}
-                                </button>
-                            </li>
-                            <li className='nav-item'>
-                                <button
-                                    className={clsx(`nav-link cursor-pointer`, {
-                                        active: activeTab === Tabs.Subusers,
-                                    })}
-                                    onClick={() => setActiveTab(Tabs.Subusers)}
-                                    role='tab'
-                                >
-                                    {Tabs.Subusers}
-                                </button>
-                            </li>
-                            <li className='nav-item'>
-                                <button
-                                    className={clsx(`nav-link cursor-pointer`, {
-                                        active: activeTab === Tabs.SalesPersons,
-                                    })}
-                                    onClick={() => setActiveTab(Tabs.SalesPersons)}
-                                    role='tab'
-                                >
-                                    {Tabs.SalesPersons}
-                                </button>
-                            </li>
-                            <li className='nav-item'>
-                                <button
-                                    className={clsx(`nav-link cursor-pointer`, {
-                                        active: activeTab === Tabs.Permissions,
-                                    })}
-                                    onClick={() => setActiveTab(Tabs.Permissions)}
-                                    role='tab'
-                                >
-                                    {Tabs.Permissions}
-                                </button>
-                            </li>
-                            <li className='nav-item'>
-                                <button
-                                    className={clsx(`nav-link cursor-pointer`, {
-                                        active: activeTab === Tabs.UserTypes,
-                                    })}
-                                    onClick={() => setActiveTab(Tabs.UserTypes)}
-                                    role='tab'
-                                >
-                                    {Tabs.UserTypes}
-                                </button>
-                            </li>
+                            {tabsArray.map((tab) => (
+                                <TabNavigate tab={tab} activeTab={activeTab} />
+                            ))}
                         </ul>
                     </div>
                 </div>

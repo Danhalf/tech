@@ -15,8 +15,8 @@ export function DashboardHeader() {
         }
     }
     return (
-        <div id='kt_app_header' className='app-header'>
-            <div className='app-container flex-lg-grow-1 d-flex align-items-stretch justify-content-between'>
+        <header className='app-header'>
+            <div className='container flex-lg-grow-1 d-flex align-items-stretch justify-content-between'>
                 <div className='d-flex align-items-stretch justify-content-between flex-lg-grow-1'>
                     <div className='app-header-menu app-header-mobile-drawer align-items-stretch'>
                         <div className='menu menu-rounded menu-column menu-lg-row my-5 my-lg-0 align-items-stretch fw-semibold px 2 px-lg-0'>
@@ -39,6 +39,6 @@ export function DashboardHeader() {
                     </div>
                 </div>
             </div>
-        </div>
+        </header>
     )
 }
