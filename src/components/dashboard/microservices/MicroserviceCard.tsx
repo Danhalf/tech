@@ -9,7 +9,7 @@ import {
     Microservice,
 } from './service'
 import clsx from 'clsx'
-import { TabContent, TabNavigate } from '../helpers/helpers'
+import { TabPanel, TabNavigate } from '../helpers/helpers'
 
 enum MicroserviceTabs {
     State = 'State',
@@ -80,7 +80,7 @@ export function MicroserviceCard() {
                     </div>
                 </div>
 
-                <div className='tab-content' id='myTabContent'>
+                <div className='tab-content' id='myTabPanel'>
                     <div
                         className={clsx('tab-pane', { active: activeTab === MicroserviceTabs.State })}
                         id='kt_tab_pane_1'
@@ -188,30 +188,30 @@ export function MicroserviceCard() {
                             </div>
                         </div>
                     </div>
-                    <TabContent
+                    <TabPanel
                         activeTab={activeTab}
                         tabName={MicroserviceTabs.Logs}
-                        tabIndex={2}
-                        tabContent={logs}
-                    />
-                    <TabContent
+                    >
+                        {logs}
+                    </TabPanel>
+                    <TabPanel
                         activeTab={activeTab}
                         tabName={MicroserviceTabs.Audit}
-                        tabIndex={3}
-                        tabContent={audit}
-                    />
-                    <TabContent
+                    >
+                        {audit}
+                    </TabPanel>
+                    <TabPanel
                         activeTab={activeTab}
                         tabName={MicroserviceTabs.Alerts}
-                        tabIndex={4}
-                        tabContent={alerts}
-                    />
-                    <TabContent
+                    >
+                        {alerts}
+                    </TabPanel>
+                    <TabPanel
                         activeTab={activeTab}
                         tabName={MicroserviceTabs.Counters}
-                        tabIndex={5}
-                        tabContent={counters}
-                    />
+                    >
+                        {counters}
+                    </TabPanel>
                 </div>
             </div>
         </div>

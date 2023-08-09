@@ -60,17 +60,42 @@ export const TabNavigate = ({ activeTab, tab, onTabClick }: { activeTab: string;
     </li>
 )
 
-const TabDataWrapper = ({
-    title,
+
+export const TabPanel = ({ activeTab, tabName, children, tabId }: ITabValues) => (
+    <div
+        className={clsx('tab-pane vw-90 mx-auto', {
+            active: activeTab === tabName,
+        })}
+        role='tabpanel'
+        id={tabId ? `kt_tab_pane_${tabId}` : undefined}
+    >
+        {children}
+    </div>
+)
+
+
+
+export const TabDataWrapper = ({
     data,
     checkbox = false,
 }: {
-    title: string
     data: string
-    checkbox: boolean
+    checkbox?: boolean
 }) => {
+    enum ViewTypes {
+        JSON = "JSON view",
+        GENERAL = "General view"
+    }
+    const viewTypesArray: string[] = Object.values(ViewTypes) as string[]
+
+    const [activeTab, setActiveTab] = useState(ViewTypes.JSON)
+
+    const handleTabClick = (tab: any) => {
+        setActiveTab(tab);
+    };
+
+    if (!data) return <></>
     const parsedData = JSON.parse(data)
-    const [activeTab, setActiveTab] = useState('JSON view')
     const renderContent = () => {
         if (typeof parsedData === 'object' && !Array.isArray(parsedData)) {
             return renderList(parsedData, checkbox)
@@ -86,59 +111,26 @@ const TabDataWrapper = ({
                     <div className='card card-custom mb-5 vw-90 mx-auto'>
                         <div className='card-header d-flex flex-column justify-content-end pb-0'>
                             <ul className='nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder flex-nowrap'>
-                                <li className='nav-item'>
-                                    <button
-                                        className={clsx(
-                                            `nav-link text-active-primary cursor-pointer`,
-                                            {
-                                                active: activeTab === 'JSON view',
-                                            }
-                                        )}
-                                        onClick={() => setActiveTab('JSON view')}
-                                        role='tab'
-                                    >
-                                        JSON view
-                                    </button>
-                                </li>
-                                <li className='nav-item'>
-                                    <button
-                                        className={clsx(
-                                            `nav-link text-active-primary cursor-pointer`,
-                                            {
-                                                active: activeTab === 'General view',
-                                            }
-                                        )}
-                                        onClick={() => setActiveTab('General view')}
-                                        role='tab'
-                                    >
-                                        General view
-                                    </button>
-                                </li>
+                                {
+                                    viewTypesArray.map(tab => <TabNavigate key={tab} activeTab={activeTab} tab={tab} onTabClick={handleTabClick} />)
+                                }
                             </ul>
                         </div>
                         <div className='tab-content' id='myTabContentInner'>
-                            <div
-                                className={clsx('tab-pane vw-90 mx-auto', {
-                                    active: activeTab === 'JSON view',
-                                })}
-                                id='kt_tab_pane_json'
-                                role='tabpanel'
+                            <TabPanel
+                                activeTab={activeTab} tabName='JSON view'
                             >
                                 <div className='card-body'>
                                     <pre className='fs-4'>{data}</pre>
                                 </div>
-                            </div>
-                            <div
-                                className={clsx('tab-pane vw-90 mx-auto', {
-                                    active: activeTab === 'General view',
-                                })}
-                                id='kt_tab_pane_general'
-                                role='tabpanel'
+                            </TabPanel>
+                            <TabPanel
+                                activeTab={activeTab} tabName='General view'
                             >
                                 <div className='card-body'>
                                     {parsedData ? renderContent() : 'No data available'}
                                 </div>
-                            </div>
+                            </TabPanel>
                         </div>
                     </div>
                 </div>
@@ -146,18 +138,3 @@ const TabDataWrapper = ({
         </>
     )
 }
-export const TabContent = ({
-    activeTab,
-    tabName,
-    tabIndex,
-    tabContent,
-    checkbox = false,
-}: ITabValues) => (
-    <div
-        className={clsx('tab-pane vw-90 mx-auto', { active: activeTab === tabName })}
-        id={`kt_tab_pane_${tabIndex}`}
-        role='tabpanel'
-    >
-        {tabContent && <TabDataWrapper title={tabName} data={tabContent} checkbox={checkbox} />}
-    </div>
-)

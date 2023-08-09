@@ -1,6 +1,5 @@
 import { useParams } from 'react-router-dom'
-import React, { useEffect, useState } from 'react'
-import clsx from 'clsx'
+import { useEffect, useState } from 'react'
 import {
     getAllUIPermissions,
     getAllUITypes,
@@ -15,7 +14,7 @@ import {
     listUserLogins,
     listUserSessions,
 } from './user.service'
-import { TabContent, TabNavigate } from '../helpers/helpers'
+import { TabPanel, TabNavigate, TabDataWrapper } from '../helpers/helpers'
 
 enum UserCardTabs {
     Profile = 'Profile',
@@ -128,80 +127,78 @@ export function UserCard() {
                     </div>
                 </div>
 
-                <div className='tab-content' id='myTabContent'>
-                    <TabContent
+                <div className='tab-content' id='myTabPanel'>
+                    <TabPanel
                         activeTab={activeTab}
                         tabName={UserCardTabs.Profile}
-                        tabIndex={0}
-                        tabContent={profileJson}
-                    />
-                    <TabContent
+                    >
+                        <TabDataWrapper data={profileJson} />
+                    </TabPanel>
+                    <TabPanel
                         activeTab={activeTab}
                         tabName={UserCardTabs.ExtendedInfo}
-                        tabIndex={1}
-                        tabContent={extendedInfoJSON}
-                    />
-                    <TabContent
+                    >
+                        <TabDataWrapper data={extendedInfoJSON} />
+                    </TabPanel>
+                    <TabPanel
                         activeTab={activeTab}
                         tabName={UserCardTabs.ShortInfo}
-                        tabIndex={2}
-                        tabContent={shortInfoJSON}
-                    />
-                    <TabContent
+                    >
+                        <TabDataWrapper data={shortInfoJSON} />
+                    </TabPanel>
+                    <TabPanel
                         activeTab={activeTab}
                         tabName={UserCardTabs.Locations}
-                        tabIndex={3}
-                        tabContent={mutateJson(locationsJSON, 'status')}
-                    />
-                    <TabContent
+                    >
+                        <TabDataWrapper data={mutateJson(locationsJSON, 'status')} />
+                    </TabPanel>
+                    <TabPanel
                         activeTab={activeTab}
                         tabName={UserCardTabs.UserPermissions}
-                        tabIndex={4}
-                        tabContent={mutateJson(userPermissionsJSON, 'useruid')}
-                        checkbox={true}
-                    />
-                    <TabContent
+                    >
+                        <TabDataWrapper data={mutateJson(userPermissionsJSON, 'useruid')} checkbox={true} />
+                    </TabPanel>
+                    <TabPanel
                         activeTab={activeTab}
                         tabName={UserCardTabs.Settings}
-                        tabIndex={5}
-                        tabContent={mutateJson(userSettingsJSON, 'status')}
-                    />
-                    <TabContent
+                    >
+                        <TabDataWrapper data={mutateJson(userSettingsJSON, 'status')} />
+                    </TabPanel>
+                    <TabPanel
                         activeTab={activeTab}
                         tabName={UserCardTabs.Sessions}
-                        tabIndex={6}
-                        tabContent={userSessionsJSON}
-                    />
-                    <TabContent
+                    >
+                        <TabDataWrapper data={userSessionsJSON} />
+                    </TabPanel>
+                    <TabPanel
                         activeTab={activeTab}
                         tabName={UserCardTabs.Logins}
-                        tabIndex={7}
-                        tabContent={userLoginsJSON}
-                    />
-                    <TabContent
+
+                    ><TabDataWrapper data={userLoginsJSON} /></TabPanel>
+                    <TabPanel
                         activeTab={activeTab}
                         tabName={UserCardTabs.Subusers}
-                        tabIndex={8}
-                        tabContent={userSubusersJSON}
-                    />
-                    <TabContent
+                    >
+                        <TabDataWrapper data={userSubusersJSON} />
+                    </TabPanel>
+                    <TabPanel
                         activeTab={activeTab}
                         tabName={UserCardTabs.SalesPersons}
-                        tabIndex={9}
-                        tabContent={userSalesPersonsJSON}
-                    />
-                    <TabContent
+                    >
+                        <TabDataWrapper data={userSalesPersonsJSON} />
+                    </TabPanel>
+                    <TabPanel
                         activeTab={activeTab}
                         tabName={UserCardTabs.Permissions}
-                        tabIndex={10}
-                        tabContent={mutateJson(permissionsJSON, 'status')}
-                    />
-                    <TabContent
+                    >
+                        <TabDataWrapper data={mutateJson(permissionsJSON, 'status')} />
+                    </TabPanel>
+                    <TabPanel
                         activeTab={activeTab}
                         tabName={UserCardTabs.UserTypes}
-                        tabIndex={11}
-                        tabContent={userTypesJSON}
-                    />
+                    >
+                        <TabDataWrapper data={userTypesJSON} />
+                    </TabPanel>
                 </div>
             </div>
         </div>

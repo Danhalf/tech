@@ -3,9 +3,8 @@ import { IMicroserviceServerData } from './IMicroserviceServerData'
 interface ITabValues {
     activeTab: string
     tabName: string
-    tabIndex: number
-    tabContent: string
-    checkbox?: boolean
+    children: string | JSX.Element | JSX.Element[]
+    tabId?: number
 }
 
 export type { IMicroserviceServerData, ITabValues }
