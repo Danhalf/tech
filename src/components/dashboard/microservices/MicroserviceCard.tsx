@@ -9,7 +9,7 @@ import {
     Microservice,
 } from './service'
 import clsx from 'clsx'
-import { TabPanel, TabNavigate } from '../helpers/helpers'
+import { TabPanel, TabNavigate, TabDataWrapper } from '../helpers/helpers'
 
 enum MicroserviceTabs {
     State = 'State',
@@ -61,8 +61,8 @@ export function MicroserviceCard() {
     }, [uid])
 
     const handleTabClick = (tab: string) => {
-        setActiveTab(tab);
-    };
+        setActiveTab(tab)
+    }
 
     return (
         <div className='row g-5 g-xl-10 mb-5 mb-xl-10'>
@@ -73,16 +73,23 @@ export function MicroserviceCard() {
                     </div>
                     <div className='card-body d-flex flex-column justify-content-end pb-0'>
                         <ul className='nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder flex-nowrap'>
-                            {
-                                microserviceTabsArray.map(tab => <TabNavigate key={tab} activeTab={activeTab} tab={tab} onTabClick={handleTabClick} />)
-                            }
+                            {microserviceTabsArray.map((tab) => (
+                                <TabNavigate
+                                    key={tab}
+                                    activeTab={activeTab}
+                                    tab={tab}
+                                    onTabClick={handleTabClick}
+                                />
+                            ))}
                         </ul>
                     </div>
                 </div>
 
                 <div className='tab-content' id='myTabPanel'>
                     <div
-                        className={clsx('tab-pane', { active: activeTab === MicroserviceTabs.State })}
+                        className={clsx('tab-pane', {
+                            active: activeTab === MicroserviceTabs.State,
+                        })}
                         id='kt_tab_pane_1'
                         role='tabpanel'
                     >
@@ -102,7 +109,9 @@ export function MicroserviceCard() {
                         </div>
                         <div className='card card-custom mb-6'>
                             <div className='card-header'>
-                                <h3 className='card-title fw-bolder text-dark'>{MicroserviceTabs.State}</h3>
+                                <h3 className='card-title fw-bolder text-dark'>
+                                    {MicroserviceTabs.State}
+                                </h3>
                             </div>
                             <div className='card-body'>
                                 <div className='d-flex align-items-center mb-7'>
@@ -188,29 +197,17 @@ export function MicroserviceCard() {
                             </div>
                         </div>
                     </div>
-                    <TabPanel
-                        activeTab={activeTab}
-                        tabName={MicroserviceTabs.Logs}
-                    >
-                        {logs}
+                    <TabPanel activeTab={activeTab} tabName={MicroserviceTabs.Logs}>
+                        <TabDataWrapper data={logs} />
                     </TabPanel>
-                    <TabPanel
-                        activeTab={activeTab}
-                        tabName={MicroserviceTabs.Audit}
-                    >
-                        {audit}
+                    <TabPanel activeTab={activeTab} tabName={MicroserviceTabs.Audit}>
+                        <TabDataWrapper data={audit} />
                     </TabPanel>
-                    <TabPanel
-                        activeTab={activeTab}
-                        tabName={MicroserviceTabs.Alerts}
-                    >
-                        {alerts}
+                    <TabPanel activeTab={activeTab} tabName={MicroserviceTabs.Alerts}>
+                        <TabDataWrapper data={alerts} />
                     </TabPanel>
-                    <TabPanel
-                        activeTab={activeTab}
-                        tabName={MicroserviceTabs.Counters}
-                    >
-                        {counters}
+                    <TabPanel activeTab={activeTab} tabName={MicroserviceTabs.Counters}>
+                        <TabDataWrapper data={counters} />
                     </TabPanel>
                 </div>
             </div>

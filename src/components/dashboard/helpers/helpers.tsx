@@ -46,7 +46,15 @@ const renderList = (data: any, checkbox: boolean = false) => {
     })
 }
 
-export const TabNavigate = ({ activeTab, tab, onTabClick }: { activeTab: string; tab: string; onTabClick: (tab: string) => void }) => (
+export const TabNavigate = ({
+    activeTab,
+    tab,
+    onTabClick,
+}: {
+    activeTab: string
+    tab: string
+    onTabClick: (tab: string) => void
+}) => (
     <li className='nav-item'>
         <button
             className={clsx(`nav-link text-active-primary cursor-pointer`, {
@@ -60,7 +68,6 @@ export const TabNavigate = ({ activeTab, tab, onTabClick }: { activeTab: string;
     </li>
 )
 
-
 export const TabPanel = ({ activeTab, tabName, children, tabId }: ITabValues) => (
     <div
         className={clsx('tab-pane vw-90 mx-auto', {
@@ -73,8 +80,6 @@ export const TabPanel = ({ activeTab, tabName, children, tabId }: ITabValues) =>
     </div>
 )
 
-
-
 export const TabDataWrapper = ({
     data,
     checkbox = false,
@@ -83,16 +88,16 @@ export const TabDataWrapper = ({
     checkbox?: boolean
 }) => {
     enum ViewTypes {
-        JSON = "JSON view",
-        GENERAL = "General view"
+        JSON = 'JSON view',
+        GENERAL = 'General view',
     }
     const viewTypesArray: string[] = Object.values(ViewTypes) as string[]
 
     const [activeTab, setActiveTab] = useState(ViewTypes.JSON)
 
     const handleTabClick = (tab: any) => {
-        setActiveTab(tab);
-    };
+        setActiveTab(tab)
+    }
 
     if (!data) return <></>
     const parsedData = JSON.parse(data)
@@ -111,22 +116,23 @@ export const TabDataWrapper = ({
                     <div className='card card-custom mb-5 vw-90 mx-auto'>
                         <div className='card-header d-flex flex-column justify-content-end pb-0'>
                             <ul className='nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder flex-nowrap'>
-                                {
-                                    viewTypesArray.map(tab => <TabNavigate key={tab} activeTab={activeTab} tab={tab} onTabClick={handleTabClick} />)
-                                }
+                                {viewTypesArray.map((tab) => (
+                                    <TabNavigate
+                                        key={tab}
+                                        activeTab={activeTab}
+                                        tab={tab}
+                                        onTabClick={handleTabClick}
+                                    />
+                                ))}
                             </ul>
                         </div>
                         <div className='tab-content' id='myTabContentInner'>
-                            <TabPanel
-                                activeTab={activeTab} tabName='JSON view'
-                            >
+                            <TabPanel activeTab={activeTab} tabName={ViewTypes.JSON}>
                                 <div className='card-body'>
                                     <pre className='fs-4'>{data}</pre>
                                 </div>
                             </TabPanel>
-                            <TabPanel
-                                activeTab={activeTab} tabName='General view'
-                            >
+                            <TabPanel activeTab={activeTab} tabName={ViewTypes.GENERAL}>
                                 <div className='card-body'>
                                     {parsedData ? renderContent() : 'No data available'}
                                 </div>

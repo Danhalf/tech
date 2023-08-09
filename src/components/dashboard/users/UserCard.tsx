@@ -101,15 +101,14 @@ export function UserCard() {
                 const updatedJsonObject = { [fieldName]: fieldValue, ...jsonObject }
                 return JSON.stringify(updatedJsonObject, null, 2)
             }
-        } catch (err) { }
+        } catch (err) {}
 
         return jsonString
     }
 
-
     const handleTabClick = (tab: string) => {
-        setActiveTab(tab);
-    };
+        setActiveTab(tab)
+    }
 
     return (
         <div className='row g-5 g-xl-10 mb-5 mb-xl-10'>
@@ -121,82 +120,55 @@ export function UserCard() {
                     <div className='card-body d-flex flex-column justify-content-end pb-0'>
                         <ul className='nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder flex-nowrap'>
                             {userCardTabsArray.map((tab) => (
-                                <TabNavigate key={tab} tab={tab} activeTab={activeTab} onTabClick={handleTabClick} />
+                                <TabNavigate
+                                    key={tab}
+                                    tab={tab}
+                                    activeTab={activeTab}
+                                    onTabClick={handleTabClick}
+                                />
                             ))}
                         </ul>
                     </div>
                 </div>
 
                 <div className='tab-content' id='myTabPanel'>
-                    <TabPanel
-                        activeTab={activeTab}
-                        tabName={UserCardTabs.Profile}
-                    >
+                    <TabPanel activeTab={activeTab} tabName={UserCardTabs.Profile}>
                         <TabDataWrapper data={profileJson} />
                     </TabPanel>
-                    <TabPanel
-                        activeTab={activeTab}
-                        tabName={UserCardTabs.ExtendedInfo}
-                    >
+                    <TabPanel activeTab={activeTab} tabName={UserCardTabs.ExtendedInfo}>
                         <TabDataWrapper data={extendedInfoJSON} />
                     </TabPanel>
-                    <TabPanel
-                        activeTab={activeTab}
-                        tabName={UserCardTabs.ShortInfo}
-                    >
+                    <TabPanel activeTab={activeTab} tabName={UserCardTabs.ShortInfo}>
                         <TabDataWrapper data={shortInfoJSON} />
                     </TabPanel>
-                    <TabPanel
-                        activeTab={activeTab}
-                        tabName={UserCardTabs.Locations}
-                    >
+                    <TabPanel activeTab={activeTab} tabName={UserCardTabs.Locations}>
                         <TabDataWrapper data={mutateJson(locationsJSON, 'status')} />
                     </TabPanel>
-                    <TabPanel
-                        activeTab={activeTab}
-                        tabName={UserCardTabs.UserPermissions}
-                    >
-                        <TabDataWrapper data={mutateJson(userPermissionsJSON, 'useruid')} checkbox={true} />
+                    <TabPanel activeTab={activeTab} tabName={UserCardTabs.UserPermissions}>
+                        <TabDataWrapper
+                            data={mutateJson(userPermissionsJSON, 'useruid')}
+                            checkbox={true}
+                        />
                     </TabPanel>
-                    <TabPanel
-                        activeTab={activeTab}
-                        tabName={UserCardTabs.Settings}
-                    >
+                    <TabPanel activeTab={activeTab} tabName={UserCardTabs.Settings}>
                         <TabDataWrapper data={mutateJson(userSettingsJSON, 'status')} />
                     </TabPanel>
-                    <TabPanel
-                        activeTab={activeTab}
-                        tabName={UserCardTabs.Sessions}
-                    >
+                    <TabPanel activeTab={activeTab} tabName={UserCardTabs.Sessions}>
                         <TabDataWrapper data={userSessionsJSON} />
                     </TabPanel>
-                    <TabPanel
-                        activeTab={activeTab}
-                        tabName={UserCardTabs.Logins}
-
-                    ><TabDataWrapper data={userLoginsJSON} /></TabPanel>
-                    <TabPanel
-                        activeTab={activeTab}
-                        tabName={UserCardTabs.Subusers}
-                    >
+                    <TabPanel activeTab={activeTab} tabName={UserCardTabs.Logins}>
+                        <TabDataWrapper data={userLoginsJSON} />
+                    </TabPanel>
+                    <TabPanel activeTab={activeTab} tabName={UserCardTabs.Subusers}>
                         <TabDataWrapper data={userSubusersJSON} />
                     </TabPanel>
-                    <TabPanel
-                        activeTab={activeTab}
-                        tabName={UserCardTabs.SalesPersons}
-                    >
+                    <TabPanel activeTab={activeTab} tabName={UserCardTabs.SalesPersons}>
                         <TabDataWrapper data={userSalesPersonsJSON} />
                     </TabPanel>
-                    <TabPanel
-                        activeTab={activeTab}
-                        tabName={UserCardTabs.Permissions}
-                    >
+                    <TabPanel activeTab={activeTab} tabName={UserCardTabs.Permissions}>
                         <TabDataWrapper data={mutateJson(permissionsJSON, 'status')} />
                     </TabPanel>
-                    <TabPanel
-                        activeTab={activeTab}
-                        tabName={UserCardTabs.UserTypes}
-                    >
+                    <TabPanel activeTab={activeTab} tabName={UserCardTabs.UserTypes}>
                         <TabDataWrapper data={userTypesJSON} />
                     </TabPanel>
                 </div>

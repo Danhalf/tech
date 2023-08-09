@@ -2,13 +2,12 @@ import { useEffect, useState } from 'react'
 import { deleteUser, getDeletedUsers, getUsers, undeleteUser, User } from './user.service'
 import { Link } from 'react-router-dom'
 import clsx from 'clsx'
-import { TabNavigate } from '../helpers/helpers'
+import { TabNavigate, TabPanel } from '../helpers/helpers'
 
 enum UsersTabs {
-    Users = "Users",
-    DeletedUsers = "Deleted users"
+    Users = 'Users',
+    DeletedUsers = 'Deleted users',
 }
-
 
 const usersTabsArray: string[] = Object.values(UsersTabs) as string[]
 
@@ -63,28 +62,27 @@ export default function Users() {
     }
 
     const handleTabClick = (tab: string) => {
-        setActiveTab(tab);
-    };
+        setActiveTab(tab)
+    }
 
     return (
         <>
-            <div className="card">
+            <div className='card'>
                 <div className='card-header d-flex flex-column justify-content-end pb-0'>
                     <ul className='nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder flex-nowrap'>
-                        {
-                            usersTabsArray.map(tab => <TabNavigate key={tab} activeTab={activeTab} tab={tab} onTabClick={handleTabClick} />)
-                        }
+                        {usersTabsArray.map((tab) => (
+                            <TabNavigate
+                                key={tab}
+                                activeTab={activeTab}
+                                tab={tab}
+                                onTabClick={handleTabClick}
+                            />
+                        ))}
                     </ul>
                 </div>
 
                 <div className='tab-content' id='myTabContentInner'>
-                    <div
-                        className={clsx('tab-pane vw-90 mx-auto', {
-                            active: activeTab === UsersTabs.Users,
-                        })}
-                        id={`kt_tab_pane_${1}`}
-                        role='tabpanel'
-                    >
+                    <TabPanel activeTab={activeTab} tabName={UsersTabs.Users}>
                         <div className='card-body'>
                             <div className='table-responsive'>
                                 <table
@@ -112,7 +110,9 @@ export default function Users() {
                                                     <td>
                                                         <button
                                                             className='btn btn-danger'
-                                                            onClick={() => moveToTrash(user.useruid)}
+                                                            onClick={() =>
+                                                                moveToTrash(user.useruid)
+                                                            }
                                                         >
                                                             Delete user
                                                         </button>
@@ -124,7 +124,7 @@ export default function Users() {
                                 </table>
                             </div>
                         </div>
-                    </div>
+                    </TabPanel>
                 </div>
 
                 <div className='tab-content' id='myTabContentInner'>
@@ -162,7 +162,9 @@ export default function Users() {
                                                     <td>
                                                         <button
                                                             className='btn btn-success'
-                                                            onClick={() => restoreUser(user.useruid)}
+                                                            onClick={() =>
+                                                                restoreUser(user.useruid)
+                                                            }
                                                         >
                                                             Restore user
                                                         </button>
