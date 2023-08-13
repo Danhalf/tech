@@ -3,6 +3,8 @@ import { deleteUser, getDeletedUsers, getUsers, undeleteUser, User } from './use
 import { Link } from 'react-router-dom'
 import clsx from 'clsx'
 import { TabNavigate, TabPanel } from '../helpers/helpers'
+import { AddUserModal } from './UserModal/AddUserModal'
+import { CreateDropdownHelper } from '../helpers/createDropdownHelper'
 
 enum UsersTabs {
     Users = 'Users',
@@ -13,10 +15,13 @@ const usersTabsArray: string[] = Object.values(UsersTabs) as string[]
 
 export default function Users() {
     const [users, setUsers] = useState<User[]>([])
+    const [modalEnabled, setModalEnabled] = useState<boolean>(false)
 
     const [activeTab, setActiveTab] = useState('Users')
     const [deletedUsers, setDeletedUsers] = useState<User[]>([])
     const [loaded, setLoaded] = useState<boolean>(false)
+
+    const handleModalOpen = () => setModalEnabled(!modalEnabled)
 
     useEffect(() => {
         if (!loaded) {
@@ -67,6 +72,7 @@ export default function Users() {
 
     return (
         <>
+            {modalEnabled && <AddUserModal onClose={handleModalOpen} />}
             <div className='card'>
                 <div className='card-header d-flex flex-column justify-content-end pb-0'>
                     <ul className='nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder flex-nowrap'>
@@ -88,7 +94,11 @@ export default function Users() {
                                 className='d-flex justify-content-end'
                                 data-kt-user-table-toolbar='base'
                             >
-                                <button type='button' className='btn btn-primary'>
+                                <button
+                                    type='button'
+                                    className='btn btn-primary'
+                                    onClick={handleModalOpen}
+                                >
                                     Add User
                                 </button>
                             </div>
@@ -116,14 +126,23 @@ export default function Users() {
                                                         </Link>
                                                     </td>
                                                     <td>
-                                                        <button
-                                                            className='btn btn-danger'
-                                                            onClick={() =>
-                                                                moveToTrash(user.useruid)
-                                                            }
-                                                        >
-                                                            Delete user
-                                                        </button>
+                                                        <CreateDropdownHelper
+                                                            title='Action'
+                                                            items={[
+                                                                {
+                                                                    menuItemName: 'Delete user',
+                                                                    menuItemAction: () =>
+                                                                        moveToTrash(user.useruid),
+                                                                },
+                                                                {
+                                                                    menuItemName: 'Change password',
+                                                                    menuItemAction: () =>
+                                                                        console.log(
+                                                                            `${user.useruid} password changed`
+                                                                        ),
+                                                                },
+                                                            ]}
+                                                        />
                                                     </td>
                                                 </tr>
                                             )
@@ -168,14 +187,23 @@ export default function Users() {
                                                         </Link>
                                                     </td>
                                                     <td>
-                                                        <button
-                                                            className='btn btn-success'
-                                                            onClick={() =>
-                                                                restoreUser(user.useruid)
-                                                            }
-                                                        >
-                                                            Restore user
-                                                        </button>
+                                                        <CreateDropdownHelper
+                                                            title='Action'
+                                                            items={[
+                                                                {
+                                                                    menuItemName: 'Restore user',
+                                                                    menuItemAction: () =>
+                                                                        restoreUser(user.useruid),
+                                                                },
+                                                                {
+                                                                    menuItemName: 'Change password',
+                                                                    menuItemAction: () =>
+                                                                        console.log(
+                                                                            `${user.useruid} password changed`
+                                                                        ),
+                                                                },
+                                                            ]}
+                                                        />
                                                     </td>
                                                 </tr>
                                             )
