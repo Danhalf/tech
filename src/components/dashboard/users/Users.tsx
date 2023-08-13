@@ -84,6 +84,14 @@ export default function Users() {
                 <div className='tab-content' id='myTabContentInner'>
                     <TabPanel activeTab={activeTab} tabName={UsersTabs.Users}>
                         <div className='card-body'>
+                            <div
+                                className='d-flex justify-content-end'
+                                data-kt-user-table-toolbar='base'
+                            >
+                                <button type='button' className='btn btn-primary'>
+                                    Add User
+                                </button>
+                            </div>
                             <div className='table-responsive'>
                                 <table
                                     id='kt_table_users'
