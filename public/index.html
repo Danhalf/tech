@@ -1,20 +1,26 @@
 <!DOCTYPE html>
 <html lang="en" data-bs-theme="light">
-  <head>
-    <meta charset="utf-8" />
-    <link rel="shortcut icon" href="favicon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
-    <meta
-      name="description"
-      content="Web site created using create-react-app"
-    />
-    <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    <title>Admin Panel</title>
-  </head>
-  <body class="app-default" data-kt-app-header-minimize="on" data-kt-app-header-fixed="true">
-    <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-  </body>
+    <head>
+        <meta charset="utf-8" />
+        <link rel="shortcut icon" href="favicon.ico" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="theme-color" content="#000000" />
+        <meta name="description" content="Web site created using create-react-app" />
+        <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
+        <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+        <title>Admin Panel</title>
+    </head>
+    <body
+        class="app-default page-loading"
+        data-kt-app-header-minimize="on"
+        data-kt-app-header-fixed="true"
+        id="kt_body"
+    >
+        <noscript>You need to enable JavaScript to run this app.</noscript>
+        <div id="root"></div>
+        <div id="splash-screen" class="splash-screen">
+            <img src="%PUBLIC_URL%/adms_logo.png" class="logo" alt="ADMS logo" />
+            <span>Loading ...</span>
+        </div>
+    </body>
 </html>

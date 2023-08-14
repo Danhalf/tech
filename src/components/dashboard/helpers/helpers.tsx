@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { renderTable } from './renderTableHelper'
 import { ITabValues } from '../interfaces/interfaces'
 import { CustomCheckbox } from './renderInputsHelper'
+import { CustomDropdown } from './renderDropdownHelper'
 
 const renderList = (data: any, checkbox: boolean = false) => {
     if (typeof data !== 'object' || data === null) {
@@ -144,3 +145,5 @@ export const TabDataWrapper = ({
         </>
     )
 }
+
+export { CustomDropdown }

@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import { deleteUser, getDeletedUsers, getUsers, undeleteUser, User } from './user.service'
 import { Link } from 'react-router-dom'
 import clsx from 'clsx'
-import { TabNavigate, TabPanel } from '../helpers/helpers'
+import { CustomDropdown, TabNavigate, TabPanel } from '../helpers/helpers'
 import { AddUserModal } from './UserModal/AddUserModal'
-import { CreateDropdownHelper } from '../helpers/createDropdownHelper'
+import { Dropdown } from 'react-bootstrap'
 
 enum UsersTabs {
     Users = 'Users',
@@ -126,7 +126,34 @@ export default function Users() {
                                                         </Link>
                                                     </td>
                                                     <td>
-                                                        <CreateDropdownHelper
+                                                        <Dropdown>
+                                                            <Dropdown.Toggle
+                                                                variant='light'
+                                                                id='dropdown-basic'
+                                                            >
+                                                                Action
+                                                            </Dropdown.Toggle>
+
+                                                            <Dropdown.Menu>
+                                                                <Dropdown.Item
+                                                                    onClick={() =>
+                                                                        moveToTrash(user.useruid)
+                                                                    }
+                                                                >
+                                                                    Delete user
+                                                                </Dropdown.Item>
+                                                                <Dropdown.Item
+                                                                    onClick={() =>
+                                                                        console.log(
+                                                                            `${user.useruid} password changed`
+                                                                        )
+                                                                    }
+                                                                >
+                                                                    Change password
+                                                                </Dropdown.Item>
+                                                            </Dropdown.Menu>
+                                                        </Dropdown>
+                                                        {/* <CustomDropdown
                                                             title='Action'
                                                             items={[
                                                                 {
@@ -142,7 +169,7 @@ export default function Users() {
                                                                         ),
                                                                 },
                                                             ]}
-                                                        />
+                                                        /> */}
                                                     </td>
                                                 </tr>
                                             )
@@ -187,7 +214,7 @@ export default function Users() {
                                                         </Link>
                                                     </td>
                                                     <td>
-                                                        <CreateDropdownHelper
+                                                        <CustomDropdown
                                                             title='Action'
                                                             items={[
                                                                 {
