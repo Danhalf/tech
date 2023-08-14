@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom'
 import clsx from 'clsx'
 import { CustomDropdown, TabNavigate, TabPanel } from '../helpers/helpers'
 import { AddUserModal } from './UserModal/AddUserModal'
-import { Dropdown } from 'react-bootstrap'
 
 enum UsersTabs {
     Users = 'Users',
@@ -126,40 +125,13 @@ export default function Users() {
                                                         </Link>
                                                     </td>
                                                     <td>
-                                                        <Dropdown>
-                                                            <Dropdown.Toggle
-                                                                variant='light'
-                                                                id='dropdown-basic'
-                                                            >
-                                                                Action
-                                                            </Dropdown.Toggle>
-
-                                                            <Dropdown.Menu>
-                                                                <Dropdown.Item
-                                                                    onClick={() =>
-                                                                        moveToTrash(user.useruid)
-                                                                    }
-                                                                >
-                                                                    Delete user
-                                                                </Dropdown.Item>
-                                                                <Dropdown.Item
-                                                                    onClick={() =>
-                                                                        console.log(
-                                                                            `${user.useruid} password changed`
-                                                                        )
-                                                                    }
-                                                                >
-                                                                    Change password
-                                                                </Dropdown.Item>
-                                                            </Dropdown.Menu>
-                                                        </Dropdown>
-                                                        {/* <CustomDropdown
-                                                            title='Action'
+                                                        <CustomDropdown
+                                                            title='Actions'
                                                             items={[
                                                                 {
                                                                     menuItemName: 'Delete user',
                                                                     menuItemAction: () =>
-                                                                        moveToTrash(user.useruid),
+                                                                        restoreUser(user.useruid),
                                                                 },
                                                                 {
                                                                     menuItemName: 'Change password',
@@ -169,7 +141,7 @@ export default function Users() {
                                                                         ),
                                                                 },
                                                             ]}
-                                                        /> */}
+                                                        />
                                                     </td>
                                                 </tr>
                                             )
@@ -215,7 +187,7 @@ export default function Users() {
                                                     </td>
                                                     <td>
                                                         <CustomDropdown
-                                                            title='Action'
+                                                            title='Actions'
                                                             items={[
                                                                 {
                                                                     menuItemName: 'Restore user',
