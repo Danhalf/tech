@@ -43,21 +43,22 @@ export const CustomDropdown: FC<Props> = ({ title, items }) => {
     return (
         <div ref={dropdownRef} className={clsx('dropdown', { show: dropdownOpen })}>
             <button
-                className='btn btn-light btn-active-light-primary btn-sm dropdown-toggle'
+                className='btn btn-light btn-active-light-primary btn-sm fw-bold'
                 onClick={toggleDropdown}
             >
                 {title}
+                <i className='ki-duotone ki-down fs-5 m-0'></i>
             </button>
             <div
                 className={clsx(
-                    'dropdown-menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4',
+                    'dropdown-menu menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-125px py-4 transition',
                     { show: dropdownOpen }
                 )}
                 onClick={(e) => e.stopPropagation()}
             >
                 {items.map(({ menuItemName, menuItemAction }, idx) => (
-                    <div key={menuItemName + idx} className='dropdown-item px-3 cursor-pointer'>
-                        <a className='dropdown-item-link px-3' onClick={menuItemAction}>
+                    <div key={menuItemName + idx} className='menu-item px-3 cursor-pointer'>
+                        <a className='menu-link px-3' onClick={menuItemAction}>
                             {menuItemName}
                         </a>
                     </div>

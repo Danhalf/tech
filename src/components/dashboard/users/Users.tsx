@@ -98,6 +98,7 @@ export default function Users() {
                                     className='btn btn-primary'
                                     onClick={handleModalOpen}
                                 >
+                                    <i className='ki-duotone ki-plus fs-2'></i>
                                     Add User
                                 </button>
                             </div>
@@ -131,7 +132,7 @@ export default function Users() {
                                                                 {
                                                                     menuItemName: 'Delete user',
                                                                     menuItemAction: () =>
-                                                                        restoreUser(user.useruid),
+                                                                        moveToTrash(user.useruid),
                                                                 },
                                                                 {
                                                                     menuItemName: 'Change password',
@@ -162,6 +163,19 @@ export default function Users() {
                         role='tabpanel'
                     >
                         <div className='card-body'>
+                            <div
+                                className='d-flex justify-content-end'
+                                data-kt-user-table-toolbar='base'
+                            >
+                                <button
+                                    type='button'
+                                    className='btn btn-primary'
+                                    onClick={handleModalOpen}
+                                >
+                                    <i className='ki-duotone ki-plus fs-2'></i>
+                                    Add User
+                                </button>
+                            </div>
                             <div className='table-responsive'>
                                 <table
                                     id='kt_table_users'

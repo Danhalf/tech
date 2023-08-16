@@ -14,7 +14,10 @@ export const AddUserModalHeader: FC<AddUserModalProps> = ({ onClose }) => {
                 onClick={onClose}
                 style={{ cursor: 'pointer' }}
             >
-                ✖
+                <i className='ki-duotone ki-cross fs-1'>
+                    <span className='path1'></span>
+                    <span className='path2'></span>
+                </i>
             </div>
         </div>
     )
