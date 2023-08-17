@@ -12,7 +12,7 @@ export function MasterInit() {
     const pluginsInitialization = () => {
         setTimeout(() => {
             MenuComponent.bootstrap()
-        }, 500)
+        }, 1500)
     }
 
     useEffect(() => {
@@ -21,7 +21,6 @@ export function MasterInit() {
 
     return <></>
 }
-MenuComponent.bootstrap()
 
 const Content = () => (
     <div className='d-flex flex-column flex-lg-row flex-column-fluid h-100'>
