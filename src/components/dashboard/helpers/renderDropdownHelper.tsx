@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import { FC } from 'react'
+import { FC, useEffect } from 'react'
+import { MenuComponent } from '../../../_metronic/assets/ts/components'
 
 interface PropsItems {
     menuItemName: string
@@ -12,6 +13,10 @@ interface Props {
 }
 
 export const CustomDropdown: FC<Props> = ({ title, items }) => {
+    useEffect(() => {
+        MenuComponent.reinitialization()
+    }, [items])
+
     return (
         <div className='m-0'>
             <a
@@ -19,6 +24,7 @@ export const CustomDropdown: FC<Props> = ({ title, items }) => {
                 className='btn btn-light btn-active-light-primary btn-sm'
                 data-kt-menu-trigger='click'
                 data-kt-menu-placement='bottom-end'
+                // eslint-disable-next-line react/style-prop-object
             >
                 {title}
                 <i className='ki-duotone ki-down fs-5 m-0'></i>

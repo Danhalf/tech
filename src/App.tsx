@@ -1,4 +1,5 @@
-import { lazy, Suspense } from 'react'
+import { lazy, Suspense, useEffect } from 'react'
+import { MenuComponent } from './_metronic/assets/ts/components'
 const Content = lazy(() => import('./Content'))
 
 const Loader = () => {
@@ -11,9 +12,23 @@ const Loader = () => {
     )
 }
 
+export function MasterInit() {
+    const pluginsInitialization = () => {
+        setTimeout(() => {
+            MenuComponent.bootstrap()
+        }, 500)
+    }
+
+    useEffect(() => {
+        pluginsInitialization()
+    }, [])
+    return <></>
+}
+
 const App: React.FC = () => {
     return (
         <Suspense fallback={<Loader />}>
+            <MasterInit />
             <Content />
         </Suspense>
     )
