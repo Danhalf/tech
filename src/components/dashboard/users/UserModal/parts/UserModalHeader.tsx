@@ -1,13 +1,14 @@
 import { FC } from 'react'
 
-interface AddUserModalProps {
+interface UserModalHeaderProps {
     onClose: () => void
+    title?: string
 }
 
-export const AddUserModalHeader: FC<AddUserModalProps> = ({ onClose }) => {
+export const UserModalHeader: FC<UserModalHeaderProps> = ({ onClose, title = 'User' }) => {
     return (
         <div className='modal-header'>
-            <h2 className='fw-bolder'>Add User</h2>
+            <h2 className='fw-bolder'>{title}</h2>
             <div
                 className='btn btn-icon btn-sm btn-active-icon-primary'
                 data-kt-users-modal-action='close'
