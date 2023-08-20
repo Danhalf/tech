@@ -82,6 +82,15 @@ export default function Users() {
         setActiveTab(tab)
     }
 
+    const UsersTableHead = (): JSX.Element => (
+        <thead>
+            <tr className='text-start text-muted fw-bolder fs-7 text-uppercase gs-0'>
+                <th>User name</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+    )
+
     return (
         <>
             {modalEnabled && <AddUserModal onClose={handleModalOpen} />}
@@ -120,12 +129,7 @@ export default function Users() {
                                     id='kt_table_users'
                                     className='table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer'
                                 >
-                                    <thead>
-                                        <tr className='text-start text-muted fw-bolder fs-7 text-uppercase gs-0'>
-                                            <th>User name</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
+                                    <UsersTableHead />
                                     <tbody className='text-gray-600 fw-bold'>
                                         {users.map((user) => {
                                             return (
@@ -196,12 +200,7 @@ export default function Users() {
                                     id='kt_table_users'
                                     className='table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer'
                                 >
-                                    <thead>
-                                        <tr className='text-start text-muted fw-bolder fs-7 text-uppercase gs-0'>
-                                            <th>User name</th>
-                                            <th>Actions</th>
-                                        </tr>
-                                    </thead>
+                                    <UsersTableHead />
                                     <tbody className='text-gray-600 fw-bold'>
                                         {deletedUsers.map((user) => {
                                             return (
