@@ -9,7 +9,7 @@ import {
 } from './user.service'
 import { Link } from 'react-router-dom'
 import clsx from 'clsx'
-import { CustomDropdown, TabNavigate, TabPanel } from '../helpers/helpers'
+import { CustomDropdown, TableHead, TabNavigate, TabPanel } from '../helpers/helpers'
 import { AddUserModal } from './UserModal/AddUserModal'
 
 enum UsersTabs {
@@ -17,7 +17,13 @@ enum UsersTabs {
     DeletedUsers = 'Deleted users',
 }
 
+enum UsersColumns {
+    Microservice = 'User name',
+    Actions = 'Actions',
+}
+
 const usersTabsArray: string[] = Object.values(UsersTabs) as string[]
+const usersColumnsArray: string[] = Object.values(UsersColumns) as string[]
 
 export default function Users() {
     const TEMP_PASSWORD = '654321'
@@ -82,15 +88,6 @@ export default function Users() {
         setActiveTab(tab)
     }
 
-    const UsersTableHead = (): JSX.Element => (
-        <thead>
-            <tr className='text-start text-muted fw-bolder fs-7 text-uppercase gs-0'>
-                <th>User name</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-    )
-
     return (
         <>
             {modalEnabled && <AddUserModal onClose={handleModalOpen} />}
@@ -129,7 +126,7 @@ export default function Users() {
                                     id='kt_table_users'
                                     className='table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer'
                                 >
-                                    <UsersTableHead />
+                                    <TableHead columns={usersColumnsArray} />
                                     <tbody className='text-gray-600 fw-bold'>
                                         {users.map((user) => {
                                             return (
@@ -200,7 +197,7 @@ export default function Users() {
                                     id='kt_table_users'
                                     className='table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer'
                                 >
-                                    <UsersTableHead />
+                                    <TableHead columns={usersColumnsArray} />
                                     <tbody className='text-gray-600 fw-bold'>
                                         {deletedUsers.map((user) => {
                                             return (
