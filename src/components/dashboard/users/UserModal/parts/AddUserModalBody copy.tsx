@@ -2,20 +2,22 @@ import clsx from 'clsx'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import { useState, FormEvent } from 'react'
-import { IUserEdit } from '../../../interfaces/IUserData'
+import { IUserAdd } from '../../../interfaces/IUserData'
 
-export const AddUserModalBody = () => {
-    const [userForEdit, setUserForEdit] = useState<IUserEdit>({
+export const AddUserModalBody = (): JSX.Element => {
+    const [userData, setUserData] = useState<IUserAdd>({
         username: '',
+        password: '',
     })
 
-    const editUserSchema = Yup.object().shape({
+    const addUserSchema = Yup.object().shape({
         username: Yup.string().trim().required('Username is required'),
+        password: Yup.string().trim().required('Password is required'),
     })
 
     const formik = useFormik({
-        initialValues: userForEdit,
-        validationSchema: editUserSchema,
+        initialValues: userData,
+        validationSchema: addUserSchema,
         onSubmit: async (values, { setSubmitting }) => {
             setSubmitting(true)
             try {
@@ -61,7 +63,7 @@ export const AddUserModalBody = () => {
                             )}
                             onInput={({ target }: FormEvent<HTMLInputElement>) => {
                                 const inputElement = target as HTMLInputElement
-                                setUserForEdit({ username: inputElement.value })
+                                setUserData({ ...userData, username: inputElement.value })
                             }}
                             autoComplete='off'
                             disabled={formik.isSubmitting}
@@ -74,13 +76,41 @@ export const AddUserModalBody = () => {
                             </div>
                         )}
                     </div>
+                    <div className='fv-row mb-7'>
+                        <label className='required fw-bold fs-6 mb-2'>Password</label>
+                        <input
+                            placeholder='Password'
+                            type='text'
+                            name='name'
+                            className={clsx(
+                                'form-control form-control-solid mb-3 mb-lg-0',
+                                { 'is-invalid': formik.touched.password && formik.errors.password },
+                                {
+                                    'is-valid': formik.touched.password && !formik.errors.password,
+                                }
+                            )}
+                            onInput={({ target }: FormEvent<HTMLInputElement>) => {
+                                const inputElement = target as HTMLInputElement
+                                setUserData({ ...userData, password: inputElement.value })
+                            }}
+                            autoComplete='off'
+                            disabled={formik.isSubmitting}
+                        />
+                        {formik.touched.password && formik.errors.password && (
+                            <div className='fv-plugins-message-container'>
+                                <div className='fv-help-block'>
+                                    <span role='alert'>{formik.errors.password}</span>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
                 <div className='text-center pt-15'>
                     <button
                         type='submit'
                         className='btn btn-primary'
                         data-kt-users-modal-action='submit'
-                        disabled={formik.isSubmitting || !formik.isValid || !formik.touched || true} // temporary solution, until the API is ready - constantly disabled
+                        disabled={formik.isSubmitting || !formik.isValid || !formik.touched}
                     >
                         <span className='indicator-label'>Submit</span>
                         {formik.isSubmitting && (

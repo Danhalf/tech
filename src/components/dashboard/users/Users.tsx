@@ -29,13 +29,13 @@ export default function Users() {
     const TEMP_PASSWORD = '654321'
 
     const [users, setUsers] = useState<User[]>([])
-    const [modalEnabled, setModalEnabled] = useState<boolean>(false)
+    const [addUserModalEnabled, setAddUserModalEnabled] = useState<boolean>(false)
 
     const [activeTab, setActiveTab] = useState('Users')
     const [deletedUsers, setDeletedUsers] = useState<User[]>([])
     const [loaded, setLoaded] = useState<boolean>(false)
 
-    const handleModalOpen = () => setModalEnabled(!modalEnabled)
+    const handleAddUserModalOpen = () => setAddUserModalEnabled(!addUserModalEnabled)
 
     useEffect(() => {
         if (!loaded) {
@@ -90,7 +90,9 @@ export default function Users() {
 
     return (
         <>
-            {modalEnabled && <AddUserModal onClose={handleModalOpen} />}
+            {addUserModalEnabled && (
+                <AddUserModal onClose={handleAddUserModalOpen} title={'Add user'} />
+            )}
             <div className='card'>
                 <div className='card-header d-flex flex-column justify-content-end pb-0'>
                     <ul className='nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder flex-nowrap'>
@@ -115,7 +117,7 @@ export default function Users() {
                                 <button
                                     type='button'
                                     className='btn btn-primary'
-                                    onClick={handleModalOpen}
+                                    onClick={handleAddUserModalOpen}
                                 >
                                     <i className='ki-duotone ki-plus fs-2'></i>
                                     Add User
@@ -186,7 +188,7 @@ export default function Users() {
                                 <button
                                     type='button'
                                     className='btn btn-primary'
-                                    onClick={handleModalOpen}
+                                    onClick={handleAddUserModalOpen}
                                 >
                                     <i className='ki-duotone ki-plus fs-2'></i>
                                     Add User
