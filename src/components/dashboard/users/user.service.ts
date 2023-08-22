@@ -23,6 +23,18 @@ export const createUser = (loginname: string, loginpassword: string) => {
     )
 }
 
+export const copyUser = (srcuid: string) => {
+    return axios
+        .post<ActionStatus>(
+            `${API_URL}user/${srcuid}/copyuser`,
+            {},
+            {
+                headers: { Authorization: `Bearer ${getToken()}` },
+            }
+        )
+        .then((response) => response.data)
+}
+
 export const updateUser = (uid: string, loginname: string, loginpassword: string) => {
     return axios.post(
         API_URL + 'user/' + uid + '/user',

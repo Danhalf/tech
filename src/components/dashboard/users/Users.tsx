@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import {
+    copyUser,
     deleteUser,
     getDeletedUsers,
     getUsers,
@@ -49,6 +50,21 @@ export default function Users() {
             })
         }
     }, [users, loaded])
+
+    const handleCopyUser = (srcuid: string) => {
+        copyUser(srcuid).then((response) => {
+            if (response.status === 'OK') {
+                getUsers().then((response) => {
+                    setUsers(response)
+                    setLoaded(true)
+                })
+                getDeletedUsers().then((response) => {
+                    setDeletedUsers(response)
+                    setLoaded(true)
+                })
+            }
+        })
+    }
 
     const moveToTrash = (userId: string) => {
         deleteUser(userId).then((response) => {
@@ -152,6 +168,13 @@ export default function Users() {
                                                                             user.useruid,
                                                                             user.username,
                                                                             TEMP_PASSWORD
+                                                                        ),
+                                                                },
+                                                                {
+                                                                    menuItemName: 'Copy user',
+                                                                    menuItemAction: () =>
+                                                                        handleCopyUser(
+                                                                            user.useruid
                                                                         ),
                                                                 },
                                                                 {
