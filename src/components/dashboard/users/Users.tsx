@@ -1,17 +1,10 @@
 import { useEffect, useState } from 'react'
-import {
-    copyUser,
-    deleteUser,
-    getDeletedUsers,
-    getUsers,
-    undeleteUser,
-    updateUser,
-    User,
-} from './user.service'
+import { copyUser, deleteUser, getDeletedUsers, getUsers, undeleteUser, User } from './user.service'
 import { Link } from 'react-router-dom'
 import clsx from 'clsx'
 import { CustomDropdown, TableHead, TabNavigate, TabPanel } from '../helpers/helpers'
 import { AddUserModal } from './UserModal/AddUserModal'
+import { EditUserModal } from './UserModal/EditUserModal'
 
 enum UsersTabs {
     Users = 'Users',
@@ -27,16 +20,31 @@ const usersTabsArray: string[] = Object.values(UsersTabs) as string[]
 const usersColumnsArray: string[] = Object.values(UsersColumns) as string[]
 
 export default function Users() {
-    const TEMP_PASSWORD = '654321'
-
     const [users, setUsers] = useState<User[]>([])
     const [addUserModalEnabled, setAddUserModalEnabled] = useState<boolean>(false)
+    const [editUserModalEnabled, setEditUserModalEnabled] = useState<boolean>(false)
+
+    const initialUserState = {
+        created: '',
+        createdbyuid: '',
+        index: 0,
+        parentuid: '',
+        updated: '',
+        username: '',
+        useruid: '',
+    }
+
+    const [selectedUser, setSelectedUser] = useState<User>(initialUserState)
 
     const [activeTab, setActiveTab] = useState('Users')
     const [deletedUsers, setDeletedUsers] = useState<User[]>([])
     const [loaded, setLoaded] = useState<boolean>(false)
 
     const handleAddUserModalOpen = () => setAddUserModalEnabled(!addUserModalEnabled)
+    const handleEditUserModalOpen = ({ useruid, username }: User) => {
+        setSelectedUser({ ...selectedUser, useruid, username: username })
+        setEditUserModalEnabled(true)
+    }
 
     useEffect(() => {
         if (!loaded) {
@@ -96,10 +104,6 @@ export default function Users() {
         })
     }
 
-    const changePassword = (uid: string, loginname: string, loginpassword: string): void => {
-        updateUser(uid, loginname, loginpassword)
-    }
-
     const handleTabClick = (tab: string) => {
         setActiveTab(tab)
     }
@@ -108,6 +112,13 @@ export default function Users() {
         <>
             {addUserModalEnabled && (
                 <AddUserModal onClose={handleAddUserModalOpen} title={'Add user'} />
+            )}
+            {editUserModalEnabled && (
+                <EditUserModal
+                    onClose={() => setEditUserModalEnabled(false)}
+                    title={'Change password'}
+                    userData={selectedUser}
+                />
             )}
             <div className='card'>
                 <div className='card-header d-flex flex-column justify-content-end pb-0'>
@@ -146,7 +157,7 @@ export default function Users() {
                                 >
                                     <TableHead columns={usersColumnsArray} />
                                     <tbody className='text-gray-600 fw-bold'>
-                                        {users.map((user) => {
+                                        {users.map((user: User) => {
                                             return (
                                                 <tr key={user.useruid}>
                                                     <td>
@@ -164,10 +175,8 @@ export default function Users() {
                                                                 {
                                                                     menuItemName: 'Change password',
                                                                     menuItemAction: () =>
-                                                                        changePassword(
-                                                                            user.useruid,
-                                                                            user.username,
-                                                                            TEMP_PASSWORD
+                                                                        handleEditUserModalOpen(
+                                                                            user
                                                                         ),
                                                                 },
                                                                 {
@@ -224,7 +233,7 @@ export default function Users() {
                                 >
                                     <TableHead columns={usersColumnsArray} />
                                     <tbody className='text-gray-600 fw-bold'>
-                                        {deletedUsers.map((user) => {
+                                        {deletedUsers.map((user: User) => {
                                             return (
                                                 <tr key={user.useruid}>
                                                     <td>
@@ -247,10 +256,8 @@ export default function Users() {
                                                                 {
                                                                     menuItemName: 'Change password',
                                                                     menuItemAction: () =>
-                                                                        changePassword(
-                                                                            user.useruid,
-                                                                            user.username,
-                                                                            TEMP_PASSWORD
+                                                                        handleEditUserModalOpen(
+                                                                            user
                                                                         ),
                                                                 },
                                                             ]}

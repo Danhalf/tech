@@ -1,12 +1,13 @@
 import clsx from 'clsx'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
-import { useState, FormEvent } from 'react'
-import { IUserAdd } from '../../../interfaces/IUserData'
+import { useState } from 'react'
+import { IUserEdit } from '../../../interfaces/IUserData'
+import { User, updateUser } from '../../user.service'
 
-export const AddUserModalBody = (): JSX.Element => {
-    const [userData, setUserData] = useState<IUserAdd>({
-        username: '',
+export const EditUserModalBody = ({ user }: { user: User }): JSX.Element => {
+    const [userData] = useState<IUserEdit>({
+        username: user.username,
         password: '',
     })
 
@@ -18,14 +19,14 @@ export const AddUserModalBody = (): JSX.Element => {
     const formik = useFormik({
         initialValues: userData,
         validationSchema: addUserSchema,
-        onSubmit: async (values, { setSubmitting }) => {
+        onSubmit: async ({ username, password }, { setSubmitting }) => {
             setSubmitting(true)
             try {
-                console.log(values)
+                await updateUser(user.useruid, username, password)
             } catch (ex) {
                 console.error(ex)
             } finally {
-                setSubmitting(true)
+                setSubmitting(false)
             }
         },
     })
@@ -38,63 +39,49 @@ export const AddUserModalBody = (): JSX.Element => {
                 onSubmit={formik.handleSubmit}
                 noValidate
             >
-                <div
-                    className='d-flex flex-column scroll-y me-n7 pe-7'
-                    id='kt_modal_add_user_scroll'
-                    data-kt-scroll='true'
-                    data-kt-scroll-activate='{default: false, lg: true}'
-                    data-kt-scroll-max-height='auto'
-                    data-kt-scroll-dependencies='#kt_modal_add_user_header'
-                    data-kt-scroll-wrappers='#kt_modal_add_user_scroll'
-                    data-kt-scroll-offset='300px'
-                >
-                    <div className='fv-row mb-7'>
-                        <label className='required fw-bold fs-6 mb-2'>Username</label>
+                <div className='d-flex flex-column scroll-y me-n7 pe-7'>
+                    <div className='fv-row mb-8'>
+                        <label className='form-label fs-6 fw-bolder text-dark'>Username</label>
                         <input
                             placeholder='Username'
-                            type='text'
-                            name='name'
+                            {...formik.getFieldProps('username')}
                             className={clsx(
-                                'form-control form-control-solid mb-3 mb-lg-0',
-                                { 'is-invalid': formik.touched.username && formik.errors.username },
+                                'form-control bg-transparent',
+                                {
+                                    'is-invalid': formik.touched.username && formik.errors.username,
+                                },
                                 {
                                     'is-valid': formik.touched.username && !formik.errors.username,
                                 }
                             )}
-                            onInput={({ target }: FormEvent<HTMLInputElement>) => {
-                                const inputElement = target as HTMLInputElement
-                                setUserData({ ...userData, username: inputElement.value })
-                            }}
+                            type='text'
+                            name='username'
                             autoComplete='off'
-                            disabled={formik.isSubmitting}
+                            disabled
                         />
                         {formik.touched.username && formik.errors.username && (
                             <div className='fv-plugins-message-container'>
-                                <div className='fv-help-block'>
-                                    <span role='alert'>{formik.errors.username}</span>
-                                </div>
+                                <span role='alert'>{formik.errors.username}</span>
                             </div>
                         )}
                     </div>
-                    <div className='fv-row mb-7'>
-                        <label className='required fw-bold fs-6 mb-2'>Password</label>
+
+                    <div className='fv-row mb-8'>
+                        <label className='form-label fw-bolder text-dark fs-6 mb-0'>Password</label>
                         <input
+                            type='password'
                             placeholder='Password'
-                            type='text'
-                            name='name'
+                            autoComplete='off'
+                            {...formik.getFieldProps('password')}
                             className={clsx(
-                                'form-control form-control-solid mb-3 mb-lg-0',
-                                { 'is-invalid': formik.touched.password && formik.errors.password },
+                                'form-control bg-transparent',
+                                {
+                                    'is-invalid': formik.touched.password && formik.errors.password,
+                                },
                                 {
                                     'is-valid': formik.touched.password && !formik.errors.password,
                                 }
                             )}
-                            onInput={({ target }: FormEvent<HTMLInputElement>) => {
-                                const inputElement = target as HTMLInputElement
-                                setUserData({ ...userData, password: inputElement.value })
-                            }}
-                            autoComplete='off'
-                            disabled={formik.isSubmitting}
                         />
                         {formik.touched.password && formik.errors.password && (
                             <div className='fv-plugins-message-container'>

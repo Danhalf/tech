@@ -1,51 +1,12 @@
-import React from 'react'
 import clsx from 'clsx'
 import * as Yup from 'yup'
-import { FormikProps, useFormik } from 'formik'
-import { useState, FormEvent } from 'react'
+import { useFormik } from 'formik'
+import { useState } from 'react'
 import { IUserAdd } from '../../../interfaces/IUserData'
-
-interface FormikInputProps {
-    title: string
-    field: keyof IUserAdd
-    formik: FormikProps<IUserAdd>
-    setUserData: React.Dispatch<React.SetStateAction<IUserAdd>>
-}
-
-const FormikInput = ({ title, field, formik, setUserData }: FormikInputProps) => {
-    return (
-        <div className='fv-row mb-7'>
-            <label className='required fw-bold fs-6 mb-2'>{title}</label>
-            <input
-                placeholder={title}
-                type='text'
-                name={field}
-                className={clsx('form-control form-control-solid mb-3 mb-lg-0', {
-                    'is-invalid': formik.touched[field] && formik.errors[field],
-                })}
-                onInput={({ target }: FormEvent<HTMLInputElement>) => {
-                    const inputElement = target as HTMLInputElement
-                    setUserData((prevData) => ({
-                        ...prevData,
-                        [field]: inputElement.value,
-                    }))
-                }}
-                autoComplete='off'
-                disabled={formik.isSubmitting}
-            />
-            {formik.touched[field] && formik.errors[field] && (
-                <div className='fv-plugins-message-container'>
-                    <div className='fv-help-block'>
-                        <span role='alert'>{formik.errors[field]}</span>
-                    </div>
-                </div>
-            )}
-        </div>
-    )
-}
+import { createUser } from '../../user.service'
 
 export const AddUserModalBody = (): JSX.Element => {
-    const [userData, setUserData] = useState<IUserAdd>({
+    const [userData] = useState<IUserAdd>({
         username: '',
         password: '',
     })
@@ -57,14 +18,11 @@ export const AddUserModalBody = (): JSX.Element => {
 
     const formik = useFormik({
         initialValues: userData,
-        validationSchema: (val: any) => {
-            console.log(val)
-            return addUserSchema
-        },
-        onSubmit: async (values, { setSubmitting }) => {
+        validationSchema: addUserSchema,
+        onSubmit: async ({ username, password }: IUserAdd, { setSubmitting }) => {
             setSubmitting(true)
             try {
-                console.log(values)
+                await createUser(username, password)
             } catch (ex) {
                 console.error(ex)
             } finally {
@@ -82,18 +40,56 @@ export const AddUserModalBody = (): JSX.Element => {
                 noValidate
             >
                 <div className='d-flex flex-column scroll-y me-n7 pe-7'>
-                    <FormikInput
-                        title='Username'
-                        field='username'
-                        formik={formik}
-                        setUserData={setUserData}
-                    />
-                    <FormikInput
-                        title='Password'
-                        field='password'
-                        formik={formik}
-                        setUserData={setUserData}
-                    />
+                    <div className='fv-row mb-8'>
+                        <label className='form-label fs-6 fw-bolder text-dark'>Username</label>
+                        <input
+                            placeholder='Username'
+                            {...formik.getFieldProps('username')}
+                            className={clsx(
+                                'form-control bg-transparent',
+                                {
+                                    'is-invalid': formik.touched.username && formik.errors.username,
+                                },
+                                {
+                                    'is-valid': formik.touched.username && !formik.errors.username,
+                                }
+                            )}
+                            type='text'
+                            name='username'
+                            autoComplete='off'
+                        />
+                        {formik.touched.username && formik.errors.username && (
+                            <div className='fv-plugins-message-container'>
+                                <span role='alert'>{formik.errors.username}</span>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className='fv-row mb-8'>
+                        <label className='form-label fw-bolder text-dark fs-6 mb-0'>Password</label>
+                        <input
+                            type='password'
+                            placeholder='Password'
+                            autoComplete='off'
+                            {...formik.getFieldProps('password')}
+                            className={clsx(
+                                'form-control bg-transparent',
+                                {
+                                    'is-invalid': formik.touched.password && formik.errors.password,
+                                },
+                                {
+                                    'is-valid': formik.touched.password && !formik.errors.password,
+                                }
+                            )}
+                        />
+                        {formik.touched.password && formik.errors.password && (
+                            <div className='fv-plugins-message-container'>
+                                <div className='fv-help-block'>
+                                    <span role='alert'>{formik.errors.password}</span>
+                                </div>
+                            </div>
+                        )}
+                    </div>
                 </div>
                 <div className='text-center pt-15'>
                     <button
