@@ -49,11 +49,6 @@ export const UserModalBody = ({ onClose, user }: UserModalBodyProps): JSX.Elemen
                 onSubmit={formik.handleSubmit}
                 noValidate
             >
-                {formik.status && (
-                    <div className='mb-lg-15 alert alert-danger'>
-                        <div className='alert-text font-weight-bold'>{formik.status}</div>
-                    </div>
-                )}
                 <div className='d-flex flex-column scroll-y me-n7 pe-7'>
                     <div className='fv-row mb-8'>
                         <label className='form-label fs-6 fw-bolder text-dark'>Username</label>
