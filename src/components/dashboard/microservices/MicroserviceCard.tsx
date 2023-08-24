@@ -67,9 +67,6 @@ export function MicroserviceCard() {
         <div className='row g-5 g-xl-10 mb-5 mb-xl-10'>
             <div className='col-12'>
                 <div className='card card-custom mb-5 vw-90 mx-auto'>
-                    <div className='card-header'>
-                        <h3 className='card-title fw-bolder text-dark'>{microserviceData?.name}</h3>
-                    </div>
                     <div className='card-body d-flex flex-column justify-content-end pb-0'>
                         <ul className='nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder flex-nowrap'>
                             {microserviceTabsArray.map((tab) => (
