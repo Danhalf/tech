@@ -133,23 +133,21 @@ export default function Users() {
                         ))}
                     </ul>
                 </div>
-
+                <button
+                    type='button'
+                    className='btn btn-primary align-self-end m-4'
+                    onClick={handleAddUserModalOpen}
+                >
+                    <i className='ki-duotone ki-plus fs-2'></i>
+                    Add User
+                </button>
                 <div className='tab-content' id='myTabContentInner'>
                     <TabPanel activeTab={activeTab} tabName={UsersTabs.Users}>
                         <div className='card-body'>
                             <div
                                 className='d-flex justify-content-end'
                                 data-kt-user-table-toolbar='base'
-                            >
-                                <button
-                                    type='button'
-                                    className='btn btn-primary'
-                                    onClick={handleAddUserModalOpen}
-                                >
-                                    <i className='ki-duotone ki-plus fs-2'></i>
-                                    Add User
-                                </button>
-                            </div>
+                            ></div>
                             <div className='table-responsive'>
                                 <table
                                     id='kt_table_users'
@@ -216,16 +214,7 @@ export default function Users() {
                             <div
                                 className='d-flex justify-content-end'
                                 data-kt-user-table-toolbar='base'
-                            >
-                                <button
-                                    type='button'
-                                    className='btn btn-primary'
-                                    onClick={handleAddUserModalOpen}
-                                >
-                                    <i className='ki-duotone ki-plus fs-2'></i>
-                                    Add User
-                                </button>
-                            </div>
+                            ></div>
                             <div className='table-responsive'>
                                 <table
                                     id='kt_table_users'

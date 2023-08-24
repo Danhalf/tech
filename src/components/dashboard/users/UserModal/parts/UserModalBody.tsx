@@ -2,14 +2,21 @@ import clsx from 'clsx'
 import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import { useState } from 'react'
-import { IUserEdit } from '../../../interfaces/IUserData'
-import { User, updateUser } from '../../user.service'
+import { createOrUpdateUser, User } from '../../user.service'
+import { IUserData } from '../../../interfaces/interfaces'
 
-export const EditUserModalBody = ({ user }: { user: User }): JSX.Element => {
-    const [userData] = useState<IUserEdit>({
-        username: user.username,
+interface UserModalBodyProps {
+    onClose: () => void
+    user?: User
+}
+
+export const UserModalBody = ({ onClose, user }: UserModalBodyProps): JSX.Element => {
+    const initialUserData: IUserData = {
+        username: user?.username || '',
         password: '',
-    })
+    }
+
+    const [userData] = useState<IUserData>(initialUserData)
 
     const addUserSchema = Yup.object().shape({
         username: Yup.string().trim().required('Username is required'),
@@ -22,7 +29,10 @@ export const EditUserModalBody = ({ user }: { user: User }): JSX.Element => {
         onSubmit: async ({ username, password }, { setSubmitting }) => {
             setSubmitting(true)
             try {
-                await updateUser(user.useruid, username, password)
+                const params: [string, string, string?] = [username, password]
+                if (user?.useruid) params.push(user.useruid)
+                await createOrUpdateUser(...params)
+                onClose()
             } catch (ex) {
                 console.error(ex)
             } finally {
@@ -39,6 +49,11 @@ export const EditUserModalBody = ({ user }: { user: User }): JSX.Element => {
                 onSubmit={formik.handleSubmit}
                 noValidate
             >
+                {formik.status && (
+                    <div className='mb-lg-15 alert alert-danger'>
+                        <div className='alert-text font-weight-bold'>{formik.status}</div>
+                    </div>
+                )}
                 <div className='d-flex flex-column scroll-y me-n7 pe-7'>
                     <div className='fv-row mb-8'>
                         <label className='form-label fs-6 fw-bolder text-dark'>Username</label>
@@ -57,7 +72,7 @@ export const EditUserModalBody = ({ user }: { user: User }): JSX.Element => {
                             type='text'
                             name='username'
                             autoComplete='off'
-                            disabled
+                            disabled={Boolean(user)}
                         />
                         {formik.touched.username && formik.errors.username && (
                             <div className='fv-plugins-message-container'>

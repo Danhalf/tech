@@ -1,5 +1,5 @@
 import { IMicroserviceServerData } from './IMicroserviceServerData'
-import { IUser, IUserEdit } from './IUserData'
+import { IUser, IUserData } from './IUserData'
 
 interface ITabValues {
     activeTab: string
@@ -8,4 +8,4 @@ interface ITabValues {
     tabId?: number
 }
 
-export type { IMicroserviceServerData, ITabValues, IUser, IUserEdit }
+export type { IMicroserviceServerData, ITabValues, IUser, IUserData }
