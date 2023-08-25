@@ -8,9 +8,10 @@ import { IUserData } from '../../../interfaces/interfaces'
 interface UserModalBodyProps {
     onClose: () => void
     user?: User
+    updateData?: () => void
 }
 
-export const UserModalBody = ({ onClose, user }: UserModalBodyProps): JSX.Element => {
+export const UserModalBody = ({ onClose, user, updateData }: UserModalBodyProps): JSX.Element => {
     const initialUserData: IUserData = {
         username: user?.username || '',
         password: '',
@@ -33,6 +34,7 @@ export const UserModalBody = ({ onClose, user }: UserModalBodyProps): JSX.Elemen
                 if (user?.useruid) params.push(user.useruid)
                 await createOrUpdateUser(...params)
                 onClose()
+                updateData && updateData()
             } catch (ex) {
                 console.error(ex)
             } finally {

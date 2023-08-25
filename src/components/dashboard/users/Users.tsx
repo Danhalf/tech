@@ -46,12 +46,16 @@ export default function Users() {
         setEditUserModalEnabled(true)
     }
 
+    const updateUsers = (): void => {
+        getUsers().then((response) => {
+            setUsers(response)
+            setLoaded(true)
+        })
+    }
+
     useEffect(() => {
         if (!loaded) {
-            getUsers().then((response) => {
-                setUsers(response)
-                setLoaded(true)
-            })
+            updateUsers()
             getDeletedUsers().then((response) => {
                 setDeletedUsers(response)
                 setLoaded(true)
@@ -111,7 +115,11 @@ export default function Users() {
     return (
         <>
             {addUserModalEnabled && (
-                <AddUserModal onClose={handleAddUserModalOpen} title={'Add user'} />
+                <AddUserModal
+                    onClose={handleAddUserModalOpen}
+                    title={'Add user'}
+                    updateData={updateUsers}
+                />
             )}
             {editUserModalEnabled && (
                 <EditUserModal
@@ -218,7 +226,7 @@ export default function Users() {
                             <div className='table-responsive'>
                                 <table
                                     id='kt_table_users'
-                                    className='table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer'
+                                    className='table align-middle table-row-dashed fs-6 gy-5 no-footer'
                                 >
                                     <TableHead columns={usersColumnsArray} />
                                     <tbody className='text-gray-600 fw-bold'>
