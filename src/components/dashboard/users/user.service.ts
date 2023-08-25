@@ -166,7 +166,7 @@ export const listUserSessions = (uid: string) => {
 }
 
 export const killSession = (id: number) => {
-    return axios.post(`${API_URL}/user/${id}/session`, {
+    return axios.post(`${API_URL}user/${id}/session`, {
         headers: { Authorization: `Bearer ${getToken()}` },
     })
 }
