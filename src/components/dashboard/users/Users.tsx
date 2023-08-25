@@ -141,15 +141,18 @@ export default function Users() {
                         ))}
                     </ul>
                 </div>
-                <button
-                    type='button'
-                    className='btn btn-primary align-self-end m-4'
-                    onClick={handleAddUserModalOpen}
-                >
-                    <i className='ki-duotone ki-plus fs-2'></i>
-                    Add User
-                </button>
+
                 <div className='tab-content' id='myTabContentInner'>
+                    <div className='d-flex w-100 justify-content-end px-8 mt-4'>
+                        <button
+                            type='button'
+                            className='btn btn-primary'
+                            onClick={handleAddUserModalOpen}
+                        >
+                            <i className='ki-duotone ki-plus fs-2'></i>
+                            Add User
+                        </button>
+                    </div>
                     <TabPanel activeTab={activeTab} tabName={UsersTabs.Users}>
                         <div className='card-body'>
                             <div
@@ -208,16 +211,7 @@ export default function Users() {
                             </div>
                         </div>
                     </TabPanel>
-                </div>
-
-                <div className='tab-content' id='myTabContentInner'>
-                    <div
-                        className={clsx('tab-pane vw-90 mx-auto', {
-                            active: activeTab === UsersTabs.DeletedUsers,
-                        })}
-                        id={`kt_tab_pane_${2}`}
-                        role='tabpanel'
-                    >
+                    <TabPanel activeTab={activeTab} tabName={UsersTabs.DeletedUsers}>
                         <div className='card-body'>
                             <div
                                 className='d-flex justify-content-end'
@@ -267,7 +261,7 @@ export default function Users() {
                                 </table>
                             </div>
                         </div>
-                    </div>
+                    </TabPanel>
                 </div>
             </div>
         </>
