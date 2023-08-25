@@ -36,7 +36,7 @@ $app-main-margin-x-mobile: null !default;
 
 // Wrapper
 $app-wrapper-transition: margin-left $app-general-transition-duration $app-general-transition-timing,
-  margin-right $app-general-transition-duration $app-general-transition-timing;
+    margin-right $app-general-transition-duration $app-general-transition-timing;
 $app-wrapper-bg-color: null !default;
 $app-wrapper-bg-color-dark: null !default;
 
@@ -390,8 +390,8 @@ $app-sidebar-primary-minimize-gap-bottom-mobile: 0px !default;
 
 // Sidebar secondary
 $app-sidebar-secondary-base-transition: width $app-general-transition-duration
-    $app-general-transition-timing,
-  margin $app-general-transition-duration $app-general-transition-timing !default;
+        $app-general-transition-timing,
+    margin $app-general-transition-duration $app-general-transition-timing !default;
 $app-sidebar-secondary-base-z-index: null !default;
 $app-sidebar-secondary-base-z-index-mobile: null !default;
 $app-sidebar-secondary-base-bg-color: null !default;
@@ -602,7 +602,7 @@ $app-aside-minimize-gap-bottom-mobile: 0px !default;
 
 // Footer
 $app-footer-transition: left $app-general-transition-duration $app-general-transition-timing,
-  right $app-general-transition-duration $app-general-transition-timing;
+    right $app-general-transition-duration $app-general-transition-timing;
 $app-footer-height: auto !default;
 $app-footer-height-mobile: auto !default;
 $app-footer-z-index: null !default;

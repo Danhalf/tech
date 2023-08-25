@@ -1,10 +1,18 @@
 import { useEffect, useState } from 'react'
-import { copyUser, deleteUser, getDeletedUsers, getUsers, undeleteUser, User } from './user.service'
+import {
+    copyUser,
+    deleteUser,
+    getDeletedUsers,
+    getUsers,
+    killSession,
+    undeleteUser,
+    User,
+} from './user.service'
 import { Link } from 'react-router-dom'
-import clsx from 'clsx'
-import { CustomDropdown, TableHead, TabNavigate, TabPanel } from '../helpers/helpers'
+import { CustomDropdown, TabNavigate, TabPanel } from '../helpers/helpers'
 import { AddUserModal } from './UserModal/AddUserModal'
 import { EditUserModal } from './UserModal/EditUserModal'
+import { TableHead } from '../helpers/renderTableHelper'
 
 enum UsersTabs {
     Users = 'Users',

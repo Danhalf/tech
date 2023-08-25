@@ -147,4 +147,3 @@ export const TabDataWrapper = ({
 }
 
 export { CustomDropdown }
-export { TableHead } from './renderTableHelper'

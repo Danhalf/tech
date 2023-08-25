@@ -3,7 +3,8 @@ import * as MicroservicesService from './service'
 import { Microservice, stopService } from './service'
 import { Link } from 'react-router-dom'
 import { ActionStatus } from '../../../common/models'
-import { CustomDropdown, TableHead } from '../helpers/helpers'
+import { CustomDropdown } from '../helpers/helpers'
+import { TableHead } from '../helpers/renderTableHelper'
 
 enum MicroserviceColumns {
     Microservice = 'Microservice',

@@ -4,9 +4,9 @@
 
 // Base
 .tox-target {
-  display: none;
+    display: none;
 }
 
 .tox-tinymce {
-  @include border-radius($border-radius !important);
+    @include border-radius($border-radius !important);
 }
