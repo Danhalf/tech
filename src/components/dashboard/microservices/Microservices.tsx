@@ -34,9 +34,6 @@ function Microservices() {
     return (
         <>
             <div className='card'>
-                <div className='card-header d-flex flex-column justify-content-end pb-0'>
-                    <h1 className='mb-5'>Microservices</h1>
-                </div>
                 <div className='card-body'>
                     <div className='table-responsive'>
                         <table
