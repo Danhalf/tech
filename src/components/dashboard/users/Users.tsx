@@ -212,7 +212,7 @@ export default function Users() {
                                                                     menuItemName:
                                                                         'Kill user session',
                                                                     menuItemAction: () =>
-                                                                        killSession(user.index),
+                                                                        killSession(user.useruid),
                                                                 },
                                                             ]}
                                                         />

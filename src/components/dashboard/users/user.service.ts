@@ -165,8 +165,8 @@ export const listUserSessions = (uid: string) => {
         .then((response) => response.data)
 }
 
-export const killSession = (id: number) => {
-    return axios.post(`${API_URL}user/${id}/session`, {
+export const killSession = (uid: string) => {
+    return axios.post(`${API_URL}user/${uid}/session`, {
         headers: { Authorization: `Bearer ${getToken()}` },
     })
 }
