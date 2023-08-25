@@ -1,9 +1,9 @@
-interface IUserData {
+export interface IUserData {
     username: string
     password: string
 }
 
-interface IUser {
+export interface IUser {
     created: string
     createdbyuid: string
     index: number
@@ -12,5 +12,3 @@ interface IUser {
     username: string
     useruid: string
 }
-
-export type { IUserData, IUser }

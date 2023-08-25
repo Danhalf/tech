@@ -3,7 +3,7 @@ import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import { useState } from 'react'
 import { createOrUpdateUser, User } from '../../user.service'
-import { IUserData } from '../../../interfaces/interfaces'
+import { IUserData } from '../../../interfaces/IUserData'
 
 interface UserModalBodyProps {
     onClose: () => void

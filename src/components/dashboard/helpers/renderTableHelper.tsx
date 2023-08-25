@@ -1,4 +1,4 @@
-import { IMicroserviceServerData } from '../interfaces/interfaces'
+import { IMicroserviceServerData } from '../interfaces/IMicroserviceServerData'
 
 const getUniqValues = ({ values }: { values: IMicroserviceServerData[] }) => {
     const columns = new Set<string>()
@@ -12,7 +12,7 @@ const getUniqValues = ({ values }: { values: IMicroserviceServerData[] }) => {
     return [...columns]
 }
 
-const TableHead = ({ columns }: { columns: string[] }): JSX.Element => (
+export const TableHead = ({ columns }: { columns: string[] }): JSX.Element => (
     <thead>
         <tr className='fw-bold fs-6 text-gray-800 border-bottom border-gray-200'>
             {columns.map((column: string) => (
@@ -34,7 +34,7 @@ const TableBody = ({ data }: { data: IMicroserviceServerData[] }) => (
     </tbody>
 )
 
-const renderTable = (data: IMicroserviceServerData[]) => {
+export const renderTable = (data: IMicroserviceServerData[]) => {
     const columns = getUniqValues({ values: data })
     return (
         <div className='w-100 table-responsive table-responsive-horizontal'>
@@ -45,5 +45,3 @@ const renderTable = (data: IMicroserviceServerData[]) => {
         </div>
     )
 }
-
-export { TableHead, renderTable }
