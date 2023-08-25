@@ -1,5 +1,13 @@
 import { useEffect, useState } from 'react'
-import { copyUser, deleteUser, getDeletedUsers, getUsers, undeleteUser, User } from './user.service'
+import {
+    copyUser,
+    deleteUser,
+    getDeletedUsers,
+    getUsers,
+    killSession,
+    undeleteUser,
+    User,
+} from './user.service'
 import { Link } from 'react-router-dom'
 import { CustomDropdown, TabNavigate, TabPanel } from '../helpers/helpers'
 import { AddUserModal } from './UserModal/AddUserModal'
@@ -199,6 +207,12 @@ export default function Users() {
                                                                     menuItemName: 'Delete user',
                                                                     menuItemAction: () =>
                                                                         moveToTrash(user.useruid),
+                                                                },
+                                                                {
+                                                                    menuItemName:
+                                                                        'Kill user session',
+                                                                    menuItemAction: () =>
+                                                                        killSession(user.index),
                                                                 },
                                                             ]}
                                                         />
