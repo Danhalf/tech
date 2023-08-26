@@ -13,6 +13,7 @@ import {
     listSubusers,
     listUserLogins,
     listUserSessions,
+    setUserPermissions,
 } from './user.service'
 import { TabPanel, TabNavigate, TabDataWrapper } from '../helpers/helpers'
 
@@ -106,6 +107,17 @@ export function UserCard() {
         return jsonString
     }
 
+    const handleChangeUserPermissions = ([fieldName, fieldValue]: [string, number]) => {
+        const parsedUserPermission = JSON.parse(userPermissionsJSON)
+        parsedUserPermission[fieldName] = fieldValue
+        if (id)
+            setUserPermissions(id, parsedUserPermission).then(() =>
+                getUserPermissions(id).then((response) => {
+                    setUserPermissionsJSON(JSON.stringify(response, null, 2))
+                })
+            )
+    }
+
     const handleTabClick = (tab: string) => {
         setActiveTab(tab)
     }
@@ -148,6 +160,7 @@ export function UserCard() {
                         <TabDataWrapper
                             data={mutateJson(userPermissionsJSON, 'useruid')}
                             checkbox={true}
+                            action={handleChangeUserPermissions}
                         />
                     </TabPanel>
                     <TabPanel activeTab={activeTab} tabName={UserCardTabs.Settings}>
