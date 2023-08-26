@@ -3,7 +3,7 @@ import * as Yup from 'yup'
 import { useFormik } from 'formik'
 import { useState } from 'react'
 import { createOrUpdateUser, User } from '../../user.service'
-import { IUserData } from '../../../interfaces/IUserData'
+import { IUserData } from '../../../../../common/interfaces/IUserData'
 
 interface UserModalBodyProps {
     onClose: () => void
@@ -58,7 +58,7 @@ export const UserModalBody = ({ onClose, user, updateData }: UserModalBodyProps)
                             placeholder='Username'
                             {...formik.getFieldProps('username')}
                             className={clsx(
-                                'form-control bg-transparent',
+                                'form-control',
                                 {
                                     'is-invalid': formik.touched.username && formik.errors.username,
                                 },
@@ -86,7 +86,7 @@ export const UserModalBody = ({ onClose, user, updateData }: UserModalBodyProps)
                             autoComplete='off'
                             {...formik.getFieldProps('password')}
                             className={clsx(
-                                'form-control bg-transparent',
+                                'form-control',
                                 {
                                     'is-invalid': formik.touched.password && formik.errors.password,
                                 },

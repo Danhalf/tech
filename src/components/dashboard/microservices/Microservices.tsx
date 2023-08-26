@@ -2,9 +2,9 @@ import { useEffect, useState } from 'react'
 import * as MicroservicesService from './service'
 import { Microservice, stopService } from './service'
 import { Link } from 'react-router-dom'
-import { ActionStatus } from '../../../common/models'
 import { CustomDropdown } from '../helpers/helpers'
 import { TableHead } from '../helpers/renderTableHelper'
+import { ActionStatus } from '../../../common/interfaces/IActionStatus'
 
 enum MicroserviceColumns {
     Microservice = 'Microservice',

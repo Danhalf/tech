@@ -1,4 +1,4 @@
-import { IMicroserviceServerData } from '../interfaces/IMicroserviceServerData'
+import { IMicroserviceServerData } from '../../../common/interfaces/IMicroserviceServerData'
 
 const getUniqValues = ({ values }: { values: IMicroserviceServerData[] }) => {
     const columns = new Set<string>()

@@ -1,9 +1,9 @@
 import clsx from 'clsx'
 import { useState } from 'react'
 import { renderTable } from './renderTableHelper'
-import { ITabValues } from '../interfaces/interfaces'
 import { CustomCheckbox } from './renderInputsHelper'
 import { CustomDropdown } from './renderDropdownHelper'
+import { ITabValues } from '../../../common/interfaces/ITabValues'
 
 const renderList = (data: any, checkbox: boolean = false) => {
     if (typeof data !== 'object' || data === null) {
@@ -92,6 +92,7 @@ export const TabDataWrapper = ({
         JSON = 'JSON view',
         GENERAL = 'General view',
     }
+
     const viewTypesArray: string[] = Object.values(ViewTypes) as string[]
 
     const [activeTab, setActiveTab] = useState(ViewTypes.JSON)
