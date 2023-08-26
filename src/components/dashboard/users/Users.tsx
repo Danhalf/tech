@@ -13,6 +13,7 @@ import { CustomDropdown, TabNavigate, TabPanel } from '../helpers/helpers'
 import { AddUserModal } from './UserModal/AddUserModal'
 import { EditUserModal } from './UserModal/EditUserModal'
 import { TableHead } from '../helpers/renderTableHelper'
+import { UserPermissonsModal } from './UserModal/UserPermissonsModal'
 
 enum UsersTabs {
     Users = 'Users',
@@ -31,6 +32,7 @@ export default function Users() {
     const [users, setUsers] = useState<User[]>([])
     const [addUserModalEnabled, setAddUserModalEnabled] = useState<boolean>(false)
     const [editUserModalEnabled, setEditUserModalEnabled] = useState<boolean>(false)
+    const [userPermissionsModalEnabled, setUserPermissionsModalEnabled] = useState<boolean>(false)
 
     const initialUserState = {
         created: '',
@@ -52,6 +54,10 @@ export default function Users() {
     const handleEditUserModalOpen = ({ useruid, username }: User) => {
         setSelectedUser({ ...selectedUser, useruid, username: username })
         setEditUserModalEnabled(true)
+    }
+    const handleUserPermissonsModalOpen = ({ useruid, username }: User) => {
+        setSelectedUser({ ...selectedUser, useruid, username: username })
+        setUserPermissionsModalEnabled(true)
     }
 
     const updateUsers = (): void => {
@@ -136,6 +142,13 @@ export default function Users() {
                     userData={selectedUser}
                 />
             )}
+            {userPermissionsModalEnabled && (
+                <UserPermissonsModal
+                    onClose={() => setUserPermissionsModalEnabled(false)}
+                    title={`${selectedUser.username} user permissions: `}
+                    useruid={selectedUser.useruid}
+                />
+            )}
             <div className='card'>
                 <div className='card-header d-flex flex-column justify-content-end pb-0'>
                     <ul className='nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder flex-nowrap'>
@@ -201,6 +214,14 @@ export default function Users() {
                                                                     menuItemAction: () =>
                                                                         handleCopyUser(
                                                                             user.useruid
+                                                                        ),
+                                                                },
+                                                                {
+                                                                    menuItemName:
+                                                                        'User permissions',
+                                                                    menuItemAction: () =>
+                                                                        handleUserPermissonsModalOpen(
+                                                                            user
                                                                         ),
                                                                 },
                                                                 {

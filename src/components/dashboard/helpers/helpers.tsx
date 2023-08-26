@@ -11,7 +11,7 @@ interface IRenderListArgs {
     action?: (value: [string, number]) => void
 }
 
-const renderList = ({ data, checkbox, action }: IRenderListArgs) => {
+export const renderList = ({ data, checkbox, action }: IRenderListArgs) => {
     if (typeof data !== 'object' || data === null) {
         return (
             <div>
