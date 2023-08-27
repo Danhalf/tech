@@ -15,29 +15,34 @@ export const UserPermissionsModalBody = ({
     const [modifiedJSON, setModifiedJSON] = useState<string>('')
     const [isLoading, setIsLoading] = useState<boolean>(false)
 
+    const filterObjectValues = async (json: Record<string, string | number>) => {
+        const newObj: any = {}
+        for (const key in json) {
+            if (json.hasOwnProperty(key)) {
+                const value = json[key]
+                if (value === 0 || value === 1) {
+                    newObj[key] = value
+                }
+            }
+        }
+
+        return newObj
+    }
+
     useEffect(() => {
         getUserPermissions(useruid).then(async (response) => {
             setIsLoading(true)
-            // setUserPermissionsJSON(response)
-            const filterObjectValues = async (json: Record<string, string | number>) => {
-                const newObj: any = {}
-                for (const key in json) {
-                    if (json.hasOwnProperty(key)) {
-                        const value = json[key]
-                        if (value === 0 || value === 1) {
-                            newObj[key] = value
-                        }
-                    }
-                }
-
-                return newObj
+            if (useruid) {
+                getUserPermissions(useruid).then((response) => {
+                    setUserPermissionsJSON(JSON.stringify(response, null, 2))
+                })
             }
 
             const data = typeof response === 'object' && (await filterObjectValues(response))
             data && setModifiedJSON(data)
             setIsLoading(false)
         })
-    }, [isLoading])
+    }, [modifiedJSON, isLoading])
 
     const handleChangeUserPermissions = ([fieldName, fieldValue]: [string, number]) => {
         const parsedUserPermission = JSON.parse(userPermissionsJSON)
@@ -50,5 +55,14 @@ export const UserPermissionsModalBody = ({
             )
     }
 
-    return <>{!isLoading && renderList({ data: modifiedJSON, checkbox: true })}</>
+    return (
+        <>
+            {!isLoading &&
+                renderList({
+                    data: modifiedJSON,
+                    checkbox: true,
+                    action: handleChangeUserPermissions,
+                })}
+        </>
+    )
 }
