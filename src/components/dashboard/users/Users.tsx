@@ -14,6 +14,7 @@ import { AddUserModal } from './UserModal/AddUserModal'
 import { EditUserModal } from './UserModal/EditUserModal'
 import { TableHead } from '../helpers/renderTableHelper'
 import { UserPermissonsModal } from './UserModal/UserPermissonsModal'
+import { PrimaryButton } from '../smallComponents/buttons/PrimaryButton'
 
 enum UsersTabs {
     Users = 'Users',
@@ -165,14 +166,11 @@ export default function Users() {
 
                 <div className='tab-content' id='myTabContentInner'>
                     <div className='d-flex w-100 justify-content-end px-8 mt-4'>
-                        <button
-                            type='button'
-                            className='btn btn-primary'
-                            onClick={handleAddUserModalOpen}
-                        >
-                            <i className='ki-duotone ki-plus fs-2'></i>
-                            Add User
-                        </button>
+                        <PrimaryButton
+                            buttonText='Add User'
+                            icon='plus'
+                            buttonClickAction={handleAddUserModalOpen}
+                        />
                     </div>
                     <TabPanel activeTab={activeTab} tabName={UsersTabs.Users}>
                         <div className='card-body'>
@@ -218,7 +216,7 @@ export default function Users() {
                                                                 },
                                                                 {
                                                                     menuItemName:
-                                                                        'User permissions',
+                                                                        'Set user permissions',
                                                                     menuItemAction: () =>
                                                                         handleUserPermissonsModalOpen(
                                                                             user

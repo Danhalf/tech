@@ -1,12 +1,12 @@
 import clsx from 'clsx'
-import { useState } from 'react'
+import { PropsWithChildren, useState } from 'react'
 import { renderTable } from './renderTableHelper'
 import { CustomCheckbox } from './renderInputsHelper'
 import { CustomDropdown } from './renderDropdownHelper'
 import { ITabValues } from '../../../common/interfaces/ITabValues'
 
 interface IRenderListArgs {
-    data: string[] | string | null
+    data: string[] | string
     checkbox?: boolean
     action?: (value: [string, number]) => void
 }
@@ -88,7 +88,12 @@ export const TabPanel = ({ activeTab, tabName, children, tabId }: ITabValues) =>
     </div>
 )
 
-export const TabDataWrapper = ({ data, checkbox, action }: IRenderListArgs) => {
+export const TabDataWrapper = ({
+    data,
+    checkbox,
+    action,
+    children,
+}: PropsWithChildren<IRenderListArgs>) => {
     enum ViewTypes {
         JSON = 'JSON view',
         GENERAL = 'General view',
@@ -133,11 +138,13 @@ export const TabDataWrapper = ({ data, checkbox, action }: IRenderListArgs) => {
                             <TabPanel activeTab={activeTab} tabName={ViewTypes.JSON}>
                                 <div className='card-body'>
                                     <pre className='fs-4'>{data}</pre>
+                                    {children}
                                 </div>
                             </TabPanel>
                             <TabPanel activeTab={activeTab} tabName={ViewTypes.GENERAL}>
                                 <div className='card-body'>
                                     {parsedData ? renderContent() : 'No data available'}
+                                    {children}
                                 </div>
                             </TabPanel>
                         </div>

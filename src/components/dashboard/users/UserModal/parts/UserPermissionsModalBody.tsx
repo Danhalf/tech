@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { getUserPermissions, setUserPermissions } from '../../user.service'
 import { renderList } from '../../../helpers/helpers'
+import { PrimaryButton } from '../../../smallComponents/buttons/PrimaryButton'
 
 interface UserPermissionsModalBodyProps {
     onClose: () => void
@@ -12,47 +13,68 @@ export const UserPermissionsModalBody = ({
     useruid,
 }: UserPermissionsModalBodyProps): JSX.Element => {
     const [userPermissionsJSON, setUserPermissionsJSON] = useState<string>('')
+    const [initialUserPermissionsJSON, setInitialUserPermissionsJSON] = useState<string>('')
     const [modifiedJSON, setModifiedJSON] = useState<string>('')
     const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true)
 
-    const filterObjectValues = async (json: Record<string, string | number>) => {
-        const newObj: any = {}
+    const filterObjectValues = (json: Record<string, string | number>) => {
+        const filteredObj: any = {}
         for (const key in json) {
             if (json.hasOwnProperty(key)) {
                 const value = json[key]
                 if (value === 0 || value === 1) {
-                    newObj[key] = value
+                    filteredObj[key] = value
                 }
             }
         }
 
-        return newObj
+        return filteredObj
     }
 
     useEffect(() => {
-        getUserPermissions(useruid).then(async (response) => {
-            setIsLoading(true)
-            if (useruid) {
-                getUserPermissions(useruid).then((response) => {
-                    setUserPermissionsJSON(JSON.stringify(response, null, 2))
-                })
-            }
+        setIsLoading(true)
+        if (useruid) {
+            getUserPermissions(useruid).then(async (response) => {
+                const stringifiedResponse = JSON.stringify(response, null, 2)
+                setUserPermissionsJSON(stringifiedResponse)
+                setInitialUserPermissionsJSON(stringifiedResponse)
+                const filteredData = typeof response === 'object' && filterObjectValues(response)
+                setModifiedJSON(filteredData)
+                setIsLoading(false)
+            })
+        }
+    }, [useruid])
 
-            const data = typeof response === 'object' && (await filterObjectValues(response))
-            data && setModifiedJSON(data)
-            setIsLoading(false)
-        })
-    }, [modifiedJSON, isLoading])
+    useEffect(() => {
+        if (initialUserPermissionsJSON !== userPermissionsJSON && !isLoading) {
+            setIsButtonDisabled(false)
+        } else {
+            setIsButtonDisabled(true)
+        }
+    }, [userPermissionsJSON, initialUserPermissionsJSON, isLoading])
 
-    const handleChangeUserPermissions = ([fieldName, fieldValue]: [string, number]) => {
+    const handleChangeUserPermissions = ([fieldName, fieldValue]: [string, number]): void => {
         const parsedUserPermission = JSON.parse(userPermissionsJSON)
         parsedUserPermission[fieldName] = fieldValue
-        if (useruid)
-            setUserPermissions(useruid, parsedUserPermission).then(() =>
-                getUserPermissions(useruid).then((response) => {
-                    setUserPermissionsJSON(JSON.stringify(response, null, 2))
-                })
-            )
+        setUserPermissionsJSON(JSON.stringify(parsedUserPermission, null, 2))
+        setModifiedJSON(filterObjectValues(parsedUserPermission))
+    }
+
+    const handleSetUserPermissions = (): void => {
+        setIsLoading(true)
+        if (useruid) {
+            setUserPermissions(useruid, JSON.parse(userPermissionsJSON)).then((response) => {
+                try {
+                    response.status = 200
+                    onClose()
+                } catch (error) {
+                    console.log(error)
+                } finally {
+                    setIsLoading(false)
+                }
+            })
+        }
     }
 
     return (
@@ -63,6 +85,12 @@ export const UserPermissionsModalBody = ({
                     checkbox: true,
                     action: handleChangeUserPermissions,
                 })}
+            <PrimaryButton
+                buttonText='Save permissions'
+                icon='check'
+                disabled={isButtonDisabled}
+                buttonClickAction={handleSetUserPermissions}
+            />
         </>
     )
 }
