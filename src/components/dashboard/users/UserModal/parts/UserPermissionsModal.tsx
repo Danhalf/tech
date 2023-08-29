@@ -3,15 +3,15 @@ import { getUserPermissions, setUserPermissions } from '../../user.service'
 import { renderList } from '../../../helpers/helpers'
 import { PrimaryButton } from '../../../smallComponents/buttons/PrimaryButton'
 
-interface UserPermissionsModalBodyProps {
+interface UserPermissionsModalProps {
     onClose: () => void
     useruid: string
 }
 
-export const UserPermissionsModalBody = ({
+export const UserPermissionsModal = ({
     onClose,
     useruid,
-}: UserPermissionsModalBodyProps): JSX.Element => {
+}: UserPermissionsModalProps): JSX.Element => {
     const [userPermissionsJSON, setUserPermissionsJSON] = useState<string>('')
     const [initialUserPermissionsJSON, setInitialUserPermissionsJSON] = useState<string>('')
     const [modifiedJSON, setModifiedJSON] = useState<string>('')

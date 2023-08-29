@@ -5,13 +5,13 @@ import { useState } from 'react'
 import { createOrUpdateUser, User } from '../../user.service'
 import { IUserData } from '../../../../../common/interfaces/IUserData'
 
-interface UserModalBodyProps {
+interface UserModalProps {
     onClose: () => void
     user?: User
     updateData?: () => void
 }
 
-export const UserModalBody = ({ onClose, user, updateData }: UserModalBodyProps): JSX.Element => {
+export const UserModal = ({ onClose, user, updateData }: UserModalProps): JSX.Element => {
     const initialUserData: IUserData = {
         username: user?.username || '',
         password: '',
