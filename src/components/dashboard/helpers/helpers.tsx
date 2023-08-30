@@ -31,7 +31,7 @@ export const renderList = ({ data, checkbox, action }: IRenderListArgs) => {
             if (Array.isArray(value)) {
                 return <div key={`${key}-${index}`}>{renderTable(value)}</div>
             }
-            return <div key={`${key}-${index}`}>{renderList(value)}</div>
+            return <div key={`${key}-${index}`}>{renderList({ data: value })}</div>
         } else {
             const activeCheckbox = checkbox && (Number(value) === 0 || Number(value) === 1)
             return activeCheckbox ? (

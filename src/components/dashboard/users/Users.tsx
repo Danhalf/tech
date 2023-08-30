@@ -161,11 +161,11 @@ export default function Users() {
             )}
             {userSettingsModalEnabled && (
                 <CustomModal
-                    onClose={() => setUserPermissionsModalEnabled(false)}
+                    onClose={() => setUserSettingssModalEnabled(false)}
                     title={`${selectedUser.username} user settings: `}
                 >
                     <UserSettingsModal
-                        onClose={() => setUserPermissionsModalEnabled(false)}
+                        onClose={() => setUserSettingssModalEnabled(false)}
                         useruid={selectedUser.useruid}
                     />
                 </CustomModal>

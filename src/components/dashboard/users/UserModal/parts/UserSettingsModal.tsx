@@ -1,6 +1,7 @@
-import { useEffect, useState } from 'react'
+import { ChangeEvent, useCallback, useEffect, useState } from 'react'
 import { getUserSettings, setUserSettings } from '../../user.service'
 import { PrimaryButton } from '../../../smallComponents/buttons/PrimaryButton'
+import { convertToNumberIfNumeric, deepEqual } from '../../../helpers/common'
 
 interface UserSettingsModalProps {
     onClose: () => void
@@ -8,8 +9,9 @@ interface UserSettingsModalProps {
 }
 
 export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps): JSX.Element => {
-    const [userSettingsJSON, setUserSettingsJSON] = useState<string>('')
-    const [initialUserSettingsJSON, setInitialUserSettingsJSON] = useState<string>('')
+    const [settings, setSettings] = useState<any>({})
+    const [initialUserSettings, setInitialUserSettings] = useState<any>({})
+    const [allSettings, setAllSettings] = useState<any>({})
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true)
 
@@ -17,61 +19,77 @@ export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps):
         setIsLoading(true)
         if (useruid) {
             getUserSettings(useruid).then(async (response) => {
-                const stringifiedResponse = response.settings
-                setUserSettingsJSON(stringifiedResponse)
-                setInitialUserSettingsJSON(stringifiedResponse)
+                setAllSettings(response)
+                const responseSettings = response.settings
+                setSettings(responseSettings)
+                setInitialUserSettings(responseSettings)
                 setIsLoading(false)
             })
         }
     }, [useruid])
 
     useEffect(() => {
-        if (initialUserSettingsJSON !== userSettingsJSON && !isLoading) {
+        const isEqual = deepEqual(initialUserSettings, settings)
+        if (!isEqual && !isLoading) {
             setIsButtonDisabled(false)
         } else {
             setIsButtonDisabled(true)
         }
-    }, [userSettingsJSON, initialUserSettingsJSON, isLoading])
+    }, [settings, initialUserSettings, isLoading])
 
-    const handleChangeUserSettings = ([fieldName, fieldValue]: [string, number]): void => {
-        const parsedUserPermission = JSON.parse(userSettingsJSON)
-        parsedUserPermission[fieldName] = fieldValue
-        setUserSettingsJSON(JSON.stringify(parsedUserPermission, null, 2))
-    }
+    const handleChangeUserSettings = useCallback(
+        (event: ChangeEvent<HTMLInputElement>) => {
+            const { name, value } = event.target
+
+            setSettings({
+                ...settings,
+                [name]: convertToNumberIfNumeric(value),
+            })
+        },
+        [settings]
+    )
 
     const handleSetUserSettings = (): void => {
         setIsLoading(true)
         if (useruid) {
-            // setUserSettings(useruid, JSON.parse(userSettingsJSON)).then((response) => {
-            //     try {
-            //         response.status = 200
-            //         onClose()
-            //     } catch (error) {
-            //         console.log(error)
-            //     } finally {
-            //         setIsLoading(false)
-            //     }
-            // })
+            const newSettings = { ...allSettings, settings }
+            setUserSettings(useruid, newSettings).then((response) => {
+                try {
+                    response.status = 200
+                    onClose()
+                } catch (error) {
+                    console.log(error)
+                } finally {
+                    setIsLoading(false)
+                }
+            })
         }
     }
 
-    console.log(userSettingsJSON)
+    if (!settings) {
+        return <></>
+    }
 
     const disabledKeys = ['useruid', 'created', 'updated']
     return (
         <>
-            {userSettingsJSON &&
-                Object.keys(userSettingsJSON).map((key: any) => {
+            {settings &&
+                Object.entries(settings).map(([setting, value]: any) => {
                     return (
-                        <div className='w-100 mb-2'>
-                            <label htmlFor={key}>{key}</label>
+                        <div className='fv-row mb-8' key={setting}>
+                            <label
+                                htmlFor={setting}
+                                className='form-label fs-6 fw-bolder text-dark'
+                            >
+                                {setting}
+                            </label>
                             <input
-                                disabled={disabledKeys.includes(key)}
-                                key={key}
-                                name={key}
+                                disabled={disabledKeys.includes(setting)}
+                                className='form-control bg-transparent'
+                                name={setting}
                                 type={'text'}
-                                value={userSettingsJSON[key]}
-                                onChange={handleSetUserSettings}
+                                value={value}
+                                onChange={handleChangeUserSettings}
                             />
                         </div>
                     )
