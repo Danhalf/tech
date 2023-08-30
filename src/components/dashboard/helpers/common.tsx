@@ -1,4 +1,4 @@
-const deepEqual = (firstObj: any, secondObj: any): boolean => {
+export const deepEqual = (firstObj: any, secondObj: any): boolean => {
     if (firstObj === secondObj) {
         return true
     }
@@ -28,7 +28,7 @@ const deepEqual = (firstObj: any, secondObj: any): boolean => {
     return true
 }
 
-const convertToNumberIfNumeric = (str: string): number | string => {
+export const convertToNumberIfNumeric = (str: string): number | string => {
     const parsedNumber = Number.parseFloat(str)
 
     if (isNaN(parsedNumber)) {
@@ -37,5 +37,3 @@ const convertToNumberIfNumeric = (str: string): number | string => {
 
     return parsedNumber
 }
-
-export { deepEqual, convertToNumberIfNumeric }

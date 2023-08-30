@@ -7,8 +7,8 @@ import {
     getServiceCounters,
     getServiceLogs,
     Microservice,
-} from './service'
-import { TabPanel, TabNavigate, TabDataWrapper } from '../helpers/helpers'
+} from 'components/dashboard/microservices/service'
+import { TabDataWrapper, TabNavigate, TabPanel } from 'components/dashboard/helpers/helpers'
 
 enum MicroserviceTabs {
     State = 'State',

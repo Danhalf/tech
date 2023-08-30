@@ -1,4 +1,4 @@
-import { clearCache } from '../../users/user.service'
+import { clearCache } from 'components/dashboard/users/user.service'
 
 export const ClearCache = () => (
     <div className='fixed-bottom d-flex justify-content-end m-3'>

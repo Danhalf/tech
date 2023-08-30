@@ -1,7 +1,7 @@
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
-import { getUserSettings, setUserSettings } from '../../user.service'
-import { PrimaryButton } from '../../../smallComponents/buttons/PrimaryButton'
-import { convertToNumberIfNumeric, deepEqual } from '../../../helpers/common'
+import { getUserSettings, setUserSettings } from 'components/dashboard/users/user.service'
+import { convertToNumberIfNumeric, deepEqual } from 'components/dashboard/helpers/common'
+import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton'
 
 interface UserSettingsModalProps {
     onClose: () => void

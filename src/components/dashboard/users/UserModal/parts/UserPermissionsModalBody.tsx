@@ -3,15 +3,15 @@ import { getUserPermissions, setUserPermissions } from 'components/dashboard/use
 import { renderList } from 'components/dashboard/helpers/helpers'
 import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton'
 
-interface UserPermissionsModalProps {
+interface UserPermissionsModalBodyProps {
     onClose: () => void
     useruid: string
 }
 
-export const UserPermissionsModal = ({
+export const UserPermissionsModalBody = ({
     onClose,
     useruid,
-}: UserPermissionsModalProps): JSX.Element => {
+}: UserPermissionsModalBodyProps): JSX.Element => {
     const [userPermissionsJSON, setUserPermissionsJSON] = useState<string>('')
     const [initialUserPermissionsJSON, setInitialUserPermissionsJSON] = useState<string>('')
     const [modifiedJSON, setModifiedJSON] = useState<string>('')
@@ -66,7 +66,6 @@ export const UserPermissionsModal = ({
         if (useruid) {
             setUserPermissions(useruid, JSON.parse(userPermissionsJSON)).then((response) => {
                 try {
-                    response.status = 200
                     onClose()
                 } catch (error) {
                     console.log(error)

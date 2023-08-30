@@ -1,7 +1,7 @@
 import { ChangeEvent, useCallback, useEffect, useState } from 'react'
-import { getUserLocations, setUserOptionalData } from '../../user.service'
-import { PrimaryButton } from '../../../smallComponents/buttons/PrimaryButton'
-import { deepEqual } from '../../../helpers/common'
+import { getUserLocations, setUserOptionalData } from 'components/dashboard/users/user.service'
+import { convertToNumberIfNumeric, deepEqual } from 'components/dashboard/helpers/common'
+import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton'
 
 interface UserOptionalModalProps {
     onClose: () => void
@@ -9,7 +9,7 @@ interface UserOptionalModalProps {
 }
 
 export const UserOptionalModal = ({ onClose, useruid }: UserOptionalModalProps): JSX.Element => {
-    const [optional, setOptional] = useState<any[]>([])
+    const [optional, setOptional] = useState<any>({})
     const [initialUserOptional, setInitialUserOptional] = useState<any>({})
     const [allOptional, setAllOptional] = useState<any>({})
     const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -18,9 +18,10 @@ export const UserOptionalModal = ({ onClose, useruid }: UserOptionalModalProps):
     useEffect(() => {
         setIsLoading(true)
         if (useruid) {
-            getUserLocations(useruid).then(async (response: any) => {
-                setAllOptional(response)
-                const responseOptional: any[] = response.locations
+            getUserLocations(useruid).then(async (response) => {
+                const jsonResponse = JSON.parse(response)
+                setAllOptional(jsonResponse)
+                const responseOptional = jsonResponse.location
                 setOptional(responseOptional)
                 setInitialUserOptional(responseOptional)
                 setIsLoading(false)
@@ -38,31 +39,31 @@ export const UserOptionalModal = ({ onClose, useruid }: UserOptionalModalProps):
     }, [optional, initialUserOptional, isLoading])
 
     const handleChangeUserOptional = useCallback(
-        (event: ChangeEvent<HTMLInputElement>, index: number) => {
+        (event: ChangeEvent<HTMLInputElement>) => {
             const { name, value } = event.target
-            const updatedOptional = [...optional]
 
-            updatedOptional[index] = { ...updatedOptional[index], [name]: value }
-
-            setOptional(updatedOptional)
+            setOptional({
+                ...optional,
+                [name]: convertToNumberIfNumeric(value),
+            })
         },
         [optional]
     )
 
-    const handleSetUserOptional = async (): Promise<void> => {
+    const handleSetUserOptional = (): void => {
         setIsLoading(true)
         if (useruid) {
-            const newOptional = { ...allOptional, locations: optional }
-            try {
-                const response = await setUserOptionalData(useruid, newOptional)
-                if (response.status === 200) {
+            const newOptional = { ...allOptional, optional }
+            setUserOptionalData(useruid, newOptional).then((response: any) => {
+                try {
+                    response.status = 200
                     onClose()
+                } catch (error) {
+                    console.log(error)
+                } finally {
+                    setIsLoading(false)
                 }
-            } catch (error) {
-                console.log(error)
-            } finally {
-                setIsLoading(false)
-            }
+            })
         }
     }
 
@@ -74,8 +75,8 @@ export const UserOptionalModal = ({ onClose, useruid }: UserOptionalModalProps):
     return (
         <>
             {optional &&
-                optional.map((option: any) => {
-                    return Object.entries(option).map(([setting, value]: any, index: number) => {
+                optional.map((option: any) =>
+                    Object.entries(option).map(([setting, value]: any) => {
                         return (
                             <div className='fv-row mb-8' key={setting}>
                                 <label
@@ -90,12 +91,12 @@ export const UserOptionalModal = ({ onClose, useruid }: UserOptionalModalProps):
                                     name={setting}
                                     type={'text'}
                                     value={value}
-                                    onChange={(event) => handleChangeUserOptional(event, index)}
+                                    onChange={handleChangeUserOptional}
                                 />
                             </div>
                         )
                     })
-                })}
+                )}
             <PrimaryButton
                 buttonText='Save permissions'
                 icon='check'

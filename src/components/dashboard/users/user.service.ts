@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { getToken } from '../../../common/utils'
-import { API_URL } from '../../../common/app-consts'
-import { ActionStatus } from '../../../common/interfaces/IActionStatus'
+import { getToken } from 'common/utils'
+import { API_URL } from 'common/app-consts'
+import { ActionStatus } from 'common/interfaces/IActionStatus'
 
 export interface User {
     created: string

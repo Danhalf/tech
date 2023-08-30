@@ -3,7 +3,7 @@ import { useFormik } from 'formik'
 import React, { useState } from 'react'
 import * as Yup from 'yup'
 
-import { login } from '../common/auth.service'
+import { login } from 'common/auth.service'
 import { useNavigate } from 'react-router-dom'
 
 interface LoginCredentials {

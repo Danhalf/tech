@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import {
     copyUser,
     deleteUser,
@@ -7,16 +8,16 @@ import {
     killSession,
     undeleteUser,
     User,
-} from './user.service'
-import { Link } from 'react-router-dom'
-import { CustomDropdown, TabNavigate, TabPanel } from '../helpers/helpers'
-import { TableHead } from '../helpers/renderTableHelper'
-import { PrimaryButton } from '../smallComponents/buttons/PrimaryButton'
-import { CustomModal } from '../helpers/modal/renderModalHelper'
-import { UserModal } from './UserModal/parts/UserModal'
-import { UserPermissionsModal } from './UserModal/parts/UserPermissionsModal'
-import { UserSettingsModal } from './UserModal/parts/UserSettingsModal'
-import { UserOptionalModal } from './UserModal/parts/UserOptionalModal'
+} from 'components/dashboard/users/user.service'
+import { CustomModal } from 'components/dashboard/helpers/modal/renderModalHelper'
+import { UserModal } from 'components/dashboard/users/UserModal/parts/UserModal'
+import { UserPermissionsModal } from 'components/dashboard/users/UserModal/parts/UserPermissionsModal'
+import { UserSettingsModal } from 'components/dashboard/users/UserModal/parts/UserSettingsModal'
+import { UserOptionalModal } from 'components/dashboard/users/UserModal/parts/UserOptionalModal'
+import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton'
+import { TableHead } from 'components/dashboard/helpers/renderTableHelper'
+import { TabNavigate, TabPanel } from 'components/dashboard/helpers/helpers'
+import { CustomDropdown } from 'components/dashboard/helpers/renderDropdownHelper'
 
 enum UsersTabs {
     Users = 'Users',

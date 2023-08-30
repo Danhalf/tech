@@ -12,7 +12,7 @@ import {
     slideDown,
     slideUp,
     throttle,
-} from '../_utils'
+} from '_metronic/assets/ts/_utils'
 
 export interface MenuOptions {
     dropdown: {
