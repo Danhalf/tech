@@ -16,6 +16,7 @@ import { CustomModal } from '../helpers/modal/renderModalHelper'
 import { UserModal } from './UserModal/parts/UserModal'
 import { UserPermissionsModal } from './UserModal/parts/UserPermissionsModal'
 import { UserSettingsModal } from './UserModal/parts/UserSettingsModal'
+import { UserOptionalModal } from './UserModal/parts/UserOptionalModal'
 
 enum UsersTabs {
     Users = 'Users',
@@ -36,6 +37,7 @@ export default function Users() {
     const [editUserModalEnabled, setEditUserModalEnabled] = useState<boolean>(false)
     const [userPermissionsModalEnabled, setUserPermissionsModalEnabled] = useState<boolean>(false)
     const [userSettingsModalEnabled, setUserSettingssModalEnabled] = useState<boolean>(false)
+    const [userOptionalModalEnabled, setUserOptionalsModalEnabled] = useState<boolean>(false)
 
     const initialUserState = {
         created: '',
@@ -65,6 +67,10 @@ export default function Users() {
     const handleUserSettingsModalOpen = ({ useruid, username }: User) => {
         setSelectedUser({ ...selectedUser, useruid, username: username })
         setUserSettingssModalEnabled(true)
+    }
+    const handleUserOptionalModalOpen = ({ useruid, username }: User) => {
+        setSelectedUser({ ...selectedUser, useruid, username: username })
+        setUserOptionalsModalEnabled(true)
     }
 
     const updateUsers = (): void => {
@@ -170,6 +176,17 @@ export default function Users() {
                     />
                 </CustomModal>
             )}
+            {userOptionalModalEnabled && (
+                <CustomModal
+                    onClose={() => setUserOptionalsModalEnabled(false)}
+                    title={`${selectedUser.username} user settings: `}
+                >
+                    <UserOptionalModal
+                        onClose={() => setUserOptionalsModalEnabled(false)}
+                        useruid={selectedUser.useruid}
+                    />
+                </CustomModal>
+            )}
             <div className='card'>
                 <div className='card-header d-flex flex-column justify-content-end pb-0'>
                     <ul className='nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder flex-nowrap'>
@@ -247,6 +264,14 @@ export default function Users() {
                                                                         'Set user settings',
                                                                     menuItemAction: () =>
                                                                         handleUserSettingsModalOpen(
+                                                                            user
+                                                                        ),
+                                                                },
+                                                                {
+                                                                    menuItemName:
+                                                                        'Set user optional data',
+                                                                    menuItemAction: () =>
+                                                                        handleUserOptionalModalOpen(
                                                                             user
                                                                         ),
                                                                 },
