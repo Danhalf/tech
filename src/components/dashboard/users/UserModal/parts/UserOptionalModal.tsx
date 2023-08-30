@@ -10,7 +10,7 @@ interface UserOptionalModalProps {
 
 export const UserOptionalModal = ({ onClose, useruid }: UserOptionalModalProps): JSX.Element => {
     const [optional, setOptional] = useState<any[]>([])
-    const [initialUserOptional, setInitialUserOptional] = useState<any>({})
+    const [initialUserOptional, setInitialUserOptional] = useState<any>([])
     const [allOptional, setAllOptional] = useState<any>({})
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true)
@@ -22,7 +22,8 @@ export const UserOptionalModal = ({ onClose, useruid }: UserOptionalModalProps):
                 setAllOptional(response)
                 const responseOptional: any[] = response.locations
                 setOptional(responseOptional)
-                setInitialUserOptional(responseOptional)
+                const deepClone = JSON.parse(JSON.stringify(responseOptional))
+                setInitialUserOptional(deepClone)
                 setIsLoading(false)
             })
         }
@@ -40,11 +41,9 @@ export const UserOptionalModal = ({ onClose, useruid }: UserOptionalModalProps):
     const handleChangeUserOptional = useCallback(
         (event: ChangeEvent<HTMLInputElement>, index: number) => {
             const { name, value } = event.target
-            const updatedOptional = [...optional]
+            optional[index][name] = value
 
-            updatedOptional[index] = { ...updatedOptional[index], [name]: value }
-            console.log(updatedOptional)
-            setOptional(updatedOptional)
+            setOptional([...optional])
         },
         [optional]
     )

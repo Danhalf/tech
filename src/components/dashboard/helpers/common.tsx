@@ -1,27 +1,43 @@
-export const deepEqual = (firstObj: any, secondObj: any): boolean => {
-    if (firstObj === secondObj) {
+export const deepEqual = (first: any, second: any): boolean => {
+    if (first === second) {
         return true
     }
 
     if (
-        typeof firstObj !== 'object' ||
-        firstObj === null ||
-        typeof secondObj !== 'object' ||
-        secondObj === null
+        typeof first !== 'object' ||
+        first === null ||
+        typeof second !== 'object' ||
+        second === null
     ) {
         return false
     }
 
-    const firstKeys = Object.keys(firstObj)
-    const secondKeys = Object.keys(secondObj)
-
-    if (firstKeys.length !== secondKeys.length) {
+    if (Array.isArray(first) !== Array.isArray(second)) {
         return false
     }
 
-    for (const key of firstKeys) {
-        if (!secondKeys.includes(key) || !deepEqual(firstObj[key], secondObj[key])) {
+    if (Array.isArray(first)) {
+        if (first.length !== second.length) {
             return false
+        }
+
+        for (let i = 0; i < first.length; i++) {
+            if (!deepEqual(first[i], second[i])) {
+                return false
+            }
+        }
+    } else {
+        const firstKeys = Object.keys(first)
+        const secondKeys = Object.keys(second)
+
+        if (firstKeys.length !== secondKeys.length) {
+            return false
+        }
+
+        for (const key of firstKeys) {
+            if (!secondKeys.includes(key) || !deepEqual(first[key], second[key])) {
+                return false
+            }
         }
     }
 
