@@ -39,7 +39,7 @@ function Microservices() {
                     <div className='table-responsive'>
                         <table
                             id='kt_table_users'
-                            className='table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer'
+                            className='table align-middle table-row-dashed fs-6 gy-2 no-footer'
                         >
                             <TableHead columns={microserviceColumnsArray} />
                             <tbody className='text-gray-600 fw-bold'>
