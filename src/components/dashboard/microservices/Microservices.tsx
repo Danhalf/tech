@@ -49,7 +49,7 @@ function Microservices() {
                                             <td>
                                                 <Link
                                                     to={`microservices/${service.uid}`}
-                                                    className='text-gray-800 text-hover-primary mb-1'
+                                                    className='text-gray-800 text-hover-primary mb-1 text-decoration-underline'
                                                 >
                                                     {service.name}
                                                 </Link>

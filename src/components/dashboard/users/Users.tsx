@@ -229,7 +229,7 @@ export default function Users() {
                                                     <td>
                                                         <Link
                                                             to={`${user.useruid}`}
-                                                            className='text-gray-800 text-hover-primary mb-1'
+                                                            className='text-gray-800 text-hover-primary mb-1 text-decoration-underline'
                                                         >
                                                             {user.username}
                                                         </Link>
