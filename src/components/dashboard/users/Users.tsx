@@ -25,6 +25,7 @@ enum UsersTabs {
 }
 
 enum UsersColumns {
+    ID = 'User id',
     Microservice = 'User name',
     Actions = 'Actions',
 }
@@ -231,6 +232,14 @@ export default function Users() {
                                                             to={`${user.useruid}`}
                                                             className='text-gray-800 text-hover-primary mb-1 text-decoration-underline'
                                                         >
+                                                            {user.useruid}
+                                                        </Link>
+                                                    </td>
+                                                    <td>
+                                                        <Link
+                                                            to={`${user.useruid}`}
+                                                            className='text-gray-800 text-hover-primary mb-1 text-decoration-underline'
+                                                        >
                                                             {user.username}
                                                         </Link>
                                                     </td>
@@ -314,6 +323,14 @@ export default function Users() {
                                         {deletedUsers.map((user: User) => {
                                             return (
                                                 <tr key={user.useruid}>
+                                                    <td>
+                                                        <Link
+                                                            to={`${user.useruid}`}
+                                                            className='text-gray-800 text-hover-primary mb-1'
+                                                        >
+                                                            {user.useruid}
+                                                        </Link>
+                                                    </td>
                                                     <td>
                                                         <Link
                                                             to={`${user.useruid}`}

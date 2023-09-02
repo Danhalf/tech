@@ -7,6 +7,7 @@ import { TableHead } from 'components/dashboard/helpers/renderTableHelper'
 import { CustomDropdown } from 'components/dashboard/helpers/renderDropdownHelper'
 
 enum MicroserviceColumns {
+    ID = 'Microservice ID',
     Microservice = 'Microservice',
     Actions = 'Actions',
 }
@@ -46,6 +47,14 @@ function Microservices() {
                                 {listOfServices.map((service) => {
                                     return (
                                         <tr key={service.uid}>
+                                            <td>
+                                                <Link
+                                                    to={`microservices/${service.uid}`}
+                                                    className='text-gray-800 text-hover-primary mb-1 text-decoration-underline'
+                                                >
+                                                    {service.uid}
+                                                </Link>
+                                            </td>
                                             <td>
                                                 <Link
                                                     to={`microservices/${service.uid}`}
