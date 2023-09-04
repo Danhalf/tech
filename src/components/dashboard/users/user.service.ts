@@ -8,9 +8,11 @@ export interface User {
     createdbyuid: string;
     index: number;
     parentuid: string;
+    parentusername: string;
     updated: string;
     username: string;
     useruid: string;
+    isAdmin: number;
 }
 
 export const createOrUpdateUser = (loginname: string, loginpassword: string, uid: string = '0') => {

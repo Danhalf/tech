@@ -26,7 +26,9 @@ enum UsersTabs {
 
 enum UsersColumns {
     ID = 'Index',
-    Microservice = 'User name',
+    Username = 'User name',
+    ParrentUser = 'Created by user',
+    isAdmin = 'Is admin',
     Actions = 'Actions',
 }
 
@@ -41,17 +43,19 @@ export default function Users() {
     const [userSettingsModalEnabled, setUserSettingssModalEnabled] = useState<boolean>(false);
     const [userOptionalModalEnabled, setUserOptionalsModalEnabled] = useState<boolean>(false);
 
-    const initialUserState = {
+    const initialUsersState = {
         created: '',
         createdbyuid: '',
         index: 0,
         parentuid: '',
+        parentusername: '',
         updated: '',
         username: '',
         useruid: '',
+        isAdmin: 0,
     };
 
-    const [selectedUser, setSelectedUser] = useState<User>(initialUserState);
+    const [selectedUser, setSelectedUser] = useState<User>(initialUsersState);
 
     const [activeTab, setActiveTab] = useState('Users');
     const [deletedUsers, setDeletedUsers] = useState<User[]>([]);
@@ -233,6 +237,16 @@ export default function Users() {
                                                             {user.username}
                                                         </Link>
                                                     </td>
+                                                    <td>
+                                                        <Link
+                                                            to={`user/${user.parentuid}`}
+                                                            className='text-gray-800 text-hover-primary mb-1 text-decoration-underline'
+                                                        >
+                                                            {user.parentusername}
+                                                        </Link>
+                                                    </td>
+                                                    <td>{user.isAdmin ? 'yes' : 'no'}</td>
+
                                                     <td>
                                                         <CustomDropdown
                                                             title='Actions'
