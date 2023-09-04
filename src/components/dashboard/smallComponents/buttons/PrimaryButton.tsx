@@ -1,8 +1,8 @@
 interface IButtonProps {
-    buttonText: string
-    disabled?: boolean
-    icon?: string
-    buttonClickAction?: () => void
+    buttonText: string;
+    disabled?: boolean;
+    icon?: string;
+    buttonClickAction?: () => void;
 }
 
 export const PrimaryButton = ({ buttonText, icon, disabled, buttonClickAction }: IButtonProps) => {
@@ -16,5 +16,5 @@ export const PrimaryButton = ({ buttonText, icon, disabled, buttonClickAction }:
             {icon && <i className={`ki-duotone ki-${icon} fs-2`}></i>}
             {buttonText}
         </button>
-    )
-}
+    );
+};

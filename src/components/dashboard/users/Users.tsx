@@ -1,5 +1,5 @@
-import { useEffect, useState } from 'react'
-import { Link } from 'react-router-dom'
+import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import {
     copyUser,
     deleteUser,
@@ -8,16 +8,16 @@ import {
     killSession,
     undeleteUser,
     User,
-} from 'components/dashboard/users/user.service'
-import { CustomModal } from 'components/dashboard/helpers/modal/renderModalHelper'
-import { UserModal } from 'components/dashboard/users/UserModal/parts/UserModal'
-import { UserPermissionsModal } from 'components/dashboard/users/UserModal/parts/UserPermissionsModal'
-import { UserSettingsModal } from 'components/dashboard/users/UserModal/parts/UserSettingsModal'
-import { UserOptionalModal } from 'components/dashboard/users/UserModal/parts/UserOptionalModal'
-import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton'
-import { TableHead } from 'components/dashboard/helpers/renderTableHelper'
-import { TabNavigate, TabPanel } from 'components/dashboard/helpers/helpers'
-import { CustomDropdown } from 'components/dashboard/helpers/renderDropdownHelper'
+} from 'components/dashboard/users/user.service';
+import { CustomModal } from 'components/dashboard/helpers/modal/renderModalHelper';
+import { UserModal } from 'components/dashboard/users/UserModal/parts/UserModal';
+import { UserPermissionsModal } from 'components/dashboard/users/UserModal/parts/UserPermissionsModal';
+import { UserSettingsModal } from 'components/dashboard/users/UserModal/parts/UserSettingsModal';
+import { UserOptionalModal } from 'components/dashboard/users/UserModal/parts/UserOptionalModal';
+import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton';
+import { TableHead } from 'components/dashboard/helpers/renderTableHelper';
+import { TabNavigate, TabPanel } from 'components/dashboard/helpers/helpers';
+import { CustomDropdown } from 'components/dashboard/helpers/renderDropdownHelper';
 
 enum UsersTabs {
     Users = 'Users',
@@ -25,21 +25,21 @@ enum UsersTabs {
 }
 
 enum UsersColumns {
-    ID = 'User id',
+    ID = 'Index',
     Microservice = 'User name',
     Actions = 'Actions',
 }
 
-const usersTabsArray: string[] = Object.values(UsersTabs) as string[]
-const usersColumnsArray: string[] = Object.values(UsersColumns) as string[]
+const usersTabsArray: string[] = Object.values(UsersTabs) as string[];
+const usersColumnsArray: string[] = Object.values(UsersColumns) as string[];
 
 export default function Users() {
-    const [users, setUsers] = useState<User[]>([])
-    const [addUserModalEnabled, setAddUserModalEnabled] = useState<boolean>(false)
-    const [editUserModalEnabled, setEditUserModalEnabled] = useState<boolean>(false)
-    const [userPermissionsModalEnabled, setUserPermissionsModalEnabled] = useState<boolean>(false)
-    const [userSettingsModalEnabled, setUserSettingssModalEnabled] = useState<boolean>(false)
-    const [userOptionalModalEnabled, setUserOptionalsModalEnabled] = useState<boolean>(false)
+    const [users, setUsers] = useState<User[]>([]);
+    const [addUserModalEnabled, setAddUserModalEnabled] = useState<boolean>(false);
+    const [editUserModalEnabled, setEditUserModalEnabled] = useState<boolean>(false);
+    const [userPermissionsModalEnabled, setUserPermissionsModalEnabled] = useState<boolean>(false);
+    const [userSettingsModalEnabled, setUserSettingssModalEnabled] = useState<boolean>(false);
+    const [userOptionalModalEnabled, setUserOptionalsModalEnabled] = useState<boolean>(false);
 
     const initialUserState = {
         created: '',
@@ -49,97 +49,97 @@ export default function Users() {
         updated: '',
         username: '',
         useruid: '',
-    }
+    };
 
-    const [selectedUser, setSelectedUser] = useState<User>(initialUserState)
+    const [selectedUser, setSelectedUser] = useState<User>(initialUserState);
 
-    const [activeTab, setActiveTab] = useState('Users')
-    const [deletedUsers, setDeletedUsers] = useState<User[]>([])
-    const [loaded, setLoaded] = useState<boolean>(false)
+    const [activeTab, setActiveTab] = useState('Users');
+    const [deletedUsers, setDeletedUsers] = useState<User[]>([]);
+    const [loaded, setLoaded] = useState<boolean>(false);
 
-    const handleAddUserModalOpen = () => setAddUserModalEnabled(!addUserModalEnabled)
+    const handleAddUserModalOpen = () => setAddUserModalEnabled(!addUserModalEnabled);
     const handleEditUserModalOpen = ({ useruid, username }: User) => {
-        setSelectedUser({ ...selectedUser, useruid, username: username })
-        setEditUserModalEnabled(true)
-    }
+        setSelectedUser({ ...selectedUser, useruid, username: username });
+        setEditUserModalEnabled(true);
+    };
     const handleUserPermissonsModalOpen = ({ useruid, username }: User) => {
-        setSelectedUser({ ...selectedUser, useruid, username: username })
-        setUserPermissionsModalEnabled(true)
-    }
+        setSelectedUser({ ...selectedUser, useruid, username: username });
+        setUserPermissionsModalEnabled(true);
+    };
     const handleUserSettingsModalOpen = ({ useruid, username }: User) => {
-        setSelectedUser({ ...selectedUser, useruid, username: username })
-        setUserSettingssModalEnabled(true)
-    }
+        setSelectedUser({ ...selectedUser, useruid, username: username });
+        setUserSettingssModalEnabled(true);
+    };
     const handleUserOptionalModalOpen = ({ useruid, username }: User) => {
-        setSelectedUser({ ...selectedUser, useruid, username: username })
-        setUserOptionalsModalEnabled(true)
-    }
+        setSelectedUser({ ...selectedUser, useruid, username: username });
+        setUserOptionalsModalEnabled(true);
+    };
 
     const updateUsers = (): void => {
         getUsers().then((response) => {
-            setUsers(response)
-            setLoaded(true)
-        })
-    }
+            setUsers(response);
+            setLoaded(true);
+        });
+    };
 
     useEffect(() => {
         if (!loaded) {
-            updateUsers()
+            updateUsers();
             getDeletedUsers().then((response) => {
-                setDeletedUsers(response)
-                setLoaded(true)
-            })
+                setDeletedUsers(response);
+                setLoaded(true);
+            });
         }
-    }, [users, loaded])
+    }, [users, loaded]);
 
     const handleCopyUser = (srcuid: string) => {
         copyUser(srcuid).then((response) => {
             if (response.status === 'OK') {
                 getUsers().then((response) => {
-                    setUsers(response)
-                    setLoaded(true)
-                })
+                    setUsers(response);
+                    setLoaded(true);
+                });
                 getDeletedUsers().then((response) => {
-                    setDeletedUsers(response)
-                    setLoaded(true)
-                })
+                    setDeletedUsers(response);
+                    setLoaded(true);
+                });
             }
-        })
-    }
+        });
+    };
 
     const moveToTrash = (userId: string) => {
         deleteUser(userId).then((response) => {
             if (response.status === 'OK') {
                 getUsers().then((response) => {
-                    setUsers(response)
-                    setLoaded(true)
-                })
+                    setUsers(response);
+                    setLoaded(true);
+                });
                 getDeletedUsers().then((response) => {
-                    setDeletedUsers(response)
-                    setLoaded(true)
-                })
+                    setDeletedUsers(response);
+                    setLoaded(true);
+                });
             }
-        })
-    }
+        });
+    };
 
     const restoreUser = (userId: string) => {
         undeleteUser(userId).then((response) => {
             if (response.status === 'OK') {
                 getUsers().then((response) => {
-                    setUsers(response)
-                    setLoaded(true)
-                })
+                    setUsers(response);
+                    setLoaded(true);
+                });
                 getDeletedUsers().then((response) => {
-                    setDeletedUsers(response)
-                    setLoaded(true)
-                })
+                    setDeletedUsers(response);
+                    setLoaded(true);
+                });
             }
-        })
-    }
+        });
+    };
 
     const handleTabClick = (tab: string) => {
-        setActiveTab(tab)
-    }
+        setActiveTab(tab);
+    };
 
     return (
         <>
@@ -218,23 +218,13 @@ export default function Users() {
                                 data-kt-user-table-toolbar='base'
                             ></div>
                             <div className='table-responsive'>
-                                <table
-                                    id='kt_table_users'
-                                    className='table align-middle table-row-dashed fs-6 gy-2 no-footer'
-                                >
+                                <table className='table align-middle table-row-dashed fs-6 gy-3 no-footer'>
                                     <TableHead columns={usersColumnsArray} />
                                     <tbody className='text-gray-600 fw-bold'>
                                         {users.map((user: User) => {
                                             return (
                                                 <tr key={user.useruid}>
-                                                    <td>
-                                                        <Link
-                                                            to={`${user.useruid}`}
-                                                            className='text-gray-800 text-hover-primary mb-1 text-decoration-underline'
-                                                        >
-                                                            {user.useruid}
-                                                        </Link>
-                                                    </td>
+                                                    <td className='text-gray-800'>{user.index}</td>
                                                     <td>
                                                         <Link
                                                             to={`${user.useruid}`}
@@ -300,7 +290,7 @@ export default function Users() {
                                                         />
                                                     </td>
                                                 </tr>
-                                            )
+                                            );
                                         })}
                                     </tbody>
                                 </table>
@@ -314,27 +304,17 @@ export default function Users() {
                                 data-kt-user-table-toolbar='base'
                             ></div>
                             <div className='table-responsive'>
-                                <table
-                                    id='kt_table_users'
-                                    className='table align-middle table-row-dashed fs-6 gy-5 no-footer'
-                                >
+                                <table className='table align-middle table-row-dashed fs-6 gy-3 no-footer'>
                                     <TableHead columns={usersColumnsArray} />
                                     <tbody className='text-gray-600 fw-bold'>
                                         {deletedUsers.map((user: User) => {
                                             return (
                                                 <tr key={user.useruid}>
+                                                    <td className='text-gray-800'>{user.index}</td>
                                                     <td>
                                                         <Link
                                                             to={`${user.useruid}`}
-                                                            className='text-gray-800 text-hover-primary mb-1'
-                                                        >
-                                                            {user.useruid}
-                                                        </Link>
-                                                    </td>
-                                                    <td>
-                                                        <Link
-                                                            to={`${user.useruid}`}
-                                                            className='text-gray-800 text-hover-primary mb-1'
+                                                            className='text-gray-800 text-hover-primary mb-1 text-decoration-underline'
                                                         >
                                                             {user.username}
                                                         </Link>
@@ -359,7 +339,7 @@ export default function Users() {
                                                         />
                                                     </td>
                                                 </tr>
-                                            )
+                                            );
                                         })}
                                     </tbody>
                                 </table>
@@ -369,5 +349,5 @@ export default function Users() {
                 </div>
             </div>
         </>
-    )
+    );
 }

@@ -1,16 +1,16 @@
-import { IMicroserviceServerData } from 'common/interfaces/IMicroserviceServerData'
+import { IMicroserviceServerData } from 'common/interfaces/IMicroserviceServerData';
 
 const getUniqValues = ({ values }: { values: IMicroserviceServerData[] }) => {
-    const columns = new Set<string>()
+    const columns = new Set<string>();
 
     values.forEach((obj: IMicroserviceServerData): void => {
         Object.keys(obj).forEach((key: string): void => {
-            columns.add(key)
-        })
-    })
+            columns.add(key);
+        });
+    });
 
-    return [...columns]
-}
+    return [...columns];
+};
 
 export const TableHead = ({ columns }: { columns: string[] }): JSX.Element => (
     <thead>
@@ -20,7 +20,7 @@ export const TableHead = ({ columns }: { columns: string[] }): JSX.Element => (
             ))}
         </tr>
     </thead>
-)
+);
 
 const TableBody = ({ data }: { data: IMicroserviceServerData[] }) => (
     <tbody>
@@ -32,10 +32,10 @@ const TableBody = ({ data }: { data: IMicroserviceServerData[] }) => (
             </tr>
         ))}
     </tbody>
-)
+);
 
 export const renderTable = (data: IMicroserviceServerData[]) => {
-    const columns = getUniqValues({ values: data })
+    const columns = getUniqValues({ values: data });
     return (
         <div className='w-100 table-responsive table-responsive-horizontal'>
             <table className='table table-row-dashed table-row-gray-300 gy-7'>
@@ -43,5 +43,5 @@ export const renderTable = (data: IMicroserviceServerData[]) => {
                 <TableBody data={data} />
             </table>
         </div>
-    )
-}
+    );
+};

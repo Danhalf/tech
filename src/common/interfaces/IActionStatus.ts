@@ -1,3 +1,3 @@
 export interface ActionStatus {
-    status: string
+    status: string;
 }

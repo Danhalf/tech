@@ -1,9 +1,9 @@
-import { PropsWithChildren } from 'react'
+import { PropsWithChildren } from 'react';
 
 type CustomModalProps = {
-    onClose: () => void
-    title: string
-}
+    onClose: () => void;
+    title: string;
+};
 
 const UserModalHeader = ({ onClose, title }: CustomModalProps): JSX.Element => {
     return (
@@ -21,8 +21,8 @@ const UserModalHeader = ({ onClose, title }: CustomModalProps): JSX.Element => {
                 </i>
             </div>
         </div>
-    )
-}
+    );
+};
 
 const CustomModal = ({
     title,
@@ -47,7 +47,7 @@ const CustomModal = ({
             </div>
             <div className='modal-backdrop fade show'></div>
         </>
-    )
-}
+    );
+};
 
-export { CustomModal }
+export { CustomModal };

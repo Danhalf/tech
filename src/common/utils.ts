@@ -1,9 +1,9 @@
 export function getToken(): string {
-    const userJson = localStorage.getItem('admss-admin-user')
-    let token = ''
+    const userJson = localStorage.getItem('admss-admin-user');
+    let token = '';
 
     if (userJson) {
-        token = JSON.parse(userJson).token
+        token = JSON.parse(userJson).token;
     }
-    return token
+    return token;
 }

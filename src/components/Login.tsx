@@ -1,51 +1,51 @@
-import clsx from 'clsx'
-import { useFormik } from 'formik'
-import React, { useState } from 'react'
-import * as Yup from 'yup'
+import clsx from 'clsx';
+import { useFormik } from 'formik';
+import React, { useState } from 'react';
+import * as Yup from 'yup';
 
-import { login } from 'common/auth.service'
-import { useNavigate } from 'react-router-dom'
+import { login } from 'common/auth.service';
+import { useNavigate } from 'react-router-dom';
 
 interface LoginCredentials {
-    username: string
-    password: string
+    username: string;
+    password: string;
 }
 
 const loginSchema = Yup.object().shape({
     username: Yup.string().trim().required('Username is required'),
     password: Yup.string().trim().required('Password is required'),
-})
+});
 
 const initialValues: LoginCredentials = {
     username: '',
     password: '',
-}
+};
 
 export function Login() {
-    const [loading, setLoading] = useState(false)
-    const navigate = useNavigate()
+    const [loading, setLoading] = useState(false);
+    const navigate = useNavigate();
 
     const formik = useFormik({
         initialValues,
         validationSchema: loginSchema,
         onSubmit: async (values, { setStatus, setSubmitting }) => {
-            setLoading(true)
+            setLoading(true);
 
             login(values.username, values.password)
                 .then((response) => {
-                    setStatus(false)
-                    localStorage.setItem('admss-admin-user', JSON.stringify(response))
-                    navigate('/dashboard')
+                    setStatus(false);
+                    localStorage.setItem('admss-admin-user', JSON.stringify(response));
+                    navigate('/dashboard');
                 })
                 .catch((err) => {
-                    setStatus(err.response.data.error)
+                    setStatus(err.response.data.error);
                 })
                 .finally(() => {
-                    setSubmitting(false)
-                    setLoading(false)
-                })
+                    setSubmitting(false);
+                    setLoading(false);
+                });
         },
-    })
+    });
     return (
         <div className='d-flex flex-column flex-lg-row-fluid w-lg-50 p-10 order-2 order-lg-1'>
             <div className='d-flex flex-center flex-column flex-lg-row-fluid'>
@@ -137,5 +137,5 @@ export function Login() {
                 </div>
             </div>
         </div>
-    )
+    );
 }

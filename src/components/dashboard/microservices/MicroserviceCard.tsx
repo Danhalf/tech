@@ -1,5 +1,5 @@
-import { useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import {
     getServiceAlerts,
     getServiceAudit,
@@ -7,8 +7,8 @@ import {
     getServiceCounters,
     getServiceLogs,
     Microservice,
-} from 'components/dashboard/microservices/service'
-import { TabDataWrapper, TabNavigate, TabPanel } from 'components/dashboard/helpers/helpers'
+} from 'components/dashboard/microservices/service';
+import { TabDataWrapper, TabNavigate, TabPanel } from 'components/dashboard/helpers/helpers';
 
 enum MicroserviceTabs {
     State = 'State',
@@ -18,50 +18,50 @@ enum MicroserviceTabs {
     Counters = 'Counters',
 }
 
-const microserviceTabsArray: string[] = Object.values(MicroserviceTabs) as string[]
+const microserviceTabsArray: string[] = Object.values(MicroserviceTabs) as string[];
 
 export function MicroserviceCard() {
-    const { uid } = useParams()
-    const [activeTab, setActiveTab] = useState('State')
-    const [logs, setLogs] = useState<string>('')
-    const [audit, setAudit] = useState<string>('')
-    const [alerts, setAlerts] = useState<string>('')
-    const [counters, setCounters] = useState<string>('')
-    const [microserviceData, setMicroservice] = useState<Microservice | null>(null)
+    const { uid } = useParams();
+    const [activeTab, setActiveTab] = useState('State');
+    const [logs, setLogs] = useState<string>('');
+    const [audit, setAudit] = useState<string>('');
+    const [alerts, setAlerts] = useState<string>('');
+    const [counters, setCounters] = useState<string>('');
+    const [microserviceData, setMicroservice] = useState<Microservice | null>(null);
 
     useEffect(() => {
         if (uid) {
             getServiceById(uid).then((response) => {
                 if (response) {
-                    setMicroservice(response)
+                    setMicroservice(response);
                 }
-            })
+            });
             getServiceLogs(uid).then((response) => {
                 if (response) {
-                    setLogs(JSON.stringify(response, null, 2))
+                    setLogs(JSON.stringify(response, null, 2));
                 }
-            })
+            });
             getServiceAudit(uid).then((response) => {
                 if (response) {
-                    setAudit(JSON.stringify(response, null, 2))
+                    setAudit(JSON.stringify(response, null, 2));
                 }
-            })
+            });
             getServiceAlerts(uid).then((response) => {
                 if (response) {
-                    setAlerts(JSON.stringify(response, null, 2))
+                    setAlerts(JSON.stringify(response, null, 2));
                 }
-            })
+            });
             getServiceCounters(uid).then((response) => {
                 if (response) {
-                    setCounters(JSON.stringify(response, null, 2))
+                    setCounters(JSON.stringify(response, null, 2));
                 }
-            })
+            });
         }
-    }, [uid])
+    }, [uid]);
 
     const handleTabClick = (tab: string) => {
-        setActiveTab(tab)
-    }
+        setActiveTab(tab);
+    };
 
     return (
         <div className='row g-5 g-xl-10 mb-5 mb-xl-10'>
@@ -103,5 +103,5 @@ export function MicroserviceCard() {
                 </div>
             </div>
         </div>
-    )
+    );
 }

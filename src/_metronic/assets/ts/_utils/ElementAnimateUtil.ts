@@ -12,41 +12,41 @@ export class ElementAnimateUtil {
          */
         const easings = {
             linear: function (t: number, b: number, c: number, d: number) {
-                return (c * t) / d + b
+                return (c * t) / d + b;
             },
-        }
+        };
 
         // Create mock done() function if necessary
         if (!complete) {
-            complete = function () {}
+            complete = function () {};
         }
 
         // Animation loop
         // let canceled = false;
-        const change = to - from
+        const change = to - from;
 
         function loop(timestamp: number) {
-            var time = (timestamp || +new Date()) - start
+            var time = (timestamp || +new Date()) - start;
 
             if (time >= 0) {
-                update(easings.linear(time, from, change, duration))
+                update(easings.linear(time, from, change, duration));
             }
             if (time >= 0 && time >= duration) {
-                update(to)
+                update(to);
                 if (complete) {
-                    complete()
+                    complete();
                 }
             } else {
-                window.requestAnimationFrame(loop)
+                window.requestAnimationFrame(loop);
             }
         }
 
-        update(from)
+        update(from);
 
         // Start animation loop
         const start =
-            window.performance && window.performance.now ? window.performance.now() : +new Date()
+            window.performance && window.performance.now ? window.performance.now() : +new Date();
 
-        window.requestAnimationFrame(loop)
+        window.requestAnimationFrame(loop);
     }
 }

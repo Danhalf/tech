@@ -1,75 +1,74 @@
-import { ChangeEvent, useCallback, useEffect, useState } from 'react'
-import { getUserLocations, setUserOptionalData } from 'components/dashboard/users/user.service'
-import { deepEqual } from 'components/dashboard/helpers/common'
-import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton'
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { getUserLocations, setUserOptionalData } from 'components/dashboard/users/user.service';
+import { deepEqual } from 'components/dashboard/helpers/common';
+import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton';
 
 interface UserOptionalModalProps {
-    onClose: () => void
-    useruid: string
+    onClose: () => void;
+    useruid: string;
 }
 
 export const UserOptionalModal = ({ onClose, useruid }: UserOptionalModalProps): JSX.Element => {
-    const [optional, setOptional] = useState<any[]>([])
-    const [initialUserOptional, setInitialUserOptional] = useState<any>([])
-    const [allOptional, setAllOptional] = useState<any>({})
-    const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true)
+    const [optional, setOptional] = useState<any[]>([]);
+    const [initialUserOptional, setInitialUserOptional] = useState<any>([]);
+    const [allOptional, setAllOptional] = useState<any>({});
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
     useEffect(() => {
-        setIsLoading(true)
+        setIsLoading(true);
         if (useruid) {
             getUserLocations(useruid).then(async (response: any) => {
-                setAllOptional(response)
-                const responseOptional: any[] = response.locations
-                setOptional(responseOptional)
-                const deepClone = JSON.parse(JSON.stringify(responseOptional))
-                setInitialUserOptional(deepClone)
-                setIsLoading(false)
-            })
+                setAllOptional(response);
+                const responseOptional: any[] = response.locations;
+                setOptional(responseOptional);
+                const deepClone = JSON.parse(JSON.stringify(responseOptional));
+                setInitialUserOptional(deepClone);
+                setIsLoading(false);
+            });
         }
-    }, [useruid])
+    }, [useruid]);
 
     useEffect(() => {
-        const isEqual = deepEqual(initialUserOptional, optional)
+        const isEqual = deepEqual(initialUserOptional, optional);
         if (!isEqual && !isLoading) {
-            setIsButtonDisabled(false)
+            setIsButtonDisabled(false);
         } else {
-            setIsButtonDisabled(true)
+            setIsButtonDisabled(true);
         }
-    }, [optional, initialUserOptional, isLoading])
+    }, [optional, initialUserOptional, isLoading]);
 
     const handleChangeUserOptional = useCallback(
         (event: ChangeEvent<HTMLInputElement>, index: number) => {
-            const { name, value } = event.target
-            optional[index][name] = value
+            const { name, value } = event.target;
+            optional[index][name] = value;
 
-            setOptional([...optional])
+            setOptional([...optional]);
         },
         [optional]
-    )
+    );
 
     const handleSetUserOptional = async (): Promise<void> => {
-        setIsLoading(true)
+        setIsLoading(true);
         if (useruid) {
-            const newOptional = { ...allOptional, locations: optional }
+            const newOptional = { ...allOptional, locations: optional };
             try {
-                const response = await setUserOptionalData(useruid, newOptional)
+                const response = await setUserOptionalData(useruid, newOptional);
                 if (response.status === 200) {
-                    onClose()
+                    onClose();
                 }
             } catch (error) {
-                console.log(error)
             } finally {
-                setIsLoading(false)
+                setIsLoading(false);
             }
         }
-    }
+    };
 
     if (!optional) {
-        return <></>
+        return <></>;
     }
 
-    const disabledKeys = ['useruid', 'created', 'updated']
+    const disabledKeys = ['useruid', 'created', 'updated'];
     return (
         <>
             {optional &&
@@ -92,8 +91,8 @@ export const UserOptionalModal = ({ onClose, useruid }: UserOptionalModalProps):
                                     onChange={(event) => handleChangeUserOptional(event, index)}
                                 />
                             </div>
-                        )
-                    })
+                        );
+                    });
                 })}
             <PrimaryButton
                 buttonText='Save permissions'
@@ -102,5 +101,5 @@ export const UserOptionalModal = ({ onClose, useruid }: UserOptionalModalProps):
                 buttonClickAction={handleSetUserOptional}
             />
         </>
-    )
-}
+    );
+};

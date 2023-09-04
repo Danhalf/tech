@@ -1,5 +1,5 @@
-import { useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import {
     getAllUIPermissions,
     getAllUITypes,
@@ -14,9 +14,9 @@ import {
     listUserLogins,
     listUserSessions,
     setUserPermissions,
-} from 'components/dashboard/users/user.service'
-import { TabDataWrapper, TabNavigate, TabPanel } from 'components/dashboard/helpers/helpers'
-import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton'
+} from 'components/dashboard/users/user.service';
+import { TabDataWrapper, TabNavigate, TabPanel } from 'components/dashboard/helpers/helpers';
+import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton';
 
 enum UserCardTabs {
     Profile = 'Profile',
@@ -33,121 +33,121 @@ enum UserCardTabs {
     UserTypes = 'User types',
 }
 
-const userCardTabsArray: string[] = Object.values(UserCardTabs) as string[]
+const userCardTabsArray: string[] = Object.values(UserCardTabs) as string[];
 
 export function UserCard() {
-    const { id } = useParams()
-    const [activeTab, setActiveTab] = useState('Profile')
-    const [profileJson, setProfileJson] = useState<string>('')
-    const [extendedInfoJSON, setExtendedInfoJSON] = useState<string>('')
-    const [shortInfoJSON, setShortInfoJSON] = useState<string>('')
-    const [locationsJSON, setLocationsJSON] = useState<string>('')
-    const [userPermissionsJSON, setUserPermissionsJSON] = useState<string>('')
-    const [userSettingsJSON, setUserSettingsJSON] = useState<string>('')
-    const [userSessionsJSON, setUserSessionsJSON] = useState<string>('')
-    const [userLoginsJSON, setUserLoginsJSON] = useState<string>('')
-    const [userSubusersJSON, setUserSubusersJSON] = useState<string>('')
-    const [userSalesPersonsJSON, setSalesPersonsJSON] = useState<string>('')
-    const [permissionsJSON, setPermissionsJSON] = useState<string>('')
-    const [userTypesJSON, setUserTypesJSON] = useState<string>('')
+    const { id } = useParams();
+    const [activeTab, setActiveTab] = useState('Profile');
+    const [profileJson, setProfileJson] = useState<string>('');
+    const [extendedInfoJSON, setExtendedInfoJSON] = useState<string>('');
+    const [shortInfoJSON, setShortInfoJSON] = useState<string>('');
+    const [locationsJSON, setLocationsJSON] = useState<string>('');
+    const [userPermissionsJSON, setUserPermissionsJSON] = useState<string>('');
+    const [userSettingsJSON, setUserSettingsJSON] = useState<string>('');
+    const [userSessionsJSON, setUserSessionsJSON] = useState<string>('');
+    const [userLoginsJSON, setUserLoginsJSON] = useState<string>('');
+    const [userSubusersJSON, setUserSubusersJSON] = useState<string>('');
+    const [userSalesPersonsJSON, setSalesPersonsJSON] = useState<string>('');
+    const [permissionsJSON, setPermissionsJSON] = useState<string>('');
+    const [userTypesJSON, setUserTypesJSON] = useState<string>('');
 
-    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true)
-    const [buttonPermissionsText, setButtonPermissionsText] = useState<string>('Save permissions')
-    const [initialUserPermissionsJSON, setInitialUserPermissionsJSON] = useState<string>('')
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
+    const [buttonPermissionsText, setButtonPermissionsText] = useState<string>('Save permissions');
+    const [initialUserPermissionsJSON, setInitialUserPermissionsJSON] = useState<string>('');
 
     useEffect(() => {
         if (id) {
             getUserProfile(id).then((response) => {
-                setProfileJson(JSON.stringify(response, null, 2))
-            })
+                setProfileJson(JSON.stringify(response, null, 2));
+            });
             getUserExtendedInfo(id).then((response) => {
-                setExtendedInfoJSON(JSON.stringify(response, null, 2))
-            })
+                setExtendedInfoJSON(JSON.stringify(response, null, 2));
+            });
             getUserShortInfo(id).then((response) => {
-                setShortInfoJSON(JSON.stringify(response, null, 2))
-            })
+                setShortInfoJSON(JSON.stringify(response, null, 2));
+            });
             getUserLocations(id).then((response) => {
-                setLocationsJSON(JSON.stringify(response, null, 2))
-            })
+                setLocationsJSON(JSON.stringify(response, null, 2));
+            });
             getUserPermissions(id).then((response) => {
-                const stringifiedResponse = JSON.stringify(response, null, 2)
-                setUserPermissionsJSON(stringifiedResponse)
-                setInitialUserPermissionsJSON(stringifiedResponse)
-            })
+                const stringifiedResponse = JSON.stringify(response, null, 2);
+                setUserPermissionsJSON(stringifiedResponse);
+                setInitialUserPermissionsJSON(stringifiedResponse);
+            });
             getUserSettings(id).then((response) => {
-                setUserSettingsJSON(JSON.stringify(response, null, 2))
-            })
+                setUserSettingsJSON(JSON.stringify(response, null, 2));
+            });
             listUserSessions(id).then((response) => {
-                setUserSessionsJSON(JSON.stringify(response, null, 2))
-            })
+                setUserSessionsJSON(JSON.stringify(response, null, 2));
+            });
             listUserLogins(id).then((response) => {
-                setUserLoginsJSON(JSON.stringify(response, null, 2))
-            })
+                setUserLoginsJSON(JSON.stringify(response, null, 2));
+            });
             listSubusers(id).then((response) => {
-                setUserSubusersJSON(JSON.stringify(response, null, 2))
-            })
+                setUserSubusersJSON(JSON.stringify(response, null, 2));
+            });
             listSalesPersons(id).then((response) => {
-                setSalesPersonsJSON(JSON.stringify(response, null, 2))
-            })
+                setSalesPersonsJSON(JSON.stringify(response, null, 2));
+            });
             getAllUIPermissions(id).then((response) => {
-                setPermissionsJSON(JSON.stringify(response, null, 2))
-            })
+                setPermissionsJSON(JSON.stringify(response, null, 2));
+            });
             getAllUITypes(id).then((response) => {
-                setUserTypesJSON(JSON.stringify(response, null, 2))
-            })
+                setUserTypesJSON(JSON.stringify(response, null, 2));
+            });
         }
-    }, [id])
+    }, [id]);
 
     const mutateJson = (jsonString: string, fieldName: string): string => {
         try {
-            const jsonObject = JSON.parse(jsonString)
+            const jsonObject = JSON.parse(jsonString);
 
             if (typeof jsonObject === 'object' && jsonObject !== null) {
-                const fieldValue = jsonObject[fieldName]
-                delete jsonObject[fieldName]
+                const fieldValue = jsonObject[fieldName];
+                delete jsonObject[fieldName];
 
-                const updatedJsonObject = { [fieldName]: fieldValue, ...jsonObject }
-                return JSON.stringify(updatedJsonObject, null, 2)
+                const updatedJsonObject = { [fieldName]: fieldValue, ...jsonObject };
+                return JSON.stringify(updatedJsonObject, null, 2);
             }
         } catch (err) {}
 
-        return jsonString
-    }
+        return jsonString;
+    };
 
     useEffect(() => {
         if (initialUserPermissionsJSON !== userPermissionsJSON) {
-            setIsButtonDisabled(false)
+            setIsButtonDisabled(false);
         } else {
-            setIsButtonDisabled(true)
+            setIsButtonDisabled(true);
         }
-    }, [userPermissionsJSON, initialUserPermissionsJSON])
+    }, [userPermissionsJSON, initialUserPermissionsJSON]);
 
     const handleChangeUserPermissions = ([fieldName, fieldValue]: [string, number]): void => {
-        const parsedUserPermission = JSON.parse(userPermissionsJSON)
-        parsedUserPermission[fieldName] = fieldValue
-        setUserPermissionsJSON(JSON.stringify(parsedUserPermission, null, 2))
-    }
+        const parsedUserPermission = JSON.parse(userPermissionsJSON);
+        parsedUserPermission[fieldName] = fieldValue;
+        setUserPermissionsJSON(JSON.stringify(parsedUserPermission, null, 2));
+    };
 
     const handleSetUserPermissions = (): void => {
         if (id) {
             setUserPermissions(id, JSON.parse(userPermissionsJSON)).then((response) => {
                 try {
-                    setButtonPermissionsText('Success!')
-                    setIsButtonDisabled(true)
-                    setInitialUserPermissionsJSON(userPermissionsJSON)
-                    setButtonPermissionsText('Save permissions')
+                    setButtonPermissionsText('Success!');
+                    setIsButtonDisabled(true);
+                    setInitialUserPermissionsJSON(userPermissionsJSON);
+                    setButtonPermissionsText('Save permissions');
                 } catch (error) {
-                    setButtonPermissionsText('Error!')
-                    setIsButtonDisabled(true)
-                    setButtonPermissionsText('Save permissions')
+                    setButtonPermissionsText('Error!');
+                    setIsButtonDisabled(true);
+                    setButtonPermissionsText('Save permissions');
                 }
-            })
+            });
         }
-    }
+    };
 
     const handleTabClick = (tab: string) => {
-        setActiveTab(tab)
-    }
+        setActiveTab(tab);
+    };
 
     return (
         <div className='row g-5 g-xl-10 mb-5 mb-xl-10'>
@@ -221,5 +221,5 @@ export function UserCard() {
                 </div>
             </div>
         </div>
-    )
+    );
 }

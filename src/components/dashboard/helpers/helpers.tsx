@@ -1,13 +1,13 @@
-import clsx from 'clsx'
-import { PropsWithChildren, useState } from 'react'
-import { ITabValues } from 'common/interfaces/ITabValues'
-import { CustomCheckbox } from 'components/dashboard/helpers/renderInputsHelper'
-import { renderTable } from 'components/dashboard/helpers/renderTableHelper'
+import clsx from 'clsx';
+import { PropsWithChildren, useState } from 'react';
+import { ITabValues } from 'common/interfaces/ITabValues';
+import { CustomCheckbox } from 'components/dashboard/helpers/renderInputsHelper';
+import { renderTable } from 'components/dashboard/helpers/renderTableHelper';
 
 interface IRenderListArgs {
-    data: string[] | string
-    checkbox?: boolean
-    action?: (value: [string, number]) => void
+    data: string[] | string;
+    checkbox?: boolean;
+    action?: (value: [string, number]) => void;
 }
 
 export const renderList = ({ data, checkbox, action }: IRenderListArgs) => {
@@ -16,23 +16,23 @@ export const renderList = ({ data, checkbox, action }: IRenderListArgs) => {
             <div>
                 <span className='text-muted d-block fw-semibold mb-6'>{data}</span>
             </div>
-        )
+        );
     }
 
-    const properties = Object.entries(data)
+    const properties = Object.entries(data);
 
     return properties.map(([key, value]: [string, any], index: number) => {
         const title = key.replace(/^[^a-zа-яё]*([a-zа-яё])/i, (letter: string) =>
             letter.toUpperCase()
-        )
+        );
 
         if (typeof value === 'object' && value !== null) {
             if (Array.isArray(value)) {
-                return <div key={`${key}-${index}`}>{renderTable(value)}</div>
+                return <div key={`${key}-${index}`}>{renderTable(value)}</div>;
             }
-            return <div key={`${key}-${index}`}>{renderList({ data: value })}</div>
+            return <div key={`${key}-${index}`}>{renderList({ data: value })}</div>;
         } else {
-            const activeCheckbox = checkbox && (Number(value) === 0 || Number(value) === 1)
+            const activeCheckbox = checkbox && (Number(value) === 0 || Number(value) === 1);
             return activeCheckbox ? (
                 <CustomCheckbox
                     key={key}
@@ -48,19 +48,19 @@ export const renderList = ({ data, checkbox, action }: IRenderListArgs) => {
                         <span className='text-muted d-block fw-semibold'>{value}</span>
                     </div>
                 </div>
-            )
+            );
         }
-    })
-}
+    });
+};
 
 export const TabNavigate = ({
     activeTab,
     tab,
     onTabClick,
 }: {
-    activeTab: string
-    tab: string
-    onTabClick: (tab: string) => void
+    activeTab: string;
+    tab: string;
+    onTabClick: (tab: string) => void;
 }) => (
     <li className='nav-item'>
         <button
@@ -73,7 +73,7 @@ export const TabNavigate = ({
             {tab}
         </button>
     </li>
-)
+);
 
 export const TabPanel = ({ activeTab, tabName, children, tabId }: ITabValues) => (
     <div
@@ -85,7 +85,7 @@ export const TabPanel = ({ activeTab, tabName, children, tabId }: ITabValues) =>
     >
         {children}
     </div>
-)
+);
 
 export const TabDataWrapper = ({
     data,
@@ -98,23 +98,23 @@ export const TabDataWrapper = ({
         GENERAL = 'General view',
     }
 
-    const viewTypesArray: string[] = Object.values(ViewTypes) as string[]
+    const viewTypesArray: string[] = Object.values(ViewTypes) as string[];
 
-    const [activeTab, setActiveTab] = useState(ViewTypes.JSON)
+    const [activeTab, setActiveTab] = useState(ViewTypes.JSON);
 
     const handleTabClick = (tab: any) => {
-        setActiveTab(tab)
-    }
+        setActiveTab(tab);
+    };
 
-    if (!data) return <></>
-    const parsedData = typeof data === 'string' && JSON.parse(data)
+    if (!data) return <></>;
+    const parsedData = typeof data === 'string' && JSON.parse(data);
     const renderContent = () => {
         if (typeof parsedData === 'object' && !Array.isArray(parsedData)) {
-            return renderList({ data: parsedData, checkbox, action })
+            return renderList({ data: parsedData, checkbox, action });
         } else {
-            return renderTable(parsedData)
+            return renderTable(parsedData);
         }
-    }
+    };
 
     return (
         <>
@@ -151,5 +151,5 @@ export const TabDataWrapper = ({
                 </div>
             </div>
         </>
-    )
-}
+    );
+};

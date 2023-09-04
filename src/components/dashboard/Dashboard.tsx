@@ -1,7 +1,7 @@
-import { DashboardHeader } from './DashboardHeader'
-import React from 'react'
-import { Outlet } from 'react-router-dom'
-import { ClearCache } from './smallComponents/buttons/ClearCache'
+import { DashboardHeader } from './DashboardHeader';
+import React from 'react';
+import { Outlet } from 'react-router-dom';
+import { ClearCache } from './smallComponents/buttons/ClearCache';
 
 export function Dashboard() {
     return (
@@ -22,5 +22,5 @@ export function Dashboard() {
                 </div>
             </div>
         </div>
-    )
+    );
 }

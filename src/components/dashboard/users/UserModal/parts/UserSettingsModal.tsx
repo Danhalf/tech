@@ -1,76 +1,75 @@
-import { ChangeEvent, useCallback, useEffect, useState } from 'react'
-import { getUserSettings, setUserSettings } from 'components/dashboard/users/user.service'
-import { convertToNumberIfNumeric, deepEqual } from 'components/dashboard/helpers/common'
-import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton'
+import { ChangeEvent, useCallback, useEffect, useState } from 'react';
+import { getUserSettings, setUserSettings } from 'components/dashboard/users/user.service';
+import { convertToNumberIfNumeric, deepEqual } from 'components/dashboard/helpers/common';
+import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton';
 
 interface UserSettingsModalProps {
-    onClose: () => void
-    useruid: string
+    onClose: () => void;
+    useruid: string;
 }
 
 export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps): JSX.Element => {
-    const [settings, setSettings] = useState<any>({})
-    const [initialUserSettings, setInitialUserSettings] = useState<any>({})
-    const [allSettings, setAllSettings] = useState<any>({})
-    const [isLoading, setIsLoading] = useState<boolean>(false)
-    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true)
+    const [settings, setSettings] = useState<any>({});
+    const [initialUserSettings, setInitialUserSettings] = useState<any>({});
+    const [allSettings, setAllSettings] = useState<any>({});
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
     useEffect(() => {
-        setIsLoading(true)
+        setIsLoading(true);
         if (useruid) {
             getUserSettings(useruid).then(async (response) => {
-                setAllSettings(response)
-                const responseSettings = response.settings
-                setSettings(responseSettings)
-                setInitialUserSettings(responseSettings)
-                setIsLoading(false)
-            })
+                setAllSettings(response);
+                const responseSettings = response.settings;
+                setSettings(responseSettings);
+                setInitialUserSettings(responseSettings);
+                setIsLoading(false);
+            });
         }
-    }, [useruid])
+    }, [useruid]);
 
     useEffect(() => {
-        const isEqual = deepEqual(initialUserSettings, settings)
+        const isEqual = deepEqual(initialUserSettings, settings);
         if (!isEqual && !isLoading) {
-            setIsButtonDisabled(false)
+            setIsButtonDisabled(false);
         } else {
-            setIsButtonDisabled(true)
+            setIsButtonDisabled(true);
         }
-    }, [settings, initialUserSettings, isLoading])
+    }, [settings, initialUserSettings, isLoading]);
 
     const handleChangeUserSettings = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
-            const { name, value } = event.target
+            const { name, value } = event.target;
 
             setSettings({
                 ...settings,
                 [name]: convertToNumberIfNumeric(value),
-            })
+            });
         },
         [settings]
-    )
+    );
 
     const handleSetUserSettings = (): void => {
-        setIsLoading(true)
+        setIsLoading(true);
         if (useruid) {
-            const newSettings = { ...allSettings, settings }
+            const newSettings = { ...allSettings, settings };
             setUserSettings(useruid, newSettings).then((response) => {
                 try {
-                    response.status = 200
-                    onClose()
+                    response.status = 200;
+                    onClose();
                 } catch (error) {
-                    console.log(error)
                 } finally {
-                    setIsLoading(false)
+                    setIsLoading(false);
                 }
-            })
+            });
         }
-    }
+    };
 
     if (!settings) {
-        return <></>
+        return <></>;
     }
 
-    const disabledKeys = ['useruid', 'created', 'updated']
+    const disabledKeys = ['useruid', 'created', 'updated'];
     return (
         <>
             {settings &&
@@ -92,7 +91,7 @@ export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps):
                                 onChange={handleChangeUserSettings}
                             />
                         </div>
-                    )
+                    );
                 })}
             <PrimaryButton
                 buttonText='Save permissions'
@@ -101,5 +100,5 @@ export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps):
                 buttonClickAction={handleSetUserSettings}
             />
         </>
-    )
-}
+    );
+};

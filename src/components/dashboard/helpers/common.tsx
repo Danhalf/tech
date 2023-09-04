@@ -1,6 +1,6 @@
 export const deepEqual = (first: any, second: any): boolean => {
     if (first === second) {
-        return true
+        return true;
     }
 
     if (
@@ -9,47 +9,47 @@ export const deepEqual = (first: any, second: any): boolean => {
         typeof second !== 'object' ||
         second === null
     ) {
-        return false
+        return false;
     }
 
     if (Array.isArray(first) !== Array.isArray(second)) {
-        return false
+        return false;
     }
 
     if (Array.isArray(first)) {
         if (first.length !== second.length) {
-            return false
+            return false;
         }
 
         for (let i = 0; i < first.length; i++) {
             if (!deepEqual(first[i], second[i])) {
-                return false
+                return false;
             }
         }
     } else {
-        const firstKeys = Object.keys(first)
-        const secondKeys = Object.keys(second)
+        const firstKeys = Object.keys(first);
+        const secondKeys = Object.keys(second);
 
         if (firstKeys.length !== secondKeys.length) {
-            return false
+            return false;
         }
 
         for (const key of firstKeys) {
             if (!secondKeys.includes(key) || !deepEqual(first[key], second[key])) {
-                return false
+                return false;
             }
         }
     }
 
-    return true
-}
+    return true;
+};
 
 export const convertToNumberIfNumeric = (str: string): number | string => {
-    const parsedNumber = Number.parseFloat(str)
+    const parsedNumber = Number.parseFloat(str);
 
     if (isNaN(parsedNumber)) {
-        return str
+        return str;
     }
 
-    return parsedNumber
-}
+    return parsedNumber;
+};

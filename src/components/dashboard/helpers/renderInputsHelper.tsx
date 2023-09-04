@@ -1,29 +1,29 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react';
 
 interface ICustomInput {
-    currentValue: number
-    id: string
-    title: string
-    action?: (value: [string, number]) => void
+    currentValue: number;
+    id: string;
+    title: string;
+    action?: (value: [string, number]) => void;
 }
 
 interface ICustomCheckbox extends ICustomInput {}
 
 export const CustomCheckbox = ({ currentValue, id, title, action }: ICustomCheckbox) => {
-    const [value, setValue] = useState<number>(currentValue)
-    const [isLoading, setIsLoading] = useState<boolean>(false)
+    const [value, setValue] = useState<number>(currentValue);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handleChange = () => {
-        setValue((prevValue: any) => (prevValue === 1 ? 0 : 1))
-    }
+        setValue((prevValue: any) => (prevValue === 1 ? 0 : 1));
+    };
 
     useEffect(() => {
-        setIsLoading(false)
+        setIsLoading(false);
         if (currentValue !== value && action) {
-            setIsLoading(true)
-            action([title, value])
+            setIsLoading(true);
+            action([title, value]);
         }
-    }, [title, value, currentValue, action])
+    }, [title, value, currentValue, action]);
 
     return (
         <div className='mb-10'>
@@ -42,5 +42,5 @@ export const CustomCheckbox = ({ currentValue, id, title, action }: ICustomCheck
                 </label>
             </div>
         </div>
-    )
-}
+    );
+};
