@@ -80,7 +80,7 @@ export default function Users() {
     };
 
     const updateUsers = (): void => {
-        getUsers().then((response) => {
+        getUsers().then((response: any) => {
             setUsers(response);
             setLoaded(true);
         });
@@ -99,7 +99,7 @@ export default function Users() {
     const handleCopyUser = (srcuid: string) => {
         copyUser(srcuid).then((response) => {
             if (response.status === 'OK') {
-                getUsers().then((response) => {
+                getUsers().then((response: any) => {
                     setUsers(response);
                     setLoaded(true);
                 });
@@ -114,7 +114,7 @@ export default function Users() {
     const moveToTrash = (userId: string) => {
         deleteUser(userId).then((response) => {
             if (response.status === 'OK') {
-                getUsers().then((response) => {
+                getUsers().then((response: any) => {
                     setUsers(response);
                     setLoaded(true);
                 });
@@ -129,7 +129,7 @@ export default function Users() {
     const restoreUser = (userId: string) => {
         undeleteUser(userId).then((response) => {
             if (response.status === 'OK') {
-                getUsers().then((response) => {
+                getUsers().then((response: any) => {
                     setUsers(response);
                     setLoaded(true);
                 });
