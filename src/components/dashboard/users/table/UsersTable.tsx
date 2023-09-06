@@ -9,6 +9,8 @@ import { usersColumns } from './columns/_columns';
 
 const UsersTable = () => {
     const users = useQueryResponseData();
+    // eslint-disable-next-line no-console
+    console.log(users);
     const data = useMemo(() => users, [users]);
     const columns = useMemo(() => usersColumns, []);
     const { getTableProps, getTableBodyProps, headers, rows, prepareRow } = useTable({
