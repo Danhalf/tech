@@ -33,9 +33,7 @@ export const CustomDropdown: FC<Props> = ({ title, items }) => {
             >
                 {items.map(({ menuItemName, menuItemAction }) => (
                     <div key={menuItemName} className='menu-item px-3' onClick={menuItemAction}>
-                        <a href='/#' className='menu-link px-3'>
-                            {menuItemName}
-                        </a>
+                        <a className='menu-link px-3'>{menuItemName}</a>
                     </div>
                 ))}
             </div>

@@ -4,9 +4,9 @@ import { Dashboard } from './components/dashboard/Dashboard';
 import { MicroserviceCard } from './components/dashboard/microservices/MicroserviceCard';
 import Microservices from './components/dashboard/microservices/Microservices';
 import { UserCard } from './components/dashboard/users/UserCard';
-import { UsersListWrapper } from './components/dashboard/users/UsersList';
 import { Login } from './components/Login';
 import { MenuComponent } from './_metronic/assets/ts/components';
+import Users from 'components/dashboard/users/Users';
 
 export function MasterInit() {
     const pluginsInitialization = () => {
@@ -30,7 +30,7 @@ const Content = () => (
             <Route path='/dashboard' element={<Dashboard />}>
                 <Route path='' element={<Microservices />} />
                 <Route path='microservices/:uid' element={<MicroserviceCard />} />
-                <Route path='users' element={<UsersListWrapper />} />
+                <Route path='users' element={<Users />} />
                 <Route path='users/:id' element={<UserCard />} />
             </Route>
         </Routes>
