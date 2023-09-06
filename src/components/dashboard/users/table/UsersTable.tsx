@@ -8,9 +8,8 @@ import { CustomRow } from './columns/CustomRow';
 import { usersColumns } from './columns/_columns';
 
 const UsersTable = () => {
-    const users = useQueryResponseData();
-    // eslint-disable-next-line no-console
-    console.log(users);
+    let users = useQueryResponseData();
+
     const data = useMemo(() => users, [users]);
     const columns = useMemo(() => usersColumns, []);
     const { getTableProps, getTableBodyProps, headers, rows, prepareRow } = useTable({
@@ -18,6 +17,8 @@ const UsersTable = () => {
         data,
     });
 
+    // eslint-disable-next-line no-console
+    // console.log(rows);
     return (
         <>
             <div className='table-responsive'>

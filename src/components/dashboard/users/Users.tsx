@@ -18,6 +18,7 @@ import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/Prim
 import { TableHead } from 'components/dashboard/helpers/renderTableHelper';
 import { TabNavigate, TabPanel } from 'components/dashboard/helpers/helpers';
 import { CustomDropdown } from 'components/dashboard/helpers/renderDropdownHelper';
+import { UserTable } from './UserModal/parts/UserTable/UserTable';
 
 enum UsersTabs {
     Users = 'Users',
@@ -157,7 +158,7 @@ export default function Users() {
                     onClose={() => setEditUserModalEnabled(false)}
                     title={'Change password'}
                 >
-                    <UserModal onClose={() => setEditUserModalEnabled(false)} user={selectedUser} />
+                    {/* <UserModal onClose={() => setEditUserModalEnabled(false)} user={selectedUser} /> */}
                 </CustomModal>
             )}
             {userPermissionsModalEnabled && (
@@ -216,158 +217,126 @@ export default function Users() {
                         />
                     </div>
                     <TabPanel activeTab={activeTab} tabName={UsersTabs.Users}>
-                        <div className='card-body'>
-                            <div
-                                className='d-flex justify-content-end'
-                                data-kt-user-table-toolbar='base'
-                            ></div>
-                            <div className='table-responsive'>
-                                <table className='table align-middle table-row-dashed fs-6 gy-3 no-footer'>
-                                    <TableHead columns={usersColumnsArray} />
-                                    <tbody className='text-gray-600 fw-bold'>
-                                        {users.map((user: User) => {
-                                            return (
-                                                <tr key={user.useruid}>
-                                                    <td className='text-gray-800'>{user.index}</td>
-                                                    <td>
-                                                        <Link
-                                                            to={`${user.useruid}`}
-                                                            className='text-gray-800 text-hover-primary mb-1 text-decoration-underline'
-                                                        >
-                                                            {user.username}
-                                                        </Link>
-                                                    </td>
-                                                    <td>
-                                                        <Link
-                                                            to={`user/${user.parentuid}`}
-                                                            className='text-gray-800 text-hover-primary mb-1 text-decoration-underline'
-                                                        >
-                                                            {user.parentusername}
-                                                        </Link>
-                                                    </td>
-                                                    <td>{user.isAdmin ? 'yes' : 'no'}</td>
+                        <UserTable>
+                            <TableHead columns={usersColumnsArray} />
+                            <tbody className='text-gray-600 fw-bold'>
+                                {users.map((user: User) => {
+                                    return (
+                                        <tr key={user.useruid}>
+                                            <td className='text-gray-800'>{user.index}</td>
+                                            <td>
+                                                <Link
+                                                    to={`${user.useruid}`}
+                                                    className='text-gray-800 text-hover-primary mb-1 text-decoration-underline'
+                                                >
+                                                    {user.username}
+                                                </Link>
+                                            </td>
+                                            <td>
+                                                <Link
+                                                    to={`user/${user.parentuid}`}
+                                                    className='text-gray-800 text-hover-primary mb-1 text-decoration-underline'
+                                                >
+                                                    {user.parentusername}
+                                                </Link>
+                                            </td>
+                                            <td>{user.isAdmin ? 'yes' : 'no'}</td>
 
-                                                    <td>
-                                                        <CustomDropdown
-                                                            title='Actions'
-                                                            items={[
-                                                                {
-                                                                    menuItemName: 'Change password',
-                                                                    menuItemAction: () =>
-                                                                        handleEditUserModalOpen(
-                                                                            user
-                                                                        ),
-                                                                },
-                                                                {
-                                                                    menuItemName: 'Copy user',
-                                                                    menuItemAction: () =>
-                                                                        handleCopyUser(
-                                                                            user.useruid
-                                                                        ),
-                                                                },
-                                                                {
-                                                                    menuItemName:
-                                                                        'Set user permissions',
-                                                                    menuItemAction: () =>
-                                                                        handleUserPermissonsModalOpen(
-                                                                            user
-                                                                        ),
-                                                                },
-                                                                {
-                                                                    menuItemName:
-                                                                        'Set user settings',
-                                                                    menuItemAction: () =>
-                                                                        handleUserSettingsModalOpen(
-                                                                            user
-                                                                        ),
-                                                                },
-                                                                {
-                                                                    menuItemName:
-                                                                        'Set user optional data',
-                                                                    menuItemAction: () =>
-                                                                        handleUserOptionalModalOpen(
-                                                                            user
-                                                                        ),
-                                                                },
-                                                                {
-                                                                    menuItemName: 'Delete user',
-                                                                    menuItemAction: () =>
-                                                                        moveToTrash(user.useruid),
-                                                                },
-                                                                {
-                                                                    menuItemName:
-                                                                        'Kill user session',
-                                                                    menuItemAction: () =>
-                                                                        killSession(user.useruid),
-                                                                },
-                                                            ]}
-                                                        />
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                                            <td>
+                                                <CustomDropdown
+                                                    title='Actions'
+                                                    items={[
+                                                        {
+                                                            menuItemName: 'Change password',
+                                                            menuItemAction: () =>
+                                                                handleEditUserModalOpen(user),
+                                                        },
+                                                        {
+                                                            menuItemName: 'Copy user',
+                                                            menuItemAction: () =>
+                                                                handleCopyUser(user.useruid),
+                                                        },
+                                                        {
+                                                            menuItemName: 'Set user permissions',
+                                                            menuItemAction: () =>
+                                                                handleUserPermissonsModalOpen(user),
+                                                        },
+                                                        {
+                                                            menuItemName: 'Set user settings',
+                                                            menuItemAction: () =>
+                                                                handleUserSettingsModalOpen(user),
+                                                        },
+                                                        {
+                                                            menuItemName: 'Set user optional data',
+                                                            menuItemAction: () =>
+                                                                handleUserOptionalModalOpen(user),
+                                                        },
+                                                        {
+                                                            menuItemName: 'Delete user',
+                                                            menuItemAction: () =>
+                                                                moveToTrash(user.useruid),
+                                                        },
+                                                        {
+                                                            menuItemName: 'Kill user session',
+                                                            menuItemAction: () =>
+                                                                killSession(user.useruid),
+                                                        },
+                                                    ]}
+                                                />
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </UserTable>
                     </TabPanel>
                     <TabPanel activeTab={activeTab} tabName={UsersTabs.DeletedUsers}>
-                        <div className='card-body'>
-                            <div
-                                className='d-flex justify-content-end'
-                                data-kt-user-table-toolbar='base'
-                            ></div>
-                            <div className='table-responsive'>
-                                <table className='table align-middle table-row-dashed fs-6 gy-3 no-footer'>
-                                    <TableHead columns={usersColumnsArray} />
-                                    <tbody className='text-gray-600 fw-bold'>
-                                        {deletedUsers.map((user: User) => {
-                                            return (
-                                                <tr key={user.useruid}>
-                                                    <td className='text-gray-800'>{user.index}</td>
-                                                    <td>
-                                                        <Link
-                                                            to={`${user.useruid}`}
-                                                            className='text-gray-800 text-hover-primary mb-1 text-decoration-underline'
-                                                        >
-                                                            {user.username}
-                                                        </Link>
-                                                    </td>
-                                                    <td>
-                                                        <Link
-                                                            to={`user/${user.parentuid}`}
-                                                            className='text-gray-800 text-hover-primary mb-1 text-decoration-underline'
-                                                        >
-                                                            {user.parentusername}
-                                                        </Link>
-                                                    </td>
-                                                    <td>{user.isAdmin ? 'yes' : 'no'}</td>
-                                                    <td>
-                                                        <CustomDropdown
-                                                            title='Actions'
-                                                            items={[
-                                                                {
-                                                                    menuItemName: 'Restore user',
-                                                                    menuItemAction: () =>
-                                                                        restoreUser(user.useruid),
-                                                                },
-                                                                {
-                                                                    menuItemName: 'Change password',
-                                                                    menuItemAction: () =>
-                                                                        handleEditUserModalOpen(
-                                                                            user
-                                                                        ),
-                                                                },
-                                                            ]}
-                                                        />
-                                                    </td>
-                                                </tr>
-                                            );
-                                        })}
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+                        <UserTable>
+                            <TableHead columns={usersColumnsArray} />
+                            <tbody className='text-gray-600 fw-bold'>
+                                {deletedUsers.map((user: User) => {
+                                    return (
+                                        <tr key={user.useruid}>
+                                            <td className='text-gray-800'>{user.index}</td>
+                                            <td>
+                                                <Link
+                                                    to={`${user.useruid}`}
+                                                    className='text-gray-800 text-hover-primary mb-1 text-decoration-underline'
+                                                >
+                                                    {user.username}
+                                                </Link>
+                                            </td>
+                                            <td>
+                                                <Link
+                                                    to={`user/${user.parentuid}`}
+                                                    className='text-gray-800 text-hover-primary mb-1 text-decoration-underline'
+                                                >
+                                                    {user.parentusername}
+                                                </Link>
+                                            </td>
+                                            <td>{user.isAdmin ? 'yes' : 'no'}</td>
+                                            <td>
+                                                <CustomDropdown
+                                                    title='Actions'
+                                                    items={[
+                                                        {
+                                                            menuItemName: 'Restore user',
+                                                            menuItemAction: () =>
+                                                                restoreUser(user.useruid),
+                                                        },
+                                                        {
+                                                            menuItemName: 'Change password',
+                                                            menuItemAction: () =>
+                                                                handleEditUserModalOpen(user),
+                                                        },
+                                                    ]}
+                                                />
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
+                            </tbody>
+                        </UserTable>
                     </TabPanel>
                 </div>
             </div>

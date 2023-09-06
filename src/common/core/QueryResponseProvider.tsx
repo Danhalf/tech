@@ -10,6 +10,7 @@ import {
     PaginationState,
     initialQueryState,
     WithChildren,
+    Response,
 } from '_metronic/helpers';
 import { User, getUsers } from 'components/dashboard/users/user.service';
 
@@ -28,7 +29,7 @@ const QueryResponseProvider: FC<WithChildren> = ({ children }) => {
     const {
         isFetching,
         refetch,
-        data: response,
+        data: axiosResponse,
     } = useQuery(
         `${QUERIES.USERS_LIST}-${query}`,
         () => {
@@ -36,6 +37,10 @@ const QueryResponseProvider: FC<WithChildren> = ({ children }) => {
         },
         { cacheTime: 0, keepPreviousData: true, refetchOnWindowFocus: false }
     );
+
+    const response: Response<User[]> = {
+        data: axiosResponse && axiosResponse.data,
+    };
 
     return (
         <QueryResponseContext.Provider value={{ isLoading: isFetching, refetch, response, query }}>

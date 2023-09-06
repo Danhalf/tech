@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { AxiosResponse } from 'axios';
 import { getToken } from 'common/utils';
 import { API_URL } from 'common/app-consts';
 import { ActionStatus } from 'common/interfaces/IActionStatus';
@@ -15,8 +15,6 @@ export interface User {
     useruid: string;
     isAdmin: number;
 }
-
-export type UsersQueryResponse = Response<Array<User>>;
 
 export const createOrUpdateUser = (loginname: string, loginpassword: string, uid: string = '0') => {
     return axios.post(
@@ -50,12 +48,10 @@ export const setUserOptionalData = (uid: string, data: any) => {
     );
 };
 
-export const getUsers = (query: string = ''): Promise<UsersQueryResponse> => {
-    return axios
-        .get<User[]>(`${API_URL}user/0/list`, {
-            headers: { Authorization: `Bearer ${getToken()}` },
-        })
-        .then((d: any) => d.data);
+export const getUsers = (query?: string): Promise<AxiosResponse<User[], any>> => {
+    return axios.get<User[]>(`${API_URL}user/0/list`, {
+        headers: { Authorization: `Bearer ${getToken()}` },
+    });
 };
 
 // export const getUsers = (query: string = '') => {

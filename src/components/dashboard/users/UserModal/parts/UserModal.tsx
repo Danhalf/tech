@@ -7,13 +7,19 @@ import { createOrUpdateUser, User } from 'components/dashboard/users/user.servic
 
 interface UserModalProps {
     onClose: () => void;
-    user?: User;
+    username?: string;
+    useruid?: string;
     updateData?: () => void;
 }
 
-export const UserModal = ({ onClose, user, updateData }: UserModalProps): JSX.Element => {
+export const UserModal = ({
+    onClose,
+    username,
+    useruid,
+    updateData,
+}: UserModalProps): JSX.Element => {
     const initialUserData: IUserData = {
-        username: user?.username || '',
+        username: username || '',
         password: '',
     };
 
@@ -31,7 +37,7 @@ export const UserModal = ({ onClose, user, updateData }: UserModalProps): JSX.El
             setSubmitting(true);
             try {
                 const params: [string, string, string?] = [username, password];
-                if (user?.useruid) params.push(user.useruid);
+                if (useruid) params.push(useruid);
                 await createOrUpdateUser(...params);
                 onClose();
                 updateData && updateData();
@@ -63,7 +69,7 @@ export const UserModal = ({ onClose, user, updateData }: UserModalProps): JSX.El
                             type='text'
                             name='username'
                             autoComplete='off'
-                            disabled={Boolean(user)}
+                            disabled={Boolean(username)}
                         />
                         {formik.touched.username && formik.errors.username && (
                             <div className='fv-plugins-message-container'>
