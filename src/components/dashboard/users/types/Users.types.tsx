@@ -3,7 +3,12 @@ export interface UserInputData {
     password: string;
 }
 
-export type UsersListType = 'Users' | 'Deleted users';
+export enum UsersType {
+    Users = 'Users',
+    DeletedUsers = 'Deleted users',
+}
+
+export type UsersListType = UsersType;
 
 export interface User {
     created?: string;

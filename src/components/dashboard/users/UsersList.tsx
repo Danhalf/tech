@@ -6,14 +6,9 @@ import { TabNavigate, TabPanel } from '../helpers/helpers';
 import { CustomModal } from '../helpers/modal/renderModalHelper';
 import { UserModal } from './UserModal/parts/UserModal';
 import { PrimaryButton } from '../smallComponents/buttons/PrimaryButton';
-import { UsersListType } from './types/Users.types';
+import { UsersListType, UsersType } from './types/Users.types';
 
-enum UsersTabs {
-    Users = 'Users',
-    DeletedUsers = 'Deleted users',
-}
-
-const usersTabsArray: string[] = Object.values(UsersTabs) as string[];
+const usersTabsArray: string[] = Object.values(UsersType) as string[];
 
 // const UsersList = () => {
 //     const [activeTab, setActiveTab] = useState('Users');
@@ -38,7 +33,7 @@ const usersTabsArray: string[] = Object.values(UsersTabs) as string[];
 // };
 
 const UsersListWrapper = () => {
-    const [activeTab, setActiveTab] = useState<UsersListType>('Users');
+    const [activeTab, setActiveTab] = useState<UsersListType>(UsersType.Users);
     const [addUserModalEnabled, setAddUserModalEnabled] = useState<boolean>(false);
 
     const handleAddUserModalOpen = () => setAddUserModalEnabled(!addUserModalEnabled);
@@ -77,11 +72,11 @@ const UsersListWrapper = () => {
                                     buttonClickAction={handleAddUserModalOpen}
                                 />
                             </div>
-                            <TabPanel activeTab={activeTab} tabName={UsersTabs.Users}>
-                                <UsersTable list='Users' />
+                            <TabPanel activeTab={activeTab} tabName={UsersType.Users}>
+                                <UsersTable list={UsersType.Users} />
                             </TabPanel>
-                            <TabPanel activeTab={activeTab} tabName={UsersTabs.DeletedUsers}>
-                                <UsersTable list='Deleted users' />
+                            <TabPanel activeTab={activeTab} tabName={UsersType.DeletedUsers}>
+                                <UsersTable list={UsersType.DeletedUsers} />
                             </TabPanel>
                         </div>
                     </div>

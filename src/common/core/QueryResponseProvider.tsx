@@ -13,7 +13,7 @@ import {
     Response,
 } from '_metronic/helpers';
 import { getDeletedUsers, getUsers } from 'components/dashboard/users/api/user.service';
-import { User, UsersListType } from 'components/dashboard/users/types/Users.types';
+import { User, UsersListType, UsersType } from 'components/dashboard/users/types/Users.types';
 
 type QueryResponseProviderProps = {
     listType: UsersListType;
@@ -30,9 +30,9 @@ const QueryResponseProvider = ({
 
     const GET_LIST_TYPE = () => {
         switch (listType) {
-            case 'Users':
+            case UsersType.Users:
                 return QUERIES.USERS_LIST;
-            case 'Deleted users':
+            case UsersType.DeletedUsers:
                 return QUERIES.DELETED_USERS_LIST;
         }
     };
@@ -51,9 +51,9 @@ const QueryResponseProvider = ({
         `${GET_LIST_TYPE()}-${query}`,
         () => {
             switch (listType) {
-                case 'Users':
+                case UsersType.Users:
                     return getUsers(query);
-                case 'Deleted users':
+                case UsersType.DeletedUsers:
                     return getDeletedUsers(query);
             }
         },

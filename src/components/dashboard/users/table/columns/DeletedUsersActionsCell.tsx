@@ -13,10 +13,10 @@ import {
 import { CustomModal } from 'components/dashboard/helpers/modal/renderModalHelper';
 import { CustomDropdown } from 'components/dashboard/helpers/renderDropdownHelper';
 import { UserModal } from '../../UserModal/parts/UserModal';
-import { User } from '../../types/Users.types';
+import { User, UsersType } from '../../types/Users.types';
 
 const DeletedUsersActionsCell = ({ useruid, username }: User) => {
-    const { query } = useQueryResponse('Deleted users');
+    const { query } = useQueryResponse(UsersType.DeletedUsers);
 
     const queryClient = useQueryClient();
 

@@ -16,10 +16,10 @@ import { UserModal } from '../../UserModal/parts/UserModal';
 import { UserOptionalModal } from '../../UserModal/parts/UserOptionalModal';
 import { UserPermissionsModal } from '../../UserModal/parts/UserPermissionsModal';
 import { UserSettingsModal } from '../../UserModal/parts/UserSettingsModal';
-import { User } from '../../types/Users.types';
+import { User, UsersType } from '../../types/Users.types';
 
 const UserActionsCell = ({ useruid, username }: User) => {
-    const { query } = useQueryResponse('Users');
+    const { query } = useQueryResponse(UsersType.Users);
 
     const queryClient = useQueryClient();
 

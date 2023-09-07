@@ -4,9 +4,10 @@ import { UserCustomHeader } from './UserCustomHeader';
 import { UserLinkCell } from './UserLinkCell';
 import { UserActionsCell } from './UserActionsCell';
 import { DeletedUsersActionsCell } from './DeletedUsersActionsCell';
-import { User, UsersListType } from '../../types/Users.types';
+import { User, UsersListType, UsersType } from '../../types/Users.types';
 
 const usersColumns = (list: UsersListType): ReadonlyArray<Column<User>> => {
+    const { Users, DeletedUsers } = UsersType;
     return [
         {
             Header: (props) => <UserCustomHeader tableProps={props} title='Index' />,
@@ -34,7 +35,7 @@ const usersColumns = (list: UsersListType): ReadonlyArray<Column<User>> => {
         },
         {
             Header: (props) => <UserCustomHeader tableProps={props} title='Is admin' />,
-            accessor: 'isadmin',
+            id: 'isadmin',
             Cell: ({ ...props }) => (props.data[props.row.index].isadmin ? 'yes' : 'no'),
         },
         {
@@ -46,9 +47,9 @@ const usersColumns = (list: UsersListType): ReadonlyArray<Column<User>> => {
             Cell: ({ ...props }) => {
                 const { useruid, username }: User = props.data[props.row.index];
                 switch (list) {
-                    case 'Users':
+                    case Users:
                         return <UserActionsCell useruid={useruid} username={username} />;
-                    case 'Deleted users':
+                    case DeletedUsers:
                         return <DeletedUsersActionsCell useruid={useruid} username={username} />;
                 }
             },
