@@ -8,22 +8,17 @@ type Props = {
     row: Row<User>;
 };
 
-const CustomRow: FC<Props> = ({ row }) => {
-    // eslint-disable-next-line no-console
-    // console.log(row);
+const CustomRow = ({ row }: Props) => {
     return (
         <tr {...row.getRowProps()}>
             {row.cells.map((cell) => {
-                // eslint-disable-next-line no-console
-                // console.log(cell.render('Cell'));
                 return (
-                    <td>{cell.render('Cell')}</td>
-                    // <td
-                    //     {...cell.getCellProps()}
-                    //     className={clsx({ 'text-end min-w-100px': cell.column.id === 'actions' })}
-                    // >
-                    //     {cell.render('Cell')}
-                    // </td>
+                    <td
+                        {...cell.getCellProps()}
+                        className={clsx({ 'text-end min-w-100px': cell.column.id === 'actions' })}
+                    >
+                        {cell.render('Cell')}
+                    </td>
                 );
             })}
         </tr>

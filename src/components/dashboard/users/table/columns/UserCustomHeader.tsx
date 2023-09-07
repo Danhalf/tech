@@ -21,7 +21,7 @@ const UserCustomHeader: FC<Props> = ({ className, title, tableProps }) => {
 
     const sortColumn = () => {
         // avoid sorting for these columns
-        if (id === 'actions' || id === 'selection') {
+        if (id === 'actions') {
             return;
         }
 

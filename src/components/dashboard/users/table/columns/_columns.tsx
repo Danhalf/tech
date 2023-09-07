@@ -3,18 +3,22 @@ import { Column } from 'react-table';
 import { UserCustomHeader } from './UserCustomHeader';
 import { User } from '../../user.service';
 import { UserActionsCell } from './UserActionsCell';
+import { UserLinkCell } from './UserLinkCell';
+
 const usersColumns: ReadonlyArray<Column<User>> = [
     {
-        Header: (props) => (
-            <UserCustomHeader tableProps={props} title='Index' className='min-w-125px' />
-        ),
+        Header: (props) => <UserCustomHeader tableProps={props} title='Index' />,
         accessor: 'index',
     },
     {
         Header: (props) => (
             <UserCustomHeader tableProps={props} title='User name' className='min-w-125px' />
         ),
-        accessor: 'username',
+        id: 'username',
+        Cell: ({ ...props }) => {
+            const { useruid, username }: User = props.data[props.row.index];
+            return <UserLinkCell useruid={useruid} username={username} />;
+        },
     },
     {
         Header: (props) => (
@@ -23,15 +27,17 @@ const usersColumns: ReadonlyArray<Column<User>> = [
         accessor: 'parentusername',
     },
     {
-        Header: (props) => (
-            <UserCustomHeader tableProps={props} title='Is admin' className='min-w-125px' />
-        ),
+        Header: (props) => <UserCustomHeader tableProps={props} title='Is admin' />,
         accessor: 'isadmin',
-        Cell: ({ ...props }) => (props.isAdmin ? 'yes' : 'no'),
+        Cell: ({ ...props }) => (props.data[props.row.index].isadmin ? 'yes' : 'no'),
     },
     {
         Header: (props) => (
-            <UserCustomHeader tableProps={props} title='Actions' className='min-w-125px' />
+            <UserCustomHeader
+                tableProps={props}
+                title='Actions'
+                className='text-end px-3 min-w-125px'
+            />
         ),
         id: 'actions',
 

@@ -24,7 +24,7 @@ const UsersTable = () => {
             <div className='table-responsive'>
                 <table
                     id='kt_table_users'
-                    className='table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer'
+                    className='table align-middle table-row-dashed fs-6 gy-3 dataTable no-footer'
                     {...getTableProps()}
                 >
                     <thead>
@@ -38,7 +38,7 @@ const UsersTable = () => {
                         {rows.length > 0 ? (
                             rows.map((row: Row<User>, i) => {
                                 prepareRow(row);
-                                return <CustomRow row={row} key={`row-${i}-${row.id}`} />;
+                                return <CustomRow row={row} key={`${row.id}`} />;
                             })
                         ) : (
                             <tr>
