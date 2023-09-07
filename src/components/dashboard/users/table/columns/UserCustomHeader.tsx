@@ -3,7 +3,7 @@ import { useQueryRequest } from 'common/core/QueryRequestProvider';
 import { FC, PropsWithChildren, useMemo } from 'react';
 import { HeaderProps } from 'react-table';
 import { initialQueryState } from '_metronic/helpers';
-import { User } from '../../user.service';
+import { User } from '../../types/Users.types';
 
 type Props = {
     className?: string;

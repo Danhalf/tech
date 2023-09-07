@@ -12,7 +12,8 @@ import {
     WithChildren,
     Response,
 } from '_metronic/helpers';
-import { User, getUsers } from 'components/dashboard/users/user.service';
+import { getUsers } from 'components/dashboard/users/api/user.service';
+import { User } from 'components/dashboard/users/types/Users.types';
 
 const QueryResponseContext = createResponseContext<User>(initialQueryResponse);
 const QueryResponseProvider: FC<WithChildren> = ({ children }) => {

@@ -2,8 +2,8 @@ import clsx from 'clsx';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useState } from 'react';
-import { IUserData } from 'common/interfaces/IUserData';
-import { createOrUpdateUser, User } from 'components/dashboard/users/user.service';
+import { createOrUpdateUser } from 'components/dashboard/users/api/user.service';
+import { IUserData } from '../../types/Users.types';
 
 interface UserModalProps {
     onClose: () => void;

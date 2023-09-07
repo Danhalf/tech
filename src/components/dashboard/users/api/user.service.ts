@@ -2,19 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import { getToken } from 'common/utils';
 import { API_URL } from 'common/app-consts';
 import { ActionStatus } from 'common/interfaces/IActionStatus';
-import { Response } from '_metronic/helpers';
-
-export interface User {
-    created: string;
-    createdbyuid: string;
-    index: number;
-    parentuid: string;
-    parentusername: string;
-    updated: string;
-    username: string;
-    useruid: string;
-    isAdmin: number;
-}
+import { User } from '../types/Users.types';
 
 export const createOrUpdateUser = (loginname: string, loginpassword: string, uid: string = '0') => {
     return axios.post(

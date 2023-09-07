@@ -8,17 +8,14 @@ import {
     deleteUser,
     getDeletedUsers,
     getUsers,
-    killSession,
+    undeleteUser,
 } from '../../api/user.service';
 import { CustomModal } from 'components/dashboard/helpers/modal/renderModalHelper';
 import { CustomDropdown } from 'components/dashboard/helpers/renderDropdownHelper';
 import { UserModal } from '../../UserModal/parts/UserModal';
-import { UserOptionalModal } from '../../UserModal/parts/UserOptionalModal';
-import { UserPermissionsModal } from '../../UserModal/parts/UserPermissionsModal';
-import { UserSettingsModal } from '../../UserModal/parts/UserSettingsModal';
 import { User } from '../../types/Users.types';
 
-const UserActionsCell = ({ useruid, username }: User) => {
+const DeletedUsersActionsCell = ({ useruid, username }: User) => {
     const { query } = useQueryResponse();
 
     const queryClient = useQueryClient();
@@ -41,6 +38,21 @@ const UserActionsCell = ({ useruid, username }: User) => {
     };
     const handleUserOptionalModalOpen = () => {
         setUserOptionalsModalEnabled(true);
+    };
+
+    const restoreUser = (userId: string) => {
+        undeleteUser(userId).then((response) => {
+            if (response.status === 'OK') {
+                getUsers().then((response: any) => {
+                    //     setUsers(response);
+                    //     setLoaded(true);
+                });
+                getDeletedUsers().then((response) => {
+                    // setDeletedUsers(response);
+                    // setLoaded(true);
+                });
+            }
+        });
     };
 
     useEffect(() => {
@@ -96,39 +108,6 @@ const UserActionsCell = ({ useruid, username }: User) => {
                     />
                 </CustomModal>
             )}
-            {userPermissionsModalEnabled && (
-                <CustomModal
-                    onClose={() => setUserPermissionsModalEnabled(false)}
-                    title={`${username} user permissions: `}
-                >
-                    <UserPermissionsModal
-                        onClose={() => setUserPermissionsModalEnabled(false)}
-                        useruid={useruid}
-                    />
-                </CustomModal>
-            )}
-            {userSettingsModalEnabled && (
-                <CustomModal
-                    onClose={() => setUserSettingssModalEnabled(false)}
-                    title={`${username} user settings: `}
-                >
-                    <UserSettingsModal
-                        onClose={() => setUserSettingssModalEnabled(false)}
-                        useruid={useruid}
-                    />
-                </CustomModal>
-            )}
-            {userOptionalModalEnabled && (
-                <CustomModal
-                    onClose={() => setUserOptionalsModalEnabled(false)}
-                    title={`${username} user settings: `}
-                >
-                    <UserOptionalModal
-                        onClose={() => setUserOptionalsModalEnabled(false)}
-                        useruid={useruid}
-                    />
-                </CustomModal>
-            )}
             <CustomDropdown
                 title='Actions'
                 items={[
@@ -137,28 +116,8 @@ const UserActionsCell = ({ useruid, username }: User) => {
                         menuItemAction: () => handleEditUserModalOpen(),
                     },
                     {
-                        menuItemName: 'Copy user',
-                        menuItemAction: () => handleCopyUser(),
-                    },
-                    {
-                        menuItemName: 'Set user permissions',
-                        menuItemAction: () => handleUserPermissonsModalOpen(),
-                    },
-                    {
-                        menuItemName: 'Set user settings',
-                        menuItemAction: () => handleUserSettingsModalOpen(),
-                    },
-                    {
-                        menuItemName: 'Set user optional data',
-                        menuItemAction: () => handleUserOptionalModalOpen(),
-                    },
-                    {
-                        menuItemName: 'Delete user',
-                        menuItemAction: () => moveToTrash(),
-                    },
-                    {
-                        menuItemName: 'Kill user session',
-                        menuItemAction: () => killSession(useruid),
+                        menuItemName: 'Restore user',
+                        menuItemAction: () => restoreUser(useruid),
                     },
                 ]}
             />
@@ -167,4 +126,4 @@ const UserActionsCell = ({ useruid, username }: User) => {
     );
 };
 
-export { UserActionsCell };
+export { DeletedUsersActionsCell };

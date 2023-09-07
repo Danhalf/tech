@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import { User } from '../../user.service';
+import { User } from '../../types/Users.types';
 
 const UserLinkCell = ({ useruid, username }: User) => (
     <Link

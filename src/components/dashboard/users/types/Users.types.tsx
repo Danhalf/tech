@@ -3,12 +3,14 @@ export interface IUserData {
     password: string;
 }
 
-export interface IUser {
+export interface User {
     created: string;
     createdbyuid: string;
     index: number;
     parentuid: string;
+    parentusername: string;
     updated: string;
     username: string;
     useruid: string;
+    isAdmin: number;
 }

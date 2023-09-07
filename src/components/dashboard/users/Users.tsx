@@ -7,8 +7,7 @@ import {
     getUsers,
     killSession,
     undeleteUser,
-    User,
-} from 'components/dashboard/users/user.service';
+} from 'components/dashboard/users/api/user.service';
 import { CustomModal } from 'components/dashboard/helpers/modal/renderModalHelper';
 import { UserModal } from 'components/dashboard/users/UserModal/parts/UserModal';
 import { UserPermissionsModal } from 'components/dashboard/users/UserModal/parts/UserPermissionsModal';
@@ -19,6 +18,7 @@ import { TableHead } from 'components/dashboard/helpers/renderTableHelper';
 import { TabNavigate, TabPanel } from 'components/dashboard/helpers/helpers';
 import { CustomDropdown } from 'components/dashboard/helpers/renderDropdownHelper';
 import { UserTable } from './UserModal/parts/UserTable/UserTable';
+import { User } from './types/Users.types';
 
 enum UsersTabs {
     Users = 'Users',

@@ -2,23 +2,21 @@ import { useQueryResponseData } from 'common/core/QueryResponseProvider';
 import { UsersListPagination } from 'components/dashboard/helpers/pagination/renderPagination';
 import { useMemo } from 'react';
 import { useTable, ColumnInstance, Row } from 'react-table';
-import { User } from '../user.service';
 import { CustomHeaderColumn } from './columns/CustomHeaderColumn';
 import { CustomRow } from './columns/CustomRow';
 import { usersColumns } from './columns/_columns';
+import { User } from '../types/Users.types';
 
 const UsersTable = () => {
     let users = useQueryResponseData();
 
-    const data = useMemo(() => users, [users]);
-    const columns = useMemo(() => usersColumns, []);
+    const usersData = useMemo(() => users, [users]);
+    const columns = useMemo(() => usersColumns(), []);
     const { getTableProps, getTableBodyProps, headers, rows, prepareRow } = useTable({
         columns,
-        data,
+        data: usersData,
     });
 
-    // eslint-disable-next-line no-console
-    // console.log(rows);
     return (
         <>
             <div className='table-responsive'>
