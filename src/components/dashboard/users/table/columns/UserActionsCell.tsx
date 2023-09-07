@@ -19,7 +19,7 @@ import { UserSettingsModal } from '../../UserModal/parts/UserSettingsModal';
 import { User } from '../../types/Users.types';
 
 const UserActionsCell = ({ useruid, username }: User) => {
-    const { query } = useQueryResponse();
+    const { query } = useQueryResponse('Users');
 
     const queryClient = useQueryClient();
 

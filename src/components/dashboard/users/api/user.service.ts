@@ -50,13 +50,19 @@ export const getUsers = (query?: string): Promise<AxiosResponse<User[], any>> =>
 //         .then((response) => response.data);
 // };
 
-export const getDeletedUsers = () => {
-    return axios
-        .get<User[]>(`${API_URL}user/0/listdeleted`, {
-            headers: { Authorization: `Bearer ${getToken()}` },
-        })
-        .then((response) => response.data);
+export const getDeletedUsers = (query?: string): Promise<AxiosResponse<User[], any>> => {
+    return axios.get<User[]>(`${API_URL}user/0/listdeleted`, {
+        headers: { Authorization: `Bearer ${getToken()}` },
+    });
 };
+
+// export const getDeletedUsers = () => {
+//     return axios
+//         .get<User[]>(`${API_URL}user/0/listdeleted`, {
+//             headers: { Authorization: `Bearer ${getToken()}` },
+//         })
+//         .then((response) => response.data);
+// };
 
 export const deleteUser = (uid: string) => {
     return axios

@@ -1,14 +1,12 @@
-// @ts-nocheck
+//@ts-nocheck
 import { Column } from 'react-table';
 import { UserCustomHeader } from './UserCustomHeader';
-import { User } from '../../api/user.service';
 import { UserLinkCell } from './UserLinkCell';
 import { UserActionsCell } from './UserActionsCell';
 import { DeletedUsersActionsCell } from './DeletedUsersActionsCell';
+import { User, UsersListType } from '../../types/Users.types';
 
-type userColumnsArguments = 'users' | 'deletedUsers';
-
-const usersColumns = (list: userColumnsArguments = 'users'): ReadonlyArray<Column<User>> => {
+const usersColumns = (list: UsersListType): ReadonlyArray<Column<User>> => {
     return [
         {
             Header: (props) => <UserCustomHeader tableProps={props} title='Index' />,
@@ -41,20 +39,16 @@ const usersColumns = (list: userColumnsArguments = 'users'): ReadonlyArray<Colum
         },
         {
             Header: (props) => (
-                <UserCustomHeader
-                    tableProps={props}
-                    title='Actions'
-                    className='text-end px-3 min-w-125px'
-                />
+                <UserCustomHeader tableProps={props} title='Actions' className='px-3 min-w-125px' />
             ),
             id: 'actions',
 
             Cell: ({ ...props }) => {
                 const { useruid, username }: User = props.data[props.row.index];
                 switch (list) {
-                    case 'users':
+                    case 'Users':
                         return <UserActionsCell useruid={useruid} username={username} />;
-                    case 'deletedUsers':
+                    case 'Deleted users':
                         return <DeletedUsersActionsCell useruid={useruid} username={username} />;
                 }
             },

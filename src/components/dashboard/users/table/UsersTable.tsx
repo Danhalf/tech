@@ -5,13 +5,13 @@ import { useTable, ColumnInstance, Row } from 'react-table';
 import { CustomHeaderColumn } from './columns/CustomHeaderColumn';
 import { CustomRow } from './columns/CustomRow';
 import { usersColumns } from './columns/_columns';
-import { User } from '../types/Users.types';
+import { User, UsersListType } from '../types/Users.types';
 
-const UsersTable = () => {
-    let users = useQueryResponseData();
+const UsersTable = ({ list }: { list: UsersListType }) => {
+    let users = useQueryResponseData(list);
 
     const usersData = useMemo(() => users, [users]);
-    const columns = useMemo(() => usersColumns(), []);
+    const columns = useMemo(() => usersColumns(list), []);
     const { getTableProps, getTableBodyProps, headers, rows, prepareRow } = useTable({
         columns,
         data: usersData,
@@ -50,7 +50,7 @@ const UsersTable = () => {
                     </tbody>
                 </table>
             </div>
-            <UsersListPagination />
+            <UsersListPagination list={list} />
         </>
     );
 };

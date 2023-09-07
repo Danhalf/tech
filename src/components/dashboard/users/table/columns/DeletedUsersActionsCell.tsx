@@ -16,28 +16,16 @@ import { UserModal } from '../../UserModal/parts/UserModal';
 import { User } from '../../types/Users.types';
 
 const DeletedUsersActionsCell = ({ useruid, username }: User) => {
-    const { query } = useQueryResponse();
+    const { query } = useQueryResponse('Deleted users');
 
     const queryClient = useQueryClient();
 
     const [addUserModalEnabled, setAddUserModalEnabled] = useState<boolean>(false);
     const [editUserModalEnabled, setEditUserModalEnabled] = useState<boolean>(false);
-    const [userPermissionsModalEnabled, setUserPermissionsModalEnabled] = useState<boolean>(false);
-    const [userSettingsModalEnabled, setUserSettingssModalEnabled] = useState<boolean>(false);
-    const [userOptionalModalEnabled, setUserOptionalsModalEnabled] = useState<boolean>(false);
 
     const handleAddUserModalOpen = () => setAddUserModalEnabled(!addUserModalEnabled);
     const handleEditUserModalOpen = () => {
         setEditUserModalEnabled(true);
-    };
-    const handleUserPermissonsModalOpen = () => {
-        setUserPermissionsModalEnabled(true);
-    };
-    const handleUserSettingsModalOpen = () => {
-        setUserSettingssModalEnabled(true);
-    };
-    const handleUserOptionalModalOpen = () => {
-        setUserOptionalsModalEnabled(true);
     };
 
     const restoreUser = (userId: string) => {

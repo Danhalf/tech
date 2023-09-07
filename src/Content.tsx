@@ -6,7 +6,6 @@ import Microservices from './components/dashboard/microservices/Microservices';
 import { UserCard } from './components/dashboard/users/UserCard';
 import { Login } from './components/Login';
 import { MenuComponent } from './_metronic/assets/ts/components';
-import Users from 'components/dashboard/users/Users';
 import { UsersListWrapper } from 'components/dashboard/users/UsersList';
 
 export function MasterInit() {

@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { FC, useContext, useState, useEffect, useMemo } from 'react';
+import { FC, useContext, useState, useEffect, useMemo, PropsWithChildren } from 'react';
 import { useQuery } from 'react-query';
 import { useQueryRequest } from './QueryRequestProvider';
 import {
@@ -12,14 +12,30 @@ import {
     WithChildren,
     Response,
 } from '_metronic/helpers';
-import { getUsers } from 'components/dashboard/users/api/user.service';
-import { User } from 'components/dashboard/users/types/Users.types';
+import { getDeletedUsers, getUsers } from 'components/dashboard/users/api/user.service';
+import { User, UsersListType } from 'components/dashboard/users/types/Users.types';
+
+type QueryResponseProviderProps = {
+    listType: UsersListType;
+};
 
 const QueryResponseContext = createResponseContext<User>(initialQueryResponse);
-const QueryResponseProvider: FC<WithChildren> = ({ children }) => {
+const QueryResponseProvider = ({
+    listType,
+    children,
+}: PropsWithChildren<QueryResponseProviderProps>) => {
     const { state } = useQueryRequest();
     const [query, setQuery] = useState<string>(stringifyRequestQuery(state));
     const updatedQuery = useMemo(() => stringifyRequestQuery(state), [state]);
+
+    const GET_LIST_TYPE = () => {
+        switch (listType) {
+            case 'Users':
+                return QUERIES.USERS_LIST;
+            case 'Deleted users':
+                return QUERIES.DELETED_USERS_LIST;
+        }
+    };
 
     useEffect(() => {
         if (query !== updatedQuery) {
@@ -32,9 +48,14 @@ const QueryResponseProvider: FC<WithChildren> = ({ children }) => {
         refetch,
         data: axiosResponse,
     } = useQuery(
-        `${QUERIES.USERS_LIST}-${query}`,
+        `${GET_LIST_TYPE()}-${query}`,
         () => {
-            return getUsers(query);
+            switch (listType) {
+                case 'Users':
+                    return getUsers(query);
+                case 'Deleted users':
+                    return getDeletedUsers(query);
+            }
         },
         { cacheTime: 0, keepPreviousData: true, refetchOnWindowFocus: false }
     );
@@ -50,10 +71,10 @@ const QueryResponseProvider: FC<WithChildren> = ({ children }) => {
     );
 };
 
-const useQueryResponse = () => useContext(QueryResponseContext);
+const useQueryResponse = (dataType: UsersListType) => useContext(QueryResponseContext);
 
-const useQueryResponseData = () => {
-    const { response } = useQueryResponse();
+const useQueryResponseData = (dataType: UsersListType) => {
+    const { response } = useQueryResponse(dataType);
     if (!response) {
         return [];
     }
@@ -61,13 +82,13 @@ const useQueryResponseData = () => {
     return response?.data || [];
 };
 
-const useQueryResponsePagination = () => {
+const useQueryResponsePagination = (dataType: UsersListType) => {
     const defaultPaginationState: PaginationState = {
         links: [],
         ...initialQueryState,
     };
 
-    const { response } = useQueryResponse();
+    const { response } = useQueryResponse(dataType);
     if (!response || !response.payload || !response.payload.pagination) {
         return defaultPaginationState;
     }
@@ -75,8 +96,8 @@ const useQueryResponsePagination = () => {
     return response.payload.pagination;
 };
 
-const useQueryResponseLoading = (): boolean => {
-    const { isLoading } = useQueryResponse();
+const useQueryResponseLoading = (dataType: UsersListType): boolean => {
+    const { isLoading } = useQueryResponse(dataType);
     return isLoading;
 };
 

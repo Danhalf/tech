@@ -1,6 +1,5 @@
 // @ts-nocheck
 import clsx from 'clsx';
-import { FC } from 'react';
 import { Row } from 'react-table';
 import { User } from '../../core/_models';
 
@@ -15,7 +14,7 @@ const CustomRow = ({ row }: Props) => {
                 return (
                     <td
                         {...cell.getCellProps()}
-                        className={clsx({ 'text-end min-w-100px': cell.column.id === 'actions' })}
+                        className={clsx({ 'min-w-100px': cell.column.id === 'actions' })}
                     >
                         {cell.render('Cell')}
                     </td>

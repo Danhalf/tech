@@ -8,6 +8,7 @@ import {
 } from 'common/core/QueryResponseProvider';
 import { PaginationState } from '_metronic/helpers';
 import { useQueryRequest } from 'common/core/QueryRequestProvider';
+import { UsersListType } from 'components/dashboard/users/types/Users.types';
 
 const mappedLabel = (label: string): string => {
     if (label === '&laquo; Previous') {
@@ -21,9 +22,9 @@ const mappedLabel = (label: string): string => {
     return label;
 };
 
-const UsersListPagination = () => {
-    const pagination = useQueryResponsePagination();
-    const isLoading = useQueryResponseLoading();
+const UsersListPagination = ({ list }: { list: UsersListType }) => {
+    const pagination = useQueryResponsePagination(list);
+    const isLoading = useQueryResponseLoading(list);
     const { updateState } = useQueryRequest();
     const updatePage = (page: number | undefined | null) => {
         if (!page || isLoading || pagination.page === page) {

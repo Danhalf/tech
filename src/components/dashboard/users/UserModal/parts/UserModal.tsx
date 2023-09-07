@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useState } from 'react';
 import { createOrUpdateUser } from 'components/dashboard/users/api/user.service';
-import { IUserData } from '../../types/Users.types';
+import { UserInputData } from '../../types/Users.types';
 
 interface UserModalProps {
     onClose: () => void;
@@ -18,12 +18,12 @@ export const UserModal = ({
     useruid,
     updateData,
 }: UserModalProps): JSX.Element => {
-    const initialUserData: IUserData = {
+    const initialUserData: UserInputData = {
         username: username || '',
         password: '',
     };
 
-    const [userData] = useState<IUserData>(initialUserData);
+    const [userData] = useState<UserInputData>(initialUserData);
 
     const addUserSchema = Yup.object().shape({
         username: Yup.string().trim().required('Username is required'),
