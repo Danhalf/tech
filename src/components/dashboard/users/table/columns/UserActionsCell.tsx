@@ -1,35 +1,21 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { MenuComponent } from '_metronic/assets/ts/components';
-import { useQueryResponse } from 'common/core/QueryResponseProvider';
 import { useEffect, useState } from 'react';
-import { useQueryClient } from 'react-query';
-import {
-    copyUser,
-    deleteUser,
-    getDeletedUsers,
-    getUsers,
-    killSession,
-} from '../../api/user.service';
+import { copyUser, deleteUser, getUsers, killSession } from '../../api/user.service';
 import { CustomModal } from 'components/dashboard/helpers/modal/renderModalHelper';
 import { CustomDropdown } from 'components/dashboard/helpers/renderDropdownHelper';
-import { UserModal } from '../../UserModal/parts/UserModal';
-import { UserOptionalModal } from '../../UserModal/parts/UserOptionalModal';
-import { UserPermissionsModal } from '../../UserModal/parts/UserPermissionsModal';
-import { UserSettingsModal } from '../../UserModal/parts/UserSettingsModal';
-import { User, UsersType } from '../../types/Users.types';
+import { UserModal } from '../../UserModal/UserModal';
+import { UserOptionalModal } from '../../UserModal/UserOptionalModal';
+import { UserPermissionsModal } from '../../UserModal/UserPermissionsModal';
+import { UserSettingsModal } from '../../UserModal/UserSettingsModal';
+import { User } from '../../types/Users.types';
 
 const UserActionsCell = ({ useruid, username }: User) => {
-    const { query } = useQueryResponse(UsersType.Users);
-
-    const queryClient = useQueryClient();
-
-    const [addUserModalEnabled, setAddUserModalEnabled] = useState<boolean>(false);
     const [editUserModalEnabled, setEditUserModalEnabled] = useState<boolean>(false);
     const [userPermissionsModalEnabled, setUserPermissionsModalEnabled] = useState<boolean>(false);
     const [userSettingsModalEnabled, setUserSettingssModalEnabled] = useState<boolean>(false);
     const [userOptionalModalEnabled, setUserOptionalsModalEnabled] = useState<boolean>(false);
 
-    const handleAddUserModalOpen = () => setAddUserModalEnabled(!addUserModalEnabled);
     const handleEditUserModalOpen = () => {
         setEditUserModalEnabled(true);
     };
@@ -50,14 +36,7 @@ const UserActionsCell = ({ useruid, username }: User) => {
     const handleCopyUser = () => {
         copyUser(useruid).then((response) => {
             if (response.status === 'OK') {
-                getUsers().then((response: any) => {
-                    // setUsers(response);
-                    // setLoaded(true);
-                });
-                getDeletedUsers().then((response) => {
-                    // setDeletedUsers(response);
-                    // setLoaded(true);
-                });
+                getUsers().then((response: any) => {});
             }
         });
     };
@@ -65,25 +44,13 @@ const UserActionsCell = ({ useruid, username }: User) => {
     const moveToTrash = () => {
         deleteUser(useruid).then((response) => {
             if (response.status === 'OK') {
-                getUsers().then((response: any) => {
-                    // setUsers(response);
-                    // setLoaded(true);
-                });
-                getDeletedUsers().then((response) => {
-                    // setDeletedUsers(response);
-                    // setLoaded(true);
-                });
+                getUsers().then((response: any) => {});
             }
         });
     };
 
     return (
         <>
-            {addUserModalEnabled && (
-                <CustomModal onClose={handleAddUserModalOpen} title={'Add user'}>
-                    <UserModal onClose={handleAddUserModalOpen} />
-                </CustomModal>
-            )}
             {editUserModalEnabled && (
                 <CustomModal
                     onClose={() => setEditUserModalEnabled(false)}
@@ -162,7 +129,6 @@ const UserActionsCell = ({ useruid, username }: User) => {
                     },
                 ]}
             />
-            {/* end::Menu */}
         </>
     );
 };

@@ -4,7 +4,7 @@ import { UsersTable } from './table/UsersTable';
 import { useState } from 'react';
 import { TabNavigate, TabPanel } from '../helpers/helpers';
 import { CustomModal } from '../helpers/modal/renderModalHelper';
-import { UserModal } from './UserModal/parts/UserModal';
+import { UserModal } from './UserModal/UserModal';
 import { PrimaryButton } from '../smallComponents/buttons/PrimaryButton';
 import { UsersListType, UsersType } from './types/Users.types';
 

@@ -3,7 +3,7 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useState } from 'react';
 import { createOrUpdateUser } from 'components/dashboard/users/api/user.service';
-import { UserInputData } from '../../types/Users.types';
+import { UserInputData } from '../types/Users.types';
 
 interface UserModalProps {
     onClose: () => void;
