@@ -93,8 +93,7 @@
         ],
         "rules": {
             "no-unused-vars": "warn",
-            "no-console": "error",
-            "jsx-a11y/anchor-is-valid": "off"
+            "no-console": "error"
         }
     },
     "browserslist": {
