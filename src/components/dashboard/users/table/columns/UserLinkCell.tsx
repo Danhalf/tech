@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { User } from '../../types/Users.types';
 
-const UserLinkCell = ({ useruid, username }: User) => (
+export const UserLinkCell = ({ useruid, username }: User) => (
     <Link
         to={`${useruid}`}
         className='text-gray-800 text-hover-primary mb-1 text-decoration-underline'
@@ -9,5 +9,3 @@ const UserLinkCell = ({ useruid, username }: User) => (
         {username}
     </Link>
 );
-
-export { UserLinkCell };

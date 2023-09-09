@@ -10,7 +10,7 @@ import { UserPermissionsModal } from '../../UserModal/UserPermissionsModal';
 import { UserSettingsModal } from '../../UserModal/UserSettingsModal';
 import { User } from '../../types/Users.types';
 
-const UserActionsCell = ({ useruid, username }: User) => {
+export const UserActionsCell = ({ useruid, username }: User) => {
     const [editUserModalEnabled, setEditUserModalEnabled] = useState<boolean>(false);
     const [userPermissionsModalEnabled, setUserPermissionsModalEnabled] = useState<boolean>(false);
     const [userSettingsModalEnabled, setUserSettingssModalEnabled] = useState<boolean>(false);
@@ -132,5 +132,3 @@ const UserActionsCell = ({ useruid, username }: User) => {
         </>
     );
 };
-
-export { UserActionsCell };

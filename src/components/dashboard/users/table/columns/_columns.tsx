@@ -6,7 +6,7 @@ import { UserActionsCell } from './UserActionsCell';
 import { DeletedUsersActionsCell } from './DeletedUsersActionsCell';
 import { User, UsersListType, UsersType } from '../../types/Users.types';
 
-const usersColumns = (list: UsersListType): ReadonlyArray<Column<User>> => {
+export const usersColumns = (list: UsersListType): ReadonlyArray<Column<User>> => {
     const { Users, DeletedUsers } = UsersType;
     return [
         {
@@ -56,4 +56,3 @@ const usersColumns = (list: UsersListType): ReadonlyArray<Column<User>> => {
         },
     ];
 };
-export { usersColumns };

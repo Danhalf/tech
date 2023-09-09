@@ -22,7 +22,7 @@ const mappedLabel = (label: string): string => {
     return label;
 };
 
-const UsersListPagination = ({ list }: { list: UsersListType }) => {
+export const UsersListPagination = ({ list }: { list: UsersListType }) => {
     const pagination = useQueryResponsePagination(list);
     const isLoading = useQueryResponseLoading(list);
     const { updateState } = useQueryRequest();
@@ -170,5 +170,3 @@ const UsersListPagination = ({ list }: { list: UsersListType }) => {
         </div>
     );
 };
-
-export { UsersListPagination };

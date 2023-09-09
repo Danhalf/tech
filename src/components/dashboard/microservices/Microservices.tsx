@@ -13,7 +13,7 @@ enum MicroserviceColumns {
 
 const microserviceColumnsArray: string[] = Object.values(MicroserviceColumns) as string[];
 
-function Microservices() {
+export const Microservices = () => {
     const [listOfServices, setListOfServices] = useState<Microservice[]>([]);
     const [loaded, setLoaded] = useState<boolean>(false);
     useEffect(() => {
@@ -70,6 +70,4 @@ function Microservices() {
             </div>
         </>
     );
-}
-
-export default Microservices;
+};

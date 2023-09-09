@@ -7,7 +7,7 @@ import { CustomRow } from './columns/CustomRow';
 import { usersColumns } from './columns/_columns';
 import { User, UsersListType } from '../types/Users.types';
 
-const UsersTable = ({ list }: { list: UsersListType }) => {
+export const UsersTable = ({ list }: { list: UsersListType }) => {
     let users = useQueryResponseData(list);
 
     const usersData = useMemo(() => users, [users]);
@@ -50,9 +50,6 @@ const UsersTable = ({ list }: { list: UsersListType }) => {
                     </tbody>
                 </table>
             </div>
-            <UsersListPagination list={list} />
         </>
     );
 };
-
-export { UsersTable };

@@ -6,7 +6,7 @@ import { CustomDropdown } from 'components/dashboard/helpers/renderDropdownHelpe
 import { UserModal } from '../../UserModal/UserModal';
 import { User } from '../../types/Users.types';
 
-const DeletedUsersActionsCell = ({ useruid, username }: User) => {
+export const DeletedUsersActionsCell = ({ useruid, username }: User) => {
     const [addUserModalEnabled, setAddUserModalEnabled] = useState<boolean>(false);
     const [editUserModalEnabled, setEditUserModalEnabled] = useState<boolean>(false);
 
@@ -62,5 +62,3 @@ const DeletedUsersActionsCell = ({ useruid, username }: User) => {
         </>
     );
 };
-
-export { DeletedUsersActionsCell };

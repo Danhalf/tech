@@ -24,7 +24,7 @@ const UserModalHeader = ({ onClose, title }: CustomModalProps): JSX.Element => {
     );
 };
 
-const CustomModal = ({
+export const CustomModal = ({
     title,
     onClose,
     children,
@@ -49,5 +49,3 @@ const CustomModal = ({
         </>
     );
 };
-
-export { CustomModal };

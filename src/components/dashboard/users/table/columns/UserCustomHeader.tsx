@@ -10,7 +10,7 @@ type Props = {
     title?: string;
     tableProps: PropsWithChildren<HeaderProps<User>>;
 };
-const UserCustomHeader: FC<Props> = ({ className, title, tableProps }) => {
+export const UserCustomHeader: FC<Props> = ({ className, title, tableProps }) => {
     const id = tableProps.column.id;
     const { state, updateState } = useQueryRequest();
 
@@ -57,5 +57,3 @@ const UserCustomHeader: FC<Props> = ({ className, title, tableProps }) => {
         </th>
     );
 };
-
-export { UserCustomHeader };

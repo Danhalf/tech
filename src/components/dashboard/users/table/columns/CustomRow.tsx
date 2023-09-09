@@ -7,7 +7,7 @@ type Props = {
     row: Row<User>;
 };
 
-const CustomRow = ({ row }: Props) => {
+export const CustomRow = ({ row }: Props) => {
     return (
         <tr {...row.getRowProps()}>
             {row.cells.map((cell) => {
@@ -23,5 +23,3 @@ const CustomRow = ({ row }: Props) => {
         </tr>
     );
 };
-
-export { CustomRow };

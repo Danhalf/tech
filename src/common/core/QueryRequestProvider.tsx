@@ -4,7 +4,7 @@ import { QueryState } from 'react-query/types/core/query';
 
 const QueryRequestContext = createContext<QueryRequestContextProps>(initialQueryRequest);
 
-const QueryRequestProvider: FC<WithChildren> = ({ children }) => {
+export const QueryRequestProvider: FC<WithChildren> = ({ children }) => {
     const [state, setState] = useState<any>(initialQueryRequest.state);
 
     const updateState = (updates: Partial<any>) => {
@@ -19,5 +19,4 @@ const QueryRequestProvider: FC<WithChildren> = ({ children }) => {
     );
 };
 
-const useQueryRequest = () => useContext(QueryRequestContext);
-export { QueryRequestProvider, useQueryRequest };
+export const useQueryRequest = () => useContext(QueryRequestContext);

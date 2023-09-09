@@ -10,29 +10,7 @@ import { UsersListType, UsersType } from './types/Users.types';
 
 const usersTabsArray: string[] = Object.values(UsersType) as string[];
 
-// const UsersList = () => {
-//     const [activeTab, setActiveTab] = useState('Users');
-//     const [addUserModalEnabled, setAddUserModalEnabled] = useState<boolean>(false);
-
-//     const handleAddUserModalOpen = () => setAddUserModalEnabled(!addUserModalEnabled);
-
-//     const handleTabClick = (tab: string) => {
-//         setActiveTab(tab);
-//     };
-
-//     return (
-//         <>
-//             <TabPanel activeTab={activeTab} tabName={UsersTabs.Users}>
-//                 <UsersTable list='users' />
-//             </TabPanel>
-//             <TabPanel activeTab={activeTab} tabName={UsersTabs.DeletedUsers}>
-//                 deleted users
-//             </TabPanel>
-//         </>
-//     );
-// };
-
-const UsersListWrapper = () => {
+export const UsersListWrapper = () => {
     const [activeTab, setActiveTab] = useState<UsersListType>(UsersType.Users);
     const [addUserModalEnabled, setAddUserModalEnabled] = useState<boolean>(false);
 
@@ -85,5 +63,3 @@ const UsersListWrapper = () => {
         </QueryRequestProvider>
     );
 };
-
-export { UsersListWrapper };
