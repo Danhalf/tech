@@ -1,4 +1,4 @@
-function getObjectPropertyValueByKey(obj: any, key: string): any | undefined {
+export function getObjectPropertyValueByKey(obj: any, key: string): any | undefined {
     const map = new Map(Object.entries(obj));
     if (obj.hasOwnProperty(key) && map) {
         return map.get(key);
@@ -10,7 +10,7 @@ function getObjectPropertyValueByKey(obj: any, key: string): any | undefined {
  * @param {string} prefix Prefix for generated ID
  * @returns {boolean}
  */
-function getUniqueIdWithPrefix(prefix: string | undefined): string {
+export function getUniqueIdWithPrefix(prefix: string | undefined): string {
     const result = Math.floor(Math.random() * new Date().getTime()).toString();
     if (!prefix) {
         return result;
@@ -19,7 +19,7 @@ function getUniqueIdWithPrefix(prefix: string | undefined): string {
     return `${prefix}${result}`;
 }
 
-function toJSON(value: string | JSON): JSON | undefined {
+export function toJSON(value: string | JSON): JSON | undefined {
     if (typeof value !== 'string') {
         return value;
     }
@@ -43,5 +43,3 @@ function toJSON(value: string | JSON): JSON | undefined {
         return undefined;
     }
 }
-
-export { getObjectPropertyValueByKey, getUniqueIdWithPrefix, toJSON };

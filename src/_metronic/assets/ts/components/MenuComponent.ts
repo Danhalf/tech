@@ -25,7 +25,7 @@ export interface MenuOptions {
     };
 }
 
-const defaultMenuOptions: MenuOptions = {
+export const defaultMenuOptions: MenuOptions = {
     dropdown: {
         hoverTimeout: 200,
         zindex: 105,
@@ -54,7 +54,7 @@ type PopperPlacement =
     | 'left-end'
     | undefined;
 
-class MenuComponent {
+export class MenuComponent {
     element: HTMLElement;
     options: MenuOptions;
     instanceUid: string;
@@ -982,5 +982,3 @@ class MenuComponent {
         MenuComponent.createInstances('[data-kt-menu="true"]');
     };
 }
-
-export { MenuComponent, defaultMenuOptions };

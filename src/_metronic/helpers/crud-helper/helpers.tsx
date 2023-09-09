@@ -2,16 +2,16 @@ import { createContext, Dispatch, SetStateAction, useEffect, useState } from 're
 import qs from 'qs';
 import { ID, QueryResponseContextProps, QueryState } from './models';
 
-function createResponseContext<T>(initialState: QueryResponseContextProps<T>) {
+export function createResponseContext<T>(initialState: QueryResponseContextProps<T>) {
     return createContext(initialState);
 }
 
-function isNotEmpty(obj: unknown) {
+export function isNotEmpty(obj: unknown) {
     return obj !== undefined && obj !== null && obj !== '';
 }
 
 // Example: page=1&items_per_page=10&sort=id&order=desc&search=a&filter_name=a&filter_online=false
-function stringifyRequestQuery(state: QueryState): string {
+export function stringifyRequestQuery(state: QueryState): string {
     const pagination = qs.stringify(state, { filter: ['page', 'items_per_page'], skipNulls: true });
     const sort = qs.stringify(state, { filter: ['sort', 'order'], skipNulls: true });
     const search = isNotEmpty(state.search)
@@ -33,12 +33,15 @@ function stringifyRequestQuery(state: QueryState): string {
         .toLowerCase();
 }
 
-function parseRequestQuery(query: string): QueryState {
+export function parseRequestQuery(query: string): QueryState {
     const cache: unknown = qs.parse(query);
     return cache as QueryState;
 }
 
-function calculatedGroupingIsDisabled<T>(isLoading: boolean, data: Array<T> | undefined): boolean {
+export function calculatedGroupingIsDisabled<T>(
+    isLoading: boolean,
+    data: Array<T> | undefined
+): boolean {
     if (isLoading) {
         return true;
     }
@@ -46,7 +49,10 @@ function calculatedGroupingIsDisabled<T>(isLoading: boolean, data: Array<T> | un
     return !data || !data.length;
 }
 
-function calculateIsAllDataSelected<T>(data: Array<T> | undefined, selected: Array<ID>): boolean {
+export function calculateIsAllDataSelected<T>(
+    data: Array<T> | undefined,
+    selected: Array<ID>
+): boolean {
     if (!data) {
         return false;
     }
@@ -54,7 +60,7 @@ function calculateIsAllDataSelected<T>(data: Array<T> | undefined, selected: Arr
     return data.length > 0 && data.length === selected.length;
 }
 
-function groupingOnSelect(
+export function groupingOnSelect(
     id: ID,
     selected: Array<ID>,
     setSelected: Dispatch<SetStateAction<Array<ID>>>
@@ -72,7 +78,7 @@ function groupingOnSelect(
     }
 }
 
-function groupingOnSelectAll<T>(
+export function groupingOnSelectAll<T>(
     isAllSelected: boolean,
     setSelected: Dispatch<SetStateAction<Array<ID>>>,
     data?: Array<T & { id?: ID }>
@@ -90,7 +96,7 @@ function groupingOnSelectAll<T>(
 }
 
 // Hook
-function useDebounce(value: string | undefined, delay: number) {
+export function useDebounce(value: string | undefined, delay: number) {
     // State and setters for debounced value
     const [debouncedValue, setDebouncedValue] = useState(value);
     useEffect(
@@ -110,15 +116,3 @@ function useDebounce(value: string | undefined, delay: number) {
     );
     return debouncedValue;
 }
-
-export {
-    createResponseContext,
-    stringifyRequestQuery,
-    parseRequestQuery,
-    calculatedGroupingIsDisabled,
-    calculateIsAllDataSelected,
-    groupingOnSelect,
-    groupingOnSelectAll,
-    useDebounce,
-    isNotEmpty,
-};

@@ -5,7 +5,7 @@ import { DataUtil } from './_DataUtil';
 import { ElementAnimateUtil } from './ElementAnimateUtil';
 import { getObjectPropertyValueByKey, toJSON } from './_TypesHelpers';
 
-function getCSSVariableValue(variableName: string) {
+export function getCSSVariableValue(variableName: string) {
     let hex = getComputedStyle(document.documentElement).getPropertyValue(variableName);
     if (hex && hex.length > 0) {
         hex = hex.trim();
@@ -14,7 +14,7 @@ function getCSSVariableValue(variableName: string) {
     return hex;
 }
 
-function getElementActualCss(el: HTMLElement, prop: any, cache: boolean) {
+export function getElementActualCss(el: HTMLElement, prop: any, cache: boolean) {
     let css = '';
 
     if (!el.getAttribute('kt-hidden-' + prop) || !cache) {
@@ -48,12 +48,12 @@ function getElementActualCss(el: HTMLElement, prop: any, cache: boolean) {
     }
 }
 
-function getElementActualHeight(el: HTMLElement) {
+export function getElementActualHeight(el: HTMLElement) {
     return getElementActualCss(el, 'height', false);
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Element/matches
-function getElementMatches(element: HTMLElement, selector: string) {
+export function getElementMatches(element: HTMLElement, selector: string) {
     const p = Element.prototype;
     const f = p.matches || p.webkitMatchesSelector;
 
@@ -64,7 +64,7 @@ function getElementMatches(element: HTMLElement, selector: string) {
     }
 }
 
-function getElementOffset(el: HTMLElement): OffsetModel {
+export function getElementOffset(el: HTMLElement): OffsetModel {
     // Return zeros for disconnected and hidden (display: none) elements (gh-2310)
     // Support: IE <=11 only
     // Running getBoundingClientRect on a
@@ -86,7 +86,7 @@ function getElementOffset(el: HTMLElement): OffsetModel {
     return rect;
 }
 
-function getElementParents(element: Element, selector: string) {
+export function getElementParents(element: Element, selector: string) {
     // Element.matches() polyfill
     if (!Element.prototype.matches) {
         Element.prototype.matches = function (s) {
@@ -117,7 +117,7 @@ function getElementParents(element: Element, selector: string) {
     return parents;
 }
 
-function getHighestZindex(el: HTMLElement) {
+export function getHighestZindex(el: HTMLElement) {
     let bufferNode: Node | null = el as Node;
     let buffer = el;
     while (bufferNode && bufferNode !== document) {
@@ -143,18 +143,18 @@ function getHighestZindex(el: HTMLElement) {
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/API/Window/innerWidth
-function getViewPort(): ViewPortModel {
+export function getViewPort(): ViewPortModel {
     return {
         width: window.innerWidth,
         height: window.innerHeight,
     };
 }
 
-function insertAfterElement(el: HTMLElement, referenceNode: HTMLElement) {
+export function insertAfterElement(el: HTMLElement, referenceNode: HTMLElement) {
     return referenceNode.parentNode?.insertBefore(el, referenceNode.nextSibling);
 }
 
-function isElementHasClasses(element: HTMLElement, classesStr: string): boolean {
+export function isElementHasClasses(element: HTMLElement, classesStr: string): boolean {
     const classes = classesStr.split(' ');
     for (let i = 0; i < classes.length; i++) {
         if (!element.classList.contains(classes[i])) {
@@ -165,12 +165,12 @@ function isElementHasClasses(element: HTMLElement, classesStr: string): boolean 
     return true;
 }
 
-function isVisibleElement(element: HTMLElement): boolean {
+export function isVisibleElement(element: HTMLElement): boolean {
     return !(element.offsetWidth === 0 && element.offsetHeight === 0);
 }
 
 // Throttle function: Input as function which needs to be throttled and delay is the time interval in milliseconds
-function throttle(timer: number | undefined, func: Function, delay?: number) {
+export function throttle(timer: number | undefined, func: Function, delay?: number) {
     // If setTimeout is already scheduled, no need to do anything
     if (timer) {
         return;
@@ -186,7 +186,10 @@ function throttle(timer: number | undefined, func: Function, delay?: number) {
     }, delay);
 }
 
-function getElementChildren(element: HTMLElement, selector: string): Array<HTMLElement> | null {
+export function getElementChildren(
+    element: HTMLElement,
+    selector: string
+): Array<HTMLElement> | null {
     if (!element || !element.childNodes) {
         return null;
     }
@@ -203,12 +206,12 @@ function getElementChildren(element: HTMLElement, selector: string): Array<HTMLE
     return result;
 }
 
-function getElementChild(element: HTMLElement, selector: string): HTMLElement | null {
+export function getElementChild(element: HTMLElement, selector: string): HTMLElement | null {
     const children = getElementChildren(element, selector);
     return children ? children[0] : null;
 }
 
-function isMobileDevice(): boolean {
+export function isMobileDevice(): boolean {
     let test = getViewPort().width < +getBreakpoint('lg') ? true : false;
 
     if (test === false) {
@@ -219,7 +222,7 @@ function isMobileDevice(): boolean {
     return test;
 }
 
-function slide(el: HTMLElement, dir: string, speed: number, callback: any) {
+export function slide(el: HTMLElement, dir: string, speed: number, callback: any) {
     if (
         !el ||
         (dir === 'up' && !isVisibleElement(el)) ||
@@ -336,15 +339,15 @@ function slide(el: HTMLElement, dir: string, speed: number, callback: any) {
     }
 }
 
-function slideUp(el: HTMLElement, speed: number, callback: any) {
+export function slideUp(el: HTMLElement, speed: number, callback: any) {
     slide(el, 'up', speed, callback);
 }
 
-function slideDown(el: HTMLElement, speed: number, callback: any) {
+export function slideDown(el: HTMLElement, speed: number, callback: any) {
     slide(el, 'down', speed, callback);
 }
 
-function getBreakpoint(breakpoint: string) {
+export function getBreakpoint(breakpoint: string) {
     let value: number | string = getCSSVariableValue('--bs-' + breakpoint);
     if (value) {
         value = parseInt(value.trim());
@@ -353,7 +356,7 @@ function getBreakpoint(breakpoint: string) {
     return value;
 }
 
-function getAttributeValueByBreakpoint(incomingAttr: string): string | JSON {
+export function getAttributeValueByBreakpoint(incomingAttr: string): string | JSON {
     let value = toJSON(incomingAttr);
     if (typeof value !== 'object') {
         return incomingAttr;
@@ -379,26 +382,3 @@ function getAttributeValueByBreakpoint(incomingAttr: string): string | JSON {
 
     return resultKey ? getObjectPropertyValueByKey(value, resultKey) : value;
 }
-
-export {
-    getBreakpoint,
-    getCSSVariableValue,
-    getElementActualCss,
-    getElementActualHeight,
-    getElementMatches,
-    getElementOffset,
-    getElementParents,
-    getHighestZindex,
-    getViewPort,
-    insertAfterElement,
-    isElementHasClasses,
-    isVisibleElement,
-    throttle,
-    getElementChildren,
-    getElementChild,
-    isMobileDevice,
-    slide,
-    slideUp,
-    slideDown,
-    getAttributeValueByBreakpoint,
-};

@@ -1,5 +1,4 @@
 import { useQueryResponseData } from 'common/core/QueryResponseProvider';
-import { UsersListPagination } from 'components/dashboard/helpers/pagination/renderPagination';
 import { useMemo } from 'react';
 import { useTable, ColumnInstance, Row } from 'react-table';
 import { CustomHeaderColumn } from './columns/CustomHeaderColumn';
@@ -11,7 +10,7 @@ export const UsersTable = ({ list }: { list: UsersListType }) => {
     let users = useQueryResponseData(list);
 
     const usersData = useMemo(() => users, [users]);
-    const columns = useMemo(() => usersColumns(list), []);
+    const columns = useMemo(() => usersColumns(list), [list]);
     const { getTableProps, getTableBodyProps, headers, rows, prepareRow } = useTable({
         columns,
         data: usersData,

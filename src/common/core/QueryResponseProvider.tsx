@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { FC, useContext, useState, useEffect, useMemo, PropsWithChildren } from 'react';
+import { useContext, useState, useEffect, useMemo, PropsWithChildren } from 'react';
 import { useQuery } from 'react-query';
 import { useQueryRequest } from './QueryRequestProvider';
 import {
@@ -9,7 +9,6 @@ import {
     QUERIES,
     PaginationState,
     initialQueryState,
-    WithChildren,
     Response,
 } from '_metronic/helpers';
 import { getDeletedUsers, getUsers } from 'components/dashboard/users/api/user.service';
@@ -20,7 +19,7 @@ type QueryResponseProviderProps = {
 };
 
 const QueryResponseContext = createResponseContext<User>(initialQueryResponse);
-const QueryResponseProvider = ({
+export const QueryResponseProvider = ({
     listType,
     children,
 }: PropsWithChildren<QueryResponseProviderProps>) => {
@@ -71,9 +70,9 @@ const QueryResponseProvider = ({
     );
 };
 
-const useQueryResponse = (dataType: UsersListType) => useContext(QueryResponseContext);
+export const useQueryResponse = (dataType: UsersListType) => useContext(QueryResponseContext);
 
-const useQueryResponseData = (dataType: UsersListType) => {
+export const useQueryResponseData = (dataType: UsersListType) => {
     const { response } = useQueryResponse(dataType);
     if (!response) {
         return [];
@@ -82,7 +81,7 @@ const useQueryResponseData = (dataType: UsersListType) => {
     return response?.data || [];
 };
 
-const useQueryResponsePagination = (dataType: UsersListType) => {
+export const useQueryResponsePagination = (dataType: UsersListType) => {
     const defaultPaginationState: PaginationState = {
         links: [],
         ...initialQueryState,
@@ -96,15 +95,7 @@ const useQueryResponsePagination = (dataType: UsersListType) => {
     return response.payload.pagination;
 };
 
-const useQueryResponseLoading = (dataType: UsersListType): boolean => {
+export const useQueryResponseLoading = (dataType: UsersListType): boolean => {
     const { isLoading } = useQueryResponse(dataType);
     return isLoading;
-};
-
-export {
-    QueryResponseProvider,
-    useQueryResponse,
-    useQueryResponseData,
-    useQueryResponsePagination,
-    useQueryResponseLoading,
 };
