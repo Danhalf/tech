@@ -7,6 +7,7 @@ import { CustomModal } from '../helpers/modal/renderModalHelper';
 import { UserModal } from './UserModal/UserModal';
 import { PrimaryButton } from '../smallComponents/buttons/PrimaryButton';
 import { UsersListType, UsersType } from './types/Users.types';
+import { UsersListSearchComponent } from './search/UsersListSearchComponent';
 
 const usersTabsArray: string[] = Object.values(UsersType) as string[];
 
@@ -43,7 +44,8 @@ export const UsersListWrapper = () => {
 
                     <div className='card-body'>
                         <div className='tab-content' id='myTabContentInner'>
-                            <div className='d-flex w-100 justify-content-end px-8 mt-4'>
+                            <div className='d-flex w-100 justify-content-between mt-4'>
+                                <UsersListSearchComponent />
                                 <PrimaryButton
                                     buttonText='Add User'
                                     icon='plus'
