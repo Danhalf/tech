@@ -44,7 +44,7 @@ export const UsersListWrapper = () => {
 
                     <div className='card-body'>
                         <div className='tab-content' id='myTabContentInner'>
-                            <div className='d-flex w-100 justify-content-between mt-4'>
+                            <div className='d-flex w-100 justify-content-between my-4'>
                                 <UsersListSearchComponent />
                                 <PrimaryButton
                                     buttonText='Add User'
