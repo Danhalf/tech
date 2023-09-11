@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import { getToken } from 'common/utils';
 import { API_URL } from 'common/app-consts';
 import { ActionStatus } from 'common/interfaces/IActionStatus';
-import { User } from '../types/Users.types';
+import { User, UserQuery } from '../types/Users.types';
 
 export const createOrUpdateUser = (loginname: string, loginpassword: string, uid: string = '0') => {
     return axios.post(
@@ -36,9 +36,10 @@ export const setUserOptionalData = (uid: string, data: any) => {
     );
 };
 
-export const getUsers = (query?: string): Promise<AxiosResponse<User[], any>> => {
+export const getUsers = (query?: UserQuery): Promise<AxiosResponse<User[], any>> => {
     return axios.get<User[]>(`${API_URL}user/0/list`, {
         headers: { Authorization: `Bearer ${getToken()}` },
+        params: query,
     });
 };
 

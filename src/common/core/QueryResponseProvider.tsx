@@ -10,6 +10,7 @@ import {
     PaginationState,
     initialQueryState,
     Response,
+    parseRequestQuery,
 } from '_metronic/helpers';
 import { getDeletedUsers, getUsers } from 'components/dashboard/users/api/user.service';
 import { User, UsersListType, UsersType } from 'components/dashboard/users/types/Users.types';
@@ -50,10 +51,10 @@ export const QueryResponseProvider = ({
         `${GET_LIST_TYPE()}-${query}`,
         () => {
             // eslint-disable-next-line no-console
-            console.log(query);
+            const userQuery = parseRequestQuery(query);
             switch (listType) {
                 case UsersType.Users:
-                    return getUsers(query);
+                    return getUsers({ ...userQuery });
                 case UsersType.DeletedUsers:
                     return getDeletedUsers(query);
             }

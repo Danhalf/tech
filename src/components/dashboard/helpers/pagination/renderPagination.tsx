@@ -26,12 +26,12 @@ export const UsersListPagination = ({ list }: { list: UsersListType }) => {
     const pagination = useQueryResponsePagination(list);
     const isLoading = useQueryResponseLoading(list);
     const { updateState } = useQueryRequest();
-    const updatePage = (skip: number | undefined | null) => {
-        if (!skip || isLoading || pagination.skip === skip) {
+    const updatePage = (page: number | undefined | null) => {
+        if (!page || isLoading || pagination.skip === page) {
             return;
         }
 
-        updateState({ skip, top: pagination.top || 10 });
+        updateState({ skip: page, top: pagination.top || 10 });
     };
 
     const PAGINATION_PAGES_COUNT = 5;
