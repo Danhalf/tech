@@ -26,12 +26,12 @@ export const UsersListPagination = ({ list }: { list: UsersListType }) => {
     const pagination = useQueryResponsePagination(list);
     const isLoading = useQueryResponseLoading(list);
     const { updateState } = useQueryRequest();
-    const updatePage = (page: number | undefined | null) => {
-        if (!page || isLoading || pagination.page === page) {
+    const updatePage = (skip: number | undefined | null) => {
+        if (!skip || isLoading || pagination.skip === skip) {
             return;
         }
 
-        updateState({ page, items_per_page: pagination.items_per_page || 10 });
+        updateState({ skip, top: pagination.top || 10 });
     };
 
     const PAGINATION_PAGES_COUNT = 5;
@@ -62,14 +62,14 @@ export const UsersListPagination = ({ list }: { list: UsersListType }) => {
         pageLinks.push(previousLink);
 
         if (
-            pagination.page <= Math.round(PAGINATION_PAGES_COUNT / 2) ||
+            pagination.skip <= Math.round(PAGINATION_PAGES_COUNT / 2) ||
             scopedLinks.length <= PAGINATION_PAGES_COUNT
         ) {
             pageLinks = [...pageLinks, ...scopedLinks.slice(0, PAGINATION_PAGES_COUNT)];
         }
 
         if (
-            pagination.page > scopedLinks.length - halfOfPagesCount &&
+            pagination.skip > scopedLinks.length - halfOfPagesCount &&
             scopedLinks.length > PAGINATION_PAGES_COUNT
         ) {
             pageLinks = [
@@ -83,16 +83,16 @@ export const UsersListPagination = ({ list }: { list: UsersListType }) => {
 
         if (
             !(
-                pagination.page <= Math.round(PAGINATION_PAGES_COUNT / 2) ||
+                pagination.skip <= Math.round(PAGINATION_PAGES_COUNT / 2) ||
                 scopedLinks.length <= PAGINATION_PAGES_COUNT
             ) &&
-            !(pagination.page > scopedLinks.length - halfOfPagesCount)
+            !(pagination.skip > scopedLinks.length - halfOfPagesCount)
         ) {
             pageLinks = [
                 ...pageLinks,
                 ...scopedLinks.slice(
-                    pagination.page - 1 - halfOfPagesCount,
-                    pagination.page + halfOfPagesCount
+                    pagination.skip - 1 - halfOfPagesCount,
+                    pagination.skip + halfOfPagesCount
                 ),
             ];
         }
@@ -112,7 +112,7 @@ export const UsersListPagination = ({ list }: { list: UsersListType }) => {
                     <ul className='pagination'>
                         <li
                             className={clsx('page-item', {
-                                disabled: isLoading || pagination.page === 1,
+                                disabled: isLoading || pagination.skip === 1,
                             })}
                         >
                             <a
@@ -131,7 +131,7 @@ export const UsersListPagination = ({ list }: { list: UsersListType }) => {
                                 <li
                                     key={link.label}
                                     className={clsx('page-item', {
-                                        active: pagination.page === link.page,
+                                        active: pagination.skip === link.page,
                                         disabled: isLoading,
                                         previous: link.label === 'Previous',
                                         next: link.label === 'Next',
@@ -153,7 +153,7 @@ export const UsersListPagination = ({ list }: { list: UsersListType }) => {
                         <li
                             className={clsx('page-item', {
                                 disabled:
-                                    isLoading || pagination.page === pagination.links?.length! - 2,
+                                    isLoading || pagination.skip === pagination.links?.length! - 2,
                             })}
                         >
                             <a

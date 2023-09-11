@@ -1,6 +1,6 @@
-import { createContext, Dispatch, SetStateAction, useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import qs from 'qs';
-import { ID, QueryResponseContextProps, QueryState } from './models';
+import { QueryResponseContextProps, QueryState } from './models';
 
 export function createResponseContext<T>(initialState: QueryResponseContextProps<T>) {
     return createContext(initialState);
@@ -10,12 +10,12 @@ export function isNotEmpty(obj: unknown) {
     return obj !== undefined && obj !== null && obj !== '';
 }
 
-// Example: page=1&items_per_page=10&sort=id&order=desc&search=a&filter_name=a&filter_online=false
+// Example: skip=1&top=10&sort=id&order=desc&search=a&filter_name=a&filter_online=false
 export function stringifyRequestQuery(state: QueryState): string {
-    const pagination = qs.stringify(state, { filter: ['page', 'items_per_page'], skipNulls: true });
-    const sort = qs.stringify(state, { filter: ['sort', 'order'], skipNulls: true });
+    const pagination = qs.stringify(state, { filter: ['skip', 'top'], skipNulls: true });
+    const sort = qs.stringify(state, { filter: ['column', 'type'], skipNulls: true });
     const search = isNotEmpty(state.search)
-        ? qs.stringify(state, { filter: ['search'], skipNulls: true })
+        ? qs.stringify(state, { filter: ['qry'], skipNulls: true })
         : '';
 
     const filter = state.filter
@@ -36,63 +36,6 @@ export function stringifyRequestQuery(state: QueryState): string {
 export function parseRequestQuery(query: string): QueryState {
     const cache: unknown = qs.parse(query);
     return cache as QueryState;
-}
-
-export function calculatedGroupingIsDisabled<T>(
-    isLoading: boolean,
-    data: Array<T> | undefined
-): boolean {
-    if (isLoading) {
-        return true;
-    }
-
-    return !data || !data.length;
-}
-
-export function calculateIsAllDataSelected<T>(
-    data: Array<T> | undefined,
-    selected: Array<ID>
-): boolean {
-    if (!data) {
-        return false;
-    }
-
-    return data.length > 0 && data.length === selected.length;
-}
-
-export function groupingOnSelect(
-    id: ID,
-    selected: Array<ID>,
-    setSelected: Dispatch<SetStateAction<Array<ID>>>
-) {
-    if (!id) {
-        return;
-    }
-
-    if (selected.includes(id)) {
-        setSelected(selected.filter((itemId) => itemId !== id));
-    } else {
-        const updatedSelected = [...selected];
-        updatedSelected.push(id);
-        setSelected(updatedSelected);
-    }
-}
-
-export function groupingOnSelectAll<T>(
-    isAllSelected: boolean,
-    setSelected: Dispatch<SetStateAction<Array<ID>>>,
-    data?: Array<T & { id?: ID }>
-) {
-    if (isAllSelected) {
-        setSelected([]);
-        return;
-    }
-
-    if (!data || !data.length) {
-        return;
-    }
-
-    setSelected(data.filter((item) => item.id).map((item) => item.id));
 }
 
 // Hook

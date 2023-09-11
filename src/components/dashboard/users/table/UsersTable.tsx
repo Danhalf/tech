@@ -5,6 +5,7 @@ import { CustomHeaderColumn } from './columns/CustomHeaderColumn';
 import { CustomRow } from './columns/CustomRow';
 import { usersColumns } from './columns/_columns';
 import { User, UsersListType } from '../types/Users.types';
+import { UsersListPagination } from 'components/dashboard/helpers/pagination/renderPagination';
 
 export const UsersTable = ({ list }: { list: UsersListType }) => {
     let users = useQueryResponseData(list);
@@ -48,6 +49,7 @@ export const UsersTable = ({ list }: { list: UsersListType }) => {
                         )}
                     </tbody>
                 </table>
+                <UsersListPagination list={list} />
             </div>
         </>
     );
