@@ -37,16 +37,9 @@ export const setUserOptionalData = (uid: string, data: any) => {
 };
 
 export const getUsers = (query?: UserQuery): Promise<AxiosResponse<User[], any>> => {
-    const currentQuery = {
-        top: query?.top,
-        skip: query?.skip,
-        column: query?.sort,
-        // type: query.?order,
-        // qry: query.?search
-    };
     return axios.get<User[]>(`${API_URL}user/0/list`, {
         headers: { Authorization: `Bearer ${getToken()}` },
-        params: currentQuery,
+        params: query,
     });
 };
 

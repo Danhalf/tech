@@ -7,9 +7,8 @@ export type WithChildren = {
 export type ID = undefined | null | number;
 
 export type PaginationState = {
-    skip: number;
-    top: 10 | 30 | 50 | 100;
-    links?: Array<{ label: string; active: boolean; url: string | null; page: number | null }>;
+    current_page: number;
+    data_count: 10 | 30 | 50 | 100;
 };
 
 export type SortState = {
@@ -44,8 +43,8 @@ export type QueryRequestContextProps = {
 };
 
 export const initialQueryState: QueryState = {
-    skip: 1,
-    top: 10,
+    current_page: 1,
+    data_count: 10,
 };
 
 export const initialQueryRequest: QueryRequestContextProps = {

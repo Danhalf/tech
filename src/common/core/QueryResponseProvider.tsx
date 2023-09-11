@@ -51,11 +51,17 @@ export const QueryResponseProvider = ({
         `${GET_LIST_TYPE()}-${query}`,
         () => {
             const userQuery = parseRequestQuery(query);
+            const currentQuery = {
+                ...userQuery,
+                column: userQuery?.sort || 'username',
+                qry: userQuery?.search || '',
+                type: userQuery?.order || 'asc',
+            };
             // eslint-disable-next-line no-console
-            console.log(userQuery);
+            // console.log(currentQuery);
             switch (listType) {
                 case UsersType.Users:
-                    return getUsers({ ...userQuery });
+                    return getUsers(currentQuery);
                 case UsersType.DeletedUsers:
                     return getDeletedUsers(query);
             }
@@ -85,18 +91,13 @@ export const useQueryResponseData = (dataType: UsersListType) => {
     return response?.data || [];
 };
 
-export const useQueryResponsePagination = (dataType: UsersListType) => {
-    const defaultPaginationState: PaginationState = {
-        links: [],
-        ...initialQueryState,
-    };
-
+export const useQueryResponsePagination = (dataType: UsersListType): number => {
     const { response } = useQueryResponse(dataType);
-    if (!response || !response.payload || !response.payload.pagination) {
-        return defaultPaginationState;
+    if (!response || !response.data) {
+        return 0;
     }
 
-    return response.payload.pagination;
+    return response.data.length;
 };
 
 export const useQueryResponseLoading = (dataType: UsersListType): boolean => {

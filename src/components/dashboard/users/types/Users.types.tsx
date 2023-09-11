@@ -6,9 +6,9 @@ export interface UserInputData {
 export interface UserQuery {
     skip?: number;
     top?: number;
-    search?: string;
-    sort?: string;
-    order?: 'asc' | 'desc';
+    column?: string;
+    qry?: string;
+    type?: 'asc' | 'desc';
 }
 
 export enum UsersType {
