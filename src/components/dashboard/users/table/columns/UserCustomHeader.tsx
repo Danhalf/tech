@@ -14,6 +14,9 @@ export const UserCustomHeader: FC<Props> = ({ className, title, tableProps }) =>
     const id = tableProps.column.id;
     const { state, updateState } = useQueryRequest();
 
+    // eslint-disable-next-line no-console
+    console.log(state);
+
     const isSelectedForSorting = useMemo(() => {
         return state.sort && state.sort === id;
     }, [state, id]);

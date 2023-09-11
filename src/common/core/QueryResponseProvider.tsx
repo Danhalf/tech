@@ -50,8 +50,9 @@ export const QueryResponseProvider = ({
     } = useQuery(
         `${GET_LIST_TYPE()}-${query}`,
         () => {
-            // eslint-disable-next-line no-console
             const userQuery = parseRequestQuery(query);
+            // eslint-disable-next-line no-console
+            console.log(userQuery);
             switch (listType) {
                 case UsersType.Users:
                     return getUsers({ ...userQuery });
