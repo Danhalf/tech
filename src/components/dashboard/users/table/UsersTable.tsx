@@ -49,7 +49,7 @@ export const UsersTable = ({ list }: { list: UsersListType }) => {
                         )}
                     </tbody>
                 </table>
-                <UsersListPagination list={list} />
+                <UsersListPagination list={list} totalRows={users.length} />
             </div>
         </>
     );

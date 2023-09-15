@@ -7,8 +7,8 @@ export type WithChildren = {
 export type ID = undefined | null | number;
 
 export type PaginationState = {
-    current_page: number;
-    data_count: 10 | 30 | 50 | 100;
+    currentPage: number;
+    rowCount: 10 | 30 | 50 | 100;
 };
 
 export type SortState = {
@@ -43,8 +43,8 @@ export type QueryRequestContextProps = {
 };
 
 export const initialQueryState: QueryState = {
-    current_page: 1,
-    data_count: 10,
+    currentPage: 1,
+    rowCount: 10,
 };
 
 export const initialQueryRequest: QueryRequestContextProps = {

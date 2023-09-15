@@ -53,7 +53,7 @@ export const QueryResponseProvider = ({
             const userQuery = parseRequestQuery(query);
             const currentQuery = {
                 ...userQuery,
-                column: userQuery?.sort || 'username',
+                // column: userQuery?.sort || 'username',
                 qry: userQuery?.search || '',
                 type: userQuery?.order || 'asc',
             };
@@ -89,15 +89,6 @@ export const useQueryResponseData = (dataType: UsersListType) => {
     }
 
     return response?.data || [];
-};
-
-export const useQueryResponsePagination = (dataType: UsersListType): number => {
-    const { response } = useQueryResponse(dataType);
-    if (!response || !response.data) {
-        return 0;
-    }
-
-    return response.data.length;
 };
 
 export const useQueryResponseLoading = (dataType: UsersListType): boolean => {

@@ -1,22 +1,28 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import clsx from 'clsx';
 
-import { useMemo, useState } from 'react';
-import {
-    useQueryResponseLoading,
-    useQueryResponsePagination,
-} from 'common/core/QueryResponseProvider';
-import { PaginationState } from '_metronic/helpers';
+import { useEffect, useState } from 'react';
+import { useQueryResponseLoading } from 'common/core/QueryResponseProvider';
 import { useQueryRequest } from 'common/core/QueryRequestProvider';
 import { UsersListType } from 'components/dashboard/users/types/Users.types';
 
-export const UsersListPagination = ({ list }: { list: UsersListType }) => {
+export const UsersListPagination = ({
+    list,
+    totalRows,
+}: {
+    list: UsersListType;
+    totalRows: number;
+}) => {
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const pageCount = useQueryResponsePagination(list);
+    const pageCount = 3;
     const isLoading = useQueryResponseLoading(list);
-    const { updateState } = useQueryRequest();
-    // eslint-disable-next-line no-console
-    console.log(pageCount);
+
+    const { state, updateState } = useQueryRequest();
+    useEffect(() => {
+        if (currentPage !== undefined) {
+            updateState({ ...state, currentPage });
+        }
+    }, [currentPage]);
 
     return (
         <div className='row'>
