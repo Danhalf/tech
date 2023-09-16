@@ -10,7 +10,7 @@ export const usersColumns = (list: UsersListType): ReadonlyArray<Column<User>> =
     const { Users, DeletedUsers } = UsersType;
     return [
         {
-            Header: (props) => <UserCustomHeader tableProps={props} title='Index' />,
+            Header: 'Index',
             accessor: 'index',
         },
         {
@@ -24,24 +24,16 @@ export const usersColumns = (list: UsersListType): ReadonlyArray<Column<User>> =
             },
         },
         {
-            Header: (props) => (
-                <UserCustomHeader
-                    tableProps={props}
-                    title='Created by user'
-                    className='min-w-125px'
-                />
-            ),
+            Header: 'Created by user',
             accessor: 'parentusername',
         },
         {
-            Header: (props) => <UserCustomHeader tableProps={props} title='Is admin' />,
+            Header: 'Is admin',
             id: 'isadmin',
             Cell: ({ ...props }) => (props.data[props.row.index].isadmin ? 'yes' : 'no'),
         },
         {
-            Header: (props) => (
-                <UserCustomHeader tableProps={props} title='Actions' className='px-3 min-w-125px' />
-            ),
+            Header: 'Actions',
             id: 'actions',
 
             Cell: ({ ...props }) => {

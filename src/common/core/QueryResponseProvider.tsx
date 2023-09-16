@@ -7,13 +7,17 @@ import {
     initialQueryResponse,
     stringifyRequestQuery,
     QUERIES,
-    PaginationState,
-    initialQueryState,
     Response,
     parseRequestQuery,
+    initialQueryState,
 } from '_metronic/helpers';
 import { getDeletedUsers, getUsers } from 'components/dashboard/users/api/user.service';
-import { User, UsersListType, UsersType } from 'components/dashboard/users/types/Users.types';
+import {
+    User,
+    UserQuery,
+    UsersListType,
+    UsersType,
+} from 'components/dashboard/users/types/Users.types';
 
 type QueryResponseProviderProps = {
     listType: UsersListType;
@@ -37,28 +41,22 @@ export const QueryResponseProvider = ({
         }
     };
 
-    useEffect(() => {
-        if (query !== updatedQuery) {
-            setQuery(updatedQuery);
-        }
-    }, [updatedQuery]);
-
     const {
         isFetching,
         refetch,
         data: axiosResponse,
     } = useQuery(
-        `${GET_LIST_TYPE()}-${query}`,
+        `${GET_LIST_TYPE()}`,
         () => {
             const userQuery = parseRequestQuery(query);
-            const currentQuery = {
-                ...userQuery,
-                // column: userQuery?.sort || 'username',
-                qry: userQuery?.search || '',
-                type: userQuery?.order || 'asc',
+            const currentQuery: UserQuery = {
+                skip: userQuery.currentPage || initialQueryState.currentPage,
+                top: userQuery.rowCount || initialQueryState.rowCount,
+                column: userQuery?.sort || initialQueryState.sort,
+                qry: userQuery?.search || initialQueryState.search,
+                type: userQuery.order || initialQueryState.order,
             };
-            // eslint-disable-next-line no-console
-            // console.log(currentQuery);
+
             switch (listType) {
                 case UsersType.Users:
                     return getUsers(currentQuery);
@@ -68,6 +66,13 @@ export const QueryResponseProvider = ({
         },
         { cacheTime: 0, keepPreviousData: true, refetchOnWindowFocus: false }
     );
+
+    useEffect(() => {
+        if (query !== updatedQuery) {
+            setQuery(updatedQuery);
+            refetch();
+        }
+    }, [updatedQuery]);
 
     const response: Response<User[]> = {
         data: axiosResponse && axiosResponse.data,

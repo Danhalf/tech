@@ -16,10 +16,6 @@ export type SortState = {
     order?: 'asc' | 'desc';
 };
 
-export type FilterState = {
-    filter?: unknown;
-};
-
 export type SearchState = {
     search?: string;
 };
@@ -35,7 +31,7 @@ export type Response<T> = {
     };
 };
 
-export type QueryState = PaginationState & SortState & FilterState & SearchState;
+export type QueryState = PaginationState & SortState & SearchState;
 
 export type QueryRequestContextProps = {
     state: QueryState;
@@ -45,6 +41,9 @@ export type QueryRequestContextProps = {
 export const initialQueryState: QueryState = {
     currentPage: 1,
     rowCount: 10,
+    sort: 'username',
+    order: 'desc',
+    search: '',
 };
 
 export const initialQueryRequest: QueryRequestContextProps = {
