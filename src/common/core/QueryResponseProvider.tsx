@@ -52,8 +52,8 @@ export const QueryResponseProvider = ({
             const currentQuery: UserQuery = {
                 skip: userQuery.currentPage || initialQueryState.currentPage,
                 top: userQuery.rowCount || initialQueryState.rowCount,
-                column: userQuery?.sort || initialQueryState.sort,
-                qry: userQuery?.search || initialQueryState.search,
+                column: userQuery.sort || initialQueryState.sort,
+                qry: userQuery.search || initialQueryState.search,
                 type: userQuery.order || initialQueryState.order,
             };
 
@@ -69,6 +69,8 @@ export const QueryResponseProvider = ({
 
     useEffect(() => {
         if (query !== updatedQuery) {
+            // eslint-disable-next-line no-console
+            console.log(updatedQuery);
             setQuery(updatedQuery);
             refetch();
         }

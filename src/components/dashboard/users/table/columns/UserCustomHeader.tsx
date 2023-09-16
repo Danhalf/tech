@@ -37,8 +37,10 @@ export const UserCustomHeader = ({ className, title, tableProps }: Props) => {
     return (
         <th
             {...tableProps.column.getHeaderProps()}
-            className={clsx(className, order !== undefined && `table-sort-${order}`)}
-            style={{ cursor: 'pointer' }}
+            className={clsx(
+                `${className} cursor-pointer`,
+                order !== undefined && `table-sort-${order}`
+            )}
             onClick={sortColumn}
         >
             {title}

@@ -42,7 +42,7 @@ export const initialQueryState: QueryState = {
     currentPage: 1,
     rowCount: 10,
     sort: 'username',
-    order: 'desc',
+    order: 'asc',
     search: '',
 };
 

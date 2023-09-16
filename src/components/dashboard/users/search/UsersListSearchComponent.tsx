@@ -3,12 +3,12 @@ import { useQueryRequest } from 'common/core/QueryRequestProvider';
 import { useState, useEffect } from 'react';
 
 export const UsersListSearchComponent = () => {
-    const { updateState } = useQueryRequest();
+    const { state, updateState } = useQueryRequest();
     const [searchTerm, setSearchTerm] = useState<string>('');
     const debouncedSearchTerm = useDebounce(searchTerm, 150);
     useEffect(() => {
         if (debouncedSearchTerm !== undefined && searchTerm !== undefined) {
-            updateState({ search: debouncedSearchTerm, ...initialQueryState });
+            updateState({ ...state, search: debouncedSearchTerm });
         }
     }, [debouncedSearchTerm]);
 

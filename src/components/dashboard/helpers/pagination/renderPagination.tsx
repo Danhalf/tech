@@ -14,14 +14,16 @@ export const UsersListPagination = ({
     totalRows: number;
 }) => {
     const [currentPage, setCurrentPage] = useState<number>(1);
-    const pageCount = 3;
     const isLoading = useQueryResponseLoading(list);
 
     const { state, updateState } = useQueryRequest();
+
     useEffect(() => {
         if (currentPage !== undefined) {
             updateState({ ...state, currentPage });
         }
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentPage]);
 
     return (
@@ -30,31 +32,31 @@ export const UsersListPagination = ({
                 <div id='kt_table_users_paginate'>
                     <ul className='pagination'>
                         <li
-                            className={clsx('page-item', {
+                            className={clsx('page-item previous', {
                                 disabled: isLoading,
                             })}
                         >
                             <a
-                                onClick={() => setCurrentPage(1)}
-                                style={{ cursor: 'btn btn-primary pointer' }}
+                                href='#'
                                 className='page-link'
+                                onClick={() => setCurrentPage((prev) => --prev)}
                             >
-                                First
+                                <i className='previous'></i>
                             </a>
                         </li>
 
                         <li
-                            className={clsx('page-item', {
+                            className={clsx('page-item next', {
                                 disabled: isLoading,
                             })}
                         >
-                            <button
-                                onClick={() => setCurrentPage(2)}
-                                style={{ cursor: 'btn btn-primary pointer' }}
+                            <a
+                                href='#'
                                 className='page-link'
+                                onClick={() => setCurrentPage((prev) => ++prev)}
                             >
-                                Last
-                            </button>
+                                <i className='next'></i>
+                            </a>
                         </li>
                     </ul>
                 </div>

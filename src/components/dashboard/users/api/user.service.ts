@@ -37,8 +37,6 @@ export const setUserOptionalData = (uid: string, data: any) => {
 };
 
 export const getUsers = (query?: UserQuery): Promise<AxiosResponse<User[], any>> => {
-    // eslint-disable-next-line no-console
-    console.log(query);
     return axios.get<User[]>(`${API_URL}user/0/list`, {
         headers: { Authorization: `Bearer ${getToken()}` },
         params: query,
