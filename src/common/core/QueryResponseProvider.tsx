@@ -50,7 +50,7 @@ export const QueryResponseProvider = ({
         () => {
             const userQuery = parseRequestQuery(query);
             const currentQuery: UserQuery = {
-                skip: userQuery.currentPage || initialQueryState.currentPage,
+                skip: userQuery.currentpage || initialQueryState.currentpage,
                 top: userQuery.rowCount || initialQueryState.rowCount,
                 column: userQuery.sort || initialQueryState.sort,
                 qry: userQuery.search || initialQueryState.search,
@@ -69,8 +69,6 @@ export const QueryResponseProvider = ({
 
     useEffect(() => {
         if (query !== updatedQuery) {
-            // eslint-disable-next-line no-console
-            console.log(updatedQuery);
             setQuery(updatedQuery);
             refetch();
         }
