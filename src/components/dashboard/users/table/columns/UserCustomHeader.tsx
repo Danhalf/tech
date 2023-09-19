@@ -2,7 +2,7 @@ import clsx from 'clsx';
 import { useQueryRequest } from 'common/core/QueryRequestProvider';
 import { PropsWithChildren, useMemo } from 'react';
 import { HeaderProps } from 'react-table';
-import { SortState } from '_metronic/helpers'; // Додайте імпорт QueryState
+import { SortState } from '_metronic/helpers';
 import { User } from '../../types/Users.types';
 
 type Props = {

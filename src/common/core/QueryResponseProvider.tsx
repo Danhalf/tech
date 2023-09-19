@@ -40,10 +40,6 @@ export const QueryResponseProvider = ({
         }
     };
 
-    // useEffect(() => {
-    //     setQuery(updatedQuery);
-    // }, [query, updatedQuery]);
-
     const {
         isFetching,
         refetch,
