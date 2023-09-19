@@ -5,11 +5,12 @@ import { useQueryResponseLoading } from 'common/core/QueryResponseProvider';
 import { useQueryRequest } from 'common/core/QueryRequestProvider';
 import { UsersListType } from 'components/dashboard/users/types/Users.types';
 import { getTotalUsersRecords } from 'components/dashboard/users/api/user.service';
+import { initialQueryState } from '_metronic/helpers';
 
 export const UsersListPagination = ({ list }: { list: UsersListType }) => {
     const [totalRecords, setTotalRecords] = useState<number>(0);
 
-    const [currentpage, setCurrentPage] = useState<number>(1);
+    const [currentpage, setCurrentPage] = useState<number>(0);
     const isLoading = useQueryResponseLoading(list);
 
     const { state, updateState } = useQueryRequest();
@@ -20,16 +21,18 @@ export const UsersListPagination = ({ list }: { list: UsersListType }) => {
         });
     }, []);
 
+    const recordsPerPage = initialQueryState.count;
+
     useEffect(() => {
         if (currentpage !== undefined) {
-            updateState({ ...state, currentpage });
+            updateState({ ...state, currentpage: currentpage * recordsPerPage });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentpage]);
 
-    const recordsPerPage = 10;
     const totalPages = Math.ceil(totalRecords / recordsPerPage);
 
-    const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
+    const pageNumbers = Array.from({ length: totalPages }, (_, index) => index);
 
     return (
         <div className='row'>
@@ -38,7 +41,7 @@ export const UsersListPagination = ({ list }: { list: UsersListType }) => {
                     <ul className='pagination'>
                         <li
                             className={clsx('page-item previous', {
-                                disabled: isLoading || currentpage === 1,
+                                disabled: isLoading || currentpage === 0,
                             })}
                         >
                             <a
@@ -62,14 +65,14 @@ export const UsersListPagination = ({ list }: { list: UsersListType }) => {
                                     className='page-link'
                                     onClick={() => setCurrentPage(pageNumber)}
                                 >
-                                    {pageNumber}
+                                    {pageNumber + 1}
                                 </a>
                             </li>
                         ))}
 
                         <li
                             className={clsx('page-item next', {
-                                disabled: isLoading || currentpage === totalPages,
+                                disabled: isLoading || currentpage === totalPages - 1,
                             })}
                         >
                             <a

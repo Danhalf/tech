@@ -8,7 +8,6 @@ import {
     stringifyRequestQuery,
     QUERIES,
     Response,
-    parseRequestQuery,
     initialQueryState,
 } from '_metronic/helpers';
 import { getDeletedUsers, getUsers } from 'components/dashboard/users/api/user.service';
@@ -41,6 +40,10 @@ export const QueryResponseProvider = ({
         }
     };
 
+    // useEffect(() => {
+    //     setQuery(updatedQuery);
+    // }, [query, updatedQuery]);
+
     const {
         isFetching,
         refetch,
@@ -48,13 +51,12 @@ export const QueryResponseProvider = ({
     } = useQuery(
         `${GET_LIST_TYPE()}`,
         () => {
-            const userQuery = parseRequestQuery(query);
             const currentQuery: UserQuery = {
-                skip: userQuery.currentpage || initialQueryState.currentpage,
-                top: userQuery.rowCount || initialQueryState.rowCount,
-                column: userQuery.sort || initialQueryState.sort,
-                qry: userQuery.search || initialQueryState.search,
-                type: userQuery.order || initialQueryState.order,
+                skip: state.currentpage || initialQueryState.currentpage,
+                top: state.count || initialQueryState.count,
+                column: state.sort || initialQueryState.sort,
+                qry: state.search || initialQueryState.search,
+                type: state.order || initialQueryState.order,
             };
 
             switch (listType) {

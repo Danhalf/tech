@@ -8,7 +8,7 @@ export type ID = undefined | null | number;
 
 export type PaginationState = {
     currentpage: number;
-    rowCount: 10 | 30 | 50 | 100;
+    count: 10 | 30 | 50 | 100;
 };
 
 export type SortState = {
@@ -39,8 +39,8 @@ export type QueryRequestContextProps = {
 };
 
 export const initialQueryState: QueryState = {
-    currentpage: 1,
-    rowCount: 10,
+    currentpage: 0,
+    count: 10,
     sort: 'username',
     order: 'asc',
     search: '',
