@@ -12,7 +12,7 @@ export function isNotEmpty(obj: unknown) {
 
 export function stringifyRequestQuery(state: QueryState): string {
     const pagination = qs.stringify(state, {
-        filter: ['currentPage', 'rowCount'],
+        filter: ['currentpage', 'rowCount'],
         skipNulls: true,
     });
     const sort = qs.stringify(state, { filter: ['sort', 'order'], skipNulls: true });

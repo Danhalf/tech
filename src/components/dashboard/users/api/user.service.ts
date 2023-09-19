@@ -4,6 +4,14 @@ import { API_URL } from 'common/app-consts';
 import { ActionStatus } from 'common/interfaces/IActionStatus';
 import { User, UserQuery } from '../types/Users.types';
 
+export const getTotalUsersRecords = (uid = 0): Promise<{ status: string; total: number }> => {
+    return axios
+        .get(`${API_URL}user/${uid}/list?total=1`, {
+            headers: { Authorization: `Bearer ${getToken()}` },
+        })
+        .then((response) => response.data);
+};
+
 export const createOrUpdateUser = (loginname: string, loginpassword: string, uid: string = '0') => {
     return axios.post(
         API_URL + 'user/' + uid + '/user',

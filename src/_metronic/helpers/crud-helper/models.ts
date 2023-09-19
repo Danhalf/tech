@@ -7,7 +7,7 @@ export type WithChildren = {
 export type ID = undefined | null | number;
 
 export type PaginationState = {
-    currentPage: number;
+    currentpage: number;
     rowCount: 10 | 30 | 50 | 100;
 };
 
@@ -39,7 +39,7 @@ export type QueryRequestContextProps = {
 };
 
 export const initialQueryState: QueryState = {
-    currentPage: 1,
+    currentpage: 1,
     rowCount: 10,
     sort: 'username',
     order: 'asc',

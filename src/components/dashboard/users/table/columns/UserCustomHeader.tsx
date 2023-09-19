@@ -30,7 +30,7 @@ export const UserCustomHeader = ({ className, title, tableProps }: Props) => {
         updateState({
             sort: id,
             order: newOrder,
-            currentPage: 1,
+            currentpage: 1,
         });
     };
 

@@ -1,30 +1,35 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import clsx from 'clsx';
-
 import { useEffect, useState } from 'react';
 import { useQueryResponseLoading } from 'common/core/QueryResponseProvider';
 import { useQueryRequest } from 'common/core/QueryRequestProvider';
 import { UsersListType } from 'components/dashboard/users/types/Users.types';
+import { getTotalUsersRecords } from 'components/dashboard/users/api/user.service';
 
-export const UsersListPagination = ({
-    list,
-    totalRows,
-}: {
-    list: UsersListType;
-    totalRows: number;
-}) => {
-    const [currentPage, setCurrentPage] = useState<number>(1);
+export const UsersListPagination = ({ list }: { list: UsersListType }) => {
+    const [totalRecords, setTotalRecords] = useState<number>(0);
+
+    const [currentpage, setCurrentPage] = useState<number>(1);
     const isLoading = useQueryResponseLoading(list);
 
     const { state, updateState } = useQueryRequest();
 
     useEffect(() => {
-        if (currentPage !== undefined) {
-            updateState({ ...state, currentPage });
-        }
+        getTotalUsersRecords().then(({ total }) => {
+            setTotalRecords(total);
+        });
+    }, []);
 
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentPage]);
+    useEffect(() => {
+        if (currentpage !== undefined) {
+            updateState({ ...state, currentpage });
+        }
+    }, [currentpage]);
+
+    const recordsPerPage = 10;
+    const totalPages = Math.ceil(totalRecords / recordsPerPage);
+
+    const pageNumbers = Array.from({ length: totalPages }, (_, index) => index + 1);
 
     return (
         <div className='row'>
@@ -33,27 +38,44 @@ export const UsersListPagination = ({
                     <ul className='pagination'>
                         <li
                             className={clsx('page-item previous', {
-                                disabled: isLoading,
+                                disabled: isLoading || currentpage === 1,
                             })}
                         >
                             <a
                                 href='#'
                                 className='page-link'
-                                onClick={() => setCurrentPage((prev) => --prev)}
+                                onClick={() => setCurrentPage((prev) => prev - 1)}
                             >
                                 <i className='previous'></i>
                             </a>
                         </li>
 
+                        {pageNumbers.map((pageNumber) => (
+                            <li
+                                key={pageNumber}
+                                className={clsx('page-item', {
+                                    active: pageNumber === currentpage,
+                                })}
+                            >
+                                <a
+                                    href='#'
+                                    className='page-link'
+                                    onClick={() => setCurrentPage(pageNumber)}
+                                >
+                                    {pageNumber}
+                                </a>
+                            </li>
+                        ))}
+
                         <li
                             className={clsx('page-item next', {
-                                disabled: isLoading,
+                                disabled: isLoading || currentpage === totalPages,
                             })}
                         >
                             <a
                                 href='#'
                                 className='page-link'
-                                onClick={() => setCurrentPage((prev) => ++prev)}
+                                onClick={() => setCurrentPage((prev) => prev + 1)}
                             >
                                 <i className='next'></i>
                             </a>
