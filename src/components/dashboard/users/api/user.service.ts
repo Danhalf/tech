@@ -4,6 +4,7 @@ import { API_URL } from 'common/app-consts';
 import { ActionStatus } from 'common/interfaces/IActionStatus';
 import { User, UserQuery } from '../types/Users.types';
 
+// fix it
 export const getTotalUsersRecords = (uid = 0): Promise<{ status: string; total: number }> => {
     return axios
         .get(`${API_URL}user/${uid}/list?total=1`, {
