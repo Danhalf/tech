@@ -6,6 +6,7 @@ import {
     getDeletedUsers,
     getUsers,
     killSession,
+    Status,
     undeleteUser,
     User,
 } from 'components/dashboard/users/user.service';
@@ -18,6 +19,8 @@ import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/Prim
 import { TableHead } from 'components/dashboard/helpers/renderTableHelper';
 import { TabNavigate, TabPanel } from 'components/dashboard/helpers/helpers';
 import { CustomDropdown } from 'components/dashboard/helpers/renderDropdownHelper';
+import { useToast } from '../helpers/renderToastHelper';
+import { AxiosError } from 'axios';
 
 // eslint-disable-next-line no-unused-vars
 enum UsersTabs {
@@ -51,6 +54,8 @@ export default function Users() {
     const [userPermissionsModalEnabled, setUserPermissionsModalEnabled] = useState<boolean>(false);
     const [userSettingsModalEnabled, setUserSettingsModalEnabled] = useState<boolean>(false);
     const [userOptionalModalEnabled, setUserOptionalsModalEnabled] = useState<boolean>(false);
+
+    const { handleShowToast } = useToast();
 
     const initialUsersState = {
         created: '',
@@ -93,6 +98,10 @@ export default function Users() {
             setUsers(response);
             setLoaded(true);
         });
+        getDeletedUsers().then((response) => {
+            setDeletedUsers(response);
+            setLoaded(true);
+        });
     };
 
     useEffect(() => {
@@ -120,34 +129,42 @@ export default function Users() {
         });
     };
 
-    const moveToTrash = (userId: string) => {
-        deleteUser(userId).then((response) => {
-            if (response.status === 'OK') {
-                getUsers().then((response) => {
-                    setUsers(response);
-                    setLoaded(true);
-                });
-                getDeletedUsers().then((response) => {
-                    setDeletedUsers(response);
-                    setLoaded(true);
-                });
+    const handleMoveToTrash = async (userId: string): Promise<void> => {
+        setLoaded(false);
+        try {
+            if (userId) {
+                const response = await deleteUser(userId);
+                if (response.status === Status.OK) {
+                    handleShowToast({
+                        message: 'User successfully deleted',
+                        type: 'success',
+                    });
+                    updateUsers();
+                }
             }
-        });
+        } catch (err) {
+            const { message } = err as Error | AxiosError;
+            handleShowToast({ message, type: 'danger' });
+        }
     };
 
-    const restoreUser = (userId: string) => {
-        undeleteUser(userId).then((response) => {
-            if (response.status === 'OK') {
-                getUsers().then((response) => {
-                    setUsers(response);
-                    setLoaded(true);
-                });
-                getDeletedUsers().then((response) => {
-                    setDeletedUsers(response);
-                    setLoaded(true);
-                });
+    const handleRestoreUser = async (userId: string): Promise<void> => {
+        setLoaded(false);
+        try {
+            if (userId) {
+                const response = await undeleteUser(userId);
+                if (response.status === Status.OK) {
+                    handleShowToast({
+                        message: 'User successfully restored',
+                        type: 'success',
+                    });
+                    updateUsers();
+                }
             }
-        });
+        } catch (err) {
+            const { message } = err as Error | AxiosError;
+            handleShowToast({ message, type: 'danger' });
+        }
     };
 
     const handleTabClick = (tab: string) => {
@@ -235,7 +252,7 @@ export default function Users() {
                                     <TableHead columns={usersColumnsArray} />
                                     <tbody className='text-gray-600 fw-bold'>
                                         {users.map((user: User) => {
-                                            return (
+                                            return user?.useruid ? (
                                                 <tr key={user.useruid}>
                                                     <td className='text-gray-800'>{user.index}</td>
                                                     <td>
@@ -301,7 +318,9 @@ export default function Users() {
                                                                 {
                                                                     menuItemName: 'Delete user',
                                                                     menuItemAction: () =>
-                                                                        moveToTrash(user.useruid),
+                                                                        handleMoveToTrash(
+                                                                            user.useruid
+                                                                        ),
                                                                 },
                                                                 {
                                                                     menuItemName:
@@ -311,6 +330,22 @@ export default function Users() {
                                                                 },
                                                             ]}
                                                         />
+                                                    </td>
+                                                </tr>
+                                            ) : (
+                                                <tr>
+                                                    <td>
+                                                        <div
+                                                            className='alert alert-danger fs-6'
+                                                            role='alert'
+                                                        >
+                                                            <div className='bold'>Error: </div>
+                                                            <span>
+                                                                {JSON.parse(JSON.stringify(users))
+                                                                    ?.error ||
+                                                                    'Incorrect type of data received from the server'}
+                                                            </span>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             );
@@ -331,7 +366,7 @@ export default function Users() {
                                     <TableHead columns={usersColumnsArray} />
                                     <tbody className='text-gray-600 fw-bold'>
                                         {deletedUsers.map((user: User) => {
-                                            return (
+                                            return user?.useruid ? (
                                                 <tr key={user.useruid}>
                                                     <td className='text-gray-800'>{user.index}</td>
                                                     <td>
@@ -349,7 +384,9 @@ export default function Users() {
                                                                 {
                                                                     menuItemName: 'Restore user',
                                                                     menuItemAction: () =>
-                                                                        restoreUser(user.useruid),
+                                                                        handleRestoreUser(
+                                                                            user.useruid
+                                                                        ),
                                                                 },
                                                                 {
                                                                     menuItemName: 'Change password',
@@ -360,6 +397,22 @@ export default function Users() {
                                                                 },
                                                             ]}
                                                         />
+                                                    </td>
+                                                </tr>
+                                            ) : (
+                                                <tr>
+                                                    <td>
+                                                        <div
+                                                            className='alert alert-danger fs-6'
+                                                            role='alert'
+                                                        >
+                                                            <div className='bold'>Error: </div>
+                                                            <span>
+                                                                {JSON.parse(JSON.stringify(users))
+                                                                    ?.error ||
+                                                                    'Incorrect type of data received from the server'}
+                                                            </span>
+                                                        </div>
                                                     </td>
                                                 </tr>
                                             );

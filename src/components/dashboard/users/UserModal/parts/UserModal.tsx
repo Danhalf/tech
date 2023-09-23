@@ -4,6 +4,8 @@ import { useFormik } from 'formik';
 import { useState } from 'react';
 import { IUserData } from 'common/interfaces/IUserData';
 import { createOrUpdateUser, User } from 'components/dashboard/users/user.service';
+import { TOAST_DURATION, useToast } from 'components/dashboard/helpers/renderToastHelper';
+import { AxiosError } from 'axios';
 
 interface UserModalProps {
     onClose: () => void;
@@ -12,10 +14,13 @@ interface UserModalProps {
 }
 
 export const UserModal = ({ onClose, user, updateData }: UserModalProps): JSX.Element => {
+    const [hasServerError, setHasServerError] = useState<boolean>(false);
     const initialUserData: IUserData = {
         username: user?.username || '',
         password: '',
     };
+
+    const { handleShowToast } = useToast();
 
     const [userData] = useState<IUserData>(initialUserData);
 
@@ -32,10 +37,30 @@ export const UserModal = ({ onClose, user, updateData }: UserModalProps): JSX.El
             try {
                 const params: [string, string, string?] = [username, password];
                 if (user?.useruid) params.push(user.useruid);
-                await createOrUpdateUser(...params);
-                onClose();
-                updateData && updateData();
-            } catch (ex) {
+                const responseData = await createOrUpdateUser(...params);
+
+                const message =
+                    params.length > 2
+                        ? `User password successfully updated`
+                        : `User ${username} successfully created`;
+
+                if (!responseData.error) {
+                    handleShowToast({
+                        message,
+                        type: 'success',
+                    });
+                    onClose();
+                    updateData && updateData();
+                } else {
+                    setHasServerError(responseData.error);
+                    setTimeout(() => {
+                        setHasServerError(false);
+                    }, TOAST_DURATION);
+                    throw new Error(responseData.error);
+                }
+            } catch (err) {
+                const { message } = err as Error | AxiosError;
+                handleShowToast({ message, type: 'danger' });
             } finally {
                 setSubmitting(false);
             }

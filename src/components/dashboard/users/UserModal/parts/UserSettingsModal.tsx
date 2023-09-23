@@ -1,7 +1,9 @@
-import { ChangeEvent, useCallback, useEffect, useState } from 'react';
-import { getUserSettings, setUserSettings } from 'components/dashboard/users/user.service';
+import { AxiosError } from 'axios';
 import { convertToNumberIfNumeric, deepEqual } from 'components/dashboard/helpers/common';
+import { useToast } from 'components/dashboard/helpers/renderToastHelper';
 import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton';
+import { useState, useEffect, useCallback, ChangeEvent } from 'react';
+import { getUserSettings, setUserSettings, Status } from '../../user.service';
 
 interface UserSettingsModalProps {
     onClose: () => void;
@@ -14,6 +16,8 @@ export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps):
     const [allSettings, setAllSettings] = useState<any>({});
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
+
+    const { handleShowToast } = useToast();
 
     useEffect(() => {
         setIsLoading(true);
@@ -49,19 +53,25 @@ export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps):
         [settings]
     );
 
-    const handleSetUserSettings = (): void => {
+    const handleSetUserSettings = async (): Promise<void> => {
         setIsLoading(true);
-        if (useruid) {
-            const newSettings = { ...allSettings, settings };
-            setUserSettings(useruid, newSettings).then((response) => {
-                try {
-                    response.status = 200;
+        try {
+            if (useruid) {
+                const newSettings = { ...allSettings, settings };
+                const response = await setUserSettings(useruid, newSettings);
+                if (response.status === Status.OK) {
+                    handleShowToast({
+                        message: 'User settings successfully saved',
+                        type: 'success',
+                    });
                     onClose();
-                } catch (error) {
-                } finally {
-                    setIsLoading(false);
                 }
-            });
+            }
+        } catch (error) {
+            const { message } = error as Error | AxiosError;
+            handleShowToast({ message, type: 'danger' });
+        } finally {
+            setIsLoading(false);
         }
     };
 
