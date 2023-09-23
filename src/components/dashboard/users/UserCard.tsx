@@ -15,7 +15,7 @@ import {
     listUserLogins,
     listUserSessions,
     setUserPermissions,
-} from 'components/dashboard/users/api/user.service';
+} from 'components/dashboard/users/user.service';
 import { TabDataWrapper, TabNavigate, TabPanel } from 'components/dashboard/helpers/helpers';
 import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton';
 

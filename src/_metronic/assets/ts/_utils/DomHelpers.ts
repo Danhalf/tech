@@ -1,4 +1,3 @@
-import { OffsetModel } from './models/OffsetModel';
 import { ViewPortModel } from './models/ViewPortModel';
 import { ElementStyleUtil } from './_ElementStyleUtil';
 import { DataUtil } from './_DataUtil';
@@ -52,7 +51,6 @@ export function getElementActualHeight(el: HTMLElement) {
     return getElementActualCss(el, 'height', false);
 }
 
-// https://developer.mozilla.org/en-US/docs/Web/API/Element/matches
 export function getElementMatches(element: HTMLElement, selector: string) {
     const p = Element.prototype;
     const f = p.matches || p.webkitMatchesSelector;
@@ -62,59 +60,6 @@ export function getElementMatches(element: HTMLElement, selector: string) {
     } else {
         return false;
     }
-}
-
-export function getElementOffset(el: HTMLElement): OffsetModel {
-    // Return zeros for disconnected and hidden (display: none) elements (gh-2310)
-    // Support: IE <=11 only
-    // Running getBoundingClientRect on a
-    // disconnected node in IE throws an error
-    if (!el.getClientRects().length) {
-        return { top: 0, left: 0 };
-    }
-
-    // Get document-relative position by adding viewport scroll to viewport-relative gBCR
-    const rect = el.getBoundingClientRect();
-    const win = el.ownerDocument.defaultView;
-    if (win) {
-        return {
-            top: rect.top + win.pageYOffset,
-            left: rect.left + win.pageXOffset,
-        };
-    }
-
-    return rect;
-}
-
-export function getElementParents(element: Element, selector: string) {
-    // Element.matches() polyfill
-    if (!Element.prototype.matches) {
-        Element.prototype.matches = function (s) {
-            const matches = (document || this.ownerDocument).querySelectorAll(s);
-            let i = matches.length;
-            while (--i >= 0 && matches.item(i) !== this) {}
-            return i > -1;
-        };
-    }
-
-    // Set up a parent array
-    const parents: Array<Element> = [];
-
-    let el: Element | null = element;
-
-    // Push each parent element to the array
-    for (; el && el !== document.body; el = el.parentElement) {
-        if (selector) {
-            if (el.matches(selector)) {
-                parents.push(el);
-            }
-            continue;
-        }
-        parents.push(el);
-    }
-
-    // Return our parent array
-    return parents;
 }
 
 export function getHighestZindex(el: HTMLElement) {
@@ -142,7 +87,6 @@ export function getHighestZindex(el: HTMLElement) {
     return null;
 }
 
-// https://developer.mozilla.org/en-US/docs/Web/API/Window/innerWidth
 export function getViewPort(): ViewPortModel {
     return {
         width: window.innerWidth,
@@ -154,22 +98,10 @@ export function insertAfterElement(el: HTMLElement, referenceNode: HTMLElement) 
     return referenceNode.parentNode?.insertBefore(el, referenceNode.nextSibling);
 }
 
-export function isElementHasClasses(element: HTMLElement, classesStr: string): boolean {
-    const classes = classesStr.split(' ');
-    for (let i = 0; i < classes.length; i++) {
-        if (!element.classList.contains(classes[i])) {
-            return false;
-        }
-    }
-
-    return true;
-}
-
 export function isVisibleElement(element: HTMLElement): boolean {
     return !(element.offsetWidth === 0 && element.offsetHeight === 0);
 }
 
-// Throttle function: Input as function which needs to be throttled and delay is the time interval in milliseconds
 export function throttle(timer: number | undefined, func: Function, delay?: number) {
     // If setTimeout is already scheduled, no need to do anything
     if (timer) {
@@ -209,17 +141,6 @@ export function getElementChildren(
 export function getElementChild(element: HTMLElement, selector: string): HTMLElement | null {
     const children = getElementChildren(element, selector);
     return children ? children[0] : null;
-}
-
-export function isMobileDevice(): boolean {
-    let test = getViewPort().width < +getBreakpoint('lg') ? true : false;
-
-    if (test === false) {
-        // For use within normal web clients
-        test = navigator.userAgent.match(/iPad/i) != null;
-    }
-
-    return test;
 }
 
 export function slide(el: HTMLElement, dir: string, speed: number, callback: any) {

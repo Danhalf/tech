@@ -1,5 +1,5 @@
 import { ChangeEvent, useCallback, useEffect, useState } from 'react';
-import { getUserSettings, setUserSettings } from 'components/dashboard/users/api/user.service';
+import { getUserSettings, setUserSettings } from 'components/dashboard/users/user.service';
 import { convertToNumberIfNumeric, deepEqual } from 'components/dashboard/helpers/common';
 import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton';
 

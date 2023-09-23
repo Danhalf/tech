@@ -1,17 +1,19 @@
-import axios, { AxiosResponse } from 'axios';
+import axios from 'axios';
 import { getToken } from 'common/utils';
 import { API_URL } from 'common/app-consts';
 import { ActionStatus } from 'common/interfaces/IActionStatus';
-import { User, UserQuery } from '../types/Users.types';
 
-// fix it
-export const getTotalUsersRecords = (uid = 0): Promise<{ status: string; total: number }> => {
-    return axios
-        .get(`${API_URL}user/${uid}/list?total=1`, {
-            headers: { Authorization: `Bearer ${getToken()}` },
-        })
-        .then((response) => response.data);
-};
+export interface User {
+    created: string;
+    createdbyuid: string;
+    index: number;
+    parentuid: string;
+    parentusername: string;
+    updated: string;
+    username: string;
+    useruid: string;
+    isAdmin: number;
+}
 
 export const createOrUpdateUser = (loginname: string, loginpassword: string, uid: string = '0') => {
     return axios.post(
@@ -45,18 +47,20 @@ export const setUserOptionalData = (uid: string, data: any) => {
     );
 };
 
-export const getUsers = (query?: UserQuery): Promise<AxiosResponse<User[], any>> => {
-    return axios.get<User[]>(`${API_URL}user/0/list`, {
-        headers: { Authorization: `Bearer ${getToken()}` },
-        params: query,
-    });
+export const getUsers = () => {
+    return axios
+        .get<User[]>(`${API_URL}user/0/list`, {
+            headers: { Authorization: `Bearer ${getToken()}` },
+        })
+        .then((response) => response.data);
 };
 
-export const getDeletedUsers = (query?: string): Promise<AxiosResponse<User[], any>> => {
-    return axios.get<User[]>(`${API_URL}user/0/listdeleted`, {
-        headers: { Authorization: `Bearer ${getToken()}` },
-        params: query,
-    });
+export const getDeletedUsers = () => {
+    return axios
+        .get<User[]>(`${API_URL}user/0/listdeleted`, {
+            headers: { Authorization: `Bearer ${getToken()}` },
+        })
+        .then((response) => response.data);
 };
 
 export const deleteUser = (uid: string) => {

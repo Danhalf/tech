@@ -2,28 +2,22 @@ import clsx from 'clsx';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useState } from 'react';
-import { createOrUpdateUser } from 'components/dashboard/users/api/user.service';
-import { UserInputData } from '../types/Users.types';
+import { IUserData } from 'common/interfaces/IUserData';
+import { createOrUpdateUser, User } from 'components/dashboard/users/user.service';
 
 interface UserModalProps {
     onClose: () => void;
-    username?: string;
-    useruid?: string;
+    user?: User;
     updateData?: () => void;
 }
 
-export const UserModal = ({
-    onClose,
-    username,
-    useruid,
-    updateData,
-}: UserModalProps): JSX.Element => {
-    const initialUserData: UserInputData = {
-        username: username || '',
+export const UserModal = ({ onClose, user, updateData }: UserModalProps): JSX.Element => {
+    const initialUserData: IUserData = {
+        username: user?.username || '',
         password: '',
     };
 
-    const [userData] = useState<UserInputData>(initialUserData);
+    const [userData] = useState<IUserData>(initialUserData);
 
     const addUserSchema = Yup.object().shape({
         username: Yup.string().trim().required('Username is required'),
@@ -37,7 +31,7 @@ export const UserModal = ({
             setSubmitting(true);
             try {
                 const params: [string, string, string?] = [username, password];
-                if (useruid) params.push(useruid);
+                if (user?.useruid) params.push(user.useruid);
                 await createOrUpdateUser(...params);
                 onClose();
                 updateData && updateData();
@@ -69,7 +63,7 @@ export const UserModal = ({
                             type='text'
                             name='username'
                             autoComplete='off'
-                            disabled={Boolean(username)}
+                            disabled={Boolean(user)}
                         />
                         {formik.touched.username && formik.errors.username && (
                             <div className='fv-plugins-message-container'>
