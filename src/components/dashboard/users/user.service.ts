@@ -11,7 +11,7 @@ export interface User {
     updated: string;
     username: string;
     useruid: string;
-    isAdmin: number;
+    isadmin: number;
 }
 
 export enum Status {
