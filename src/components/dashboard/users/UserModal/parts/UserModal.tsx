@@ -13,26 +13,42 @@ interface UserModalProps {
     updateData?: () => void;
 }
 
+interface UserModalData extends IUserData {
+    confirmPassword: '';
+}
+
 export const UserModal = ({ onClose, user, updateData }: UserModalProps): JSX.Element => {
     const [hasServerError, setHasServerError] = useState<boolean>(false);
-    const initialUserData: IUserData = {
+    const initialUserData: UserModalData = {
         username: user?.username || '',
         password: '',
+        confirmPassword: '',
     };
 
     const { handleShowToast } = useToast();
 
-    const [userData] = useState<IUserData>(initialUserData);
-
     const addUserSchema = Yup.object().shape({
         username: Yup.string().trim().required('Username is required'),
         password: Yup.string().trim().required('Password is required'),
+        confirmPassword: Yup.string()
+            .trim()
+            .oneOf([Yup.ref('password')], 'Passwords must match')
+            .required('Password confirmation is required'),
     });
 
     const formik = useFormik({
-        initialValues: userData,
+        initialValues: initialUserData,
         validationSchema: addUserSchema,
-        onSubmit: async ({ username, password }, { setSubmitting }) => {
+        onSubmit: async ({ username, password, confirmPassword }, { setSubmitting }) => {
+            if (password !== confirmPassword) {
+                handleShowToast({
+                    message: 'Passwords do not match',
+                    type: 'danger',
+                });
+                setSubmitting(false);
+                return;
+            }
+
             setSubmitting(true);
             try {
                 const params: [string, string, string?] = [username, password];
@@ -119,6 +135,36 @@ export const UserModal = ({ onClose, user, updateData }: UserModalProps): JSX.El
                                 <div className='fv-help-block'>
                                     <span role='alert'>{formik.errors.password}</span>
                                 </div>
+                            </div>
+                        )}
+                    </div>
+
+                    <div className='fv-row mb-8'>
+                        <label className='form-label fs-6 fw-bolder text-dark'>
+                            Password Confirmation
+                        </label>
+                        <input
+                            type='password'
+                            placeholder='Confirm Password'
+                            autoComplete='off'
+                            {...formik.getFieldProps('confirmPassword')}
+                            className={clsx(
+                                'form-control',
+                                {
+                                    'is-invalid':
+                                        formik.touched.confirmPassword &&
+                                        formik.errors.confirmPassword,
+                                },
+                                {
+                                    'is-valid':
+                                        formik.touched.confirmPassword &&
+                                        !formik.errors.confirmPassword,
+                                }
+                            )}
+                        />
+                        {formik.touched.confirmPassword && formik.errors.confirmPassword && (
+                            <div className='fv-plugins-message-container'>
+                                <span role='alert'>{formik.errors.confirmPassword}</span>
                             </div>
                         )}
                     </div>
