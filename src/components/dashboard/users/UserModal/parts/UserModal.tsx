@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
-import { useState } from 'react';
+import { HTMLInputTypeAttribute, useState } from 'react';
 import { IUserData } from 'common/interfaces/IUserData';
 import { createOrUpdateUser, User } from 'components/dashboard/users/user.service';
 import { TOAST_DURATION, useToast } from 'components/dashboard/helpers/renderToastHelper';
@@ -17,8 +17,22 @@ interface UserModalData extends IUserData {
     confirmPassword: '';
 }
 
+// eslint-disable-next-line no-unused-vars
+enum PassIcon {
+    // eslint-disable-next-line no-unused-vars
+    show = 'ki-eye',
+    // eslint-disable-next-line no-unused-vars
+    hidden = 'ki-eye-slash',
+}
+
 export const UserModal = ({ onClose, user, updateData }: UserModalProps): JSX.Element => {
-    const [hasServerError, setHasServerError] = useState<boolean>(false);
+    const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
+    const [passwordFieldType, setPasswordFieldType] = useState<HTMLInputTypeAttribute>('password');
+    const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState<boolean>(false);
+    const [confirmPasswordFieldType, setConfirmPasswordFieldType] =
+        useState<HTMLInputTypeAttribute>('password');
+    const [, setHasServerError] = useState<boolean>(false);
+
     const initialUserData: UserModalData = {
         username: user?.username || '',
         password: '',
@@ -26,6 +40,32 @@ export const UserModal = ({ onClose, user, updateData }: UserModalProps): JSX.El
     };
 
     const { handleShowToast } = useToast();
+
+    const handleChangePasswordVisible = () => {
+        switch (isPasswordVisible) {
+            case true:
+                setPasswordFieldType('password');
+                setIsPasswordVisible(false);
+                break;
+            case false:
+                setPasswordFieldType('text');
+                setIsPasswordVisible(true);
+                break;
+        }
+    };
+
+    const handleChangeConfirmPasswordVisible = () => {
+        switch (isConfirmPasswordVisible) {
+            case true:
+                setConfirmPasswordFieldType('password');
+                setIsConfirmPasswordVisible(false);
+                break;
+            case false:
+                setConfirmPasswordFieldType('text');
+                setIsConfirmPasswordVisible(true);
+                break;
+        }
+    };
 
     const addUserSchema = Yup.object().shape({
         username: Yup.string().trim().required('Username is required'),
@@ -113,60 +153,82 @@ export const UserModal = ({ onClose, user, updateData }: UserModalProps): JSX.El
                         )}
                     </div>
 
-                    <div className='fv-row mb-8'>
+                    <div className='fv-row mb-10 position-relative'>
                         <label className='form-label fw-bolder text-dark fs-6 mb-0'>Password</label>
                         <input
-                            type='password'
+                            type={passwordFieldType}
                             placeholder='Password'
                             autoComplete='off'
                             {...formik.getFieldProps('password')}
                             className={clsx(
-                                'form-control',
+                                'form-control bg-transparent',
                                 {
-                                    'is-invalid': formik.touched.password && formik.errors.password,
+                                    'border-danger':
+                                        formik.touched.password && formik.errors.password,
                                 },
                                 {
-                                    'is-valid': formik.touched.password && !formik.errors.password,
+                                    'border-success':
+                                        formik.touched.password && !formik.errors.password,
                                 }
                             )}
                         />
                         {formik.touched.password && formik.errors.password && (
-                            <div className='fv-plugins-message-container'>
+                            <div className='fv-plugins-message-container position-absolute'>
                                 <div className='fv-help-block'>
                                     <span role='alert'>{formik.errors.password}</span>
                                 </div>
                             </div>
                         )}
+
+                        <i
+                            className={clsx(
+                                `ki-outline fs-2 ${
+                                    isPasswordVisible ? PassIcon.show : PassIcon.hidden
+                                } position-absolute end-0 top-50 px-3 cursor-pointer text-hover-primary`
+                            )}
+                            onClick={handleChangePasswordVisible}
+                        />
                     </div>
 
-                    <div className='fv-row mb-8'>
-                        <label className='form-label fs-6 fw-bolder text-dark'>
+                    <div className='fv-row mb-10 position-relative'>
+                        <label className='form-label fw-bolder text-dark fs-6 mb-0'>
                             Password Confirmation
                         </label>
                         <input
-                            type='password'
+                            type={confirmPasswordFieldType}
                             placeholder='Confirm Password'
                             autoComplete='off'
                             {...formik.getFieldProps('confirmPassword')}
                             className={clsx(
-                                'form-control',
+                                'form-control bg-transparent',
                                 {
-                                    'is-invalid':
+                                    'border-danger':
                                         formik.touched.confirmPassword &&
                                         formik.errors.confirmPassword,
                                 },
                                 {
-                                    'is-valid':
+                                    'border-success':
                                         formik.touched.confirmPassword &&
                                         !formik.errors.confirmPassword,
                                 }
                             )}
                         />
                         {formik.touched.confirmPassword && formik.errors.confirmPassword && (
-                            <div className='fv-plugins-message-container'>
-                                <span role='alert'>{formik.errors.confirmPassword}</span>
+                            <div className='fv-plugins-message-container position-absolute'>
+                                <div className='fv-help-block'>
+                                    <span role='alert'>{formik.errors.confirmPassword}</span>
+                                </div>
                             </div>
                         )}
+
+                        <i
+                            className={clsx(
+                                `ki-outline fs-2 ${
+                                    isConfirmPasswordVisible ? PassIcon.show : PassIcon.hidden
+                                } position-absolute end-0 top-50 px-3 cursor-pointer text-hover-primary`
+                            )}
+                            onClick={handleChangeConfirmPasswordVisible}
+                        />
                     </div>
                 </div>
                 <div className='text-center pt-15'>
