@@ -5,6 +5,9 @@ import { Microservice, stopService } from './service';
 import { Link } from 'react-router-dom';
 import { TableHead } from 'components/dashboard/helpers/renderTableHelper';
 import { CustomDropdown } from 'components/dashboard/helpers/renderDropdownHelper';
+import { Status } from '../users/user.service';
+import { AxiosError } from 'axios';
+import { useToast } from '../helpers/renderToastHelper';
 
 enum MicroserviceColumns {
     ID = 'Index',
@@ -17,6 +20,9 @@ const microserviceColumnsArray: string[] = Object.values(MicroserviceColumns) as
 export const Microservices = () => {
     const [listOfServices, setListOfServices] = useState<Microservice[]>([]);
     const [loaded, setLoaded] = useState<boolean>(false);
+
+    const { handleShowToast } = useToast();
+
     useEffect(() => {
         if (!loaded) {
             MicroservicesService.listServices().then((response) => {
@@ -26,8 +32,21 @@ export const Microservices = () => {
         }
     });
 
-    const stop = (uid: string) => {
-        stopService(uid).then();
+    const handleStopService = async (uid: string): Promise<void> => {
+        try {
+            if (uid) {
+                const response = await stopService(uid);
+                if (response.status === Status.OK) {
+                    handleShowToast({
+                        message: 'Microservice successfully stopped',
+                        type: 'success',
+                    });
+                }
+            }
+        } catch (err) {
+            const { message } = err as Error | AxiosError;
+            handleShowToast({ message, type: 'danger' });
+        }
     };
 
     return (
@@ -56,7 +75,8 @@ export const Microservices = () => {
                                                     items={[
                                                         {
                                                             menuItemName: 'Restart',
-                                                            menuItemAction: () => stop(service.uid),
+                                                            menuItemAction: () =>
+                                                                handleStopService(service.uid),
                                                         },
                                                     ]}
                                                 />

@@ -2,28 +2,27 @@ import clsx from 'clsx';
 import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { useState } from 'react';
-import { createOrUpdateUser } from 'components/dashboard/users/api/user.service';
-import { UserInputData } from '../types/Users.types';
+import { IUserData } from 'common/interfaces/IUserData';
+import { createOrUpdateUser, User } from 'components/dashboard/users/user.service';
+import { TOAST_DURATION, useToast } from 'components/dashboard/helpers/renderToastHelper';
+import { AxiosError } from 'axios';
 
 interface UserModalProps {
     onClose: () => void;
-    username?: string;
-    useruid?: string;
+    user?: User;
     updateData?: () => void;
 }
 
-export const UserModal = ({
-    onClose,
-    username,
-    useruid,
-    updateData,
-}: UserModalProps): JSX.Element => {
-    const initialUserData: UserInputData = {
-        username: username || '',
+export const UserModal = ({ onClose, user, updateData }: UserModalProps): JSX.Element => {
+    const [hasServerError, setHasServerError] = useState<boolean>(false);
+    const initialUserData: IUserData = {
+        username: user?.username || '',
         password: '',
     };
 
-    const [userData] = useState<UserInputData>(initialUserData);
+    const { handleShowToast } = useToast();
+
+    const [userData] = useState<IUserData>(initialUserData);
 
     const addUserSchema = Yup.object().shape({
         username: Yup.string().trim().required('Username is required'),
@@ -37,11 +36,31 @@ export const UserModal = ({
             setSubmitting(true);
             try {
                 const params: [string, string, string?] = [username, password];
-                if (useruid) params.push(useruid);
-                await createOrUpdateUser(...params);
-                onClose();
-                updateData && updateData();
-            } catch (ex) {
+                if (user?.useruid) params.push(user.useruid);
+                const responseData = await createOrUpdateUser(...params);
+
+                const message =
+                    params.length > 2
+                        ? `User password successfully updated`
+                        : `User ${username} successfully created`;
+
+                if (!responseData.error) {
+                    handleShowToast({
+                        message,
+                        type: 'success',
+                    });
+                    onClose();
+                    updateData && updateData();
+                } else {
+                    setHasServerError(responseData.error);
+                    setTimeout(() => {
+                        setHasServerError(false);
+                    }, TOAST_DURATION);
+                    throw new Error(responseData.error);
+                }
+            } catch (err) {
+                const { message } = err as Error | AxiosError;
+                handleShowToast({ message, type: 'danger' });
             } finally {
                 setSubmitting(false);
             }
@@ -69,7 +88,7 @@ export const UserModal = ({
                             type='text'
                             name='username'
                             autoComplete='off'
-                            disabled={Boolean(username)}
+                            disabled={Boolean(user)}
                         />
                         {formik.touched.username && formik.errors.username && (
                             <div className='fv-plugins-message-container'>
