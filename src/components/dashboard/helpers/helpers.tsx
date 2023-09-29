@@ -3,6 +3,7 @@ import { PropsWithChildren, useState } from 'react';
 import { ITabValues } from 'common/interfaces/ITabValues';
 import { CustomCheckbox } from 'components/dashboard/helpers/renderInputsHelper';
 import { renderTable } from 'components/dashboard/helpers/renderTableHelper';
+import { renamedKeys } from 'common/app-consts';
 
 interface IRenderListArgs {
     data: string[] | string;
@@ -22,10 +23,6 @@ export const renderList = ({ data, checkbox, action }: IRenderListArgs) => {
     const properties = Object.entries(data);
 
     return properties.map(([key, value]: [string, any], index: number) => {
-        const title = key.replace(/^[^a-zа-яё]*([a-zа-яё])/i, (letter: string) =>
-            letter.toUpperCase()
-        );
-
         if (typeof value === 'object' && value !== null) {
             if (Array.isArray(value)) {
                 return <div key={`${key}-${index}`}>{renderTable(value)}</div>;
@@ -33,6 +30,7 @@ export const renderList = ({ data, checkbox, action }: IRenderListArgs) => {
             return <div key={`${key}-${index}`}>{renderList({ data: value })}</div>;
         } else {
             const activeCheckbox = checkbox && (Number(value) === 0 || Number(value) === 1);
+            const title = renamedKeys[key] || key;
             return activeCheckbox ? (
                 <CustomCheckbox
                     key={key}

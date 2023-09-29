@@ -4,6 +4,7 @@ import { useToast } from 'components/dashboard/helpers/renderToastHelper';
 import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton';
 import { useState, useEffect, useCallback, ChangeEvent } from 'react';
 import { getUserSettings, setUserSettings, Status } from '../../user.service';
+import { renamedKeys } from 'common/app-consts';
 
 interface UserSettingsModalProps {
     onClose: () => void;
@@ -83,26 +84,29 @@ export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps):
     return (
         <>
             {settings &&
-                Object.entries(settings).map(([setting, value]: any) => {
-                    return (
-                        <div className='fv-row mb-8' key={setting}>
-                            <label
-                                htmlFor={setting}
-                                className='form-label fs-6 fw-bolder text-dark'
-                            >
-                                {setting}
-                            </label>
-                            <input
-                                disabled={disabledKeys.includes(setting)}
-                                className='form-control bg-transparent'
-                                name={setting}
-                                type={'text'}
-                                value={value}
-                                onChange={handleChangeUserSettings}
-                            />
-                        </div>
-                    );
-                })}
+                (Object.entries(settings) as [string, string | number][]).map(
+                    ([setting, value]) => {
+                        const settingName = renamedKeys[setting] || setting;
+                        return (
+                            <div className='fv-row mb-8' key={setting}>
+                                <label
+                                    htmlFor={setting}
+                                    className='form-label fs-6 fw-bolder text-dark'
+                                >
+                                    {settingName}
+                                </label>
+                                <input
+                                    disabled={disabledKeys.includes(setting)}
+                                    className='form-control bg-transparent'
+                                    name={setting}
+                                    type={'text'}
+                                    value={value}
+                                    onChange={handleChangeUserSettings}
+                                />
+                            </div>
+                        );
+                    }
+                )}
             <PrimaryButton
                 buttonText='Save permissions'
                 icon='check'

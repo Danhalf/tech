@@ -8,6 +8,7 @@ import { deepEqual } from 'components/dashboard/helpers/common';
 import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton';
 import { useToast } from 'components/dashboard/helpers/renderToastHelper';
 import { AxiosError } from 'axios';
+import { renamedKeys } from 'common/app-consts';
 
 interface UserOptionalModalProps {
     onClose: () => void;
@@ -87,26 +88,29 @@ export const UserOptionalModal = ({ onClose, useruid }: UserOptionalModalProps):
         <>
             {optional &&
                 optional.map((option: any, index: number) => {
-                    return Object.entries(option).map(([setting, value]: any) => {
-                        return (
-                            <div className='fv-row mb-8' key={setting}>
-                                <label
-                                    htmlFor={setting}
-                                    className='form-label fs-6 fw-bolder text-dark'
-                                >
-                                    {setting}
-                                </label>
-                                <input
-                                    disabled={disabledKeys.includes(setting)}
-                                    className='form-control bg-transparent'
-                                    name={setting}
-                                    type='text'
-                                    value={value}
-                                    onChange={(event) => handleChangeUserOptional(event, index)}
-                                />
-                            </div>
-                        );
-                    });
+                    return (Object.entries(option) as [string, string | number][]).map(
+                        ([setting, value]) => {
+                            const settingName = renamedKeys[setting] || setting;
+                            return (
+                                <div className='fv-row mb-8' key={setting}>
+                                    <label
+                                        htmlFor={setting}
+                                        className='form-label fs-6 fw-bolder text-dark'
+                                    >
+                                        {settingName}
+                                    </label>
+                                    <input
+                                        disabled={disabledKeys.includes(setting)}
+                                        className='form-control bg-transparent'
+                                        name={setting}
+                                        type='text'
+                                        value={value}
+                                        onChange={(event) => handleChangeUserOptional(event, index)}
+                                    />
+                                </div>
+                            );
+                        }
+                    );
                 })}
             <PrimaryButton
                 buttonText='Save user optional data'

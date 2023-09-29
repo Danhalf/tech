@@ -219,7 +219,7 @@ export default function Users() {
             {userSettingsModalEnabled && (
                 <CustomModal
                     onClose={() => setUserSettingsModalEnabled(false)}
-                    title={`${selectedUser.username} user settings: `}
+                    title={`${selectedUser.username} settings: `}
                 >
                     <UserSettingsModal
                         onClose={() => setUserSettingsModalEnabled(false)}
@@ -230,7 +230,7 @@ export default function Users() {
             {userOptionalModalEnabled && (
                 <CustomModal
                     onClose={() => setUserOptionalsModalEnabled(false)}
-                    title={`${selectedUser.username} user settings: `}
+                    title={`${selectedUser.username} optional data: `}
                 >
                     <UserOptionalModal
                         onClose={() => setUserOptionalsModalEnabled(false)}
