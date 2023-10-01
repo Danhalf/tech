@@ -27,7 +27,7 @@ export const getServiceById = (uid: string) => {
 
 export const listServices = () => {
     return axios
-        .get<Microservice[]>(`${API_URL}services/list`, {
+        .get<Microservice[]>(`${API_URL}services/list?type=asc&column=name`, {
             headers: { Authorization: `Bearer ${getToken()}` },
         })
         .then((response) => response.data);

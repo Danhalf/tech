@@ -11,8 +11,9 @@ import { useToast } from '../helpers/renderToastHelper';
 
 enum MicroserviceColumns {
     ID = 'Index',
-    Microservice = 'Microservice',
-    Actions = 'Actions',
+    MICROSERVICE = 'Microservice',
+    STARTED = 'Started',
+    ACTIONS = 'Actions',
 }
 
 const microserviceColumnsArray: string[] = Object.values(MicroserviceColumns) as string[];
@@ -23,12 +24,16 @@ export const Microservices = () => {
 
     const { handleShowToast } = useToast();
 
+    const updateMicroservices = (): void => {
+        MicroservicesService.listServices().then((response) => {
+            setListOfServices(response);
+            setLoaded(true);
+        });
+    };
+
     useEffect(() => {
         if (!loaded) {
-            MicroservicesService.listServices().then((response) => {
-                setListOfServices(response);
-                setLoaded(true);
-            });
+            updateMicroservices();
         }
     });
 
@@ -37,6 +42,7 @@ export const Microservices = () => {
             if (uid) {
                 const response = await stopService(uid);
                 if (response.status === Status.OK) {
+                    updateMicroservices();
                     handleShowToast({
                         message: 'Microservice successfully stopped',
                         type: 'success',
@@ -69,6 +75,7 @@ export const Microservices = () => {
                                                     {service.name}
                                                 </Link>
                                             </td>
+                                            <td className='text-gray-800'>{service.started}</td>
                                             <td>
                                                 <CustomDropdown
                                                     title='Actions'
