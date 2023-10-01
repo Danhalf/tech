@@ -36,7 +36,8 @@ export const renderList = ({ data, checkbox, action }: IRenderListArgs) => {
                     key={key}
                     currentValue={value}
                     id={key}
-                    title={key}
+                    name={key}
+                    title={title}
                     action={action}
                 />
             ) : (
