@@ -17,6 +17,11 @@ export interface Microservice {
     version: string;
 }
 
+type SortParams = {
+    type: 'ASC' | 'DESC';
+    column: 'name';
+};
+
 export const getServiceById = (uid: string) => {
     return axios
         .get<Microservice[]>(`${API_URL}services/${uid}`, {
@@ -25,10 +30,16 @@ export const getServiceById = (uid: string) => {
         .then((response) => response.data[0]);
 };
 
-export const listServices = () => {
+export const listServices = (params?: SortParams) => {
+    const initialParams: SortParams = {
+        column: params?.column || 'name',
+        type: params?.type || 'ASC',
+    };
+
     return axios
         .get<Microservice[]>(`${API_URL}services/list`, {
             headers: { Authorization: `Bearer ${getToken()}` },
+            params: initialParams,
         })
         .then((response) => response.data);
 };
