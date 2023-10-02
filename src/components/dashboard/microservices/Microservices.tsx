@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react';
-import * as MicroservicesService from './service';
-import { Microservice, stopService } from './service';
+import { Microservice, listServices, stopService } from './service';
 import { Link } from 'react-router-dom';
 import { TableHead } from 'components/dashboard/helpers/renderTableHelper';
 import { CustomDropdown } from 'components/dashboard/helpers/renderDropdownHelper';
@@ -25,7 +24,7 @@ export const Microservices = () => {
     const { handleShowToast } = useToast();
 
     const updateMicroservices = (): void => {
-        MicroservicesService.listServices().then((response) => {
+        listServices().then((response) => {
             setListOfServices(response);
             setLoaded(true);
         });
