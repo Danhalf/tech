@@ -2,6 +2,7 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import {
+    Status,
     getAllUIPermissions,
     getAllUITypes,
     getUserExtendedInfo,
@@ -18,6 +19,8 @@ import {
 } from 'components/dashboard/users/user.service';
 import { TabDataWrapper, TabNavigate, TabPanel } from 'components/dashboard/helpers/helpers';
 import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton';
+import { AxiosError } from 'axios';
+import { useToast } from '../helpers/renderToastHelper';
 
 enum UserCardTabs {
     Profile = 'Profile',
@@ -53,7 +56,7 @@ export function UserCard() {
     const [userTypesJSON, setUserTypesJSON] = useState<string>('');
 
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
-    const [buttonPermissionsText, setButtonPermissionsText] = useState<string>('Save permissions');
+    const [username, setUsername] = useState<string>('Save permissions');
     const [initialUserPermissionsJSON, setInitialUserPermissionsJSON] = useState<string>('');
 
     useEffect(() => {
@@ -65,6 +68,7 @@ export function UserCard() {
                 setExtendedInfoJSON(JSON.stringify(response, null, 2));
             });
             getUserShortInfo(id).then((response) => {
+                setUsername(response?.loginname);
                 setShortInfoJSON(JSON.stringify(response, null, 2));
             });
             getUserLocations(id).then((response) => {
@@ -98,6 +102,8 @@ export function UserCard() {
             });
         }
     }, [id]);
+
+    const { handleShowToast } = useToast();
 
     const mutateJson = (jsonString: string, fieldName: string): string => {
         try {
@@ -133,14 +139,22 @@ export function UserCard() {
         if (id) {
             setUserPermissions(id, JSON.parse(userPermissionsJSON)).then((response) => {
                 try {
-                    setButtonPermissionsText('Success!');
+                    if (response.status === Status.OK) {
+                        handleShowToast({
+                            message: `${username} permissions successfully saved`,
+                            type: 'success',
+                        });
+                    }
+                } catch (err) {
+                    const { message } = err as Error | AxiosError;
+                    handleShowToast({ message, type: 'danger' });
+                }
+
+                try {
                     setIsButtonDisabled(true);
                     setInitialUserPermissionsJSON(userPermissionsJSON);
-                    setButtonPermissionsText('Save permissions');
                 } catch (error) {
-                    setButtonPermissionsText('Error!');
                     setIsButtonDisabled(true);
-                    setButtonPermissionsText('Save permissions');
                 }
             });
         }
@@ -191,7 +205,7 @@ export function UserCard() {
                             action={handleChangeUserPermissions}
                         >
                             <PrimaryButton
-                                buttonText={buttonPermissionsText}
+                                buttonText={`Save ${username} permissions`}
                                 icon='check'
                                 disabled={isButtonDisabled}
                                 buttonClickAction={handleSetUserPermissions}

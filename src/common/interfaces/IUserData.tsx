@@ -12,3 +12,14 @@ export interface IUser {
     username: string;
     useruid: string;
 }
+
+export interface ShortUserInfo {
+    firstName: string;
+    lastName: string;
+    loginname: string;
+    middleName: string;
+    status: 'OK' | 'Error';
+    userName: string;
+    useruid: string;
+    warning: string;
+}
