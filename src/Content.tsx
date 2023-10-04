@@ -31,7 +31,7 @@ const Content = () => (
                 <Route path='' element={<Microservices />} />
                 <Route path='microservices/:uid' element={<MicroserviceCard />} />
                 <Route path='users' element={<Users />} />
-                <Route path='users/:id' element={<UserCard />} />
+                <Route path='user/:id' element={<UserCard />} />
             </Route>
         </Routes>
     </div>

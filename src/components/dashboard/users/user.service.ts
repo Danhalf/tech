@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from 'axios';
 import { API_URL } from 'common/app-consts';
+import { ShortUserInfo } from 'common/interfaces/IUserData';
 import { getToken } from 'common/utils';
 
 export interface User {
@@ -147,8 +148,8 @@ export const listSalesPersons = (uid: string): Promise<string> => {
     return fetchApiData<string>('GET', `user/${uid}/salespersons`);
 };
 
-export const getUserShortInfo = (uid: string): Promise<string> => {
-    return fetchApiData<string>('GET', `user/${uid}/username`);
+export const getUserShortInfo = (uid: string): Promise<ShortUserInfo> => {
+    return fetchApiData<ShortUserInfo>('GET', `user/${uid}/username`);
 };
 
 export const getAllUIPermissions = (uid: string): Promise<string> => {
