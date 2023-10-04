@@ -18,6 +18,7 @@ export interface User {
 export enum Status {
     // eslint-disable-next-line no-unused-vars
     OK = 'OK',
+    ERROR = 'Error',
 }
 
 type Method = 'GET' | 'POST';
@@ -36,7 +37,7 @@ type Params = SortParams;
 const fetchApiData = async <T>(
     method: Method,
     url: string,
-    options?: { data?: any; params?: Params }
+    options?: { data?: unknown; params?: Params }
 ): Promise<T> => {
     const headers = { Authorization: `Bearer ${getToken()}` };
     const { data, params } = options || {};
@@ -66,15 +67,15 @@ export const undeleteUser = (uid: string): Promise<ActionStatus> => {
     return fetchApiData<ActionStatus>('POST', `user/${uid}/undelete`);
 };
 
-export const setUserProfile = (uid: string, data: any): Promise<any> => {
+export const setUserProfile = (uid: string, data: unknown): Promise<ActionStatus> => {
     return fetchApiData('POST', `user/${uid}/profile`, { data });
 };
 
-export const copyUser = (srcuid: string): Promise<any> => {
-    return fetchApiData<ActionStatus>('POST', `user/${srcuid}/copyuser`);
+export const copyUser = (uid: string): Promise<ActionStatus> => {
+    return fetchApiData<ActionStatus>('POST', `user/${uid}/copyuser`);
 };
 
-export const setUserOptionalData = (uid: string, data: any): Promise<any> => {
+export const setUserOptionalData = (uid: string, data: unknown): Promise<ActionStatus> => {
     return fetchApiData('POST', `user/${uid}/set`, { data });
 };
 
@@ -96,11 +97,11 @@ export const getDeletedUsers = (params?: SortParams): Promise<User[]> => {
     return fetchApiData<User[]>('GET', `user/0/listdeleted`, { params: initialParams });
 };
 
-export const deleteUser = (uid: string): Promise<any> => {
+export const deleteUser = (uid: string): Promise<ActionStatus> => {
     return fetchApiData<ActionStatus>('POST', `user/${uid}/delete`);
 };
 
-export const setUserPermissions = (uid: string, data: any): Promise<any> => {
+export const setUserPermissions = (uid: string, data: unknown): Promise<ActionStatus> => {
     return fetchApiData('POST', `user/${uid}/permissions`, { data });
 };
 
@@ -120,11 +121,11 @@ export const getUserProfile = (uid: string): Promise<string> => {
     return fetchApiData<string>('GET', `user/${uid}/profile`);
 };
 
-export const setUserSettings = (uid: string, data: any): Promise<any> => {
+export const setUserSettings = (uid: string, data: unknown): Promise<ActionStatus> => {
     return fetchApiData('POST', `user/${uid}/settings`, { data });
 };
 
-export const getUserSettings = (uid: string): Promise<any> => {
+export const getUserSettings = (uid: string): Promise<Record<string, unknown>> => {
     return fetchApiData('GET', `user/${uid}/settings`);
 };
 
@@ -132,7 +133,7 @@ export const listUserSessions = (uid: string): Promise<string> => {
     return fetchApiData<string>('GET', `user/${uid}/sessions`);
 };
 
-export const killSession = (uid: string): Promise<any> => {
+export const killSession = (uid: string): Promise<ActionStatus> => {
     return fetchApiData('POST', `user/${uid}/session`);
 };
 
