@@ -25,13 +25,27 @@ type ActionStatus = {
     status: Status;
 };
 
-const fetchApiData = async <T>(method: Method, url: string, data?: any): Promise<T> => {
+type SortParams = {
+    type: 'ASC' | 'DESC';
+    column: 'username';
+};
+
+type Params = SortParams;
+
+const fetchApiData = async <T>(
+    method: Method,
+    url: string,
+    options?: { data?: any; params?: Params }
+): Promise<T> => {
+    const headers = { Authorization: `Bearer ${getToken()}` };
+    const { data, params } = options || {};
     try {
         const response: AxiosResponse<T> = await axios({
-            method: method,
+            method,
             url: API_URL + url,
-            data: data,
-            headers: { Authorization: `Bearer ${getToken()}` },
+            data,
+            params,
+            headers,
         });
         return response.data;
     } catch (error) {
@@ -44,23 +58,15 @@ export const createOrUpdateUser = (
     loginpassword: string,
     uid: string = '0'
 ): Promise<any> => {
-    return fetchApiData('POST', `user/${uid}/user`, { loginname, loginpassword });
+    return fetchApiData('POST', `user/${uid}/user`, { data: { loginname, loginpassword } });
 };
 
 export const undeleteUser = (uid: string): Promise<ActionStatus> => {
     return fetchApiData<ActionStatus>('POST', `user/${uid}/undelete`);
 };
 
-export const setUserProfile = (uid: string, profile: any): Promise<any> => {
-    return fetchApiData('POST', `user/${uid}/profile`, profile);
-};
-
-export const updateUser = (
-    loginname: string,
-    loginpassword: string,
-    uid: string = '0'
-): Promise<any> => {
-    return fetchApiData('POST', `user/${uid}/user`, { loginname, loginpassword });
+export const setUserProfile = (uid: string, data: any): Promise<any> => {
+    return fetchApiData('POST', `user/${uid}/profile`, { data });
 };
 
 export const copyUser = (srcuid: string): Promise<any> => {
@@ -68,15 +74,25 @@ export const copyUser = (srcuid: string): Promise<any> => {
 };
 
 export const setUserOptionalData = (uid: string, data: any): Promise<any> => {
-    return fetchApiData('POST', `user/${uid}/set`, data);
+    return fetchApiData('POST', `user/${uid}/set`, { data });
 };
 
-export const getUsers = (useruid = '0'): Promise<User[]> => {
-    return fetchApiData<User[]>('GET', `user/${useruid}/list`);
+export const getUsers = (params?: SortParams): Promise<User[]> => {
+    const initialParams: SortParams = {
+        column: params?.column || 'username',
+        type: params?.type || 'ASC',
+    };
+
+    return fetchApiData<User[]>('GET', `user/0/list`, { params: initialParams });
 };
 
-export const getDeletedUsers = (useruid = '0'): Promise<User[]> => {
-    return fetchApiData<User[]>('GET', `user/${useruid}/listdeleted`);
+export const getDeletedUsers = (params?: SortParams): Promise<User[]> => {
+    const initialParams: SortParams = {
+        column: params?.column || 'username',
+        type: params?.type || 'ASC',
+    };
+
+    return fetchApiData<User[]>('GET', `user/0/listdeleted`, { params: initialParams });
 };
 
 export const deleteUser = (uid: string): Promise<any> => {
@@ -84,7 +100,7 @@ export const deleteUser = (uid: string): Promise<any> => {
 };
 
 export const setUserPermissions = (uid: string, data: any): Promise<any> => {
-    return fetchApiData('POST', `user/${uid}/permissions`, data);
+    return fetchApiData('POST', `user/${uid}/permissions`, { data });
 };
 
 export const getUserPermissions = (uid: string): Promise<string> => {
@@ -104,7 +120,7 @@ export const getUserProfile = (uid: string): Promise<string> => {
 };
 
 export const setUserSettings = (uid: string, data: any): Promise<any> => {
-    return fetchApiData('POST', `user/${uid}/settings`, data);
+    return fetchApiData('POST', `user/${uid}/settings`, { data });
 };
 
 export const getUserSettings = (uid: string): Promise<any> => {
