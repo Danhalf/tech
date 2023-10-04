@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
     copyUser,
     deleteUser,
@@ -54,6 +54,8 @@ export default function Users() {
     const [userPermissionsModalEnabled, setUserPermissionsModalEnabled] = useState<boolean>(false);
     const [userSettingsModalEnabled, setUserSettingsModalEnabled] = useState<boolean>(false);
     const [userOptionalModalEnabled, setUserOptionalsModalEnabled] = useState<boolean>(false);
+
+    const navigate = useNavigate();
 
     const { handleShowToast } = useToast();
 
@@ -114,19 +116,25 @@ export default function Users() {
         }
     }, [users, loaded]);
 
-    const handleCopyUser = (srcuid: string) => {
-        copyUser(srcuid).then((response) => {
-            if (response.status === 'OK') {
-                getUsers().then((response) => {
-                    setUsers(response);
-                    setLoaded(true);
-                });
-                getDeletedUsers().then((response) => {
-                    setDeletedUsers(response);
-                    setLoaded(true);
-                });
+    const handleCopyUser = async (useruid: string, username: string): Promise<void> => {
+        setLoaded(false);
+        try {
+            if (useruid) {
+                const response: any = await copyUser(useruid);
+                if (response.status === 'OK') {
+                    const newUseruid = response.useruid;
+                    navigate(`/dashboard/user/${newUseruid}`);
+                    handleShowToast({
+                        message: `${username} successfully copied`,
+                        type: 'success',
+                    });
+                    updateUsers();
+                }
             }
-        });
+        } catch (err) {
+            const { message } = err as Error | AxiosError;
+            handleShowToast({ message, type: 'danger' });
+        }
     };
 
     const handleMoveToTrash = async (userId: string): Promise<void> => {
@@ -276,7 +284,7 @@ export default function Users() {
                                                     <td className='text-gray-800'>{user.index}</td>
                                                     <td>
                                                         <Link
-                                                            to={`${user.useruid}`}
+                                                            to={`/dashboard/user/${user.useruid}`}
                                                             className='text-gray-800 text-hover-primary mb-1 text-decoration-underline'
                                                         >
                                                             {user.username}
@@ -284,7 +292,7 @@ export default function Users() {
                                                     </td>
                                                     <td>
                                                         <Link
-                                                            to={`${user.parentuid}`}
+                                                            to={`/dashboard/user/${user.parentuid}`}
                                                             className='text-gray-800 text-hover-primary mb-1 text-decoration-underline'
                                                         >
                                                             {user.parentusername}
@@ -307,7 +315,8 @@ export default function Users() {
                                                                     menuItemName: 'Copy user',
                                                                     menuItemAction: () =>
                                                                         handleCopyUser(
-                                                                            user.useruid
+                                                                            user.useruid,
+                                                                            user.username
                                                                         ),
                                                                 },
                                                                 {
