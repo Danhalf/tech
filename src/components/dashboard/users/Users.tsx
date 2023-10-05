@@ -109,10 +109,6 @@ export default function Users() {
     useEffect(() => {
         if (!loaded) {
             updateUsers();
-            getDeletedUsers().then((response) => {
-                setDeletedUsers(response);
-                setLoaded(true);
-            });
         }
     }, [users, loaded]);
 
