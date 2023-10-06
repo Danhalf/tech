@@ -1,17 +1,24 @@
+/* eslint-disable no-unused-vars */
 import clsx from 'clsx';
 import { PropsWithChildren, useState } from 'react';
-import { ITabValues } from 'common/interfaces/ITabValues';
 import { CustomCheckbox } from 'components/dashboard/helpers/renderInputsHelper';
 import { renderTable } from 'components/dashboard/helpers/renderTableHelper';
 import { renamedKeys } from 'common/app-consts';
 
-interface IRenderListArgs {
+interface RenderListArgs {
     data: string[] | string;
     checkbox?: boolean;
     action?: (value: [string, number]) => void;
 }
 
-export const renderList = ({ data, checkbox, action }: IRenderListArgs) => {
+interface TabValues {
+    activeTab: string;
+    tabName: string;
+    children: string | JSX.Element | JSX.Element[];
+    tabId?: number;
+}
+
+export const renderList = ({ data, checkbox, action }: RenderListArgs) => {
     if (typeof data !== 'object' || data === null) {
         return (
             <div>
@@ -74,7 +81,7 @@ export const TabNavigate = ({
     </li>
 );
 
-export const TabPanel = ({ activeTab, tabName, children, tabId }: ITabValues) => (
+export const TabPanel = ({ activeTab, tabName, children, tabId }: TabValues) => (
     <div
         className={clsx('tab-pane vw-90 mx-auto', {
             active: activeTab === tabName,
@@ -91,7 +98,7 @@ export const TabDataWrapper = ({
     checkbox,
     action,
     children,
-}: PropsWithChildren<IRenderListArgs>) => {
+}: PropsWithChildren<RenderListArgs>) => {
     enum ViewTypes {
         JSON = 'JSON view',
         GENERAL = 'General view',

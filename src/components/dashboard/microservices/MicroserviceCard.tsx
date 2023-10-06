@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import {
@@ -6,9 +7,9 @@ import {
     getServiceById,
     getServiceCounters,
     getServiceLogs,
-    Microservice,
 } from 'components/dashboard/microservices/service';
 import { TabDataWrapper, TabNavigate, TabPanel } from 'components/dashboard/helpers/helpers';
+import { Microservice } from 'common/interfaces/MicroserviceServerData';
 
 enum MicroserviceTabs {
     State = 'State',

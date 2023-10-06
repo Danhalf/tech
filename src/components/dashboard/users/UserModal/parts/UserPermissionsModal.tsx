@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react';
-import {
-    Status,
-    getUserPermissions,
-    setUserPermissions,
-} from 'components/dashboard/users/user.service';
+import { getUserPermissions, setUserPermissions } from 'components/dashboard/users/user.service';
 import { renderList } from 'components/dashboard/helpers/helpers';
 import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton';
 import { useToast } from 'components/dashboard/helpers/renderToastHelper';
 import { AxiosError } from 'axios';
+import { Status } from 'common/interfaces/ActionStatus';
 
 interface UserPermissionsModalProps {
     onClose: () => void;

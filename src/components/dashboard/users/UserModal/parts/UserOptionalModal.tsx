@@ -1,14 +1,11 @@
 import { ChangeEvent, useCallback, useEffect, useState } from 'react';
-import {
-    Status,
-    getUserLocations,
-    setUserOptionalData,
-} from 'components/dashboard/users/user.service';
+import { getUserLocations, setUserOptionalData } from 'components/dashboard/users/user.service';
 import { deepEqual } from 'components/dashboard/helpers/common';
 import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton';
 import { useToast } from 'components/dashboard/helpers/renderToastHelper';
 import { AxiosError } from 'axios';
 import { renamedKeys } from 'common/app-consts';
+import { Status } from 'common/interfaces/ActionStatus';
 
 interface UserOptionalModalProps {
     onClose: () => void;

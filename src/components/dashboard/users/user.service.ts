@@ -1,43 +1,16 @@
 import axios, { AxiosResponse } from 'axios';
 import { API_URL } from 'common/app-consts';
-import { ShortUserInfo } from 'common/interfaces/IUserData';
+import { ActionStatus } from 'common/interfaces/ActionStatus';
+import { UserSortParams } from 'common/interfaces/QueriesParams';
+import { ShortUserInfo, User } from 'common/interfaces/UserData';
 import { getToken } from 'common/utils';
 
-export interface User {
-    created: string;
-    createdbyuid: string;
-    index: number;
-    parentuid: string;
-    parentusername: string;
-    updated: string;
-    username: string;
-    useruid: string;
-    isadmin: number;
-}
-
-export enum Status {
-    // eslint-disable-next-line no-unused-vars
-    OK = 'OK',
-    ERROR = 'Error',
-}
-
 type Method = 'GET' | 'POST';
-
-type ActionStatus = {
-    status: Status;
-};
-
-type SortParams = {
-    type: 'ASC' | 'DESC';
-    column: 'username';
-};
-
-type Params = SortParams;
 
 const fetchApiData = async <T>(
     method: Method,
     url: string,
-    options?: { data?: unknown; params?: Params }
+    options?: { data?: unknown; params?: UserSortParams }
 ): Promise<T> => {
     const headers = { Authorization: `Bearer ${getToken()}` };
     const { data, params } = options || {};
@@ -79,8 +52,8 @@ export const setUserOptionalData = (uid: string, data: unknown): Promise<ActionS
     return fetchApiData('POST', `user/${uid}/set`, { data });
 };
 
-export const getUsers = (params?: SortParams): Promise<User[]> => {
-    const initialParams: SortParams = {
+export const getUsers = (params?: UserSortParams): Promise<User[]> => {
+    const initialParams: UserSortParams = {
         column: params?.column || 'username',
         type: params?.type || 'ASC',
     };
@@ -88,8 +61,8 @@ export const getUsers = (params?: SortParams): Promise<User[]> => {
     return fetchApiData<User[]>('GET', `user/0/list`, { params: initialParams });
 };
 
-export const getDeletedUsers = (params?: SortParams): Promise<User[]> => {
-    const initialParams: SortParams = {
+export const getDeletedUsers = (params?: UserSortParams): Promise<User[]> => {
+    const initialParams: UserSortParams = {
         column: params?.column || 'username',
         type: params?.type || 'ASC',
     };
@@ -163,4 +136,8 @@ export const getAllUITypes = (uid: string): Promise<string> => {
 
 export const clearCache = (): Promise<string[]> => {
     return fetchApiData<string[]>('GET', 'user/updateall');
+};
+
+export const getTotalUsersRecords = (): Promise<{ status: string; total: number }> => {
+    return fetchApiData<{ status: string; total: number }>('GET', `user/0/list?total=1`);
 };
