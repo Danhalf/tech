@@ -44,7 +44,7 @@ export const UserActionsCell = ({ useruid, username }: User) => {
         try {
             if (useruid) {
                 const response: any = await copyUser(useruid);
-                if (response.status === 'OK') {
+                if (response.status === Status.OK) {
                     const newUseruid = response.useruid;
                     navigate(`/dashboard/user/${newUseruid}`);
                     handleShowToast({
