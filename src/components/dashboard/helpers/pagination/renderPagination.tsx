@@ -4,22 +4,18 @@ import { useEffect, useState } from 'react';
 import { useQueryResponseLoading } from 'common/core/QueryResponseProvider';
 import { useQueryRequest } from 'common/core/QueryRequestProvider';
 import { initialQueryState } from '_metronic/helpers';
-import { getTotalUsersRecords } from 'components/dashboard/users/user.service';
 import { UsersListType } from 'common/interfaces/UserData';
 
-export const UsersListPagination = ({ list }: { list: UsersListType }) => {
-    const [totalRecords, setTotalRecords] = useState<number>(0);
+interface UsersListPaginationProps {
+    list: UsersListType, totalRecords: number
+}
+
+export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationProps) => {
 
     const [currentpage, setCurrentPage] = useState<number>(0);
     const isLoading = useQueryResponseLoading(list);
 
     const { state, updateState } = useQueryRequest();
-
-    useEffect(() => {
-        getTotalUsersRecords().then(({ total }) => {
-            setTotalRecords(total);
-        });
-    }, []);
 
     const recordsPerPage = initialQueryState.count;
 

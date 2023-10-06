@@ -51,7 +51,6 @@ export const UserActionsCell = ({ useruid, username }: User) => {
                         message: `${username} successfully copied`,
                         type: 'success',
                     });
-                    // updateUsers();
                 }
             }
         } catch (err) {
@@ -69,7 +68,6 @@ export const UserActionsCell = ({ useruid, username }: User) => {
                         message: 'User successfully deleted',
                         type: 'success',
                     });
-                    // updateUsers();
                 }
             }
         } catch (err) {
@@ -87,7 +85,6 @@ export const UserActionsCell = ({ useruid, username }: User) => {
                         message: 'User session successfully closed',
                         type: 'success',
                     });
-                    // updateUsers();
                 }
             }
         } catch (err) {
@@ -171,7 +168,7 @@ export const UserActionsCell = ({ useruid, username }: User) => {
                     },
                     {
                         menuItemName: 'Kill user session',
-                        menuItemAction: () => killSession(useruid),
+                        menuItemAction: () => handleKillSession(),
                     },
                 ]}
             />

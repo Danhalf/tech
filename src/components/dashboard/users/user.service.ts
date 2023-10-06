@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import { API_URL } from 'common/app-consts';
 import { ActionStatus } from 'common/interfaces/ActionStatus';
 import { UserSortParams } from 'common/interfaces/QueriesParams';
-import { ShortUserInfo, User } from 'common/interfaces/UserData';
+import { ShortUserInfo, User, UsersListType } from 'common/interfaces/UserData';
 import { getToken } from 'common/utils';
 
 type Method = 'GET' | 'POST';
@@ -138,6 +138,6 @@ export const clearCache = (): Promise<string[]> => {
     return fetchApiData<string[]>('GET', 'user/updateall');
 };
 
-export const getTotalUsersRecords = (): Promise<{ status: string; total: number }> => {
-    return fetchApiData<{ status: string; total: number }>('GET', `user/0/list?total=1`);
+export const getTotalUsersRecords = (list: 'list' | 'listdeleted'): Promise<{ status: string; total: number }> => {
+    return fetchApiData<{ status: string; total: number }>('GET', `user/0/${list}?total=1`);
 };

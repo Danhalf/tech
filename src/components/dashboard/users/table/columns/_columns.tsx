@@ -1,13 +1,13 @@
-//@ts-nocheck
+// @ts-nocheck
 import { Column } from 'react-table';
 import { UserCustomHeader } from './UserCustomHeader';
 import { UserLinkCell } from './UserLinkCell';
 import { UserActionsCell } from './UserActionsCell';
 import { DeletedUsersActionsCell } from './DeletedUsersActionsCell';
-import { User, UsersListType, UsersType } from '../../types/Users.types';
+import { UsersListType, User, UsersType } from 'common/interfaces/UserData';
 
 export const usersColumns = (list: UsersListType): ReadonlyArray<Column<User>> => {
-    const { Users, DeletedUsers } = UsersType;
+    const { ACTIVE, DELETED } = UsersType;
     return [
         {
             Header: 'Index',
@@ -39,9 +39,9 @@ export const usersColumns = (list: UsersListType): ReadonlyArray<Column<User>> =
             Cell: ({ ...props }) => {
                 const { useruid, username }: User = props.data[props.row.index];
                 switch (list) {
-                    case Users:
+                    case ACTIVE:
                         return <UserActionsCell useruid={useruid} username={username} />;
-                    case DeletedUsers:
+                    case DELETED:
                         return <DeletedUsersActionsCell useruid={useruid} username={username} />;
                 }
             },

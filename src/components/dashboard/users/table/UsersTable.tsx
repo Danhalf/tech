@@ -1,15 +1,29 @@
 import { useQueryResponseData } from 'common/core/QueryResponseProvider';
-import { useMemo } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useTable, ColumnInstance, Row } from 'react-table';
 import { CustomHeaderColumn } from './columns/CustomHeaderColumn';
 import { CustomRow } from './columns/CustomRow';
 import { usersColumns } from './columns/_columns';
 import { UsersListPagination } from 'components/dashboard/helpers/pagination/renderPagination';
-import { QueryState } from '_metronic/helpers';
-import { UsersListType, User } from 'common/interfaces/UserData';
+import { UsersListType, User, UsersType } from 'common/interfaces/UserData';
+import { getTotalUsersRecords } from '../user.service';
 
-export const UsersTable = ({ list }: { list: UsersListType }) => {
+interface UsersTableProps {
+    list: UsersListType
+}
+
+export const UsersTable = ({ list }: UsersTableProps) => {
+    const [totalRecords, setTotalRecords] = useState<number>(0);
+
     const users = useQueryResponseData(list);
+
+    const totalList = list === UsersType.ACTIVE ? 'list' : 'listdeleted';
+
+    useEffect(() => {
+        getTotalUsersRecords(totalList).then(({ total }) => {
+            setTotalRecords(total);
+        });
+    }, []);
 
     const usersData = useMemo(() => users, [users]);
     const columns = useMemo(() => usersColumns(list), [list]);
@@ -50,11 +64,8 @@ export const UsersTable = ({ list }: { list: UsersListType }) => {
                         )}
                     </tbody>
                 </table>
-                <UsersListPagination list={list} />
+                <UsersListPagination list={list} totalRecords={totalRecords} />
             </div>
         </>
     );
 };
-function updateState(initialQueryState: QueryState) {
-    throw new Error('Function not implemented.');
-}
