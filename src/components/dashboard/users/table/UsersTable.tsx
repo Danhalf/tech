@@ -9,7 +9,7 @@ import { UsersListType, User, UsersType } from 'common/interfaces/UserData';
 import { getTotalUsersRecords } from '../user.service';
 
 interface UsersTableProps {
-    list: UsersListType
+    list: UsersListType;
 }
 
 export const UsersTable = ({ list }: UsersTableProps) => {

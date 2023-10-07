@@ -1,4 +1,4 @@
-export type SortType = 'ASC' | 'DESC';
+export type SortType = 'asc' | 'desc';
 
 export interface UserQuery {
     skip?: number;
@@ -10,10 +10,6 @@ export interface UserQuery {
 
 export interface SortParams {
     type: SortType;
-}
-
-export interface UserSortParams extends SortParams {
-    column: 'username';
 }
 
 export interface ServicesSortParams extends SortParams {

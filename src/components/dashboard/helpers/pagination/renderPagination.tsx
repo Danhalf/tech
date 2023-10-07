@@ -7,11 +7,11 @@ import { initialQueryState } from '_metronic/helpers';
 import { UsersListType } from 'common/interfaces/UserData';
 
 interface UsersListPaginationProps {
-    list: UsersListType, totalRecords: number
+    list: UsersListType;
+    totalRecords: number;
 }
 
 export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationProps) => {
-
     const [currentpage, setCurrentPage] = useState<number>(0);
     const isLoading = useQueryResponseLoading(list);
 
@@ -31,56 +31,54 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
     const pageNumbers = Array.from({ length: totalPages }, (_, index) => index);
 
     return (
-        <div className='row'>
-            <div className='col-sm-12 col-md-7 d-flex align-items-center justify-content-center'>
-                <div id='kt_table_users_paginate'>
-                    <ul className='pagination'>
+        <div className='w-100 py-6 col-sm-12 col-md-7 d-flex align-items-center justify-content-center'>
+            <div id='kt_table_users_paginate'>
+                <ul className='pagination'>
+                    <li
+                        className={clsx('page-item previous', {
+                            disabled: isLoading || currentpage === 0,
+                        })}
+                    >
+                        <a
+                            href='#'
+                            className='page-link'
+                            onClick={() => setCurrentPage((prev) => prev - 1)}
+                        >
+                            <i className='previous'></i>
+                        </a>
+                    </li>
+
+                    {pageNumbers.map((pageNumber) => (
                         <li
-                            className={clsx('page-item previous', {
-                                disabled: isLoading || currentpage === 0,
+                            key={pageNumber}
+                            className={clsx('page-item', {
+                                active: pageNumber === currentpage,
                             })}
                         >
                             <a
                                 href='#'
                                 className='page-link'
-                                onClick={() => setCurrentPage((prev) => prev - 1)}
+                                onClick={() => setCurrentPage(pageNumber)}
                             >
-                                <i className='previous'></i>
+                                {pageNumber + 1}
                             </a>
                         </li>
+                    ))}
 
-                        {pageNumbers.map((pageNumber) => (
-                            <li
-                                key={pageNumber}
-                                className={clsx('page-item', {
-                                    active: pageNumber === currentpage,
-                                })}
-                            >
-                                <a
-                                    href='#'
-                                    className='page-link'
-                                    onClick={() => setCurrentPage(pageNumber)}
-                                >
-                                    {pageNumber + 1}
-                                </a>
-                            </li>
-                        ))}
-
-                        <li
-                            className={clsx('page-item next', {
-                                disabled: isLoading || currentpage === totalPages - 1,
-                            })}
+                    <li
+                        className={clsx('page-item next', {
+                            disabled: isLoading || currentpage === totalPages - 1,
+                        })}
+                    >
+                        <a
+                            href='#'
+                            className='page-link'
+                            onClick={() => setCurrentPage((prev) => prev + 1)}
                         >
-                            <a
-                                href='#'
-                                className='page-link'
-                                onClick={() => setCurrentPage((prev) => prev + 1)}
-                            >
-                                <i className='next'></i>
-                            </a>
-                        </li>
-                    </ul>
-                </div>
+                            <i className='next'></i>
+                        </a>
+                    </li>
+                </ul>
             </div>
         </div>
     );

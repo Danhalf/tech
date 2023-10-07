@@ -48,16 +48,14 @@ export const QueryResponseProvider = ({
                 top: state.count || initialQueryState.count,
                 column: state.sort || initialQueryState.sort,
                 qry: state.search || initialQueryState.search,
-                // type: state.order || initialQueryState.order,
+                type: state.order || initialQueryState.order,
             };
 
-            switch (
-                listType
-                // case UsersType.ACTIVE:
-                //     return getUsers({ column: currentQuery.column });
-                // case UsersType.DELETED:
-                //     return getDeletedUsers(query);
-            ) {
+            switch (listType) {
+                case UsersType.ACTIVE:
+                    return getUsers(currentQuery);
+                case UsersType.DELETED:
+                    return getDeletedUsers(currentQuery);
             }
         },
         { cacheTime: 0, keepPreviousData: true, refetchOnWindowFocus: false }
@@ -71,7 +69,7 @@ export const QueryResponseProvider = ({
     }, [updatedQuery]);
 
     const response: Response<User[]> = {
-        // data: axiosResponse && axiosResponse.data,
+        data: axiosResponse,
     };
 
     return (

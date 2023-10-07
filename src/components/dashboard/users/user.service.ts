@@ -1,8 +1,8 @@
 import axios, { AxiosResponse } from 'axios';
 import { API_URL } from 'common/app-consts';
 import { ActionStatus } from 'common/interfaces/ActionStatus';
-import { UserSortParams } from 'common/interfaces/QueriesParams';
-import { ShortUserInfo, User, UsersListType } from 'common/interfaces/UserData';
+import { UserQuery } from 'common/interfaces/QueriesParams';
+import { ShortUserInfo, User } from 'common/interfaces/UserData';
 import { getToken } from 'common/utils';
 
 type Method = 'GET' | 'POST';
@@ -10,7 +10,7 @@ type Method = 'GET' | 'POST';
 const fetchApiData = async <T>(
     method: Method,
     url: string,
-    options?: { data?: unknown; params?: UserSortParams }
+    options?: { data?: unknown; params?: UserQuery }
 ): Promise<T> => {
     const headers = { Authorization: `Bearer ${getToken()}` };
     const { data, params } = options || {};
@@ -52,19 +52,25 @@ export const setUserOptionalData = (uid: string, data: unknown): Promise<ActionS
     return fetchApiData('POST', `user/${uid}/set`, { data });
 };
 
-export const getUsers = (params?: UserSortParams): Promise<User[]> => {
-    const initialParams: UserSortParams = {
+export const getUsers = (params?: UserQuery): Promise<User[]> => {
+    const initialParams: UserQuery = {
         column: params?.column || 'username',
-        type: params?.type || 'ASC',
+        type: params?.type || 'asc',
+        skip: params?.skip || 0,
+        qry: params?.qry || '',
+        top: params?.top || 10,
     };
 
     return fetchApiData<User[]>('GET', `user/0/list`, { params: initialParams });
 };
 
-export const getDeletedUsers = (params?: UserSortParams): Promise<User[]> => {
-    const initialParams: UserSortParams = {
+export const getDeletedUsers = (params?: UserQuery): Promise<User[]> => {
+    const initialParams: UserQuery = {
         column: params?.column || 'username',
-        type: params?.type || 'ASC',
+        type: params?.type || 'asc',
+        skip: params?.skip || 0,
+        qry: params?.qry || '',
+        top: params?.top || 10,
     };
 
     return fetchApiData<User[]>('GET', `user/0/listdeleted`, { params: initialParams });
@@ -138,6 +144,8 @@ export const clearCache = (): Promise<string[]> => {
     return fetchApiData<string[]>('GET', 'user/updateall');
 };
 
-export const getTotalUsersRecords = (list: 'list' | 'listdeleted'): Promise<{ status: string; total: number }> => {
+export const getTotalUsersRecords = (
+    list: 'list' | 'listdeleted'
+): Promise<{ status: string; total: number }> => {
     return fetchApiData<{ status: string; total: number }>('GET', `user/0/${list}?total=1`);
 };

@@ -16,7 +16,7 @@ export const getServiceById = (uid: string) => {
 export const listServices = (params?: ServicesSortParams) => {
     const initialParams: ServicesSortParams = {
         column: params?.column || 'name',
-        type: params?.type || 'ASC',
+        type: params?.type || 'asc',
     };
 
     return axios
