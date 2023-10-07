@@ -20,9 +20,9 @@ interface UserModalData extends UserInputData {
 // eslint-disable-next-line no-unused-vars
 enum PassIcon {
     // eslint-disable-next-line no-unused-vars
-    show = 'ki-eye',
+    SHOW = 'ki-eye',
     // eslint-disable-next-line no-unused-vars
-    hidden = 'ki-eye-slash',
+    HIDDEN = 'ki-eye-slash',
 }
 
 export const UserModal = ({ onClose, user, updateData }: UserModalProps): JSX.Element => {
@@ -183,7 +183,7 @@ export const UserModal = ({ onClose, user, updateData }: UserModalProps): JSX.El
                         <i
                             className={clsx(
                                 `ki-outline fs-2 ${
-                                    isPasswordVisible ? PassIcon.show : PassIcon.hidden
+                                    isPasswordVisible ? PassIcon.SHOW : PassIcon.HIDDEN
                                 } position-absolute end-0 top-50 px-3 cursor-pointer text-hover-primary`
                             )}
                             onClick={handleChangePasswordVisible}
@@ -224,7 +224,7 @@ export const UserModal = ({ onClose, user, updateData }: UserModalProps): JSX.El
                         <i
                             className={clsx(
                                 `ki-outline fs-2 ${
-                                    isConfirmPasswordVisible ? PassIcon.show : PassIcon.hidden
+                                    isConfirmPasswordVisible ? PassIcon.SHOW : PassIcon.HIDDEN
                                 } position-absolute end-0 top-50 px-3 cursor-pointer text-hover-primary`
                             )}
                             onClick={handleChangeConfirmPasswordVisible}

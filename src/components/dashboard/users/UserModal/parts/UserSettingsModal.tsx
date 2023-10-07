@@ -3,9 +3,9 @@ import { convertToNumberIfNumeric, deepEqual } from 'components/dashboard/helper
 import { useToast } from 'components/dashboard/helpers/renderToastHelper';
 import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton';
 import { useState, useEffect, useCallback, ChangeEvent } from 'react';
-import { getUserSettings, setUserSettings } from '../../user.service';
 import { renamedKeys } from 'common/app-consts';
 import { Status } from 'common/interfaces/ActionStatus';
+import { getUserSettings, setUserSettings } from 'components/dashboard/users/user.service';
 
 interface UserSettingsModalProps {
     onClose: () => void;
