@@ -1,7 +1,6 @@
-// @ts-nocheck
+import { User } from 'common/interfaces/UserData';
 import { FC } from 'react';
 import { ColumnInstance } from 'react-table';
-import { User } from '../../core/_models';
 
 type Props = {
     column: ColumnInstance<User>;

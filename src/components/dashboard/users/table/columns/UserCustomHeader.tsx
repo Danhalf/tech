@@ -2,8 +2,8 @@ import clsx from 'clsx';
 import { useQueryRequest } from 'common/core/QueryRequestProvider';
 import { PropsWithChildren, useMemo } from 'react';
 import { HeaderProps } from 'react-table';
-import { SortState } from '_metronic/helpers';
 import { User } from 'common/interfaces/UserData';
+import { SortType, UserSortParams } from 'common/interfaces/QueriesParams';
 
 type Props = {
     className?: string;
@@ -12,17 +12,17 @@ type Props = {
 };
 
 export const UserCustomHeader = ({ className, title, tableProps }: Props) => {
-    const id = tableProps.column.id;
+    const id = tableProps.column.id as UserSortParams['column'];
     const { state, updateState } = useQueryRequest();
 
-    const order: SortState['order'] | undefined = useMemo(() => state.order, [state]);
+    const order: SortType | undefined = useMemo(() => state.order, [state]);
 
     const sortColumn = () => {
-        if (id === 'actions') {
+        if (!id) {
             return;
         }
 
-        let newOrder: SortState['order'] = 'desc';
+        let newOrder: SortType = 'desc';
         if (state.sort === id && state.order === 'desc') {
             newOrder = 'asc';
         }
@@ -30,7 +30,7 @@ export const UserCustomHeader = ({ className, title, tableProps }: Props) => {
         updateState({
             sort: id,
             order: newOrder,
-            currentpage: 1,
+            currentpage: 0,
         });
     };
 

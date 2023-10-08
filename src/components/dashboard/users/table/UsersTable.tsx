@@ -23,7 +23,7 @@ export const UsersTable = ({ list }: UsersTableProps) => {
         getTotalUsersRecords(totalList).then(({ total }) => {
             setTotalRecords(total);
         });
-    }, []);
+    }, [totalList]);
 
     const usersData = useMemo(() => users, [users]);
     const columns = useMemo(() => usersColumns(list), [list]);

@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+
 export interface UserInputData {
     username: string;
     password: string;

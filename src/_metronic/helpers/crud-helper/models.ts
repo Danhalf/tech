@@ -1,3 +1,4 @@
+import { SortType } from 'common/interfaces/QueriesParams';
 import { ReactNode } from 'react';
 
 export type WithChildren = {
@@ -13,7 +14,7 @@ export type PaginationState = {
 
 export type SortState = {
     sort?: string;
-    order?: 'asc' | 'desc';
+    order?: SortType;
 };
 
 export type SearchState = {
