@@ -26,6 +26,10 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentpage]);
 
+    const handleSetCurrentPage = (page: number): void => {
+        setCurrentPage(page);
+    };
+
     const totalPages = Math.ceil(totalRecords / recordsPerPage);
 
     const pageNumbers = Array.from({ length: totalPages }, (_, index) => index);
@@ -42,7 +46,7 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
                         <a
                             href='#'
                             className='page-link'
-                            onClick={() => setCurrentPage((prev) => prev - 1)}
+                            onClick={() => handleSetCurrentPage(currentpage - 1)}
                         >
                             <i className='previous'></i>
                         </a>
@@ -52,13 +56,14 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
                         <li
                             key={pageNumber}
                             className={clsx('page-item', {
+                                disabled: isLoading,
                                 active: pageNumber === currentpage,
                             })}
                         >
                             <a
                                 href='#'
                                 className='page-link'
-                                onClick={() => setCurrentPage(pageNumber)}
+                                onClick={() => handleSetCurrentPage(pageNumber)}
                             >
                                 {pageNumber + 1}
                             </a>
@@ -73,7 +78,7 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
                         <a
                             href='#'
                             className='page-link'
-                            onClick={() => setCurrentPage((prev) => prev + 1)}
+                            onClick={() => handleSetCurrentPage(currentpage + 1)}
                         >
                             <i className='next'></i>
                         </a>

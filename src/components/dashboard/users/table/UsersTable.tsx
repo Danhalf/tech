@@ -1,4 +1,4 @@
-import { useQueryResponseData } from 'common/core/QueryResponseProvider';
+import { useQueryResponseData, useQueryResponseLoading } from 'common/core/QueryResponseProvider';
 import { useEffect, useMemo, useState } from 'react';
 import { useTable, ColumnInstance, Row } from 'react-table';
 import { CustomHeaderColumn } from './columns/CustomHeaderColumn';
@@ -17,6 +17,7 @@ export const UsersTable = ({ list }: UsersTableProps) => {
 
     const users = useQueryResponseData(list);
 
+    const isLoading = useQueryResponseLoading(list);
     const totalList = list === UsersType.ACTIVE ? 'list' : 'listdeleted';
 
     useEffect(() => {
@@ -34,7 +35,12 @@ export const UsersTable = ({ list }: UsersTableProps) => {
 
     return (
         <>
-            <div className='table-responsive'>
+            <div className='table-responsive position-relative '>
+                {isLoading && (
+                    <div className='processing-overlay cursor-default position-absolute w-100 h-100 d-flex align-items-center justify-content-center'>
+                        <div className='p-6 bg-white rounded-2 shadow-sm '>Processing...</div>
+                    </div>
+                )}
                 <table
                     id='kt_table_users'
                     className='table align-middle table-row-dashed fs-6 gy-3 dataTable no-footer'
@@ -64,8 +70,8 @@ export const UsersTable = ({ list }: UsersTableProps) => {
                         )}
                     </tbody>
                 </table>
-                <UsersListPagination list={list} totalRecords={totalRecords} />
             </div>
+            <UsersListPagination list={list} totalRecords={totalRecords} />
         </>
     );
 };
