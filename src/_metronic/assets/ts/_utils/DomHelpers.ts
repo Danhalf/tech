@@ -59,50 +59,6 @@ export function getElementMatches(element: HTMLElement, selector: string) {
     }
 }
 
-export function getElementOffset(el: HTMLElement): OffsetModel {
-    if (!el.getClientRects().length) {
-        return { top: 0, left: 0 };
-    }
-
-    const rect = el.getBoundingClientRect();
-    const win = el.ownerDocument.defaultView;
-    if (win) {
-        return {
-            top: rect.top + win.pageYOffset,
-            left: rect.left + win.pageXOffset,
-        };
-    }
-
-    return rect;
-}
-
-export function getElementParents(element: Element, selector: string) {
-    if (!Element.prototype.matches) {
-        Element.prototype.matches = function (s) {
-            const matches = (document || this.ownerDocument).querySelectorAll(s);
-            let i = matches.length;
-            while (--i >= 0 && matches.item(i) !== this) {}
-            return i > -1;
-        };
-    }
-
-    const parents: Array<Element> = [];
-
-    let el: Element | null = element;
-
-    for (; el && el !== document.body; el = el.parentElement) {
-        if (selector) {
-            if (el.matches(selector)) {
-                parents.push(el);
-            }
-            continue;
-        }
-        parents.push(el);
-    }
-
-    return parents;
-}
-
 export function getHighestZindex(el: HTMLElement) {
     let bufferNode: Node | null = el as Node;
     let buffer = el;
@@ -130,17 +86,6 @@ export function getViewPort(): ViewPortModel {
 
 export function insertAfterElement(el: HTMLElement, referenceNode: HTMLElement) {
     return referenceNode.parentNode?.insertBefore(el, referenceNode.nextSibling);
-}
-
-export function isElementHasClasses(element: HTMLElement, classesStr: string): boolean {
-    const classes = classesStr.split(' ');
-    for (let i = 0; i < classes.length; i++) {
-        if (!element.classList.contains(classes[i])) {
-            return false;
-        }
-    }
-
-    return true;
 }
 
 export function isVisibleElement(element: HTMLElement): boolean {
@@ -181,16 +126,6 @@ export function getElementChildren(
 export function getElementChild(element: HTMLElement, selector: string): HTMLElement | null {
     const children = getElementChildren(element, selector);
     return children ? children[0] : null;
-}
-
-export function isMobileDevice(): boolean {
-    let test = getViewPort().width < +getBreakpoint('lg') ? true : false;
-
-    if (test === false) {
-        test = navigator.userAgent.match(/iPad/i) != null;
-    }
-
-    return test;
 }
 
 export function slide(el: HTMLElement, dir: string, speed: number, callback: any) {
