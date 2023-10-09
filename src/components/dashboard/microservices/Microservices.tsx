@@ -1,12 +1,13 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react';
-import { Microservice, listServices, stopService } from './service';
+import { listServices, stopService } from './service';
 import { Link } from 'react-router-dom';
 import { TableHead } from 'components/dashboard/helpers/renderTableHelper';
 import { CustomDropdown } from 'components/dashboard/helpers/renderDropdownHelper';
-import { Status } from '../users/user.service';
 import { AxiosError } from 'axios';
 import { useToast } from '../helpers/renderToastHelper';
+import { Microservice } from 'common/interfaces/MicroserviceServerData';
+import { Status } from 'common/interfaces/ActionStatus';
 
 enum MicroserviceColumns {
     ID = 'Index',

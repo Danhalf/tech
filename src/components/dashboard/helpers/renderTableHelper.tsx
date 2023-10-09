@@ -1,9 +1,9 @@
-import { IMicroserviceServerData } from 'common/interfaces/IMicroserviceServerData';
+import { MicroserviceServerData } from 'common/interfaces/MicroserviceServerData';
 
-const getUniqValues = ({ values }: { values: IMicroserviceServerData[] }) => {
+const getUniqValues = ({ values }: { values: MicroserviceServerData[] }) => {
     const columns = new Set<string>();
 
-    values.forEach((obj: IMicroserviceServerData): void => {
+    values.forEach((obj: MicroserviceServerData): void => {
         Object.keys(obj).forEach((key: string): void => {
             columns.add(key);
         });
@@ -22,9 +22,9 @@ export const TableHead = ({ columns }: { columns: string[] }): JSX.Element => (
     </thead>
 );
 
-const TableBody = ({ data }: { data: IMicroserviceServerData[] }) => (
+const TableBody = ({ data }: { data: MicroserviceServerData[] }) => (
     <tbody>
-        {data.map((row: IMicroserviceServerData, index: number) => (
+        {data.map((row: MicroserviceServerData, index: number) => (
             <tr key={index}>
                 {Object.values(row).map((cell: string, cellIndex: number) => (
                     <td key={`${index}-${cellIndex}`}>{cell}</td>
@@ -34,7 +34,7 @@ const TableBody = ({ data }: { data: IMicroserviceServerData[] }) => (
     </tbody>
 );
 
-export const renderTable = (data: IMicroserviceServerData[]) => {
+export const renderTable = (data: MicroserviceServerData[]) => {
     const columns = getUniqValues({ values: data });
     return (
         <div className='w-100 table-responsive table-responsive-horizontal'>

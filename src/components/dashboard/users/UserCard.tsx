@@ -2,7 +2,6 @@
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import {
-    Status,
     getAllUIPermissions,
     getAllUITypes,
     getUserExtendedInfo,
@@ -21,6 +20,7 @@ import { TabDataWrapper, TabNavigate, TabPanel } from 'components/dashboard/help
 import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton';
 import { AxiosError } from 'axios';
 import { useToast } from '../helpers/renderToastHelper';
+import { Status } from 'common/interfaces/ActionStatus';
 
 enum UserCardTabs {
     Profile = 'Profile',

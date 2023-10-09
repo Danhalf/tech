@@ -11,13 +11,17 @@ import './_metronic/assets/sass/style.scss';
 import './_metronic/assets/sass/plugins.scss';
 import './_metronic/assets/sass/style.react.scss';
 import { ToastProvider } from 'components/dashboard/helpers/renderToastHelper';
+import { QueryClient, QueryClientProvider } from 'react-query';
 
 const root = ReactDOM.createRoot(document.getElementById('root') as HTMLElement);
+const queryClient = new QueryClient();
 
 root.render(
-    <BrowserRouter>
-        <ToastProvider>
-            <App />
-        </ToastProvider>
-    </BrowserRouter>
+    <QueryClientProvider client={queryClient}>
+        <BrowserRouter>
+            <ToastProvider>
+                <App />
+            </ToastProvider>
+        </BrowserRouter>
+    </QueryClientProvider>
 );

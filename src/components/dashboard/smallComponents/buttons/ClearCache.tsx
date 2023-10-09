@@ -20,10 +20,11 @@ export const ClearCache = () => {
 
     const { handleShowToast } = useToast();
     return (
-        <div className='fixed-bottom d-flex justify-content-end m-3'>
-            <button className='btn btn-warning font-weight-bold mr-2' onClick={handleClearCache}>
-                Clear server cache
-            </button>
-        </div>
+        <button
+            className='fixed-bottom col-sm-2 text-nowrap  ms-auto me-4 mb-4 btn btn-warning font-weight-bold'
+            onClick={handleClearCache}
+        >
+            Clear server cache
+        </button>
     );
 };

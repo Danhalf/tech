@@ -1,26 +1,9 @@
 import axios from 'axios';
 import { getToken } from 'common/utils';
 import { API_URL } from 'common/app-consts';
-import { ActionStatus } from 'common/interfaces/IActionStatus';
-
-export interface Microservice {
-    heartbit: string;
-    index: number;
-    ipv4: string;
-    name: string;
-    port: number;
-    started: string;
-    status: string;
-    type: string;
-    type_i: number;
-    uid: string;
-    version: string;
-}
-
-type SortParams = {
-    type: 'ASC' | 'DESC';
-    column: 'name';
-};
+import { Microservice } from 'common/interfaces/MicroserviceServerData';
+import { ActionStatus } from 'common/interfaces/ActionStatus';
+import { ServicesSortParams } from 'common/interfaces/QueriesParams';
 
 export const getServiceById = (uid: string) => {
     return axios
@@ -30,10 +13,10 @@ export const getServiceById = (uid: string) => {
         .then((response) => response.data[0]);
 };
 
-export const listServices = (params?: SortParams) => {
-    const initialParams: SortParams = {
+export const listServices = (params?: ServicesSortParams) => {
+    const initialParams: ServicesSortParams = {
         column: params?.column || 'name',
-        type: params?.type || 'ASC',
+        type: params?.type || 'asc',
     };
 
     return axios
