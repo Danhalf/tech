@@ -56,7 +56,7 @@ export function UserCard() {
     const [userTypesJSON, setUserTypesJSON] = useState<string>('');
 
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
-    const [username, setUsername] = useState<string>('Save permissions');
+    const [username, setUsername] = useState<string>('');
     const [initialUserPermissionsJSON, setInitialUserPermissionsJSON] = useState<string>('');
 
     useEffect(() => {
@@ -68,7 +68,7 @@ export function UserCard() {
                 setExtendedInfoJSON(JSON.stringify(response, null, 2));
             });
             getUserShortInfo(id).then((response) => {
-                setUsername(response?.loginname);
+                setUsername(response?.loginname || response?.loginname || response?.firstName);
                 setShortInfoJSON(JSON.stringify(response, null, 2));
             });
             getUserLocations(id).then((response) => {
@@ -169,7 +169,9 @@ export function UserCard() {
             <div className='col-12'>
                 <div className='card card-custom mb-5 vw-90 mx-auto'>
                     <div className='card-header'>
-                        <h3 className='card-title fw-bolder text-dark'>User Card</h3>
+                        <h3 className='card-title fw-bolder text-dark'>
+                            {username && `${username}'s User Card`}
+                        </h3>
                     </div>
                     <div className='card-body d-flex flex-column justify-content-end pb-0'>
                         <ul className='nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder flex-nowrap'>
