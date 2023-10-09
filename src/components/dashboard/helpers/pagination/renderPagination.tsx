@@ -1,7 +1,10 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import clsx from 'clsx';
 import { useEffect, useState } from 'react';
-import { useQueryResponseLoading } from 'common/core/QueryResponseProvider';
+import {
+    useQueryResponseDataLength,
+    useQueryResponseLoading,
+} from 'common/core/QueryResponseProvider';
 import { useQueryRequest } from 'common/core/QueryRequestProvider';
 import { initialQueryState } from '_metronic/helpers';
 import { UsersListType } from 'common/interfaces/UserData';
@@ -14,6 +17,8 @@ interface UsersListPaginationProps {
 export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationProps) => {
     const [currentpage, setCurrentPage] = useState<number>(0);
     const isLoading = useQueryResponseLoading(list);
+    const searchResultLength = useQueryResponseDataLength(list);
+    const [pagesCount, setPagesCount] = useState<number>(totalRecords);
 
     const { state, updateState } = useQueryRequest();
 
@@ -23,14 +28,19 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
         if (currentpage !== undefined) {
             updateState({ ...state, currentpage: currentpage * recordsPerPage });
         }
+        if (!!state.search?.length) {
+            setPagesCount(searchResultLength);
+        } else {
+            setPagesCount(totalRecords);
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentpage]);
+    }, [currentpage, searchResultLength]);
 
     const handleSetCurrentPage = (page: number): void => {
         setCurrentPage(page);
     };
 
-    const totalPages = Math.ceil(totalRecords / recordsPerPage);
+    const totalPages = Math.ceil(pagesCount / recordsPerPage);
 
     const pageNumbers = Array.from({ length: totalPages }, (_, index) => index);
 

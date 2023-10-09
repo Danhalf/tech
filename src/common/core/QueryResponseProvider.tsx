@@ -43,9 +43,10 @@ export const QueryResponseProvider = ({
     } = useQuery(
         `${GET_LIST_TYPE()}`,
         () => {
+            const top = !!state?.search?.length ? 0 : state.count || initialQueryState.count;
             const currentQuery: UserQuery = {
                 skip: state.currentpage || initialQueryState.currentpage,
-                top: state.count || initialQueryState.count,
+                top,
                 column: state.sort || initialQueryState.sort,
                 qry: state.search || initialQueryState.search,
                 type: state.order || initialQueryState.order,
@@ -88,6 +89,11 @@ export const useQueryResponseData = (dataType: UsersListType) => {
     }
 
     return response?.data || [];
+};
+
+export const useQueryResponseDataLength = (dataType: UsersListType): number => {
+    const { response } = useQueryResponse(dataType);
+    return response?.data?.length || 0;
 };
 
 export const useQueryResponseLoading = (dataType: UsersListType): boolean => {
