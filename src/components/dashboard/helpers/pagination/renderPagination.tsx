@@ -25,16 +25,17 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
     const recordsPerPage = initialQueryState.count;
 
     useEffect(() => {
-        if (currentpage !== undefined) {
-            updateState({ ...state, currentpage: currentpage * recordsPerPage });
-        }
         if (!!state.search?.length) {
             setPagesCount(searchResultLength);
         } else {
             setPagesCount(totalRecords);
         }
+        if (currentpage !== undefined) {
+            updateState({ ...state, currentpage: currentpage * recordsPerPage });
+        }
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentpage, searchResultLength]);
+    }, [currentpage, searchResultLength, state.search]);
 
     const handleSetCurrentPage = (page: number): void => {
         setCurrentPage(page);

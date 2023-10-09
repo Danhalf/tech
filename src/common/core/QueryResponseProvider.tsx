@@ -43,10 +43,9 @@ export const QueryResponseProvider = ({
     } = useQuery(
         `${GET_LIST_TYPE()}`,
         () => {
-            const top = !!state?.search?.length ? 0 : state.count || initialQueryState.count;
             const currentQuery: UserQuery = {
                 skip: state.currentpage || initialQueryState.currentpage,
-                top,
+                top: state.count || initialQueryState.count,
                 column: state.sort || initialQueryState.sort,
                 qry: state.search || initialQueryState.search,
                 type: state.order || initialQueryState.order,
