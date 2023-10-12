@@ -2,7 +2,7 @@ import { AxiosError } from 'axios';
 import { convertToNumberIfNumeric, deepEqual } from 'components/dashboard/helpers/common';
 import { useToast } from 'components/dashboard/helpers/renderToastHelper';
 import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton';
-import { useState, useEffect, useCallback, ChangeEvent } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { renamedKeys } from 'common/app-consts';
 import { Status } from 'common/interfaces/ActionStatus';
 import { getUserSettings, setUserSettings } from 'components/dashboard/users/user.service';
@@ -45,13 +45,11 @@ export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps):
     }, [settings, initialUserSettings, isLoading]);
 
     const handleChangeUserSettings = useCallback(
-        (event: ChangeEvent<HTMLInputElement>) => {
-            const { name, value } = event.target;
-            // eslint-disable-next-line no-console
-            console.log(name, value);
+        (inputData: [string, number | string]) => {
+            const [name, value] = inputData;
             setSettings({
                 ...settings,
-                [name]: convertToNumberIfNumeric(value),
+                [name]: convertToNumberIfNumeric(value as string),
             });
         },
         [settings]
@@ -99,7 +97,9 @@ export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps):
                                         id={setting}
                                         name={setting}
                                         title={settingName}
-                                        action={handleChangeUserSettings}
+                                        action={(newValue: [string, number]) =>
+                                            handleChangeUserSettings(newValue)
+                                        }
                                     />
                                 ) : (
                                     <CustomTextInput
@@ -108,7 +108,9 @@ export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps):
                                         name={setting}
                                         title={settingName}
                                         disabled={disabledKeys.includes(setting)}
-                                        action={handleChangeUserSettings}
+                                        action={(event) =>
+                                            handleChangeUserSettings([setting, event.target.value])
+                                        }
                                     />
                                 )}
                             </div>

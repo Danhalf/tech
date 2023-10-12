@@ -45,7 +45,7 @@ export const renderList = ({ data, checkbox, action }: RenderListArgs) => {
                     id={key}
                     name={key}
                     title={title}
-                // action={action}
+                    action={action}
                 />
             ) : (
                 <div key={`${key}-${index}`} className='d-flex align-items-center mb-4'>

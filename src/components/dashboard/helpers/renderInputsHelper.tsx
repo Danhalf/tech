@@ -9,7 +9,7 @@ interface CustomInputProps {
 }
 
 interface CustomCheckboxProps extends CustomInputProps {
-    action?: (event: ChangeEvent<HTMLInputElement>) => void;
+    action?: (value: [string, number]) => void;
 }
 interface CustomTextInputProps extends CustomInputProps {
     action?: (event: ChangeEvent<HTMLInputElement>) => void;
@@ -19,19 +19,19 @@ export const CustomCheckbox = ({ currentValue, id, name, title, action }: Custom
     const [value, setValue] = useState<number>(currentValue);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
-    const handleInputAction = (event: ChangeEvent<HTMLInputElement>) => {
+    const handleChange = () => {
+        const newValue = value === 1 ? 0 : 1;
+        setValue(newValue);
 
-        setValue((prevValue: number) => (prevValue === 1 ? 0 : 1));
         if (action) {
-            action(event);
+            setIsLoading(true);
+            action([name, newValue]);
         }
     };
 
     useEffect(() => {
         setIsLoading(false);
         if (currentValue !== value && action) {
-            setIsLoading(true);
-            // action([name, value]);
         }
     }, [name, value, currentValue, action]);
 
@@ -43,7 +43,7 @@ export const CustomCheckbox = ({ currentValue, id, name, title, action }: Custom
                     type='checkbox'
                     value={value}
                     checked={value === 1}
-                    onChange={handleInputAction}
+                    onChange={handleChange}
                     id={`checkbox-${id}`}
                     disabled={isLoading}
                 />
