@@ -6,6 +6,7 @@ import { useState, useEffect, useCallback, ChangeEvent } from 'react';
 import { renamedKeys } from 'common/app-consts';
 import { Status } from 'common/interfaces/ActionStatus';
 import { getUserSettings, setUserSettings } from 'components/dashboard/users/user.service';
+import { CustomCheckbox, CustomTextInput } from 'components/dashboard/helpers/renderInputsHelper';
 
 interface UserSettingsModalProps {
     onClose: () => void;
@@ -46,7 +47,8 @@ export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps):
     const handleChangeUserSettings = useCallback(
         (event: ChangeEvent<HTMLInputElement>) => {
             const { name, value } = event.target;
-
+            // eslint-disable-next-line no-console
+            console.log(name, value);
             setSettings({
                 ...settings,
                 [name]: convertToNumberIfNumeric(value),
@@ -91,30 +93,38 @@ export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps):
                         const settingName = renamedKeys[setting] || setting;
                         return (
                             <div className='fv-row mb-8' key={setting}>
-                                <label
-                                    htmlFor={setting}
-                                    className='form-label fs-6 fw-bolder text-dark'
-                                >
-                                    {settingName}
-                                </label>
                                 {checkboxInputKeys.includes(setting) ? (
-                                    <input
-                                        disabled={disabledKeys.includes(setting)}
-                                        className='form-control bg-transparent'
+                                    <CustomCheckbox
+                                        currentValue={value as number}
+                                        id={setting}
                                         name={setting}
-                                        type={'checkbox'}
-                                        value={value}
-                                        onChange={handleChangeUserSettings}
+                                        title={settingName}
                                     />
                                 ) : (
-                                    <input
-                                        disabled={disabledKeys.includes(setting)}
-                                        className='form-control bg-transparent'
+                                    <CustomTextInput
+                                        currentValue={value as number}
+                                        id={setting}
                                         name={setting}
-                                        type={'text'}
-                                        value={value}
-                                        onChange={handleChangeUserSettings}
+                                        title={settingName}
+                                        disabled={disabledKeys.includes(setting)}
+                                        action={handleChangeUserSettings}
                                     />
+                                    // <>
+                                    //     <label
+                                    //         htmlFor={setting}
+                                    //         className='form-label fs-6 fw-bolder text-dark'
+                                    //     >
+                                    //         {settingName}
+                                    //     </label>
+                                    //     <input
+                                    //         disabled={disabledKeys.includes(setting)}
+                                    //         className='form-control bg-transparent'
+                                    //         name={setting}
+                                    //         type={'text'}
+                                    //         value={value}
+                                    //         onChange={handleChangeUserSettings}
+                                    //     />
+                                    // </>
                                 )}
                             </div>
                         );

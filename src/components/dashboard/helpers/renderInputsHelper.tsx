@@ -1,16 +1,21 @@
-import { useEffect, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 
-interface ICustomInput {
+interface CustomInputProps {
     currentValue: number;
     id: string;
     name: string;
     title: string;
-    action?: (value: [string, number]) => void;
+    disabled?: boolean;
 }
 
-interface ICustomCheckbox extends ICustomInput {}
+interface CustomCheckboxProps extends CustomInputProps {
+    action?: (value: [string, number]) => void;
+}
+interface CustomTextInputProps extends CustomInputProps {
+    action?: (event: ChangeEvent<HTMLInputElement>) => void;
+}
 
-export const CustomCheckbox = ({ currentValue, id, name, title, action }: ICustomCheckbox) => {
+export const CustomCheckbox = ({ currentValue, id, name, title, action }: CustomCheckboxProps) => {
     const [value, setValue] = useState<number>(currentValue);
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
@@ -41,6 +46,39 @@ export const CustomCheckbox = ({ currentValue, id, name, title, action }: ICusto
                 <label className='form-check-label cursor-pointer' htmlFor={`checkbox-${id}`}>
                     {title}
                 </label>
+            </div>
+        </div>
+    );
+};
+
+export const CustomTextInput = ({
+    currentValue,
+    id,
+    name,
+    title,
+    action,
+    disabled,
+}: CustomTextInputProps): JSX.Element => {
+    const handleInputAction = (event: ChangeEvent<HTMLInputElement>) => {
+        if (disabled) return;
+        if (action) {
+            action(event);
+        }
+    };
+    return (
+        <div className='mb-10'>
+            <div className='form-check form-check-custom form-check-solid'>
+                <label htmlFor={`text-input-${id}`} className='form-label fs-6 fw-bolder text-dark'>
+                    {title}
+                </label>
+                <input
+                    disabled={disabled}
+                    className='form-control bg-transparent'
+                    name={name}
+                    type={'text'}
+                    value={currentValue}
+                    onChange={handleInputAction}
+                />
             </div>
         </div>
     );
