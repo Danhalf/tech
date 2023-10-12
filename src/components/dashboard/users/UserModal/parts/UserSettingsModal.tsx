@@ -45,7 +45,7 @@ export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps):
     }, [settings, initialUserSettings, isLoading]);
 
     const handleChangeUserSettings = useCallback(
-        (event: ChangeEvent<HTMLInputElement>) => {
+        (event: any) => {
             const { name, value } = event.target;
             // eslint-disable-next-line no-console
             console.log(name, value);
