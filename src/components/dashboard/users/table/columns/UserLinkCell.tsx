@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 export const UserLinkCell = ({ useruid, username }: User) => (
     <Link
-        to={`${useruid}`}
+        to={`/dashboard/user/${useruid}`}
         className='text-gray-800 text-hover-primary mb-1 text-decoration-underline'
     >
         {username}
