@@ -40,6 +40,13 @@ export function DashboardHeader() {
                             </div>
                             <div className='menu-item me-lg-1 ms-auto'>
                                 <CustomDropdown title={loginname}>
+                                    <Link
+                                        className='menu-link py-3 text-hover-primary'
+                                        to={`/dashboard/user/${useruid}`}
+                                    >
+                                        <i className='ki-outline ki-user-tick fs-2 m-2'></i>
+                                        <span className='menu-title'>{loginname}</span>
+                                    </Link>
                                     <span
                                         onClick={() => signOut()}
                                         className='menu-link text-hover-primary'
