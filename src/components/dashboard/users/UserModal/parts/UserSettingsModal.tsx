@@ -99,6 +99,7 @@ export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps):
                                         id={setting}
                                         name={setting}
                                         title={settingName}
+                                        action={handleChangeUserSettings}
                                     />
                                 ) : (
                                     <CustomTextInput
