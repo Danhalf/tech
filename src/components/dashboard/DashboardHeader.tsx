@@ -45,7 +45,7 @@ export function DashboardHeader() {
                                         to={`/dashboard/user/${useruid}`}
                                     >
                                         <i className='ki-outline ki-user-tick fs-2 m-2'></i>
-                                        <span className='menu-title'>{loginname}</span>
+                                        <span className='menu-title'>{loginname} card</span>
                                     </Link>
                                     <span
                                         onClick={() => signOut()}

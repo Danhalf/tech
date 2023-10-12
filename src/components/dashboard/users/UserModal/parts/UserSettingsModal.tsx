@@ -82,6 +82,7 @@ export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps):
     }
 
     const disabledKeys = ['useruid', 'created', 'updated'];
+    const checkboxInputKeys = ['stocknumPrefix', 'stocknumSuffix', 'stocknumFixedDigits'];
     return (
         <>
             {settings &&
@@ -96,14 +97,25 @@ export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps):
                                 >
                                     {settingName}
                                 </label>
-                                <input
-                                    disabled={disabledKeys.includes(setting)}
-                                    className='form-control bg-transparent'
-                                    name={setting}
-                                    type={'text'}
-                                    value={value}
-                                    onChange={handleChangeUserSettings}
-                                />
+                                {checkboxInputKeys.includes(setting) ? (
+                                    <input
+                                        disabled={disabledKeys.includes(setting)}
+                                        className='form-control bg-transparent'
+                                        name={setting}
+                                        type={'checkbox'}
+                                        value={value}
+                                        onChange={handleChangeUserSettings}
+                                    />
+                                ) : (
+                                    <input
+                                        disabled={disabledKeys.includes(setting)}
+                                        className='form-control bg-transparent'
+                                        name={setting}
+                                        type={'text'}
+                                        value={value}
+                                        onChange={handleChangeUserSettings}
+                                    />
+                                )}
                             </div>
                         );
                     }
