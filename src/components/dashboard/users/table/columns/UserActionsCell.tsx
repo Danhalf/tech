@@ -48,7 +48,7 @@ export const UserActionsCell = ({ useruid, username }: User) => {
                     const newUseruid = response.useruid;
                     navigate(`/dashboard/user/${newUseruid}`);
                     handleShowToast({
-                        message: `${username} successfully copied`,
+                        message: `<strong>${username}</strong> successfully copied`,
                         type: 'success',
                     });
                 }
@@ -65,7 +65,7 @@ export const UserActionsCell = ({ useruid, username }: User) => {
                 const response = await deleteUser(useruid);
                 if (response.status === Status.OK) {
                     handleShowToast({
-                        message: 'User successfully deleted',
+                        message: `<strong>${username}</strong> successfully deleted`,
                         type: 'success',
                     });
                 }
@@ -82,7 +82,7 @@ export const UserActionsCell = ({ useruid, username }: User) => {
                 const response = await killSession(useruid);
                 if (response.status === Status.OK) {
                     handleShowToast({
-                        message: 'User session successfully closed',
+                        message: `<strong>${username}</strong> session successfully closed`,
                         type: 'success',
                     });
                 }

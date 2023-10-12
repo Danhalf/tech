@@ -7,7 +7,7 @@ import { AxiosError } from 'axios';
 import { User } from 'common/interfaces/UserData';
 import { undeleteUser } from '../../user.service';
 
-export const DeletedUsersActionsCell = ({ useruid }: User) => {
+export const DeletedUsersActionsCell = ({ useruid, username }: User) => {
     const { handleShowToast } = useToast();
 
     const handleRestoreUser = async (userId: string): Promise<void> => {
@@ -16,7 +16,7 @@ export const DeletedUsersActionsCell = ({ useruid }: User) => {
                 const response = await undeleteUser(userId);
                 if (response.status === Status.OK) {
                     handleShowToast({
-                        message: 'User successfully restored',
+                        message: `<strong>${username}</strong> successfully restored`,
                         type: 'success',
                     });
                 }
