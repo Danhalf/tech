@@ -45,7 +45,7 @@ export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps):
     }, [settings, initialUserSettings, isLoading]);
 
     const handleChangeUserSettings = useCallback(
-        (event: any) => {
+        (event: ChangeEvent<HTMLInputElement>) => {
             const { name, value } = event.target;
             // eslint-disable-next-line no-console
             console.log(name, value);
@@ -110,22 +110,6 @@ export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps):
                                         disabled={disabledKeys.includes(setting)}
                                         action={handleChangeUserSettings}
                                     />
-                                    // <>
-                                    //     <label
-                                    //         htmlFor={setting}
-                                    //         className='form-label fs-6 fw-bolder text-dark'
-                                    //     >
-                                    //         {settingName}
-                                    //     </label>
-                                    //     <input
-                                    //         disabled={disabledKeys.includes(setting)}
-                                    //         className='form-control bg-transparent'
-                                    //         name={setting}
-                                    //         type={'text'}
-                                    //         value={value}
-                                    //         onChange={handleChangeUserSettings}
-                                    //     />
-                                    // </>
                                 )}
                             </div>
                         );
