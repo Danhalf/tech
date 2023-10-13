@@ -7,7 +7,6 @@ import { renamedKeys } from 'common/app-consts';
 import { Status } from 'common/interfaces/ActionStatus';
 import { getUserSettings, setUserSettings } from 'components/dashboard/users/user.service';
 import { CustomCheckbox, CustomTextInput } from 'components/dashboard/helpers/renderInputsHelper';
-import { string } from 'yup';
 
 interface UserSettingsModalProps {
     onClose: () => void;
@@ -29,16 +28,16 @@ export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps):
             getUserSettings(useruid).then(async (response) => {
                 setAllSettings(response);
                 const responseSettings = response.settings;
-                const sortedSettings = [...checkboxInputKeys, ...radioButtonsKeys].reduce(
-                    (acc, key) => {
-                        if (responseSettings[key] !== undefined) {
-                            // acc[key] = responseSettings[key];
-                        }
-                        return acc;
-                    },
-                    {}
-                );
-                setSettings(sortedSettings);
+                // const sortedSettings = [...checkboxInputKeys, ...radioButtonsKeys].reduce(
+                //     (acc: Record<string, string | number>, key) => {
+                //         if (responseSettings[key] !== undefined) {
+                //             acc[key] = responseSettings[key];
+                //         }
+                //         return acc;
+                //     },
+                //     {}
+                // );
+                setSettings(responseSettings);
                 setInitialUserSettings(responseSettings);
                 setIsLoading(false);
             });
@@ -94,40 +93,67 @@ export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps):
     const disabledKeys = ['useruid', 'created', 'updated'];
     const checkboxInputKeys = ['stocknumPrefix', 'stocknumSuffix', 'stocknumFixedDigits'];
     const radioButtonsKeys = ['stocknumLast6ofVIN', 'stocknumLast8ofVIN'];
+
+    type SettingRecord = [string, string | number];
+    type SettingsRecord = Record<string, string | number>;
+
+    const settingsEntries = Object.entries(settings) as SettingRecord[];
+    const orderedSettings: SettingRecord[] = [];
+    const checkboxSettings: SettingsRecord = {};
+    const radioSettings: SettingsRecord = {};
+    const restOfSettings: SettingsRecord = {};
+
+    settingsEntries.forEach(([key, value]: SettingRecord) => {
+        switch (true) {
+            case checkboxInputKeys.includes(key):
+                checkboxSettings[key] = value;
+                break;
+            case radioButtonsKeys.includes(key):
+                radioSettings[key] = value;
+                break;
+            default:
+                restOfSettings[key] = value;
+        }
+    });
+
+    orderedSettings.push(
+        ...Object.entries(checkboxSettings),
+        ...Object.entries(radioSettings),
+        ...Object.entries(restOfSettings)
+    );
+
     return (
         <>
-            {settings &&
-                (Object.entries(settings) as [string, string | number][]).map(
-                    ([setting, value]) => {
-                        const settingName = renamedKeys[setting] || setting;
-                        return (
-                            <div className='fv-row mb-8' key={setting}>
-                                {checkboxInputKeys.includes(setting) ? (
-                                    <CustomCheckbox
-                                        currentValue={value as number}
-                                        id={setting}
-                                        name={setting}
-                                        title={settingName}
-                                        action={(newValue: [string, number]) =>
-                                            handleChangeUserSettings(newValue)
-                                        }
-                                    />
-                                ) : (
-                                    <CustomTextInput
-                                        currentValue={value as number}
-                                        id={setting}
-                                        name={setting}
-                                        title={settingName}
-                                        disabled={disabledKeys.includes(setting)}
-                                        action={(event) =>
-                                            handleChangeUserSettings([setting, event.target.value])
-                                        }
-                                    />
-                                )}
-                            </div>
-                        );
-                    }
-                )}
+            {orderedSettings &&
+                orderedSettings.map(([setting, value]) => {
+                    const settingName = renamedKeys[setting] || setting;
+                    return (
+                        <div className='fv-row mb-8' key={setting}>
+                            {checkboxInputKeys.includes(setting) ? (
+                                <CustomCheckbox
+                                    currentValue={value as number}
+                                    id={setting}
+                                    name={setting}
+                                    title={settingName}
+                                    action={(newValue: [string, number]) =>
+                                        handleChangeUserSettings(newValue)
+                                    }
+                                />
+                            ) : (
+                                <CustomTextInput
+                                    currentValue={value as number}
+                                    id={setting}
+                                    name={setting}
+                                    title={settingName}
+                                    disabled={disabledKeys.includes(setting)}
+                                    action={(event) =>
+                                        handleChangeUserSettings([setting, event.target.value])
+                                    }
+                                />
+                            )}
+                        </div>
+                    );
+                })}
             <PrimaryButton
                 buttonText='Save permissions'
                 icon='check'

@@ -8,7 +8,6 @@ import { PrimaryButton } from '../smallComponents/buttons/PrimaryButton';
 import { UsersListSearchComponent } from '../smallComponents/search/Search';
 import { UserModal } from './UserModal/parts/UserModal';
 import { UsersTable } from './table/UsersTable';
-import { Ratio } from 'react-bootstrap';
 
 const usersTabsArray: string[] = Object.values(UsersType) as string[];
 

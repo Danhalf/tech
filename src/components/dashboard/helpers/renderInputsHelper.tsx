@@ -1,5 +1,4 @@
 import { ChangeEvent, useEffect, useState } from 'react';
-import { Ratio } from 'react-bootstrap';
 
 interface CustomInputProps {
     currentValue: number;
