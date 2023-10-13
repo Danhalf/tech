@@ -21,12 +21,12 @@ interface CustomRadioButtonProps extends CustomInputProps {
 }
 
 interface RadioButtonOption {
-    value: string;
+    value: number;
     label: string;
 }
 
 export const CustomCheckbox = ({ currentValue, id, name, title, action }: CustomCheckboxProps) => {
-    const [value, setValue] = useState<number>(currentValue);
+    const [value, setValue] = useState<number>(Number(currentValue));
     const [isLoading, setIsLoading] = useState<boolean>(false);
 
     const handleChange = () => {
@@ -80,18 +80,22 @@ export const CustomTextInput = ({
         }
     };
     return (
-        <div className='mb-4'>
-            <label htmlFor={`text-input-${id}`} className='form-label fs-6 fw-bolder text-dark'>
-                {title}
-            </label>
-            <input
-                disabled={disabled}
-                className='form-control bg-transparent'
-                name={name}
-                type={'text'}
-                value={currentValue}
-                onChange={handleInputAction}
-            />
+        <div className='row'>
+            <div className='col-6 d-flex align-items-center'>
+                <label htmlFor={`text-input-${id}`} className='form-label fs-6 fw-bolder text-dark'>
+                    {title}
+                </label>
+            </div>
+            <div className='col-6 d-flex align-items-center'>
+                <input
+                    disabled={disabled}
+                    className='form-control bg-transparent'
+                    name={name}
+                    type={'text'}
+                    value={currentValue}
+                    onChange={handleInputAction}
+                />
+            </div>
         </div>
     );
 };
@@ -104,12 +108,12 @@ export const CustomRadioButton = ({
     options,
     action,
 }: CustomRadioButtonProps) => {
-    const [selectedValue, setSelectedValue] = useState<string | number>(currentValue);
+    const [selectedValue, setSelectedValue] = useState<number>(currentValue);
     const [isLoading, setIsLoading] = useState(false);
 
     const handleRadioChange = (event: ChangeEvent<HTMLInputElement>) => {
         const newValue = event.target.value;
-        setSelectedValue(newValue);
+        setSelectedValue(Number(newValue));
 
         if (action) {
             setIsLoading(true);
@@ -123,10 +127,10 @@ export const CustomRadioButton = ({
 
     return (
         <div className='mb-4'>
-            <span className='mb-4 form-check-label'>{title}</span>
+            <span className='d-inline-block mb-2 form-check-label'>{title}</span>
             <div className='form-check form-check-custom form-check-solid'>
                 {options.map((option, key) => (
-                    <div key={id + key}>
+                    <div className='me-10' key={id + key}>
                         <input
                             className='form-check-input cursor-pointer'
                             type='radio'
@@ -137,7 +141,7 @@ export const CustomRadioButton = ({
                             disabled={isLoading}
                         />
                         <label
-                            className='form-check-label cursor-pointer px-6'
+                            className='form-check-label cursor-pointer'
                             htmlFor={`radio-${id}-${option.value}`}
                         >
                             {option.label}
