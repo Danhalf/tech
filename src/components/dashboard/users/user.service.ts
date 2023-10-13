@@ -2,7 +2,7 @@ import axios, { AxiosResponse } from 'axios';
 import { API_URL } from 'common/app-consts';
 import { ActionStatus } from 'common/interfaces/ActionStatus';
 import { UserQuery } from 'common/interfaces/QueriesParams';
-import { ShortUserInfo, User } from 'common/interfaces/UserData';
+import { ShortUserInfo, User, UserSettingsResponse } from 'common/interfaces/UserData';
 import { getToken } from 'common/utils';
 
 type Method = 'GET' | 'POST';
@@ -104,7 +104,7 @@ export const setUserSettings = (uid: string, data: unknown): Promise<ActionStatu
     return fetchApiData('POST', `user/${uid}/settings`, { data });
 };
 
-export const getUserSettings = (uid: string): Promise<Record<string, unknown>> => {
+export const getUserSettings = (uid: string): Promise<UserSettingsResponse> => {
     return fetchApiData('GET', `user/${uid}/settings`);
 };
 

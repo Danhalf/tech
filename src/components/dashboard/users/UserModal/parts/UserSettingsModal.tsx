@@ -7,6 +7,7 @@ import { renamedKeys } from 'common/app-consts';
 import { Status } from 'common/interfaces/ActionStatus';
 import { getUserSettings, setUserSettings } from 'components/dashboard/users/user.service';
 import { CustomCheckbox, CustomTextInput } from 'components/dashboard/helpers/renderInputsHelper';
+import { string } from 'yup';
 
 interface UserSettingsModalProps {
     onClose: () => void;
@@ -28,7 +29,16 @@ export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps):
             getUserSettings(useruid).then(async (response) => {
                 setAllSettings(response);
                 const responseSettings = response.settings;
-                setSettings(responseSettings);
+                const sortedSettings = [...checkboxInputKeys, ...radioButtonsKeys].reduce(
+                    (acc, key) => {
+                        if (responseSettings[key] !== undefined) {
+                            // acc[key] = responseSettings[key];
+                        }
+                        return acc;
+                    },
+                    {}
+                );
+                setSettings(sortedSettings);
                 setInitialUserSettings(responseSettings);
                 setIsLoading(false);
             });
@@ -83,6 +93,7 @@ export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps):
 
     const disabledKeys = ['useruid', 'created', 'updated'];
     const checkboxInputKeys = ['stocknumPrefix', 'stocknumSuffix', 'stocknumFixedDigits'];
+    const radioButtonsKeys = ['stocknumLast6ofVIN', 'stocknumLast8ofVIN'];
     return (
         <>
             {settings &&
