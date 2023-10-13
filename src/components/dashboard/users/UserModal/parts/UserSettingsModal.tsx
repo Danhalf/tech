@@ -2,10 +2,15 @@ import { AxiosError } from 'axios';
 import { convertToNumberIfNumeric, deepEqual } from 'components/dashboard/helpers/common';
 import { useToast } from 'components/dashboard/helpers/renderToastHelper';
 import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton';
-import { useState, useEffect, useCallback, ChangeEvent } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { renamedKeys } from 'common/app-consts';
 import { Status } from 'common/interfaces/ActionStatus';
 import { getUserSettings, setUserSettings } from 'components/dashboard/users/user.service';
+import {
+    CustomCheckbox,
+    CustomRadioButton,
+    CustomTextInput,
+} from 'components/dashboard/helpers/renderInputsHelper';
 
 interface UserSettingsModalProps {
     onClose: () => void;
@@ -27,6 +32,15 @@ export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps):
             getUserSettings(useruid).then(async (response) => {
                 setAllSettings(response);
                 const responseSettings = response.settings;
+                // const sortedSettings = [...checkboxInputKeys, ...radioButtonsKeys].reduce(
+                //     (acc: Record<string, string | number>, key) => {
+                //         if (responseSettings[key] !== undefined) {
+                //             acc[key] = responseSettings[key];
+                //         }
+                //         return acc;
+                //     },
+                //     {}
+                // );
                 setSettings(responseSettings);
                 setInitialUserSettings(responseSettings);
                 setIsLoading(false);
@@ -44,12 +58,11 @@ export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps):
     }, [settings, initialUserSettings, isLoading]);
 
     const handleChangeUserSettings = useCallback(
-        (event: ChangeEvent<HTMLInputElement>) => {
-            const { name, value } = event.target;
-
+        (inputData: [string, number | string]) => {
+            const [name, value] = inputData;
             setSettings({
                 ...settings,
-                [name]: convertToNumberIfNumeric(value),
+                [name]: convertToNumberIfNumeric(value as string),
             });
         },
         [settings]
@@ -82,32 +95,83 @@ export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps):
     }
 
     const disabledKeys = ['useruid', 'created', 'updated'];
+    const checkboxInputKeys = ['stocknumPrefix', 'stocknumSuffix', 'stocknumFixedDigits'];
+    const radioButtonsKeys = ['stocknumLast6ofVIN', 'stocknumLast8ofVIN'];
+
+    type SettingRecord = [string, string | number];
+    type SettingsRecord = Record<string, string | number>;
+
+    const settingsEntries = Object.entries(settings) as SettingRecord[];
+    const orderedSettings: SettingRecord[] = [];
+    const checkboxSettings: SettingsRecord = {};
+    const radioSettings: SettingsRecord = {};
+    const restOfSettings: SettingsRecord = {};
+
+    settingsEntries.forEach(([key, value]: SettingRecord) => {
+        switch (true) {
+            case checkboxInputKeys.includes(key):
+                checkboxSettings[key] = value;
+                break;
+            case radioButtonsKeys.includes(key):
+                radioSettings[key] = value;
+                break;
+            default:
+                restOfSettings[key] = value;
+        }
+    });
+
+    orderedSettings.push(
+        ...Object.entries(checkboxSettings),
+        ...Object.entries(radioSettings),
+        ...Object.entries(restOfSettings)
+    );
+
     return (
         <>
-            {settings &&
-                (Object.entries(settings) as [string, string | number][]).map(
-                    ([setting, value]) => {
-                        const settingName = renamedKeys[setting] || setting;
-                        return (
-                            <div className='fv-row mb-8' key={setting}>
-                                <label
-                                    htmlFor={setting}
-                                    className='form-label fs-6 fw-bolder text-dark'
-                                >
-                                    {settingName}
-                                </label>
-                                <input
-                                    disabled={disabledKeys.includes(setting)}
-                                    className='form-control bg-transparent'
+            {orderedSettings &&
+                orderedSettings.map(([setting, value]) => {
+                    const settingName = renamedKeys[setting] || setting;
+                    return (
+                        <div className='fv-row mb-4' key={setting}>
+                            {checkboxInputKeys.includes(setting) ? (
+                                <CustomCheckbox
+                                    currentValue={value as number}
+                                    id={setting}
                                     name={setting}
-                                    type={'text'}
-                                    value={value}
-                                    onChange={handleChangeUserSettings}
+                                    title={settingName}
+                                    action={(newValue: [string, number]) =>
+                                        handleChangeUserSettings(newValue)
+                                    }
                                 />
-                            </div>
-                        );
-                    }
-                )}
+                            ) : radioButtonsKeys.includes(setting) ? (
+                                <CustomRadioButton
+                                    currentValue={value as number}
+                                    id={setting}
+                                    name={setting}
+                                    title={settingName}
+                                    options={[
+                                        { value: 1, label: 'Include' },
+                                        { value: 0, label: "Don't include" },
+                                    ]}
+                                    action={(newValue: [string, string]) =>
+                                        handleChangeUserSettings(newValue)
+                                    }
+                                />
+                            ) : (
+                                <CustomTextInput
+                                    currentValue={value as number}
+                                    id={setting}
+                                    name={setting}
+                                    title={settingName}
+                                    disabled={disabledKeys.includes(setting)}
+                                    action={(event) =>
+                                        handleChangeUserSettings([setting, event.target.value])
+                                    }
+                                />
+                            )}
+                        </div>
+                    );
+                })}
             <PrimaryButton
                 buttonText='Save permissions'
                 icon='check'
