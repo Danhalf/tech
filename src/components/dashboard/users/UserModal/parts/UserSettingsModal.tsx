@@ -6,7 +6,11 @@ import { useState, useEffect, useCallback } from 'react';
 import { renamedKeys } from 'common/app-consts';
 import { Status } from 'common/interfaces/ActionStatus';
 import { getUserSettings, setUserSettings } from 'components/dashboard/users/user.service';
-import { CustomCheckbox, CustomTextInput } from 'components/dashboard/helpers/renderInputsHelper';
+import {
+    CustomCheckbox,
+    CustomRadioButton,
+    CustomTextInput,
+} from 'components/dashboard/helpers/renderInputsHelper';
 
 interface UserSettingsModalProps {
     onClose: () => void;
@@ -136,6 +140,20 @@ export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps):
                                     name={setting}
                                     title={settingName}
                                     action={(newValue: [string, number]) =>
+                                        handleChangeUserSettings(newValue)
+                                    }
+                                />
+                            ) : radioButtonsKeys.includes(setting) ? (
+                                <CustomRadioButton
+                                    currentValue={value as number}
+                                    id={setting}
+                                    name={setting}
+                                    title={settingName}
+                                    options={[
+                                        { value: '1', label: 'Include' },
+                                        { value: '0', label: "Don't include" },
+                                    ]}
+                                    action={(newValue: [string, string]) =>
                                         handleChangeUserSettings(newValue)
                                     }
                                 />

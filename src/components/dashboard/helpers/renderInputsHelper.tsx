@@ -123,9 +123,10 @@ export const CustomRadioButton = ({
 
     return (
         <div className='mb-4'>
+            <span className='mb-4 form-check-label'>{title}</span>
             <div className='form-check form-check-custom form-check-solid'>
-                {options.map((option) => (
-                    <div key={option.value}>
+                {options.map((option, key) => (
+                    <div key={id + key}>
                         <input
                             className='form-check-input cursor-pointer'
                             type='radio'
@@ -136,7 +137,7 @@ export const CustomRadioButton = ({
                             disabled={isLoading}
                         />
                         <label
-                            className='form-check-label cursor-pointer'
+                            className='form-check-label cursor-pointer px-6'
                             htmlFor={`radio-${id}-${option.value}`}
                         >
                             {option.label}
