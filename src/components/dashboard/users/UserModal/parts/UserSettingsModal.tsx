@@ -32,15 +32,6 @@ export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps):
             getUserSettings(useruid).then(async (response) => {
                 setAllSettings(response);
                 const responseSettings = response.settings;
-                // const sortedSettings = [...checkboxInputKeys, ...radioButtonsKeys].reduce(
-                //     (acc: Record<string, string | number>, key) => {
-                //         if (responseSettings[key] !== undefined) {
-                //             acc[key] = responseSettings[key];
-                //         }
-                //         return acc;
-                //     },
-                //     {}
-                // );
                 setSettings(responseSettings);
                 setInitialUserSettings(responseSettings);
                 setIsLoading(false);
