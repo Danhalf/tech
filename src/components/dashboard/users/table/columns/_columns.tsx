@@ -8,7 +8,7 @@ import { UsersListType, User, UsersType } from 'common/interfaces/UserData';
 
 export const usersColumns = (list: UsersListType): ReadonlyArray<Column<User>> => {
     const { ACTIVE, DELETED } = UsersType;
-    return [
+    const generalColumns = [
         {
             Header: 'Index',
             accessor: 'index',
@@ -23,15 +23,7 @@ export const usersColumns = (list: UsersListType): ReadonlyArray<Column<User>> =
                 return <UserLinkCell useruid={useruid} username={username} />;
             },
         },
-        {
-            Header: 'Created by user',
-            accessor: 'parentusername',
-        },
-        {
-            Header: 'Is admin',
-            id: 'isadmin',
-            Cell: ({ ...props }) => (props.data[props.row.index].isadmin ? 'yes' : 'no'),
-        },
+
         {
             Header: 'Actions',
             id: 'actions',
@@ -47,4 +39,18 @@ export const usersColumns = (list: UsersListType): ReadonlyArray<Column<User>> =
             },
         },
     ];
+
+    const userColumns = [
+        {
+            Header: 'Created by user',
+            accessor: 'parentusername',
+        },
+        {
+            Header: 'Is admin',
+            id: 'isadmin',
+            Cell: ({ ...props }) => (props.data[props.row.index].isadmin ? 'yes' : 'no'),
+        },
+    ];
+
+    return list === ACTIVE ? [...generalColumns, ...userColumns] : generalColumns;
 };
