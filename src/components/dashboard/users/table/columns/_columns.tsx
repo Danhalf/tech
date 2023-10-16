@@ -23,22 +23,22 @@ export const usersColumns = (list: UsersListType): ReadonlyArray<Column<User>> =
                 return <UserLinkCell useruid={useruid} username={username} />;
             },
         },
-
-        {
-            Header: 'Actions',
-            id: 'actions',
-
-            Cell: ({ ...props }) => {
-                const { useruid, username }: User = props.data[props.row.index];
-                switch (list) {
-                    case ACTIVE:
-                        return <UserActionsCell useruid={useruid} username={username} />;
-                    case DELETED:
-                        return <DeletedUsersActionsCell useruid={useruid} username={username} />;
-                }
-            },
-        },
     ];
+
+    const actionColumn = {
+        Header: 'Actions',
+        id: 'actions',
+
+        Cell: ({ ...props }) => {
+            const { useruid, username }: User = props.data[props.row.index];
+            switch (list) {
+                case ACTIVE:
+                    return <UserActionsCell useruid={useruid} username={username} />;
+                case DELETED:
+                    return <DeletedUsersActionsCell useruid={useruid} username={username} />;
+            }
+        },
+    };
 
     const userColumns = [
         {
@@ -52,5 +52,7 @@ export const usersColumns = (list: UsersListType): ReadonlyArray<Column<User>> =
         },
     ];
 
-    return list === ACTIVE ? [...generalColumns, ...userColumns] : generalColumns;
+    return list === ACTIVE
+        ? [...generalColumns, ...userColumns, actionColumn]
+        : [...generalColumns, actionColumn];
 };
