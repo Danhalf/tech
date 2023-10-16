@@ -20,9 +20,9 @@ export function DashboardHeader() {
     return (
         <header className='app-header'>
             <div className='container flex-lg-grow-1 d-flex align-items-stretch justify-content-between'>
-                <div className='d-flex align-items-stretch justify-content-between flex-lg-grow-1'>
-                    <div className='app-header-menu app-header-mobile-drawer align-items-stretch w-100'>
-                        <div className='menu menu-rounded menu-column menu-lg-row my-5 my-lg-0 align-items-stretch fw-semibold px 2 px-lg-0 d-flex'>
+                <div className='d-flex align-items-stretch justify-content-between flex-grow-1'>
+                    <div className='app-header-menu d-flex align-items-stretch w-100'>
+                        <div className='menu menu-rounded menu-column menu-row my-5 my-lg-0 align-items-stretch fw-semibold  px-lg-0 w-100'>
                             <div className='menu-item me-lg-1'>
                                 <Link
                                     className='menu-link py-3 text-hover-primary'
