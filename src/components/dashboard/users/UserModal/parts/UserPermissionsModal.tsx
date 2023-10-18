@@ -95,11 +95,12 @@ export const UserPermissionsModal = ({
                     action: handleChangeUserPermissions,
                 })}
             <PrimaryButton
-                buttonText='Save permissions'
                 icon='check'
                 disabled={isButtonDisabled}
                 buttonClickAction={handleSetUserPermissions}
-            />
+            >
+                Save permissions
+            </PrimaryButton>
         </>
     );
 };

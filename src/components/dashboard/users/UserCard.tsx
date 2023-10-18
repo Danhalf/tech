@@ -207,11 +207,12 @@ export function UserCard() {
                             action={handleChangeUserPermissions}
                         >
                             <PrimaryButton
-                                buttonText={`Save ${username} permissions`}
                                 icon='check'
                                 disabled={isButtonDisabled}
                                 buttonClickAction={handleSetUserPermissions}
-                            />
+                            >
+                                Save {username} permissions
+                            </PrimaryButton>
                         </TabDataWrapper>
                     </TabPanel>
                     <TabPanel activeTab={activeTab} tabName={UserCardTabs.Settings}>

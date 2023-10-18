@@ -164,11 +164,12 @@ export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps):
                     );
                 })}
             <PrimaryButton
-                buttonText='Save permissions'
                 icon='check'
                 disabled={isButtonDisabled}
                 buttonClickAction={handleSetUserSettings}
-            />
+            >
+                Save user settings
+            </PrimaryButton>
         </>
     );
 };

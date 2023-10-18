@@ -47,10 +47,11 @@ export const Users = () => {
                             <div className='d-flex w-100 justify-content-between my-4'>
                                 <UsersListSearchComponent />
                                 <PrimaryButton
-                                    buttonText='Add User'
                                     icon='plus'
                                     buttonClickAction={handleAddUserModalOpen}
-                                />
+                                >
+                                    Add user
+                                </PrimaryButton>
                             </div>
                             <TabPanel activeTab={activeTab} tabName={UsersType.ACTIVE}>
                                 <UsersTable list={UsersType.ACTIVE} />
