@@ -8,7 +8,7 @@ import { UsersListType, User, UsersType } from 'common/interfaces/UserData';
 
 export const usersColumns = (list: UsersListType): ReadonlyArray<Column<User>> => {
     const { ACTIVE, DELETED } = UsersType;
-    return [
+    const generalColumns = [
         {
             Header: 'Index',
             accessor: 'index',
@@ -23,6 +23,24 @@ export const usersColumns = (list: UsersListType): ReadonlyArray<Column<User>> =
                 return <UserLinkCell useruid={useruid} username={username} />;
             },
         },
+    ];
+
+    const actionColumn = {
+        Header: 'Actions',
+        id: 'actions',
+
+        Cell: ({ ...props }) => {
+            const { useruid, username }: User = props.data[props.row.index];
+            switch (list) {
+                case ACTIVE:
+                    return <UserActionsCell useruid={useruid} username={username} />;
+                case DELETED:
+                    return <DeletedUsersActionsCell useruid={useruid} username={username} />;
+            }
+        },
+    };
+
+    const userColumns = [
         {
             Header: 'Created by user',
             accessor: 'parentusername',
@@ -32,19 +50,9 @@ export const usersColumns = (list: UsersListType): ReadonlyArray<Column<User>> =
             id: 'isadmin',
             Cell: ({ ...props }) => (props.data[props.row.index].isadmin ? 'yes' : 'no'),
         },
-        {
-            Header: 'Actions',
-            id: 'actions',
-
-            Cell: ({ ...props }) => {
-                const { useruid, username }: User = props.data[props.row.index];
-                switch (list) {
-                    case ACTIVE:
-                        return <UserActionsCell useruid={useruid} username={username} />;
-                    case DELETED:
-                        return <DeletedUsersActionsCell useruid={useruid} username={username} />;
-                }
-            },
-        },
     ];
+
+    return list === ACTIVE
+        ? [...generalColumns, ...userColumns, actionColumn]
+        : [...generalColumns, actionColumn];
 };
