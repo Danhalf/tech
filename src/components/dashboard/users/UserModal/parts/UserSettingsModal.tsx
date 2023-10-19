@@ -15,9 +15,14 @@ import {
 interface UserSettingsModalProps {
     onClose: () => void;
     useruid: string;
+    username: string;
 }
 
-export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps): JSX.Element => {
+export const UserSettingsModal = ({
+    onClose,
+    useruid,
+    username,
+}: UserSettingsModalProps): JSX.Element => {
     const [settings, setSettings] = useState<any>({});
     const [initialUserSettings, setInitialUserSettings] = useState<any>({});
     const [allSettings, setAllSettings] = useState<any>({});
@@ -67,7 +72,7 @@ export const UserSettingsModal = ({ onClose, useruid }: UserSettingsModalProps):
                 const response = await setUserSettings(useruid, newSettings);
                 if (response.status === Status.OK) {
                     handleShowToast({
-                        message: 'User settings successfully saved',
+                        message: `<strong>${username}</strong> settings successfully saved`,
                         type: 'success',
                     });
                     onClose();
