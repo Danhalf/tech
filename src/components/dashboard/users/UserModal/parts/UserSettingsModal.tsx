@@ -169,11 +169,12 @@ export const UserSettingsModal = ({
                     );
                 })}
             <PrimaryButton
-                buttonText='Save permissions'
                 icon='check'
                 disabled={isButtonDisabled}
                 buttonClickAction={handleSetUserSettings}
-            />
+            >
+                Save user settings
+            </PrimaryButton>
         </>
     );
 };
