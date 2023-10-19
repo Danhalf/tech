@@ -114,6 +114,7 @@ export const UserActionsCell = ({ useruid, username }: User) => {
                     <UserPermissionsModal
                         onClose={() => setUserPermissionsModalEnabled(false)}
                         useruid={useruid}
+                        username={username}
                     />
                 </CustomModal>
             )}
@@ -125,6 +126,7 @@ export const UserActionsCell = ({ useruid, username }: User) => {
                     <UserSettingsModal
                         onClose={() => setUserSettingssModalEnabled(false)}
                         useruid={useruid}
+                        username={username}
                     />
                 </CustomModal>
             )}
@@ -136,6 +138,7 @@ export const UserActionsCell = ({ useruid, username }: User) => {
                     <UserOptionalModal
                         onClose={() => setUserOptionalsModalEnabled(false)}
                         useruid={useruid}
+                        username={username}
                     />
                 </CustomModal>
             )}

@@ -13,9 +13,14 @@ import clsx from 'clsx';
 interface UserOptionalModalProps {
     onClose: () => void;
     useruid: string;
+    username: string;
 }
 
-export const UserOptionalModal = ({ onClose, useruid }: UserOptionalModalProps): JSX.Element => {
+export const UserOptionalModal = ({
+    onClose,
+    useruid,
+    username,
+}: UserOptionalModalProps): JSX.Element => {
     const [optional, setOptional] = useState<any[]>([]);
     const [initialUserOptional, setInitialUserOptional] = useState<any>([]);
     const [allOptional, setAllOptional] = useState<any>({});
@@ -81,7 +86,7 @@ export const UserOptionalModal = ({ onClose, useruid }: UserOptionalModalProps):
                 const response = await setUserOptionalData(useruid, newOptional);
                 if (response.status === Status.OK) {
                     handleShowToast({
-                        message: 'User optional data successfully saved',
+                        message: `<strong>${username}</strong> optional data successfully saved`,
                         type: 'success',
                     });
                     onClose();

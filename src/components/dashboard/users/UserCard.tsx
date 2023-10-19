@@ -141,7 +141,7 @@ export function UserCard() {
                 try {
                     if (response.status === Status.OK) {
                         handleShowToast({
-                            message: `${username} permissions successfully saved`,
+                            message: `<strong>${username}</strong> permissions successfully saved`,
                             type: 'success',
                         });
                     }

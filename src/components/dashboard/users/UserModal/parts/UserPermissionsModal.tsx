@@ -9,11 +9,13 @@ import { Status } from 'common/interfaces/ActionStatus';
 interface UserPermissionsModalProps {
     onClose: () => void;
     useruid: string;
+    username: string;
 }
 
 export const UserPermissionsModal = ({
     onClose,
     useruid,
+    username,
 }: UserPermissionsModalProps): JSX.Element => {
     const [userPermissionsJSON, setUserPermissionsJSON] = useState<string>('');
     const [initialUserPermissionsJSON, setInitialUserPermissionsJSON] = useState<string>('');
@@ -72,7 +74,7 @@ export const UserPermissionsModal = ({
                 const response = await setUserPermissions(useruid, JSON.parse(userPermissionsJSON));
                 if (response.status === Status.OK) {
                     handleShowToast({
-                        message: 'Permissions successfully saved',
+                        message: `<strong>${username}</strong> permissions successfully saved`,
                         type: 'success',
                     });
                     onClose();
