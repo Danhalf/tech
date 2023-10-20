@@ -27,7 +27,6 @@ export const login = (username: string, password: string) => {
         .post<LoginResponse>(`${API_URL}user`, {
             user: username,
             secret: password,
-            magic: 'avansoft',
         })
         .then((response) => response.data);
 };
