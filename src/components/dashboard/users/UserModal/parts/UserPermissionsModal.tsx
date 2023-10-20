@@ -101,7 +101,7 @@ export const UserPermissionsModal = ({
                 disabled={isButtonDisabled}
                 buttonClickAction={handleSetUserPermissions}
             >
-                Save permissions
+                Save {username} permissions
             </PrimaryButton>
         </>
     );
