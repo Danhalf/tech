@@ -193,7 +193,7 @@ export const UserOptionalModal = ({
                                             }
                                             type='submit'
                                         >
-                                            Save user optional data
+                                            Save {username} optional data
                                         </PrimaryButton>
                                     </div>
                                 </Form>

@@ -173,7 +173,7 @@ export const UserSettingsModal = ({
                 disabled={isButtonDisabled}
                 buttonClickAction={handleSetUserSettings}
             >
-                Save user settings
+                Save {username} settings
             </PrimaryButton>
         </>
     );
