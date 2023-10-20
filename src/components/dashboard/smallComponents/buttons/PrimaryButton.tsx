@@ -1,20 +1,28 @@
-interface IButtonProps {
-    buttonText: string;
-    disabled?: boolean;
+import { ButtonHTMLAttributes } from 'react';
+
+interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
     icon?: string;
+    appearance?: 'primary' | 'light';
     buttonClickAction?: () => void;
 }
 
-export const PrimaryButton = ({ buttonText, icon, disabled, buttonClickAction }: IButtonProps) => {
+export const PrimaryButton = ({
+    icon,
+    disabled,
+    buttonClickAction,
+    type,
+    appearance = 'primary',
+    children,
+}: ButtonProps) => {
     return (
         <button
-            type='button'
-            className='btn btn-primary'
+            type={type || 'button'}
+            className={`btn btn-${appearance}`}
             onClick={buttonClickAction}
             disabled={disabled}
         >
             {icon && <i className={`ki-duotone ki-${icon} fs-2`}></i>}
-            {buttonText}
+            {children}
         </button>
     );
 };

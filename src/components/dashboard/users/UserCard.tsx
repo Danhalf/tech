@@ -141,7 +141,7 @@ export function UserCard() {
                 try {
                     if (response.status === Status.OK) {
                         handleShowToast({
-                            message: `${username} permissions successfully saved`,
+                            message: `<strong>${username}</strong> permissions successfully saved`,
                             type: 'success',
                         });
                     }
@@ -207,11 +207,12 @@ export function UserCard() {
                             action={handleChangeUserPermissions}
                         >
                             <PrimaryButton
-                                buttonText={`Save ${username} permissions`}
                                 icon='check'
                                 disabled={isButtonDisabled}
                                 buttonClickAction={handleSetUserPermissions}
-                            />
+                            >
+                                Save {username} permissions
+                            </PrimaryButton>
                         </TabDataWrapper>
                     </TabPanel>
                     <TabPanel activeTab={activeTab} tabName={UserCardTabs.Settings}>
