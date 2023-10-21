@@ -1,4 +1,4 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext } from 'react';
 import qs from 'qs';
 import { QueryResponseContextProps, QueryState } from './models';
 
@@ -29,17 +29,4 @@ export function stringifyRequestQuery(state: QueryState): string {
 export function parseRequestQuery(query: string): QueryState {
     const cache: unknown = qs.parse(query);
     return cache as QueryState;
-}
-
-export function useDebounce(value: string | undefined, delay: number) {
-    const [debouncedValue, setDebouncedValue] = useState(value);
-    useEffect(() => {
-        const handler = setTimeout(() => {
-            setDebouncedValue(value);
-        }, delay);
-        return () => {
-            clearTimeout(handler);
-        };
-    }, [value, delay]);
-    return debouncedValue;
 }
