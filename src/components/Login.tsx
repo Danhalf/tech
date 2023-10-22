@@ -5,6 +5,7 @@ import * as Yup from 'yup';
 
 import { useNavigate } from 'react-router-dom';
 import { login } from 'common/auth.service';
+import { LOC_STORAGE_USER, LOC_STORAGE_USER_STATE } from 'common/app-consts';
 
 interface LoginCredentials {
     username: string;
@@ -55,7 +56,17 @@ export function Login() {
             login(values.username, values.password)
                 .then((response) => {
                     setStatus(false);
-                    localStorage.setItem('admss-admin-user', JSON.stringify(response));
+                    const login = response?.loginname || response.username;
+                    localStorage.setItem(LOC_STORAGE_USER, JSON.stringify(response));
+
+                    const localUserState = JSON.parse(
+                        localStorage.getItem(LOC_STORAGE_USER_STATE) || '{}'
+                    );
+
+                    if (!localUserState.login || localUserState.login !== login) {
+                        localStorage.setItem(LOC_STORAGE_USER_STATE, JSON.stringify({ login }));
+                    }
+
                     navigate('/dashboard');
                 })
                 .catch((err) => {

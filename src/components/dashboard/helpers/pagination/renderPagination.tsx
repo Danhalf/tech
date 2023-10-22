@@ -15,7 +15,7 @@ interface UsersListPaginationProps {
 }
 
 export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationProps) => {
-    const [currentpage, setCurrentPage] = useState<number>(0);
+    const [currentPage, setCurrentPage] = useState<number>(0);
     const isLoading = useQueryResponseLoading(list);
     const searchResultLength = useQueryResponseDataLength(list);
     const [pagesCount, setPagesCount] = useState<number>(totalRecords);
@@ -30,12 +30,18 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
         } else {
             setPagesCount(totalRecords);
         }
-        if (currentpage !== undefined) {
-            updateState({ ...state, currentpage: currentpage * recordsPerPage });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [searchResultLength, state.search]);
+
+    useEffect(() => {
+        if (currentPage !== undefined) {
+            const currentpage = currentPage * recordsPerPage;
+
+            updateState({ ...state, currentpage });
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentpage, searchResultLength, state.search]);
+    }, [currentPage]);
 
     const handleSetCurrentPage = (page: number): void => {
         setCurrentPage(page);
@@ -51,13 +57,13 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
                 <ul className='pagination'>
                     <li
                         className={clsx('page-item previous', {
-                            disabled: isLoading || currentpage === 0,
+                            disabled: isLoading || currentPage === 0,
                         })}
                     >
                         <a
                             href='#'
                             className='page-link'
-                            onClick={() => handleSetCurrentPage(currentpage - 1)}
+                            onClick={() => handleSetCurrentPage(currentPage - 1)}
                         >
                             <i className='previous'></i>
                         </a>
@@ -68,7 +74,7 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
                             key={pageNumber}
                             className={clsx('page-item', {
                                 disabled: isLoading,
-                                active: pageNumber === currentpage,
+                                active: pageNumber === currentPage,
                             })}
                         >
                             <a
@@ -83,13 +89,13 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
 
                     <li
                         className={clsx('page-item next', {
-                            disabled: isLoading || currentpage === totalPages - 1,
+                            disabled: isLoading || currentPage === totalPages - 1,
                         })}
                     >
                         <a
                             href='#'
                             className='page-link'
-                            onClick={() => handleSetCurrentPage(currentpage + 1)}
+                            onClick={() => handleSetCurrentPage(currentPage + 1)}
                         >
                             <i className='next'></i>
                         </a>
