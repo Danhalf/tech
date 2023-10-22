@@ -6,16 +6,19 @@ import {
     useQueryResponseLoading,
 } from 'common/core/QueryResponseProvider';
 import { useQueryRequest } from 'common/core/QueryRequestProvider';
-import { initialQueryState } from '_metronic/helpers';
+import { getLocalState, initialQueryState } from '_metronic/helpers';
 import { UsersListType } from 'common/interfaces/UserData';
+import { LOC_STORAGE_USER_STATE } from 'common/app-consts';
 
 interface UsersListPaginationProps {
     list: UsersListType;
     totalRecords: number;
 }
 
+const { login, usersPage } = getLocalState();
+
 export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationProps) => {
-    const [currentPage, setCurrentPage] = useState<number>(0);
+    const [currentPage, setCurrentPage] = useState<number>(usersPage);
     const isLoading = useQueryResponseLoading(list);
     const searchResultLength = useQueryResponseDataLength(list);
     const [pagesCount, setPagesCount] = useState<number>(totalRecords);
@@ -34,11 +37,12 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
     }, [searchResultLength, state.search]);
 
     useEffect(() => {
-        if (currentPage !== undefined) {
-            const currentpage = currentPage * recordsPerPage;
-
-            updateState({ ...state, currentpage });
-        }
+        const currentpage = currentPage * recordsPerPage;
+        localStorage.setItem(
+            LOC_STORAGE_USER_STATE,
+            JSON.stringify({ login, usersPage: currentPage })
+        );
+        updateState({ ...state, currentpage });
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentPage]);
