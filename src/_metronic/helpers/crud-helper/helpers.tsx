@@ -1,6 +1,7 @@
-import { createContext, useEffect, useState } from 'react';
+import { createContext } from 'react';
 import qs from 'qs';
 import { QueryResponseContextProps, QueryState } from './models';
+import { LOC_STORAGE_USER_STATE } from 'common/app-consts';
 
 export function createResponseContext<T>(initialState: QueryResponseContextProps<T>) {
     return createContext(initialState);
@@ -31,15 +32,25 @@ export function parseRequestQuery(query: string): QueryState {
     return cache as QueryState;
 }
 
-export function useDebounce(value: string | undefined, delay: number) {
-    const [debouncedValue, setDebouncedValue] = useState(value);
-    useEffect(() => {
-        const handler = setTimeout(() => {
-            setDebouncedValue(value);
-        }, delay);
-        return () => {
-            clearTimeout(handler);
-        };
-    }, [value, delay]);
-    return debouncedValue;
-}
+export const getLocalState = (): { usersPage: number; login: string } => {
+    const defaultValues = { usersPage: 0, login: '' };
+    const storage = localStorage.getItem(LOC_STORAGE_USER_STATE);
+    if (storage !== null) {
+        const parsedData = JSON.parse(storage);
+        const result = { ...defaultValues };
+
+        if (parsedData) {
+            if (parsedData.usersPage !== undefined) {
+                result.usersPage = parsedData.usersPage;
+            }
+
+            if (parsedData.login !== undefined) {
+                result.login = parsedData.login;
+            }
+        }
+
+        return result;
+    }
+
+    return { ...defaultValues };
+};

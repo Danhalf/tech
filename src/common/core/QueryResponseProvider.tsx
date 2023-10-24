@@ -9,6 +9,7 @@ import {
     QUERIES,
     Response,
     initialQueryState,
+    getLocalState,
 } from '_metronic/helpers';
 import { getDeletedUsers, getUsers } from 'components/dashboard/users/user.service';
 import { User, UsersListType, UsersType } from 'common/interfaces/UserData';
@@ -44,7 +45,10 @@ export const QueryResponseProvider = ({
         `${GET_LIST_TYPE()}`,
         () => {
             const currentQuery: UserQuery = {
-                skip: state.currentpage || initialQueryState.currentpage,
+                skip:
+                    state.currentpage ||
+                    getLocalState().usersPage * initialQueryState.count ||
+                    initialQueryState.currentpage,
                 top: state.count || initialQueryState.count,
                 column: state.sort || initialQueryState.sort,
                 qry: state.search || initialQueryState.search,
