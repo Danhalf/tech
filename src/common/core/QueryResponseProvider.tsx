@@ -44,17 +44,24 @@ export const QueryResponseProvider = ({
     } = useQuery(
         `${GET_LIST_TYPE()}`,
         () => {
-            const currentQuery: UserQuery = {
-                skip:
-                    state.currentpage ||
-                    getLocalState().usersPage * initialQueryState.count ||
-                    initialQueryState.currentpage,
-                top: state.count || initialQueryState.count,
-                column: state.sort || initialQueryState.sort,
-                qry: state.search || initialQueryState.search,
-                type: state.order || initialQueryState.order,
+            const getPage = () => {
+                if (state.search) {
+                    return state.currentpage;
+                }
+                if (getLocalState().usersPage) {
+                    return getLocalState().usersPage * initialQueryState.count;
+                }
             };
 
+            const currentQuery: UserQuery = {
+                skip: getPage(),
+                top: state.count,
+                column: state.sort,
+                qry: state.search,
+                type: state.order,
+            };
+
+            // debugger;
             switch (listType) {
                 case UsersType.ACTIVE:
                     return getUsers(currentQuery);

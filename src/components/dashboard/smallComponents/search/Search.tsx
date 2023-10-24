@@ -1,21 +1,35 @@
 import { useQueryRequest } from 'common/core/QueryRequestProvider';
 import { useState, useEffect, KeyboardEvent } from 'react';
 import clsx from 'clsx';
+import { initialQueryState } from '_metronic/helpers';
 
 export const UsersListSearchComponent = () => {
     const { state, updateState } = useQueryRequest();
     const [searchTerm, setSearchTerm] = useState<string>('');
     const [isSearchUnchanged, setIsSearchUnchanged] = useState<boolean>(true);
+    const [isSearching, setIsSearching] = useState<boolean>(false);
 
     useEffect(() => {
         setIsSearchUnchanged(searchTerm === state.search);
+        !searchTerm && setIsSearching(false);
     }, [searchTerm, state.search]);
 
     const handleSearch = (): void => {
         if (!isSearchUnchanged) {
             setIsSearchUnchanged(true);
-            updateState({ ...state, search: searchTerm });
+            try {
+                updateState({ ...state, search: searchTerm, currentpage: 0 });
+                setIsSearching(true);
+            } catch (error) {
+                setIsSearching(false);
+            }
         }
+    };
+
+    const handleClear = (): void => {
+        setSearchTerm('');
+        updateState(initialQueryState);
+        setIsSearching(false);
     };
 
     const handleKeyPress = (e: KeyboardEvent<HTMLInputElement>): void => {
@@ -35,8 +49,14 @@ export const UsersListSearchComponent = () => {
                     placeholder='Search user'
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
-                    onKeyPress={handleKeyPress}
+                    onKeyUp={handleKeyPress}
                 />
+
+                {isSearching ? (
+                    <button className={clsx('btn btn-danger')} onClick={handleClear}>
+                        <i className='ki-outline ki-cross fs-2'></i>
+                    </button>
+                ) : null}
                 <button
                     className={clsx('btn btn-primary', {
                         disabled: isSearchUnchanged,
