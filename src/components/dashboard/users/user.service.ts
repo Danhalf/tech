@@ -40,10 +40,6 @@ export const undeleteUser = (uid: string): Promise<ActionStatus> => {
     return fetchApiData<ActionStatus>('POST', `user/${uid}/undelete`);
 };
 
-export const setUserProfile = (uid: string, data: unknown): Promise<ActionStatus> => {
-    return fetchApiData('POST', `user/${uid}/profile`, { data });
-};
-
 export const copyUser = (uid: string): Promise<ActionStatus> => {
     return fetchApiData<ActionStatus>('POST', `user/${uid}/copyuser`);
 };
@@ -130,14 +126,6 @@ export const listSalesPersons = (uid: string): Promise<string> => {
 
 export const getUserShortInfo = (uid: string): Promise<ShortUserInfo> => {
     return fetchApiData<ShortUserInfo>('GET', `user/${uid}/username`);
-};
-
-export const getAllUIPermissions = (uid: string): Promise<string> => {
-    return fetchApiData<string>('GET', `user/${uid}/listpermissions`);
-};
-
-export const getAllUITypes = (uid: string): Promise<string> => {
-    return fetchApiData<string>('GET', `user/${uid}/listusertypes`);
 };
 
 export const clearCache = (): Promise<string[]> => {
