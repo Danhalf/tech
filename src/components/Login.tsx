@@ -1,12 +1,14 @@
 import clsx from 'clsx';
 import { useFormik } from 'formik';
-import { HTMLInputTypeAttribute, useState } from 'react';
+import { HTMLInputTypeAttribute, useEffect, useState } from 'react';
 import * as Yup from 'yup';
 
 import { useNavigate } from 'react-router-dom';
 import { login } from 'common/auth.service';
 import { LOC_STORAGE_USER, LOC_STORAGE_USER_STATE } from 'common/app-consts';
 import { getLocalState } from '_metronic/helpers';
+import { useTokenValidation } from 'common/hooks/useTokenValidation';
+import { getToken } from 'common/utils';
 
 interface LoginCredentials {
     username: string;
@@ -32,6 +34,12 @@ export function Login() {
     const [passwordFieldIcon, setPasswordFieldIcon] = useState<PasswordFieldIcon>('ki-eye');
 
     const navigate = useNavigate();
+    const token = getToken();
+    const isTokenValid = useTokenValidation(token as string);
+
+    useEffect(() => {
+        isTokenValid && navigate('/dashboard');
+    }, [isTokenValid, navigate]);
 
     const handleChangePasswordField = () => {
         switch (isPasswordVisible) {
