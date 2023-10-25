@@ -2,13 +2,13 @@ import clsx from 'clsx';
 import { useFormik } from 'formik';
 import { HTMLInputTypeAttribute, useEffect, useState } from 'react';
 import * as Yup from 'yup';
-
 import { useNavigate } from 'react-router-dom';
 import { login } from 'common/auth.service';
 import { LOC_STORAGE_USER, LOC_STORAGE_USER_STATE } from 'common/app-consts';
 import { getLocalState } from '_metronic/helpers';
 import { useTokenValidation } from 'common/hooks/useTokenValidation';
 import { getToken } from 'common/utils';
+import { Status } from 'common/interfaces/ActionStatus';
 
 interface LoginCredentials {
     username: string;
@@ -64,20 +64,22 @@ export function Login() {
 
             login(values.username, values.password)
                 .then((response) => {
-                    setStatus(false);
-                    const login = response?.loginname || response.username;
-                    localStorage.setItem(LOC_STORAGE_USER, JSON.stringify(response));
+                    if (response && response?.status === Status.OK) {
+                        setStatus(false);
+                        const login = response?.loginname || response.username;
+                        localStorage.setItem(LOC_STORAGE_USER, JSON.stringify(response));
 
-                    const localUserState = getLocalState();
+                        const localUserState = getLocalState();
 
-                    if (!localUserState.login || localUserState.login !== login) {
-                        localStorage.setItem(
-                            LOC_STORAGE_USER_STATE,
-                            JSON.stringify({ login, usersPage: 0 })
-                        );
+                        if (!localUserState.login || localUserState.login !== login) {
+                            localStorage.setItem(
+                                LOC_STORAGE_USER_STATE,
+                                JSON.stringify({ login, usersPage: 0 })
+                            );
+                        }
+
+                        navigate('/dashboard');
                     }
-
-                    navigate('/dashboard');
                 })
                 .catch((err) => {
                     setStatus(err.response.data.error);
