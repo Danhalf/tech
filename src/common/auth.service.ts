@@ -18,7 +18,7 @@ export interface LoginResponse {
     useruid: string;
 }
 
-export interface LogoutResponse {
+interface LogoutResponse {
     status: 'OK';
 }
 
