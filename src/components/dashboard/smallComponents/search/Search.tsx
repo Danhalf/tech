@@ -41,20 +41,19 @@ export const UsersListSearchComponent = () => {
 
     return (
         <div className='d-flex align-items-center position-relative my-1'>
-            <div className='input-group'>
+            <div className='input-group position-relative'>
                 <input
                     type='text'
                     data-kt-user-table-filter='search'
-                    className='form-control form-control-solid w-250px'
+                    className='form-control form-control-solid w-250px ps-10'
                     placeholder='Search user'
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
                     onKeyUp={handleKeyPress}
                 />
-
                 {isSearching ? (
-                    <button className={clsx('btn btn-danger')} onClick={handleClear}>
-                        <i className='ki-outline ki-cross fs-2'></i>
+                    <button className={clsx('btn position-absolute start-0')} onClick={handleClear}>
+                        <i className='ki-outline ki-cross fs-2 '></i>
                     </button>
                 ) : null}
                 <button
