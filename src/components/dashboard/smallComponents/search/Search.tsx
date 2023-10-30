@@ -34,7 +34,7 @@ export const UsersListSearchComponent = () => {
     };
 
     return (
-        <div className='input-group w-350px'>
+        <div className='d-flex align-items-center position-relative my-1'>
             <input
                 type='text'
                 data-kt-user-table-filter='search'
@@ -45,9 +45,10 @@ export const UsersListSearchComponent = () => {
                 onKeyUp={handleKeyPress}
             />
             {searchTerm && (
-                <button className={clsx('btn btn-light input-group-append')} onClick={handleClear}>
-                    <i className='ki-outline ki-cross fs-2'></i>
-                </button>
+                <i
+                    onClick={handleClear}
+                    className='ki-outline ki-cross fs-1 end-0 position-absolute me-20 px-2 cursor-pointer'
+                />
             )}
             <button
                 className={clsx('btn btn-primary', {
