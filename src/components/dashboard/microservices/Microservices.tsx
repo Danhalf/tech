@@ -4,7 +4,6 @@ import { listServices, stopService } from './service';
 import { Link } from 'react-router-dom';
 import { TableHead } from 'components/dashboard/helpers/renderTableHelper';
 import { CustomDropdown } from 'components/dashboard/helpers/renderDropdownHelper';
-import { AxiosError } from 'axios';
 import { useToast } from '../helpers/renderToastHelper';
 import { Microservice } from 'common/interfaces/MicroserviceServerData';
 import { Status } from 'common/interfaces/ActionStatus';
@@ -41,6 +40,9 @@ export const Microservices = () => {
         try {
             if (uid) {
                 const response = await stopService(uid);
+                if (response.status === Status.ERROR) {
+                    throw new Error(response.info);
+                }
                 if (response.status === Status.OK) {
                     updateMicroservices();
                     handleShowToast({
@@ -50,7 +52,13 @@ export const Microservices = () => {
                 }
             }
         } catch (err) {
-            const { message } = err as Error | AxiosError;
+            let message = '';
+            if (err instanceof Error) {
+                message = err.message;
+            }
+            if (typeof err === 'string') {
+                message = err;
+            }
             handleShowToast({ message, type: 'danger' });
         }
     };

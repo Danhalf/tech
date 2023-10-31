@@ -1,8 +1,12 @@
 export interface MicroserviceServerData {
     info: string;
-    status: string;
+    status?: string;
     timestamp: string;
-    value?: string;
+}
+
+export interface MicroserviceCounters extends MicroserviceServerData {
+    type: string;
+    value: string;
 }
 
 export interface Microservice {

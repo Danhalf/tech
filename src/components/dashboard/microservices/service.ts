@@ -1,68 +1,41 @@
-import axios from 'axios';
-import { getToken } from 'common/utils';
-import { API_URL } from 'common/app-consts';
-import { Microservice } from 'common/interfaces/MicroserviceServerData';
-import { ActionStatus } from 'common/interfaces/ActionStatus';
+import {
+    Microservice,
+    MicroserviceCounters,
+    MicroserviceServerData,
+} from 'common/interfaces/MicroserviceServerData';
+import { ServiceStopResponse } from 'common/interfaces/ActionStatus';
 import { ServicesSortParams } from 'common/interfaces/QueriesParams';
+import { fetchApiData } from 'common/api/fetchAPI';
 
 export const getServiceById = (uid: string) => {
-    return axios
-        .get<Microservice[]>(`${API_URL}services/${uid}`, {
-            headers: { Authorization: `Bearer ${getToken()}` },
-        })
-        .then((response) => response.data[0]);
+    return fetchApiData<Microservice>('GET', `services/${uid}`);
 };
 
-export const listServices = (params?: ServicesSortParams) => {
+export const listServices = (params?: ServicesSortParams): Promise<Microservice[]> => {
     const initialParams: ServicesSortParams = {
         column: params?.column || 'name',
         type: params?.type || 'asc',
     };
 
-    return axios
-        .get<Microservice[]>(`${API_URL}services/list`, {
-            headers: { Authorization: `Bearer ${getToken()}` },
-            params: initialParams,
-        })
-        .then((response) => response.data);
+    return fetchApiData<Microservice[]>('GET', 'services/list', { params: initialParams });
 };
 
-export const getServiceLogs = (uid: string) => {
-    return axios
-        .get<ActionStatus>(`${API_URL}services/${uid}/logs`, {
-            headers: { Authorization: `Bearer ${getToken()}` },
-        })
-        .then((response) => response.data);
+export const getServiceLogs = (uid: string): Promise<MicroserviceServerData[]> => {
+    return fetchApiData<MicroserviceServerData[]>('GET', `services/${uid}/logs`);
 };
 
-export const getServiceAudit = (uid: string) => {
-    return axios
-        .get<ActionStatus>(`${API_URL}services/${uid}/audit`, {
-            headers: { Authorization: `Bearer ${getToken()}` },
-        })
-        .then((response) => response.data);
+export const getServiceAudit = (uid: string): Promise<MicroserviceServerData[]> => {
+    return fetchApiData<MicroserviceServerData[]>('GET', `services/${uid}/audit`);
 };
 
-export const getServiceAlerts = (uid: string) => {
-    return axios
-        .get<ActionStatus>(`${API_URL}services/${uid}/allerts`, {
-            headers: { Authorization: `Bearer ${getToken()}` },
-        })
-        .then((response) => response.data);
+export const getServiceAlerts = (uid: string): Promise<MicroserviceServerData[]> => {
+    return fetchApiData<MicroserviceServerData[]>('GET', `services/${uid}/allerts`);
 };
 
-export const getServiceCounters = (uid: string) => {
-    return axios
-        .get<ActionStatus>(`${API_URL}services/${uid}/counters`, {
-            headers: { Authorization: `Bearer ${getToken()}` },
-        })
-        .then((response) => response.data);
+export const getServiceCounters = (uid: string): Promise<MicroserviceCounters[]> => {
+    return fetchApiData<MicroserviceCounters[]>('GET', `services/${uid}/counters`);
 };
 
-export const stopService = (id: string) => {
-    return axios
-        .get<ActionStatus>(API_URL + 'services/' + id + '/stop', {
-            headers: { Authorization: `Bearer ${getToken()}` },
-        })
-        .then((response) => response.data);
+export const stopService = (id: string): Promise<ServiceStopResponse> => {
+    return fetchApiData<ServiceStopResponse>('POST', `services/${id}/stop`);
 };
