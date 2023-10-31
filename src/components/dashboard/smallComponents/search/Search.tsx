@@ -38,7 +38,7 @@ export const UsersListSearchComponent = () => {
             <input
                 type='text'
                 data-kt-user-table-filter='search'
-                className='form-control form-control-solid pe-4'
+                className='form-control rounded-0 rounded-start-2 form-control-solid pe-4'
                 placeholder='Search user'
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
@@ -51,12 +51,12 @@ export const UsersListSearchComponent = () => {
                 />
             )}
             <button
-                className={clsx('btn btn-primary', {
+                className={clsx('btn btn-primary rounded-0 rounded-end-2', {
                     disabled: isSearchUnchanged,
                 })}
                 onClick={handleSearch}
             >
-                <i className='ki-outline ki-magnifier fs-2'></i>
+                <i className='ki-outline ki-magnifier fs-2' />
             </button>
         </div>
     );
