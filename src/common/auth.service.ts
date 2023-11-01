@@ -38,3 +38,9 @@ export const logout = (userId: string) => {
         })
         .then((response) => response.data);
 };
+
+export const checkToken = (token: string) => {
+    return axios.get(API_URL + 'user/' + token + '/token', {
+        headers: { Authorization: `Bearer ${getToken()}` },
+    });
+};

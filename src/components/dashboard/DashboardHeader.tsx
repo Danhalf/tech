@@ -22,12 +22,15 @@ export function DashboardHeader() {
     };
     const signOut = () => {
         if (useruid) {
-            logout(useruid).then((response) => {
-                if (response.status) {
+            logout(useruid)
+                .then((response) => {
+                    if (response.status) {
+                        localStorage.removeItem(LOC_STORAGE_USER);
+                    }
+                })
+                .finally(() => {
                     navigate('/');
-                    localStorage.removeItem(LOC_STORAGE_USER);
-                }
-            });
+                });
         }
     };
     return (

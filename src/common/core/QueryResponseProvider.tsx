@@ -61,7 +61,6 @@ export const QueryResponseProvider = ({
                 type: state.order,
             };
 
-            // debugger;
             switch (listType) {
                 case UsersType.ACTIVE:
                     return getUsers(currentQuery);

@@ -4,8 +4,11 @@ const Content = lazy(() => import('./Content'));
 const Loader = () => {
     document.getElementById('splash-screen')?.remove();
     return (
-        <div id='splash-screen' className='splash-screen'>
-            <img src='/logo/admss_logo.png' className='logo' alt='ADMS' />
+        <div
+            id='splash-screen'
+            className='splash-screen d-flex justify-content-center align-items-center flex-column h-100'
+        >
+            <img src='/logo/admss_logo.png' className='logo w-25' alt='ADMS' />
             <div>Loading ...</div>
         </div>
     );
