@@ -1,32 +1,7 @@
-import axios, { AxiosResponse } from 'axios';
-import { API_URL } from 'common/app-consts';
+import { fetchApiData } from 'common/api/fetchAPI';
 import { ActionStatus } from 'common/interfaces/ActionStatus';
 import { UserQuery } from 'common/interfaces/QueriesParams';
 import { ShortUserInfo, User, UserSettingsResponse } from 'common/interfaces/UserData';
-import { getToken } from 'common/utils';
-
-type Method = 'GET' | 'POST';
-
-const fetchApiData = async <T>(
-    method: Method,
-    url: string,
-    options?: { data?: unknown; params?: UserQuery }
-): Promise<T> => {
-    const headers = { Authorization: `Bearer ${getToken()}` };
-    const { data, params } = options || {};
-    try {
-        const response: AxiosResponse<T> = await axios({
-            method,
-            url: API_URL + url,
-            data,
-            params,
-            headers,
-        });
-        return response.data;
-    } catch (error) {
-        throw error;
-    }
-};
 
 export const createOrUpdateUser = (
     loginname: string,
