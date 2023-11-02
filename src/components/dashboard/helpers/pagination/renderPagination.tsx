@@ -22,6 +22,7 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
     const isLoading = useQueryResponseLoading(list);
     const searchResultLength = useQueryResponseDataLength(list);
     const [pagesCount, setPagesCount] = useState<number>(totalRecords);
+    const showedPages = 3;
 
     const { state, updateState } = useQueryRequest();
 
@@ -73,23 +74,30 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
                         </a>
                     </li>
 
-                    {pageNumbers.map((pageNumber) => (
-                        <li
-                            key={pageNumber}
-                            className={clsx('page-item', {
-                                disabled: isLoading,
-                                active: pageNumber === currentPage,
-                            })}
-                        >
-                            <a
-                                href='#'
-                                className='page-link'
-                                onClick={() => handleSetCurrentPage(pageNumber)}
-                            >
-                                {pageNumber + 1}
-                            </a>
-                        </li>
-                    ))}
+                    {pageNumbers.map((pageNumber) => {
+                        if (
+                            currentPage + showedPages > pageNumber &&
+                            currentPage - showedPages < pageNumber
+                        ) {
+                            return (
+                                <li
+                                    key={pageNumber}
+                                    className={clsx('page-item', {
+                                        disabled: isLoading,
+                                        active: pageNumber === currentPage,
+                                    })}
+                                >
+                                    <a
+                                        href='#'
+                                        className='page-link'
+                                        onClick={() => handleSetCurrentPage(pageNumber)}
+                                    >
+                                        {pageNumber + 1}
+                                    </a>
+                                </li>
+                            );
+                        } else return null;
+                    })}
 
                     <li
                         className={clsx('page-item next', {
@@ -105,6 +113,8 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
                         </a>
                     </li>
                 </ul>
+                <div className='mt-4 text-center fs-5'>Records per page: {recordsPerPage}</div>
+                <div className='mt-4 text-center fs-5'>Total records: {totalRecords}</div>
             </div>
         </div>
     );
