@@ -61,7 +61,16 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
             <div id='kt_table_users_paginate'>
                 <ul className='pagination'>
                     <li
-                        className={clsx('page-item previous', {
+                        className={clsx('page-item first', {
+                            disabled: isLoading || currentPage === 0,
+                        })}
+                    >
+                        <a href='#' className='page-link' onClick={() => handleSetCurrentPage(0)}>
+                            <i className='ki-outline ki-double-left fs-4'></i>
+                        </a>
+                    </li>
+                    <li
+                        className={clsx('page-item previous me-6', {
                             disabled: isLoading || currentPage === 0,
                         })}
                     >
@@ -70,7 +79,7 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
                             className='page-link'
                             onClick={() => handleSetCurrentPage(currentPage - 1)}
                         >
-                            <i className='previous'></i>
+                            <i className='ki-outline ki-left fs-4'></i>
                         </a>
                     </li>
 
@@ -100,7 +109,7 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
                     })}
 
                     <li
-                        className={clsx('page-item next', {
+                        className={clsx('page-item next ms-6', {
                             disabled: isLoading || currentPage === totalPages - 1,
                         })}
                     >
@@ -109,7 +118,20 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
                             className='page-link'
                             onClick={() => handleSetCurrentPage(currentPage + 1)}
                         >
-                            <i className='next'></i>
+                            <i className='ki-outline ki-right fs-4'></i>
+                        </a>
+                    </li>
+                    <li
+                        className={clsx('page-item last', {
+                            disabled: isLoading || currentPage === totalPages - 1,
+                        })}
+                    >
+                        <a
+                            href='#'
+                            className='page-link'
+                            onClick={() => handleSetCurrentPage(totalPages - 1)}
+                        >
+                            <i className='ki-outline ki-double-right fs-4'></i>
                         </a>
                     </li>
                 </ul>
