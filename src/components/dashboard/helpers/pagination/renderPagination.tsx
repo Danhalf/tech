@@ -20,8 +20,9 @@ const { login, usersPage } = getLocalState();
 export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationProps) => {
     const [currentPage, setCurrentPage] = useState<number>(initialQueryState.currentpage);
     const isLoading = useQueryResponseLoading(list);
-    const searchResultLength = useQueryResponseDataLength(list);
+    const listLength = useQueryResponseDataLength(list);
     const [pagesCount, setPagesCount] = useState<number>(totalRecords);
+    const [pageNumbers, setPageNumbers] = useState<number[]>([]);
     const showedPages = 3;
 
     const { state, updateState } = useQueryRequest();
@@ -29,29 +30,30 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
     const recordsPerPage = initialQueryState.count;
 
     useEffect(() => {
+        setPageNumbers(Array.from({ length: totalPages }, (_, index) => index));
         if (usersPage) {
-            setCurrentPage(usersPage);
+            handleSetCurrentPage(usersPage);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, []);
+    }, [usersPage]);
 
     useEffect(() => {
-        if (totalRecords && totalRecords <= pagesCount) {
-            handleSetCurrentPage(currentPage - 1);
+        if (!listLength) {
+            currentPage > 0 && handleSetCurrentPage(currentPage - 1);
+            pagesCount && setPagesCount((prev) => prev - 1);
+            setPageNumbers(Array.from({ length: totalPages }, (_, index) => index));
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [totalRecords]);
+    }, [listLength]);
 
     useEffect(() => {
         if (!!state.search?.length) {
-            setPagesCount(searchResultLength);
+            setPagesCount(listLength);
         } else {
             setPagesCount(totalRecords);
         }
-        if (currentPage > totalPages) {
-        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchResultLength, state.search, recordsPerPage, currentPage]);
+    }, [listLength, state.search, recordsPerPage, currentPage]);
 
     const handleSetCurrentPage = (page: number): void => {
         setCurrentPage(page);
@@ -61,7 +63,6 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
     };
 
     const totalPages = Math.ceil(pagesCount / recordsPerPage);
-    const pageNumbers = Array.from({ length: totalPages }, (_, index) => index);
 
     return (
         <div className='w-100 py-6 col-sm-12 col-md-7 d-flex align-items-center justify-content-center'>
@@ -90,30 +91,31 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
                         </a>
                     </li>
 
-                    {pageNumbers.map((pageNumber) => {
-                        if (
-                            currentPage + showedPages > pageNumber &&
-                            currentPage - showedPages < pageNumber
-                        ) {
-                            return (
-                                <li
-                                    key={pageNumber}
-                                    className={clsx('page-item', {
-                                        disabled: isLoading,
-                                        active: pageNumber === currentPage,
-                                    })}
-                                >
-                                    <a
-                                        href='#'
-                                        className='page-link'
-                                        onClick={() => handleSetCurrentPage(pageNumber)}
+                    {pageNumbers &&
+                        pageNumbers.map((pageNumber) => {
+                            if (
+                                currentPage + showedPages > pageNumber &&
+                                currentPage - showedPages < pageNumber
+                            ) {
+                                return (
+                                    <li
+                                        key={pageNumber}
+                                        className={clsx('page-item', {
+                                            disabled: isLoading,
+                                            active: pageNumber === currentPage,
+                                        })}
                                     >
-                                        {pageNumber + 1}
-                                    </a>
-                                </li>
-                            );
-                        } else return null;
-                    })}
+                                        <a
+                                            href='#'
+                                            className='page-link'
+                                            onClick={() => handleSetCurrentPage(pageNumber)}
+                                        >
+                                            {pageNumber + 1}
+                                        </a>
+                                    </li>
+                                );
+                            } else return null;
+                        })}
 
                     <li
                         className={clsx('page-item next ms-6', {
