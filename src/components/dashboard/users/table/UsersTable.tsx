@@ -5,26 +5,16 @@ import { CustomHeaderColumn } from './columns/CustomHeaderColumn';
 import { CustomRow } from './columns/CustomRow';
 import { usersColumns } from './columns/_columns';
 import { UsersListPagination } from 'components/dashboard/helpers/pagination/renderPagination';
-import { UsersListType, User, UsersType } from 'common/interfaces/UserData';
-import { getTotalUsersRecords } from '../user.service';
+import { UsersListType, User } from 'common/interfaces/UserData';
 
 interface UsersTableProps {
     list: UsersListType;
 }
 
 export const UsersTable = ({ list }: UsersTableProps) => {
-    const [totalRecords, setTotalRecords] = useState<number>(0);
-
     const users = useQueryResponseData(list);
 
     const isLoading = useQueryResponseLoading(list);
-    const totalList = list === UsersType.ACTIVE ? 'list' : 'listdeleted';
-
-    useEffect(() => {
-        getTotalUsersRecords(totalList).then(({ total }) => {
-            setTotalRecords(total);
-        });
-    }, [totalList]);
 
     const usersData = useMemo(() => users, [users]);
     const columns = useMemo(() => usersColumns(list), [list]);
@@ -71,7 +61,7 @@ export const UsersTable = ({ list }: UsersTableProps) => {
                     </tbody>
                 </table>
             </div>
-            <UsersListPagination list={list} totalRecords={totalRecords} />
+            <UsersListPagination list={list} />
         </>
     );
 };
