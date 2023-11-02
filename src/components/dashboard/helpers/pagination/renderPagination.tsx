@@ -169,8 +169,6 @@ export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
                     </li>
                 </ul>
 
-                <div className='mt-4 text-center fs-5'>Current page: {currentPage + 1}</div>
-                <div className='mt-4 text-center fs-5'>Total pages: {totalPages}</div>
                 <div className='mt-4 text-center fs-5'>Records per page: {count}</div>
                 <div className='mt-4 text-center fs-5'>Total records: {totalRecords}</div>
             </div>
