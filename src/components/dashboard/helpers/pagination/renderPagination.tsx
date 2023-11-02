@@ -29,13 +29,29 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
     const recordsPerPage = initialQueryState.count;
 
     useEffect(() => {
+        if (usersPage) {
+            setCurrentPage(usersPage);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        if (totalRecords && totalRecords <= pagesCount) {
+            handleSetCurrentPage(currentPage - 1);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [totalRecords]);
+
+    useEffect(() => {
         if (!!state.search?.length) {
             setPagesCount(searchResultLength);
         } else {
             setPagesCount(totalRecords);
         }
+        if (currentPage > totalPages) {
+        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchResultLength, state.search, totalRecords]);
+    }, [searchResultLength, state.search, recordsPerPage, currentPage]);
 
     const handleSetCurrentPage = (page: number): void => {
         setCurrentPage(page);
@@ -44,14 +60,7 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
         updateState({ ...state, currentpage: page });
     };
 
-    useEffect(() => {
-        if (usersPage) {
-            setCurrentPage(usersPage);
-        }
-    }, []);
-
     const totalPages = Math.ceil(pagesCount / recordsPerPage);
-
     const pageNumbers = Array.from({ length: totalPages }, (_, index) => index);
 
     return (
@@ -108,7 +117,10 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
 
                     <li
                         className={clsx('page-item next ms-6', {
-                            disabled: isLoading || currentPage === totalPages - 1,
+                            disabled:
+                                isLoading ||
+                                currentPage === totalPages - 1 ||
+                                currentPage > totalPages,
                         })}
                     >
                         <a
@@ -121,7 +133,10 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
                     </li>
                     <li
                         className={clsx('page-item last', {
-                            disabled: isLoading || currentPage === totalPages - 1,
+                            disabled:
+                                isLoading ||
+                                currentPage === totalPages - 1 ||
+                                currentPage > totalPages,
                         })}
                     >
                         <a
@@ -133,6 +148,8 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
                         </a>
                     </li>
                 </ul>
+
+                <div className='mt-4 text-center fs-5'>Current page: {currentPage + 1}</div>
                 <div className='mt-4 text-center fs-5'>Records per page: {recordsPerPage}</div>
                 <div className='mt-4 text-center fs-5'>Total records: {totalRecords}</div>
             </div>

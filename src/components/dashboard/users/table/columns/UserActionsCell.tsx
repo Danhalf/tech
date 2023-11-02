@@ -12,13 +12,16 @@ import { UserSettingsModal } from '../../UserModal/parts/UserSettingsModal';
 import { copyUser, deleteUser, killSession } from '../../user.service';
 import { useNavigate } from 'react-router-dom';
 import { useToast } from 'components/dashboard/helpers/renderToastHelper';
-import { User } from 'common/interfaces/UserData';
+import { User, UsersType } from 'common/interfaces/UserData';
+import { useQueryResponse } from 'common/core/QueryResponseProvider';
 
 export const UserActionsCell = ({ useruid, username }: User) => {
     const [editUserModalEnabled, setEditUserModalEnabled] = useState<boolean>(false);
     const [userPermissionsModalEnabled, setUserPermissionsModalEnabled] = useState<boolean>(false);
     const [userSettingsModalEnabled, setUserSettingssModalEnabled] = useState<boolean>(false);
     const [userOptionalModalEnabled, setUserOptionalsModalEnabled] = useState<boolean>(false);
+
+    const { refetch } = useQueryResponse(UsersType.ACTIVE);
 
     const navigate = useNavigate();
     const { handleShowToast } = useToast();
@@ -64,6 +67,7 @@ export const UserActionsCell = ({ useruid, username }: User) => {
             if (useruid) {
                 const response = await deleteUser(useruid);
                 if (response.status === Status.OK) {
+                    refetch();
                     handleShowToast({
                         message: `<strong>${username}</strong> successfully deleted`,
                         type: 'success',
