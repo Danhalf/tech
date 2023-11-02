@@ -18,7 +18,7 @@ interface UsersListPaginationProps {
 const { login, usersPage } = getLocalState();
 
 export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationProps) => {
-    const [currentPage, setCurrentPage] = useState<number>(usersPage);
+    const [currentPage, setCurrentPage] = useState<number>(initialQueryState.currentpage);
     const isLoading = useQueryResponseLoading(list);
     const searchResultLength = useQueryResponseDataLength(list);
     const [pagesCount, setPagesCount] = useState<number>(totalRecords);
@@ -35,21 +35,20 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
             setPagesCount(totalRecords);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [searchResultLength, state.search]);
-
-    useEffect(() => {
-        const currentpage = currentPage * recordsPerPage;
-        localStorage.setItem(
-            LOC_STORAGE_USER_STATE,
-            JSON.stringify({ login, usersPage: currentPage })
-        );
-        updateState({ ...state, currentpage });
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [currentPage]);
+    }, [searchResultLength, state.search, totalRecords]);
 
     const handleSetCurrentPage = (page: number): void => {
         setCurrentPage(page);
+        localStorage.setItem(LOC_STORAGE_USER_STATE, JSON.stringify({ login, usersPage: page }));
+
+        updateState({ ...state, currentpage: page });
     };
+
+    useEffect(() => {
+        if (usersPage) {
+            setCurrentPage(usersPage);
+        }
+    }, []);
 
     const totalPages = Math.ceil(pagesCount / recordsPerPage);
 
