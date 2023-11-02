@@ -44,7 +44,6 @@ export const UsersListPagination = ({ list, totalRecords }: UsersListPaginationP
             JSON.stringify({ login, usersPage: currentPage })
         );
         updateState({ ...state, currentpage });
-
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [currentPage]);
 
