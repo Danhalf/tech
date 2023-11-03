@@ -208,7 +208,6 @@ export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
                         </Form.Select>
                     </label>
                     <div className='mt-4 text-center fs-5'>Total records: {totalRecords}</div>
-                    <div className='mt-4 text-center fs-5'>Total pages: {totalPages}</div>
                 </div>
             </div>
         </div>
