@@ -28,6 +28,8 @@ export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
     const [pageNumbers, setPageNumbers] = useState<number[]>([]);
     const [totalPages, setTotalPages] = useState<number>(0);
 
+    const { count } = state;
+
     useEffect(() => {
         const fetchTotalRecords = async () => {
             const totalList = list === UsersType.ACTIVE ? 'list' : 'listdeleted';
@@ -44,9 +46,7 @@ export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
             setTotalPages(res);
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [totalRecords, currentPage]);
-
-    const { count } = state;
+    }, [totalRecords, currentPage, count]);
 
     const updatePageNumbers = (length: number): void => {
         setPageNumbers(Array.from({ length }, (_, index) => index));
@@ -89,7 +89,7 @@ export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
             JSON.stringify({ ...getLocalState(), usersPage: page })
         );
 
-        updateState({ ...state, currentpage: page });
+        updateState({ ...state, count, currentpage: page });
     };
 
     const handleChangeRecordsPerPage = (count: number): void => {
@@ -208,6 +208,7 @@ export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
                         </Form.Select>
                     </label>
                     <div className='mt-4 text-center fs-5'>Total records: {totalRecords}</div>
+                    <div className='mt-4 text-center fs-5'>Total pages: {totalPages}</div>
                 </div>
             </div>
         </div>

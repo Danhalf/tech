@@ -45,12 +45,13 @@ export const QueryResponseProvider = ({
         `${GET_LIST_TYPE()}`,
         () => {
             const getPage = () => {
-                if (getLocalState().usersPage) {
-                    return getLocalState().usersPage * initialQueryState.count;
+                if (getLocalState().usersPage && getLocalState().recordsOnPage) {
+                    return getLocalState().usersPage * getLocalState().recordsOnPage;
                 }
                 if (state.search) {
                     return state.currentpage;
                 }
+                return 0;
             };
 
             const currentQuery: UserQuery = {
