@@ -55,7 +55,7 @@ export const QueryResponseProvider = ({
 
             const currentQuery: UserQuery = {
                 skip: getPage(),
-                top: state.count,
+                top: getLocalState().recordsOnPage || state.count,
                 column: state.sort,
                 qry: state.search,
                 type: state.order,

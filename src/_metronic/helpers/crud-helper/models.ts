@@ -1,4 +1,5 @@
 import { SortType } from 'common/interfaces/QueriesParams';
+import { DefaultRecordsPerPage, RecordsPerPage } from 'common/settings/settings';
 import { ReactNode } from 'react';
 
 export type WithChildren = {
@@ -9,7 +10,7 @@ export type ID = undefined | null | number;
 
 export type PaginationState = {
     currentpage: number;
-    count: 10 | 30 | 50 | 100;
+    count: RecordsPerPage;
 };
 
 export type SortState = {
@@ -41,7 +42,7 @@ export type QueryRequestContextProps = {
 
 export const initialQueryState: QueryState = {
     currentpage: 0,
-    count: 10,
+    count: DefaultRecordsPerPage,
     sort: 'username',
     order: 'asc',
     search: '',

@@ -10,12 +10,14 @@ import { getLocalState } from '_metronic/helpers';
 import { UsersListType, UsersType } from 'common/interfaces/UserData';
 import { LOC_STORAGE_USER_STATE } from 'common/app-consts';
 import { getTotalUsersRecords } from 'components/dashboard/users/user.service';
+import { Form } from 'react-bootstrap';
+import { RecordsPerPageSteps, VisiblePageCount } from 'common/settings/settings';
 
 interface UsersListPaginationProps {
     list: UsersListType;
 }
 
-const { login, usersPage } = getLocalState();
+const { usersPage } = getLocalState();
 
 export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
     const { state, updateState } = useQueryRequest();
@@ -25,7 +27,6 @@ export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
     const [totalRecords, setTotalRecords] = useState<number>(0);
     const [pageNumbers, setPageNumbers] = useState<number[]>([]);
     const [totalPages, setTotalPages] = useState<number>(0);
-    const showedPages = 3;
 
     useEffect(() => {
         const fetchTotalRecords = async () => {
@@ -42,6 +43,7 @@ export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
             updatePageNumbers(res);
             setTotalPages(res);
         });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [totalRecords, currentPage]);
 
     const { count } = state;
@@ -51,11 +53,16 @@ export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
     };
 
     useEffect(() => {
-        updatePageNumbers(totalPages);
+        const count = getLocalState().recordsOnPage;
+        if (count) {
+            handleChangeRecordsPerPage(count);
+        }
         const page = getLocalState().usersPage;
         if (page) {
             handleSetCurrentPage(page);
         }
+        updatePageNumbers(totalPages);
+
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [usersPage, totalRecords]);
 
@@ -77,9 +84,21 @@ export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
 
     const handleSetCurrentPage = (page: number): void => {
         setCurrentPage(page);
-        localStorage.setItem(LOC_STORAGE_USER_STATE, JSON.stringify({ login, usersPage: page }));
+        localStorage.setItem(
+            LOC_STORAGE_USER_STATE,
+            JSON.stringify({ ...getLocalState(), usersPage: page })
+        );
 
         updateState({ ...state, currentpage: page });
+    };
+
+    const handleChangeRecordsPerPage = (count: number): void => {
+        updatePageNumbers(totalPages);
+        localStorage.setItem(
+            LOC_STORAGE_USER_STATE,
+            JSON.stringify({ ...getLocalState(), recordsOnPage: count, usersPage: 0 })
+        );
+        updateState({ ...state, count, currentpage: 0 });
     };
 
     return (
@@ -112,8 +131,8 @@ export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
                     {pageNumbers &&
                         pageNumbers.map((pageNumber) => {
                             if (
-                                currentPage + showedPages > pageNumber &&
-                                currentPage - showedPages < pageNumber
+                                currentPage + VisiblePageCount > pageNumber &&
+                                currentPage - VisiblePageCount < pageNumber
                             ) {
                                 return (
                                     <li
@@ -168,9 +187,28 @@ export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
                         </a>
                     </li>
                 </ul>
-
-                <div className='mt-4 text-center fs-5'>Records per page: {count}</div>
-                <div className='mt-4 text-center fs-5'>Total records: {totalRecords}</div>
+                <div className='mt-4 text-center fs-5'>
+                    <label className='d-flex w-100 align-items-center gap-4 justify-content-center '>
+                        <span className='text-nowrap'>Records per page</span>
+                        <Form.Select
+                            aria-label='records per page'
+                            className='w-25'
+                            value={state.count}
+                            onChange={(event) =>
+                                handleChangeRecordsPerPage(Number(event.target.value))
+                            }
+                        >
+                            {RecordsPerPageSteps.map((value) => {
+                                return (
+                                    <option key={value} value={value}>
+                                        {value}
+                                    </option>
+                                );
+                            })}
+                        </Form.Select>
+                    </label>
+                    <div className='mt-4 text-center fs-5'>Total records: {totalRecords}</div>
+                </div>
             </div>
         </div>
     );

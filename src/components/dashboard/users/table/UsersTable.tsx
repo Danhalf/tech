@@ -1,5 +1,5 @@
 import { useQueryResponseData, useQueryResponseLoading } from 'common/core/QueryResponseProvider';
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { useTable, ColumnInstance, Row } from 'react-table';
 import { CustomHeaderColumn } from './columns/CustomHeaderColumn';
 import { CustomRow } from './columns/CustomRow';
