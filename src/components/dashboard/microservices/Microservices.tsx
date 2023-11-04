@@ -1,6 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { useEffect, useState } from 'react';
-import { listServices, stopService } from './service';
+import { checkServiceDB, listServices, stopService } from './service';
 import { Link } from 'react-router-dom';
 import { TableHead } from 'components/dashboard/helpers/renderTableHelper';
 import { CustomDropdown } from 'components/dashboard/helpers/renderDropdownHelper';
@@ -63,6 +63,32 @@ export const Microservices = () => {
         }
     };
 
+    const handleCheckDB = async (uid: string): Promise<void> => {
+        try {
+            if (uid) {
+                const response = await checkServiceDB(uid);
+                if (response.status === Status.ERROR) {
+                    throw new Error(response.info);
+                }
+                if (response.status === Status.OK) {
+                    handleShowToast({
+                        message: 'Microservice bases successfully checked',
+                        type: 'success',
+                    });
+                }
+            }
+        } catch (err) {
+            let message = '';
+            if (err instanceof Error) {
+                message = err.message;
+            }
+            if (typeof err === 'string') {
+                message = err;
+            }
+            handleShowToast({ message, type: 'danger' });
+        }
+    };
+
     return (
         <>
             <div className='card'>
@@ -92,6 +118,11 @@ export const Microservices = () => {
                                                             menuItemName: 'Restart',
                                                             menuItemAction: () =>
                                                                 handleStopService(service.uid),
+                                                        },
+                                                        {
+                                                            menuItemName: 'Check Database',
+                                                            menuItemAction: () =>
+                                                                handleCheckDB(service.uid),
                                                         },
                                                     ]}
                                                 />
