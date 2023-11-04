@@ -91,8 +91,22 @@ export const UserSettingsModal = ({
     }
 
     const disabledKeys = ['useruid', 'created', 'updated'];
-    const checkboxInputKeys = ['stocknumPrefix', 'stocknumSuffix', 'stocknumFixedDigits'];
-    const radioButtonsKeys = ['stocknumLast6ofVIN', 'stocknumLast8ofVIN'];
+    const checkboxInputKeys = [
+        'stocknumPrefix',
+        'stocknumSuffix',
+        'stocknumFixedDigits',
+        'stocknumSequental',
+        'stocknumtiSequental',
+        'stocknumtiFromSoldVehicle',
+    ];
+    const radioButtonsKeys = [
+        'stocknumLast6ofVIN',
+        'stocknumLast8ofVIN',
+        'dealType',
+        'dealStatus',
+        'leaseTerm',
+        'leasePaymentFrequency',
+    ];
 
     type SettingRecord = [string, string | number];
     type SettingsRecord = Record<string, string | number>;
