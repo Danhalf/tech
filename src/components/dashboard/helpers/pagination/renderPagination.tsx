@@ -46,7 +46,7 @@ export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
             setTotalPages(res);
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [totalRecords, currentPage, count]);
+    }, [totalRecords, count]);
 
     const updatePageNumbers = (length: number): void => {
         setPageNumbers(Array.from({ length }, (_, index) => index));
@@ -67,6 +67,7 @@ export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
     }, [usersPage, totalRecords]);
 
     useEffect(() => {
+        updatePageNumbers(totalPages);
         if (!listLength) {
             currentPage > 0 && handleSetCurrentPage(currentPage - 1);
         }
@@ -76,8 +77,6 @@ export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
     useEffect(() => {
         if (!!state.search?.length) {
             setTotalRecords(listLength);
-        } else {
-            setTotalRecords(totalRecords);
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [listLength, state.search, currentPage]);
@@ -192,7 +191,7 @@ export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
                         <span className='text-nowrap'>Records per page</span>
                         <Form.Select
                             aria-label='records per page'
-                            className='w-25'
+                            className='w-50'
                             value={state.count}
                             onChange={(event) =>
                                 handleChangeRecordsPerPage(Number(event.target.value))
