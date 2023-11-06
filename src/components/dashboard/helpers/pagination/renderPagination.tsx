@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import clsx from 'clsx';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import {
     useQueryResponseDataLength,
     useQueryResponseLoading,
@@ -17,11 +17,11 @@ interface UsersListPaginationProps {
     list: UsersListType;
 }
 
-const { usersPage } = getLocalState();
+const { usersPage, recordsOnPage } = getLocalState();
 
 export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
     const { state, updateState } = useQueryRequest();
-    const [currentPage, setCurrentPage] = useState<number>(state.currentpage);
+    const [currentPage, setCurrentPage] = useState<number>(usersPage || 0);
     const isLoading = useQueryResponseLoading(list);
     const listLength = useQueryResponseDataLength(list);
     const [totalRecords, setTotalRecords] = useState<number>(0);
@@ -30,19 +30,22 @@ export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
 
     const { count } = state;
 
-    useEffect(() => {
-        const fetchTotalRecords = async () => {
+    const fetchTotalRecords = useMemo(
+        () => async () => {
             const totalList = list === UsersType.ACTIVE ? 'list' : 'listdeleted';
             const { total } = await getTotalUsersRecords(totalList);
             setTotalRecords(total);
-        };
+        },
+        [list, setTotalRecords]
+    );
+
+    useEffect(() => {
         fetchTotalRecords();
         const getPages = async (): Promise<number> => {
             const res = await Math.ceil(totalRecords / count);
             return res;
         };
         getPages().then((res) => {
-            updatePageNumbers(res);
             setTotalPages(res);
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -54,25 +57,22 @@ export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
 
     useEffect(() => {
         const count = getLocalState().recordsOnPage;
+
         if (count) {
-            handleChangeRecordsPerPage(count);
+            updateState({ ...state, count });
         }
         const page = getLocalState().usersPage;
         if (page) {
             handleSetCurrentPage(page);
         }
-        updatePageNumbers(totalPages);
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [usersPage, totalRecords]);
 
     useEffect(() => {
         updatePageNumbers(totalPages);
-        if (!listLength) {
-            currentPage > 0 && handleSetCurrentPage(currentPage - 1);
-        }
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [listLength]);
+    }, [totalPages, state, totalRecords]);
 
     useEffect(() => {
         if (!!state.search?.length) {
@@ -87,17 +87,16 @@ export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
             LOC_STORAGE_USER_STATE,
             JSON.stringify({ ...getLocalState(), usersPage: page })
         );
-
-        updateState({ ...state, count, currentpage: page });
+        updateState({ ...state, currentpage: page });
     };
 
     const handleChangeRecordsPerPage = (count: number): void => {
-        updatePageNumbers(totalPages);
+        handleSetCurrentPage(0);
         localStorage.setItem(
             LOC_STORAGE_USER_STATE,
-            JSON.stringify({ ...getLocalState(), recordsOnPage: count, usersPage: 0 })
+            JSON.stringify({ ...getLocalState(), recordsOnPage: count })
         );
-        updateState({ ...state, count, currentpage: 0 });
+        updateState({ ...state, count });
     };
 
     return (
