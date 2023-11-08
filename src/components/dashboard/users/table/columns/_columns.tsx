@@ -15,7 +15,7 @@ export const usersColumns = (list: UsersListType): ReadonlyArray<Column<User>> =
         },
         {
             Header: (props) => (
-                <UserCustomHeader tableProps={props} title='User name' className='min-w-125px' />
+                <UserCustomHeader tableProps={props} title='User name' className='w-300px' />
             ),
             id: 'username',
             Cell: ({ ...props }) => {
