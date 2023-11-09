@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { getToken } from './utils';
-import { API_URL } from './app-consts';
+import { API_URL, APPLICATION } from './app-consts';
 
 export interface LoginResponse {
     companyname: string;
@@ -27,6 +27,7 @@ export const login = (username: string, password: string) => {
         .post<LoginResponse>(`${API_URL}user`, {
             user: username,
             secret: password,
+            application: APPLICATION,
         })
         .then((response) => response.data);
 };

@@ -10,7 +10,9 @@ export const fetchApiData = async <T>(
     url: string,
     options?: { data?: unknown; params?: UserQuery }
 ): Promise<T> => {
-    const headers = { Authorization: `Bearer ${getToken()}` };
+    const headers = {
+        Authorization: `Bearer ${getToken()}`,
+    };
     const { data, params } = options || {};
     try {
         const response: AxiosResponse<T> = await axios({
