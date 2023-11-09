@@ -1,19 +1,9 @@
 import axios from 'axios';
-import { APPLICATION, LOC_STORAGE_USER } from './app-consts';
+import { LOC_STORAGE_USER } from './app-consts';
 import { useToast } from 'components/dashboard/helpers/renderToastHelper';
 
 export const useAuthInterceptor = () => {
     const { handleShowToast } = useToast();
-
-    axios.interceptors.request.use(
-        (config) => {
-            config.params = { ...config.params, application: APPLICATION };
-            return config;
-        },
-        (error) => {
-            return Promise.reject(error);
-        }
-    );
 
     axios.interceptors.response.use(
         (response) => {
