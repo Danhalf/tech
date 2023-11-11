@@ -1,7 +1,8 @@
 import { fetchApiData } from 'common/api/fetchAPI';
-import { ActionStatus } from 'common/interfaces/ActionStatus';
+import { ActionStatus, Status } from 'common/interfaces/ActionStatus';
 import { UserQuery } from 'common/interfaces/QueriesParams';
-import { ShortUserInfo, User, UserSettingsResponse } from 'common/interfaces/UserData';
+import { ShortUserInfo, User } from 'common/interfaces/UserData';
+import { UserSettingsResponse, UserSettingDeals } from 'common/interfaces/UserSettings';
 
 export const createOrUpdateUser = (
     loginname: string,
@@ -109,6 +110,13 @@ export const clearCache = (): Promise<string[]> => {
 
 export const getTotalUsersRecords = (
     list: 'list' | 'listdeleted'
-): Promise<{ status: string; total: number }> => {
-    return fetchApiData<{ status: string; total: number }>('GET', `user/0/${list}?total=1`);
+): Promise<{ status: Status; total: number }> => {
+    return fetchApiData<{ status: Status; total: number }>('GET', `user/0/${list}?total=1`);
+};
+
+export const getDealsOptions = (deal: UserSettingDeals) => {
+    return fetchApiData<{ status: Status; [key: string]: string[] | unknown }>(
+        'GET',
+        `deals/${deal}`
+    );
 };

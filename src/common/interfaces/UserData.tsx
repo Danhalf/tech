@@ -27,10 +27,7 @@ export interface ShortUserInfo {
     useruid: string;
     warning: string;
 }
-export interface UserSettingsResponse {
-    settings: Record<string, string | number>;
-    status: string;
-}
+
 export enum UsersType {
     ACTIVE = 'Users',
     DELETED = 'Deleted users',
