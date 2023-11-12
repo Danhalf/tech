@@ -47,16 +47,16 @@ const getSettingType = (key: SettingKey): InputType => {
     return InputType.DEFAULT;
 };
 
-const getSettingGroup = (key: SettingKey) => {
-    if (dealsGroup.includes(key)) return 'DEALS';
-    if (feesGroup.includes(key)) return 'FEES';
-    if (taxesGroup.includes(key)) return 'TAXES';
-    if (stockNewGroup.includes(key)) return 'STOCK_NEW';
-    if (stockTIGroup.includes(key)) return 'STOCK_TI';
-    if (accountGroup.includes(key)) return 'ACCOUNT';
-    if (contractGroup.includes(key)) return 'CONTRACT';
-    if (leaseGroup.includes(key)) return 'LEASE';
-    return 'OTHER';
+const getSettingGroup = (key: SettingKey): SettingGroup => {
+    if (dealsGroup.includes(key)) return SettingGroup.DEALS;
+    if (feesGroup.includes(key)) return SettingGroup.FEES;
+    if (taxesGroup.includes(key)) return SettingGroup.TAXES;
+    if (stockNewGroup.includes(key)) return SettingGroup.STOCK_NEW;
+    if (stockTIGroup.includes(key)) return SettingGroup.STOCK_TI;
+    if (accountGroup.includes(key)) return SettingGroup.ACCOUNT;
+    if (contractGroup.includes(key)) return SettingGroup.CONTRACT;
+    if (leaseGroup.includes(key)) return SettingGroup.LEASE;
+    return SettingGroup.OTHER;
 };
 
 const getSettingTitle = (key: SettingKey): string => renamedKeys[key] || key;
@@ -76,58 +76,15 @@ interface UserSettingsModalProps {
     username: string;
 }
 
-const SettingGroupKeys: string[] = Object.keys(SettingGroup) as string[];
+const SettingGroupValues: string[] = Object.values(SettingGroup) as string[];
 
 const getGroupedList = () => {
     const grouped: GroupedSetting = {};
-    SettingGroupKeys.forEach((groupKey) => {
+    SettingGroupValues.forEach((groupKey) => {
         grouped[groupKey] = [];
     });
     return grouped;
 };
-
-// const initialSettingsState = {
-//     useruid: '',
-//     created: '',
-//     updated: '',
-//     stocknumPrefix: '',
-//     stocknumSuffix: '',
-//     stocknumFixedDigits: 0,
-//     stocknumSequental: 0,
-//     stocknumtiSequental: 0,
-//     stocknumtiFromSoldVehicle: 0,
-//     stocknumLast6ofVIN: 0,
-//     stocknumLast8ofVIN: 0,
-//     dealType: 0,
-//     dealStatus: 0,
-//     leaseTerm: 0,
-//     leasePaymentFrequency: 0,
-//     inventoryStatus: '',
-//     saleType: '',
-//     accountFixedDigits: 0,
-//     accountLateFeeGracePeriod: 0,
-//     accountLateFeeMax: 0,
-//     accountLateFeeMin: 0,
-//     accountLateFeePercentage: 0,
-//     accountPrefix: '',
-//     accountStartNumber: 0,
-//     accountSuffix: '',
-//     contractDefInterestRate: 0,
-//     contractPaymentFrequency: 0,
-//     feeDefDocumentation: 0,
-//     feeDefSpareTag: 0,
-//     feeDefSpareTransferTag: 0,
-//     feeDefTag: 0,
-//     feeDefTitle: 0,
-//     feeDefTransfer: 0,
-//     feeDefvehiclePack: 0,
-//     index: 0,
-//     itemuid: '',
-//     leaseDefaultMileage: 0,
-//     leaseMoneyFactor: 0,
-//     leaseOverageAmount: 0,
-//     taxDefStateVehicleTaxRate: 0,
-// };
 
 export const UserSettingsModal = ({
     onClose,
@@ -158,13 +115,12 @@ export const UserSettingsModal = ({
                                 const group = getSettingGroup(key as SettingKey);
                                 const title = getSettingTitle(key as SettingKey);
 
-                                groupedList[group] &&
-                                    groupedList[group].push({
-                                        key,
-                                        value,
-                                        title,
-                                        type,
-                                    });
+                                groupedList[group].push({
+                                    key,
+                                    value,
+                                    title,
+                                    type,
+                                });
                             }
                         );
                         setGroupedSettings(groupedList);
@@ -218,68 +174,29 @@ export const UserSettingsModal = ({
         }
     };
 
+    // eslint-disable-next-line no-console
+    console.log(groupedSettings);
+
     if (!settings) {
         return <></>;
     }
 
     return (
         <>
-            <div className='fv-row mb-4'>
-                <h2>Deals</h2>
-            </div>
-            <div className='fv-row mb-4'>
-                <h2>Fees</h2>
-                {/* {groupedSettings.Deals.map((e: any) => (
-                    <div key={e.title}>
-                        {e.title} - {e.type} - <b></b>
-                    </div>
-                ))} */}
-            </div>
-
-            {/* {orderedSettings &&
-                orderedSettings.map(([setting, value]) => {
-                    const settingName = renamedKeys[setting] || setting;
+            {groupedSettings &&
+                Object.entries(groupedSettings).map(([groupName, groupSettings]) => {
                     return (
-                        <div className='fv-row mb-4' key={setting}>
-                            {checkboxInputKeys.includes(setting) ? (
-                                <CustomCheckbox
-                                    currentValue={value as number}
-                                    id={setting}
-                                    name={setting}
-                                    title={settingName}
-                                    action={(newValue: [string, number]) =>
-                                        handleChangeUserSettings(newValue)
-                                    }
-                                />
-                            ) : (
-                                // : radioButtonsKeys.includes(setting) ? (
-                                //     <CustomRadioButton
-                                //         currentValue={value as number}
-                                //         id={setting}
-                                //         name={setting}
-                                //         title={settingName}
-                                //         options={[
-                                //             { value: 1, label: 'Include' },
-                                //             { value: 0, label: "Don't include" },
-                                //         ]}
-                                //         action={(newValue: [string, string]) =>
-                                //             handleChangeUserSettings(newValue)
-                                //         }
-                                //     />)
-                                <CustomTextInput
-                                    currentValue={value as number}
-                                    id={setting}
-                                    name={setting}
-                                    title={settingName}
-                                    disabled={disabledKeys.includes(setting)}
-                                    action={(event) =>
-                                        handleChangeUserSettings([setting, event.target.value])
-                                    }
-                                />
-                            )}
+                        <div className='fv-row mb-4' key={groupName}>
+                            <h2>{groupName}</h2>
+                            {(groupSettings as Setting[]).map((setting: Setting) => (
+                                <div key={setting.key}>
+                                    <p>{setting.title}</p>
+                                </div>
+                            ))}
                         </div>
                     );
-                })} */}
+                })}
+
             <PrimaryButton
                 icon='check'
                 disabled={isButtonDisabled}
