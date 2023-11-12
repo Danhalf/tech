@@ -2,7 +2,7 @@ import { fetchApiData } from 'common/api/fetchAPI';
 import { ActionStatus, Status } from 'common/interfaces/ActionStatus';
 import { UserQuery } from 'common/interfaces/QueriesParams';
 import { ShortUserInfo, User } from 'common/interfaces/UserData';
-import { UserSettingsResponse, UserSettingDeals } from 'common/interfaces/UserSettings';
+import { UserSettingsResponse, UserSettingDeals } from 'common/interfaces/users/UserSettings';
 
 export const createOrUpdateUser = (
     loginname: string,

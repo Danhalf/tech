@@ -14,20 +14,17 @@ import {
     CustomCheckbox,
     CustomRadioButton,
     CustomTextInput,
+    InputType,
 } from 'components/dashboard/helpers/renderInputsHelper';
 import {
-    CheckboxInputKeys,
-    RadioButtonsKeys,
-    RangeInputKeys,
-    SelectInputKeys,
-    TextInputKeys,
     checkboxInputKeys,
     disabledKeys,
     radioButtonsKeys,
     rangeInputKeys,
     selectInputKeys,
     textInputKeys,
-} from 'common/interfaces/UserSettings';
+} from 'common/interfaces/users/UserSettings';
+import { SettingKey } from 'common/interfaces/users/UserConsts';
 
 interface UserSettingsModalProps {
     onClose: () => void;
@@ -35,41 +32,48 @@ interface UserSettingsModalProps {
     username: string;
 }
 
-export interface UserSettings {
-    deals?: {
-        radioInput: RadioButtonsKeys[][];
-    };
-    fees?: {
-        textInput: TextInputKeys[];
-    };
-    taxes?: {
-        selectInput: SelectInputKeys[];
-        textInput: TextInputKeys[];
-    };
-    stockNewInventory?: {
-        checkboxInput: CheckboxInputKeys[];
-        textInput: TextInputKeys[];
-        radioInput: RadioButtonsKeys[][];
-        rangeInput?: RangeInputKeys;
-    };
-    stockTradeInventory?: {
-        checkboxInput: CheckboxInputKeys[];
-        textInput: TextInputKeys[];
-        radioInput: RadioButtonsKeys[][];
-        rangeInput: RangeInputKeys[];
-    };
-    accountSettings?: {
-        textInput: TextInputKeys[];
-        rangeInput: RangeInputKeys[];
-    };
-    contractSettings?: {
-        textInput: TextInputKeys[];
-    };
-    leaseSettings?: {
-        selectInput: SelectInputKeys[];
-        textInput: TextInputKeys[];
-    };
-}
+// const initialSettingsState = {
+//     useruid: '',
+//     created: '',
+//     updated: '',
+//     stocknumPrefix: '',
+//     stocknumSuffix: '',
+//     stocknumFixedDigits: 0,
+//     stocknumSequental: 0,
+//     stocknumtiSequental: 0,
+//     stocknumtiFromSoldVehicle: 0,
+//     stocknumLast6ofVIN: 0,
+//     stocknumLast8ofVIN: 0,
+//     dealType: 0,
+//     dealStatus: 0,
+//     leaseTerm: 0,
+//     leasePaymentFrequency: 0,
+//     inventoryStatus: '',
+//     saleType: '',
+//     accountFixedDigits: 0,
+//     accountLateFeeGracePeriod: 0,
+//     accountLateFeeMax: 0,
+//     accountLateFeeMin: 0,
+//     accountLateFeePercentage: 0,
+//     accountPrefix: '',
+//     accountStartNumber: 0,
+//     accountSuffix: '',
+//     contractDefInterestRate: 0,
+//     contractPaymentFrequency: 0,
+//     feeDefDocumentation: 0,
+//     feeDefSpareTag: 0,
+//     feeDefSpareTransferTag: 0,
+//     feeDefTag: 0,
+//     feeDefTitle: 0,
+//     feeDefTransfer: 0,
+//     feeDefvehiclePack: 0,
+//     index: 0,
+//     itemuid: '',
+//     leaseDefaultMileage: 0,
+//     leaseMoneyFactor: 0,
+//     leaseOverageAmount: 0,
+//     taxDefStateVehicleTaxRate: 0,
+// };
 
 export const UserSettingsModal = ({
     onClose,
@@ -77,7 +81,7 @@ export const UserSettingsModal = ({
     username,
 }: UserSettingsModalProps): JSX.Element => {
     const [settings, setSettings] = useState<any>({});
-    const [initialUserSettings, setInitialUserSettings] = useState<any>({});
+    const [initialUserSettings, setInitialUserSettings] = useState<any>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
@@ -89,8 +93,65 @@ export const UserSettingsModal = ({
             getUserSettings(useruid)
                 .then(async (response) => {
                     if (response.status === Status.OK && response.settings) {
-                        const settings = response.settings as any;
-                        setSettings(JSON.parse(settings));
+                        const settings = response.settings;
+                        const newSettings = Object.entries({ ...settings }).map(
+                            ([key, value]: [string, string | number]) => {
+                                let type: string;
+
+                                switch (true) {
+                                    case disabledKeys.includes(key as SettingKey):
+                                        type = InputType.DISABLED;
+                                        break;
+                                    case textInputKeys.includes(key as SettingKey):
+                                        type = InputType.TEXT;
+                                        break;
+                                    case checkboxInputKeys.includes(key as SettingKey):
+                                        type = InputType.CHECKBOX;
+                                        break;
+                                    case rangeInputKeys.includes(key as SettingKey):
+                                        type = InputType.RANGE;
+                                        break;
+                                    case radioButtonsKeys.some((group) =>
+                                        group.includes(key as SettingKey)
+                                    ):
+                                        type = InputType.RADIO;
+                                        break;
+                                    case selectInputKeys.includes(key as SettingKey):
+                                        type = InputType.SELECT;
+                                        break;
+                                    default:
+                                        type = InputType.DEFAULT;
+                                }
+
+                                return {
+                                    key,
+                                    value,
+                                    title: renamedKeys[key] || key,
+                                    type,
+                                };
+                            }
+                        );
+                        setInitialUserSettings(newSettings);
+                        // eslint-disable-next-line no-console
+                        console.log(newSettings);
+                        const UserSettings = {
+                            deals: {},
+                            fees: {
+                                feeDefDocumentation: {
+                                    title:
+                                        renamedKeys[settings.feeDefDocumentation] ||
+                                        settings.feeDefDocumentation,
+                                },
+                            },
+                            taxes: {},
+                            stockNewInventory: {},
+                            stockTradeInventory: {},
+                            accountSettings: {},
+                            contractSettings: {},
+                            leaseSettings: {},
+                        };
+
+                        setSettings(settings);
                     }
                 })
                 .finally(() => {
@@ -145,39 +206,33 @@ export const UserSettingsModal = ({
         return <></>;
     }
 
-    type SettingRecord = [string, string | number];
-    type SettingsRecord = Record<string, string | number>;
-
-    const settingsEntries = Object.entries(settings) as SettingRecord[];
-    const orderedSettings: SettingRecord[] = [];
-    const checkboxSettings: SettingsRecord = {};
-    const radioSettings: SettingsRecord = {};
-    const restOfSettings: SettingsRecord = {};
-
-    settingsEntries.forEach(([key, value]: SettingRecord) => {
-        switch (true) {
-            // case checkboxInputKeys.includes(key):
-            //     checkboxSettings[key] = value;
-            //     break;
-            // case radioButtonsKeys.includes(key):
-            //     radioSettings[key] = value;
-            //     break;
-            default:
-                restOfSettings[key] = value;
-        }
-    });
-
-    orderedSettings.push(
-        ...Object.entries(checkboxSettings),
-        ...Object.entries(radioSettings),
-        ...Object.entries(restOfSettings)
-    );
+    // eslint-disable-next-line no-console
+    console.log(initialUserSettings);
 
     return (
         <>
             <div className='fv-row mb-4'>
                 <h2>Deals</h2>
+                <CustomRadioButton
+                    action={() => {}}
+                    currentValue={settings.dealType}
+                    id={'deals'}
+                    name='deals'
+                    options={[
+                        { value: 0, label: 'Deal Status' },
+                        { value: 1, label: 'Deal Type' },
+                    ]}
+                />
             </div>
+            <div className='fv-row mb-4'>
+                <h2>Fees</h2>
+                {initialUserSettings.map((e: any) => (
+                    <div>
+                        {e.title} - {e.type}
+                    </div>
+                ))}
+            </div>
+
             {/* {orderedSettings &&
                 orderedSettings.map(([setting, value]) => {
                     const settingName = renamedKeys[setting] || setting;

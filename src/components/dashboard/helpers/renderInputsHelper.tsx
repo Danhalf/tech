@@ -1,10 +1,11 @@
+/* eslint-disable no-unused-vars */
 import { ChangeEvent, useEffect, useState } from 'react';
 
 interface CustomInputProps {
     currentValue: number;
     id: string;
     name: string;
-    title: string;
+    title?: string;
     disabled?: boolean;
 }
 
@@ -23,6 +24,16 @@ interface CustomRadioButtonProps extends CustomInputProps {
 interface RadioButtonOption {
     value: number;
     label: string;
+}
+
+export enum InputType {
+    DISABLED = 'disabledInput',
+    TEXT = 'textInput',
+    CHECKBOX = 'checkboxInput',
+    RANGE = 'rangeInput',
+    RADIO = 'radioInput',
+    SELECT = 'selectInput',
+    DEFAULT = 'defaultInput',
 }
 
 export const CustomCheckbox = ({ currentValue, id, name, title, action }: CustomCheckboxProps) => {
