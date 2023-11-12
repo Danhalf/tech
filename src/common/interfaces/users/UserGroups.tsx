@@ -7,9 +7,9 @@ export const feesGroup: readonly SettingKey[] = [
     SettingKey.FEE_DEF_VEHICLE_PACK,
     SettingKey.FEE_DEF_TITLE,
     SettingKey.FEE_DEF_TAG,
-    SettingKey.FEE_DEF_VEHICLE_PACK,
-    SettingKey.FEE_DEF_VEHICLE_PACK,
-    SettingKey.FEE_DEF_VEHICLE_PACK,
+    SettingKey.FEE_DEF_TRANSFER,
+    SettingKey.FEE_DEF_SPARE_TAG,
+    SettingKey.FEE_DEF_SPARE_TRANSFER_TAG,
 ];
 
 export const taxesGroup: readonly SettingKey[] = [SettingKey.TAX_DEF_STATE_VEHICLE_TAX_RATE];
