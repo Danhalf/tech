@@ -83,6 +83,7 @@ export const checkboxInputKeys: readonly SettingKey[] = [
 
 export const rangeInputKeys: readonly SettingKey[] = [
     SettingKey.STOCKNUM_FIXED_DIGITS,
+    SettingKey.STOCKNUMTI_FIXED_DIGITS,
     SettingKey.ACCOUNT_FIXED_DIGITS,
 ];
 

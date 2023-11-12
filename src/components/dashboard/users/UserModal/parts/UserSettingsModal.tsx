@@ -25,12 +25,66 @@ import {
     textInputKeys,
 } from 'common/interfaces/users/UserSettings';
 import { SettingKey } from 'common/interfaces/users/UserConsts';
+import {
+    SettingGroup,
+    dealsGroup,
+    feesGroup,
+    taxesGroup,
+    stockNewGroup,
+    stockTIGroup,
+    accountGroup,
+    contractGroup,
+    leaseGroup,
+} from 'common/interfaces/users/UserGroups';
+
+const getSettingType = (key: SettingKey): InputType => {
+    if (disabledKeys.includes(key)) return InputType.DISABLED;
+    if (textInputKeys.includes(key)) return InputType.TEXT;
+    if (checkboxInputKeys.includes(key)) return InputType.CHECKBOX;
+    if (rangeInputKeys.includes(key)) return InputType.RANGE;
+    if (radioButtonsKeys.some((group) => group.includes(key))) return InputType.RADIO;
+    if (selectInputKeys.includes(key)) return InputType.SELECT;
+    return InputType.DEFAULT;
+};
+
+const getSettingGroup = (key: SettingKey) => {
+    if (dealsGroup.includes(key)) return 'DEALS';
+    if (feesGroup.includes(key)) return 'FEES';
+    if (taxesGroup.includes(key)) return 'TAXES';
+    if (stockNewGroup.includes(key)) return 'STOCK_NEW';
+    if (stockTIGroup.includes(key)) return 'STOCK_TI';
+    if (accountGroup.includes(key)) return 'ACCOUNT';
+    if (contractGroup.includes(key)) return 'CONTRACT';
+    if (leaseGroup.includes(key)) return 'LEASE';
+    return 'OTHER';
+};
+
+const getSettingTitle = (key: SettingKey): string => renamedKeys[key] || key;
+
+interface Setting {
+    key: string;
+    value: string | number;
+    title: string;
+    type: InputType;
+}
+
+type GroupedSetting = Record<string, Setting[]>;
 
 interface UserSettingsModalProps {
     onClose: () => void;
     useruid: string;
     username: string;
 }
+
+const SettingGroupKeys: string[] = Object.keys(SettingGroup) as string[];
+
+const getGroupedList = () => {
+    const grouped: GroupedSetting = {};
+    SettingGroupKeys.forEach((groupKey) => {
+        grouped[groupKey] = [];
+    });
+    return grouped;
+};
 
 // const initialSettingsState = {
 //     useruid: '',
@@ -80,7 +134,8 @@ export const UserSettingsModal = ({
     useruid,
     username,
 }: UserSettingsModalProps): JSX.Element => {
-    const [settings, setSettings] = useState<any>({});
+    const [settings, setSettings] = useState<Setting[]>([]);
+    const [groupedSettings, setGroupedSettings] = useState<any>();
     const [initialUserSettings, setInitialUserSettings] = useState<any>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
@@ -94,64 +149,25 @@ export const UserSettingsModal = ({
                 .then(async (response) => {
                     if (response.status === Status.OK && response.settings) {
                         const settings = response.settings;
-                        const newSettings = Object.entries({ ...settings }).map(
+
+                        const groupedList: GroupedSetting = getGroupedList();
+
+                        Object.entries({ ...settings }).forEach(
                             ([key, value]: [string, string | number]) => {
-                                let type: string;
+                                const type = getSettingType(key as SettingKey);
+                                const group = getSettingGroup(key as SettingKey);
+                                const title = getSettingTitle(key as SettingKey);
 
-                                switch (true) {
-                                    case disabledKeys.includes(key as SettingKey):
-                                        type = InputType.DISABLED;
-                                        break;
-                                    case textInputKeys.includes(key as SettingKey):
-                                        type = InputType.TEXT;
-                                        break;
-                                    case checkboxInputKeys.includes(key as SettingKey):
-                                        type = InputType.CHECKBOX;
-                                        break;
-                                    case rangeInputKeys.includes(key as SettingKey):
-                                        type = InputType.RANGE;
-                                        break;
-                                    case radioButtonsKeys.some((group) =>
-                                        group.includes(key as SettingKey)
-                                    ):
-                                        type = InputType.RADIO;
-                                        break;
-                                    case selectInputKeys.includes(key as SettingKey):
-                                        type = InputType.SELECT;
-                                        break;
-                                    default:
-                                        type = InputType.DEFAULT;
-                                }
-
-                                return {
-                                    key,
-                                    value,
-                                    title: renamedKeys[key] || key,
-                                    type,
-                                };
+                                groupedList[group] &&
+                                    groupedList[group].push({
+                                        key,
+                                        value,
+                                        title,
+                                        type,
+                                    });
                             }
                         );
-                        setInitialUserSettings(newSettings);
-                        // eslint-disable-next-line no-console
-                        console.log(newSettings);
-                        const UserSettings = {
-                            deals: {},
-                            fees: {
-                                feeDefDocumentation: {
-                                    title:
-                                        renamedKeys[settings.feeDefDocumentation] ||
-                                        settings.feeDefDocumentation,
-                                },
-                            },
-                            taxes: {},
-                            stockNewInventory: {},
-                            stockTradeInventory: {},
-                            accountSettings: {},
-                            contractSettings: {},
-                            leaseSettings: {},
-                        };
-
-                        setSettings(settings);
+                        setGroupedSettings(groupedList);
                     }
                 })
                 .finally(() => {
@@ -206,31 +222,18 @@ export const UserSettingsModal = ({
         return <></>;
     }
 
-    // eslint-disable-next-line no-console
-    console.log(initialUserSettings);
-
     return (
         <>
             <div className='fv-row mb-4'>
                 <h2>Deals</h2>
-                <CustomRadioButton
-                    action={() => {}}
-                    currentValue={settings.dealType}
-                    id={'deals'}
-                    name='deals'
-                    options={[
-                        { value: 0, label: 'Deal Status' },
-                        { value: 1, label: 'Deal Type' },
-                    ]}
-                />
             </div>
             <div className='fv-row mb-4'>
                 <h2>Fees</h2>
-                {initialUserSettings.map((e: any) => (
-                    <div>
-                        {e.title} - {e.type}
+                {/* {groupedSettings.Deals.map((e: any) => (
+                    <div key={e.title}>
+                        {e.title} - {e.type} - <b></b>
                     </div>
-                ))}
+                ))} */}
             </div>
 
             {/* {orderedSettings &&

@@ -1,4 +1,17 @@
+/* eslint-disable no-unused-vars */
 import { SettingKey } from './UserConsts';
+
+export enum SettingGroup {
+    DEALS = 'Deals',
+    FEES = 'Fees',
+    TAXES = 'Taxes',
+    STOCK_NEW = 'Stock# for new inventory',
+    STOCK_TI = 'Stock# for trade-in inventory',
+    ACCOUNT = 'Account Settings',
+    CONTRACT = 'Contract Settings',
+    LEASE = 'Lease Settings',
+    OTHER = 'Other Settings',
+}
 
 export const dealsGroup: readonly SettingKey[] = [SettingKey.DEAL_TYPE, SettingKey.DEAL_STATUS];
 
