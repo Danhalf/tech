@@ -23,6 +23,15 @@ interface CustomRadioButtonProps extends CustomInputProps {
     group: string;
 }
 
+interface CustomRangeInputProps extends CustomInputProps {
+    group: string;
+    minValue: number;
+    maxValue: number;
+    step: number;
+    currentValue: number;
+    action?: (inputData: [string, number[]]) => void;
+}
+
 export enum InputType {
     DISABLED = 'disabledInput',
     TEXT = 'textInput',
@@ -115,27 +124,9 @@ export const CustomRadioButton = ({
     title,
     action,
 }: CustomRadioButtonProps) => {
-    // const [isLoading, setIsLoading] = useState(false);
-
-    // const handleRadioChange = (index: number, newValue: number) => {
-    //     const newSelectedValues = [...selectedValues];
-    //     newSelectedValues[index] = newValue;
-    //     setSelectedValues(newSelectedValues);
-
-    //     if (action) {
-    //         setIsLoading(true);
-    //         action([name, newSelectedValues]);
-    //     }
-    // };
-
-    // useEffect(() => {
-    //     setIsLoading(false);
-    // }, [name, selectedValues, action]);
-
     return (
         <div className='mb-4'>
             <div key={id}>
-                {/* <span className='d-inline-block mb-2 form-check-label'>{title}</span> */}
                 <div className='form-check form-check-custom form-check-solid'>
                     <div className='me-10' key={id}>
                         <input
@@ -143,10 +134,7 @@ export const CustomRadioButton = ({
                             type='radio'
                             value={currentValue}
                             name={group}
-                            // checked={selectedValues[index] === option.value}
-                            // onChange={() => handleRadioChange(index, option.value)}
                             id={`radio-${id}-${currentValue}`}
-                            // disabled={isLoading}
                         />
                         <label
                             className='form-check-label cursor-pointer'
@@ -156,6 +144,82 @@ export const CustomRadioButton = ({
                         </label>
                     </div>
                 </div>
+            </div>
+        </div>
+    );
+};
+
+// export const CustomRadioButton: React.FC<CustomRadioButtonProps> = ({
+//     id,
+//     group,
+//     title,
+//     action,
+// }) => {
+//     const handleRadioChange = () => {
+//         if (action) {
+//             action([group, title]);
+//         }
+//     };
+
+//     return (
+//         <div className='mb-4'>
+//             <div className='form-check form-check-custom form-check-solid'>
+//                 <div className='me-10'>
+//                     <input
+//                         className='form-check-input cursor-pointer'
+//                         type='radio'
+//                         value={title}
+//                         name={group}
+//                         id={`radio-${id}-${title}`}
+//                         onChange={handleRadioChange}
+//                     />
+//                     <label
+//                         className='form-check-label cursor-pointer'
+//                         htmlFor={`radio-${id}-${title}`}
+//                     >
+//                         {title}
+//                     </label>
+//                 </div>
+//             </div>
+//         </div>
+//     );
+// };
+
+export const CustomRangeInput: React.FC<CustomRangeInputProps> = ({
+    id,
+    group,
+    minValue,
+    maxValue,
+    step,
+    currentValue,
+    action,
+}) => {
+    // const handleRangeChange = (event: ChangeEvent<HTMLInputElement>) => {
+    //     const newValue = Number(event.target.value);
+    //     if (action) {
+    //         action([group, newValue]);
+    //     }
+    // };
+
+    return (
+        <div className='mb-4'>
+            <label htmlFor={`range-${id}`} className='form-label'>
+                {group}
+            </label>
+            <input
+                type='range'
+                className='form-range'
+                id={`range-${id}`}
+                name={group}
+                min={minValue}
+                max={maxValue}
+                step={step}
+                value={currentValue}
+                // onChange={handleRangeChange}
+            />
+            <div className='d-flex justify-content-between'>
+                <span>{minValue}</span>
+                <span>{maxValue}</span>
             </div>
         </div>
     );

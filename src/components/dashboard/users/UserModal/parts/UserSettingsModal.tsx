@@ -13,6 +13,7 @@ import {
 import {
     CustomCheckbox,
     CustomRadioButton,
+    CustomRangeInput,
     CustomTextInput,
     InputType,
 } from 'components/dashboard/helpers/renderInputsHelper';
@@ -186,11 +187,11 @@ export const UserSettingsModal = ({
             {groupedSettings &&
                 Object.entries(groupedSettings).map(([groupName, groupSettings]) => {
                     return (
-                        <div className='fv-row mb-4' key={groupName}>
-                            <h2>{groupName}</h2>
+                        <div className='fv-row mb-16' key={groupName}>
+                            <h2 className='display-6'>{groupName}</h2>
                             {(groupSettings as Setting[]).map(
                                 ({ key, title, type, value }: Setting) => (
-                                    <div key={key}>
+                                    <div className='mb-4' key={key}>
                                         {type === InputType.TEXT && (
                                             <CustomTextInput
                                                 currentValue={String(value)}
@@ -210,6 +211,18 @@ export const UserSettingsModal = ({
                                         {type === InputType.RADIO && (
                                             <CustomRadioButton
                                                 id={key}
+                                                name={key}
+                                                title={title}
+                                                group={groupName}
+                                                currentValue={Number(value)}
+                                            />
+                                        )}
+                                        {type === InputType.RANGE && (
+                                            <CustomRangeInput
+                                                id={key}
+                                                minValue={0}
+                                                maxValue={10}
+                                                step={1}
                                                 name={key}
                                                 title={title}
                                                 group={groupName}
