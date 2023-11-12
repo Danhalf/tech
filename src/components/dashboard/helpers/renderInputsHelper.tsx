@@ -1,4 +1,5 @@
 /* eslint-disable no-unused-vars */
+import { group } from 'console';
 import { ChangeEvent, useEffect, useState } from 'react';
 
 interface CustomInputProps {
@@ -12,18 +13,14 @@ interface CustomInputProps {
 interface CustomCheckboxProps extends CustomInputProps {
     action?: (value: [string, number]) => void;
 }
-interface CustomTextInputProps extends CustomInputProps {
+interface CustomTextInputProps extends Omit<CustomInputProps, 'currentValue'> {
+    currentValue: string;
     action?: (event: ChangeEvent<HTMLInputElement>) => void;
 }
 
 interface CustomRadioButtonProps extends CustomInputProps {
-    options: RadioButtonOption[];
-    action: (value: [string, string]) => void;
-}
-
-interface RadioButtonOption {
-    value: number;
-    label: string;
+    action?: (value: [string, number[]]) => void;
+    group: string;
 }
 
 export enum InputType {
@@ -112,53 +109,53 @@ export const CustomTextInput = ({
 };
 
 export const CustomRadioButton = ({
-    currentValue,
     id,
-    name,
+    group,
+    currentValue,
     title,
-    options,
     action,
 }: CustomRadioButtonProps) => {
-    const [selectedValue, setSelectedValue] = useState<number>(currentValue);
-    const [isLoading, setIsLoading] = useState(false);
+    // const [isLoading, setIsLoading] = useState(false);
 
-    const handleRadioChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const newValue = event.target.value;
-        setSelectedValue(Number(newValue));
+    // const handleRadioChange = (index: number, newValue: number) => {
+    //     const newSelectedValues = [...selectedValues];
+    //     newSelectedValues[index] = newValue;
+    //     setSelectedValues(newSelectedValues);
 
-        if (action) {
-            setIsLoading(true);
-            action([name, newValue]);
-        }
-    };
+    //     if (action) {
+    //         setIsLoading(true);
+    //         action([name, newSelectedValues]);
+    //     }
+    // };
 
-    useEffect(() => {
-        setIsLoading(false);
-    }, [name, selectedValue, action]);
+    // useEffect(() => {
+    //     setIsLoading(false);
+    // }, [name, selectedValues, action]);
 
     return (
         <div className='mb-4'>
-            <span className='d-inline-block mb-2 form-check-label'>{title}</span>
-            <div className='form-check form-check-custom form-check-solid'>
-                {options.map((option, key) => (
-                    <div className='me-10' key={id + key}>
+            <div key={id}>
+                {/* <span className='d-inline-block mb-2 form-check-label'>{title}</span> */}
+                <div className='form-check form-check-custom form-check-solid'>
+                    <div className='me-10' key={id}>
                         <input
                             className='form-check-input cursor-pointer'
                             type='radio'
-                            value={option.value}
-                            checked={selectedValue === option.value}
-                            onChange={handleRadioChange}
-                            id={`radio-${id}-${option.value}`}
-                            disabled={isLoading}
+                            value={currentValue}
+                            name={group}
+                            // checked={selectedValues[index] === option.value}
+                            // onChange={() => handleRadioChange(index, option.value)}
+                            id={`radio-${id}-${currentValue}`}
+                            // disabled={isLoading}
                         />
                         <label
                             className='form-check-label cursor-pointer'
-                            htmlFor={`radio-${id}-${option.value}`}
+                            htmlFor={`radio-${id}-${currentValue}`}
                         >
-                            {option.label}
+                            {title}
                         </label>
                     </div>
-                ))}
+                </div>
             </div>
         </div>
     );

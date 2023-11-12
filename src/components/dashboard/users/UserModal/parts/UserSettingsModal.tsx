@@ -188,11 +188,46 @@ export const UserSettingsModal = ({
                     return (
                         <div className='fv-row mb-4' key={groupName}>
                             <h2>{groupName}</h2>
-                            {(groupSettings as Setting[]).map((setting: Setting) => (
-                                <div key={setting.key}>
-                                    <p>{setting.title}</p>
-                                </div>
-                            ))}
+                            {(groupSettings as Setting[]).map(
+                                ({ key, title, type, value }: Setting) => (
+                                    <div key={key}>
+                                        {type === InputType.TEXT && (
+                                            <CustomTextInput
+                                                currentValue={String(value)}
+                                                id={key}
+                                                name={key}
+                                                title={title}
+                                            />
+                                        )}
+                                        {type === InputType.CHECKBOX && (
+                                            <CustomCheckbox
+                                                currentValue={Number(value)}
+                                                id={key}
+                                                name={key}
+                                                title={title}
+                                            />
+                                        )}
+                                        {type === InputType.RADIO && (
+                                            <CustomRadioButton
+                                                id={key}
+                                                name={key}
+                                                title={title}
+                                                group={groupName}
+                                                currentValue={Number(value)}
+                                            />
+                                        )}
+                                        {type === InputType.DISABLED && (
+                                            <CustomTextInput
+                                                currentValue={String(value)}
+                                                id={key}
+                                                name={key}
+                                                title={title}
+                                                disabled
+                                            />
+                                        )}
+                                    </div>
+                                )
+                            )}
                         </div>
                     );
                 })}

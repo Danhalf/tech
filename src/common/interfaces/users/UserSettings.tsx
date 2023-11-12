@@ -47,6 +47,8 @@ export const disabledKeys: readonly SettingKey[] = [
     SettingKey.USER_UID,
     SettingKey.CREATED,
     SettingKey.UPDATED,
+    SettingKey.INDEX,
+    SettingKey.ITEM_UID,
 ];
 export const textInputKeys: readonly SettingKey[] = [
     SettingKey.ACCOUNT_LATE_FEE_GRACE_PERIOD,
@@ -65,8 +67,6 @@ export const textInputKeys: readonly SettingKey[] = [
     SettingKey.FEE_DEF_TITLE,
     SettingKey.FEE_DEF_TRANSFER,
     SettingKey.FEE_DEF_VEHICLE_PACK,
-    SettingKey.INDEX,
-    SettingKey.ITEM_UID,
     SettingKey.LEASE_DEFAULT_MILEAGE,
     SettingKey.LEASE_MONEY_FACTOR,
     SettingKey.LEASE_OVERAGE_AMOUNT,
