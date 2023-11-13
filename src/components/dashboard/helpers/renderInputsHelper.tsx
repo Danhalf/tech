@@ -1,5 +1,4 @@
 /* eslint-disable no-unused-vars */
-import { group } from 'console';
 import { ChangeEvent, useEffect, useState } from 'react';
 
 interface CustomInputProps {
@@ -15,11 +14,11 @@ interface CustomCheckboxProps extends CustomInputProps {
 }
 interface CustomTextInputProps extends Omit<CustomInputProps, 'currentValue'> {
     currentValue: string;
-    action?: (event: ChangeEvent<HTMLInputElement>) => void;
+    action?: (inputData: [string, string]) => void;
 }
 
 interface CustomRadioButtonProps extends CustomInputProps {
-    action?: (value: [string, number[]]) => void;
+    action?: (inputData: [string, string, number]) => void;
     group: string;
 }
 
@@ -28,8 +27,7 @@ interface CustomRangeInputProps extends CustomInputProps {
     minValue: number;
     maxValue: number;
     step: number;
-    currentValue: number;
-    action?: (inputData: [string, number[]]) => void;
+    action?: (inputData: [string, number]) => void;
 }
 
 export enum InputType {
@@ -90,10 +88,12 @@ export const CustomTextInput = ({
     action,
     disabled,
 }: CustomTextInputProps): JSX.Element => {
-    const handleInputAction = (event: ChangeEvent<HTMLInputElement>) => {
-        if (disabled) return;
+    const [inputValue, setInputValue] = useState(currentValue);
+    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const newValue = Number(event.target.value);
         if (action) {
-            action(event);
+            setInputValue(String(newValue));
+            action([name, String(newValue)]);
         }
     };
     return (
@@ -109,8 +109,8 @@ export const CustomTextInput = ({
                     className='form-control bg-transparent'
                     name={name}
                     type={'text'}
-                    value={currentValue}
-                    onChange={handleInputAction}
+                    value={inputValue}
+                    onChange={handleInputChange}
                 />
             </div>
         </div>
@@ -121,9 +121,18 @@ export const CustomRadioButton = ({
     id,
     group,
     currentValue,
+    name,
     title,
     action,
 }: CustomRadioButtonProps) => {
+    const [inputValue, setInputValue] = useState(currentValue);
+    const handleRadioChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const newValue = Number(event.target.value);
+        if (action) {
+            setInputValue(newValue);
+            action([group, name, newValue]);
+        }
+    };
     return (
         <div className='mb-4'>
             <div key={id}>
@@ -132,9 +141,10 @@ export const CustomRadioButton = ({
                         <input
                             className='form-check-input cursor-pointer'
                             type='radio'
-                            value={currentValue}
+                            value={inputValue}
                             name={group}
                             id={`radio-${id}-${currentValue}`}
+                            onChange={handleRadioChange}
                         />
                         <label
                             className='form-check-label cursor-pointer'
@@ -149,73 +159,40 @@ export const CustomRadioButton = ({
     );
 };
 
-// export const CustomRadioButton: React.FC<CustomRadioButtonProps> = ({
-//     id,
-//     group,
-//     title,
-//     action,
-// }) => {
-//     const handleRadioChange = () => {
-//         if (action) {
-//             action([group, title]);
-//         }
-//     };
-
-//     return (
-//         <div className='mb-4'>
-//             <div className='form-check form-check-custom form-check-solid'>
-//                 <div className='me-10'>
-//                     <input
-//                         className='form-check-input cursor-pointer'
-//                         type='radio'
-//                         value={title}
-//                         name={group}
-//                         id={`radio-${id}-${title}`}
-//                         onChange={handleRadioChange}
-//                     />
-//                     <label
-//                         className='form-check-label cursor-pointer'
-//                         htmlFor={`radio-${id}-${title}`}
-//                     >
-//                         {title}
-//                     </label>
-//                 </div>
-//             </div>
-//         </div>
-//     );
-// };
-
-export const CustomRangeInput: React.FC<CustomRangeInputProps> = ({
+export const CustomRangeInput = ({
     id,
-    group,
+    name,
+    title,
     minValue,
     maxValue,
     step,
     currentValue,
     action,
-}) => {
-    // const handleRangeChange = (event: ChangeEvent<HTMLInputElement>) => {
-    //     const newValue = Number(event.target.value);
-    //     if (action) {
-    //         action([group, newValue]);
-    //     }
-    // };
+}: CustomRangeInputProps) => {
+    const [inputValue, setInputValue] = useState(currentValue);
+    const handleRangeChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const newValue = Number(event.target.value);
+        if (action) {
+            setInputValue(newValue);
+            action([name, newValue]);
+        }
+    };
 
     return (
         <div className='mb-4'>
-            <label htmlFor={`range-${id}`} className='form-label'>
-                {group}
+            <label htmlFor={`range-${id}`} className='form-label fs-6 fw-bolder'>
+                {title}: {inputValue}
             </label>
             <input
                 type='range'
                 className='form-range'
                 id={`range-${id}`}
-                name={group}
+                name={name}
                 min={minValue}
                 max={maxValue}
                 step={step}
-                value={currentValue}
-                // onChange={handleRangeChange}
+                value={inputValue}
+                onChange={handleRangeChange}
             />
             <div className='d-flex justify-content-between'>
                 <span>{minValue}</span>

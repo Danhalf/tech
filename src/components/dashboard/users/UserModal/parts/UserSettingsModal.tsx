@@ -92,9 +92,9 @@ export const UserSettingsModal = ({
     useruid,
     username,
 }: UserSettingsModalProps): JSX.Element => {
-    const [settings, setSettings] = useState<Setting[]>([]);
+    const [settings, setSettings] = useState<any>({});
     const [groupedSettings, setGroupedSettings] = useState<any>();
-    const [initialUserSettings, setInitialUserSettings] = useState<any>([]);
+    const [initialUserSettings, setInitialUserSettings] = useState<any>({});
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
@@ -107,7 +107,8 @@ export const UserSettingsModal = ({
                 .then(async (response) => {
                     if (response.status === Status.OK && response.settings) {
                         const settings = response.settings;
-
+                        setInitialUserSettings(settings);
+                        setSettings(settings);
                         const groupedList: GroupedSetting = getGroupedList();
 
                         Object.entries({ ...settings }).forEach(
@@ -153,6 +154,17 @@ export const UserSettingsModal = ({
         [settings]
     );
 
+    const handleChangeGroupSettings = useCallback(
+        (inputData: [string, string, number | string]) => {
+            const [group, name, value] = inputData;
+            setSettings({
+                ...settings,
+                [name]: convertToNumberIfNumeric(value as string),
+            });
+        },
+        [settings]
+    );
+
     const handleSetUserSettings = async (): Promise<void> => {
         setIsLoading(true);
         try {
@@ -175,9 +187,6 @@ export const UserSettingsModal = ({
         }
     };
 
-    // eslint-disable-next-line no-console
-    console.log(groupedSettings);
-
     if (!settings) {
         return <></>;
     }
@@ -198,6 +207,7 @@ export const UserSettingsModal = ({
                                                 id={key}
                                                 name={key}
                                                 title={title}
+                                                action={handleChangeUserSettings}
                                             />
                                         )}
                                         {type === InputType.CHECKBOX && (
@@ -206,6 +216,7 @@ export const UserSettingsModal = ({
                                                 id={key}
                                                 name={key}
                                                 title={title}
+                                                action={handleChangeUserSettings}
                                             />
                                         )}
                                         {type === InputType.RADIO && (
@@ -215,6 +226,7 @@ export const UserSettingsModal = ({
                                                 title={title}
                                                 group={groupName}
                                                 currentValue={Number(value)}
+                                                action={handleChangeGroupSettings}
                                             />
                                         )}
                                         {type === InputType.RANGE && (
@@ -227,6 +239,15 @@ export const UserSettingsModal = ({
                                                 title={title}
                                                 group={groupName}
                                                 currentValue={Number(value)}
+                                                action={handleChangeUserSettings}
+                                            />
+                                        )}
+                                        {type === InputType.DEFAULT && (
+                                            <CustomTextInput
+                                                currentValue={String(value)}
+                                                id={key}
+                                                name={key}
+                                                title={title}
                                             />
                                         )}
                                         {type === InputType.DISABLED && (

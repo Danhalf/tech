@@ -76,6 +76,8 @@ export const textInputKeys: readonly SettingKey[] = [
 export const checkboxInputKeys: readonly SettingKey[] = [
     SettingKey.STOCKNUM_PREFIX,
     SettingKey.STOCKNUM_SUFFIX,
+    SettingKey.STOCKNUMTI_PREFIX,
+    SettingKey.STOCKNUMTI_SUFFIX,
     SettingKey.STOCKNUM_SEQUENTIAL,
     SettingKey.STOCKNUMTI_SEQUENTIAL,
     SettingKey.STOCKNUMTI_FROM_SOLD_VEHICLE,
@@ -87,10 +89,15 @@ export const rangeInputKeys: readonly SettingKey[] = [
     SettingKey.ACCOUNT_FIXED_DIGITS,
 ];
 
-export const radioButtonsKeys: readonly (readonly SettingKey[])[] = [
-    [SettingKey.STOCKNUM_LAST_6_OF_VIN, SettingKey.STOCKNUM_LAST_8_OF_VIN],
-    [SettingKey.DEAL_TYPE, SettingKey.DEAL_STATUS],
-    [SettingKey.LEASE_TERM, SettingKey.LEASE_PAYMENT_FREQUENCY],
+export const radioButtonsKeys: readonly SettingKey[] = [
+    SettingKey.STOCKNUM_LAST_6_OF_VIN,
+    SettingKey.STOCKNUM_LAST_8_OF_VIN,
+    SettingKey.STOCKNUMTI_LAST_6_OF_VIN,
+    SettingKey.STOCKNUMTI_LAST_8_OF_VIN,
+    SettingKey.DEAL_TYPE,
+    SettingKey.DEAL_STATUS,
+    SettingKey.LEASE_TERM,
+    SettingKey.LEASE_PAYMENT_FREQUENCY,
 ];
 
 export const selectInputKeys: readonly SettingKey[] = [
