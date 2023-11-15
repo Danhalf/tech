@@ -3,13 +3,7 @@ import { convertToNumberIfNumeric, deepEqual } from 'components/dashboard/helper
 import { useToast } from 'components/dashboard/helpers/renderToastHelper';
 import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton';
 import { useState, useEffect, useCallback } from 'react';
-import { renamedKeys } from 'common/app-consts';
 import { Status } from 'common/interfaces/ActionStatus';
-import {
-    getDealsOptions,
-    getUserSettings,
-    setUserSettings,
-} from 'components/dashboard/users/user.service';
 import {
     CustomCheckbox,
     CustomRadioButton,
@@ -18,6 +12,7 @@ import {
     InputType,
 } from 'components/dashboard/helpers/renderInputsHelper';
 import {
+    Settings,
     checkboxInputKeys,
     disabledKeys,
     radioButtonsKeys,
@@ -37,6 +32,8 @@ import {
     contractGroup,
     leaseGroup,
 } from 'common/interfaces/users/UserGroups';
+import { renamedKeys } from 'common/app-consts';
+import { getUserSettings, setUserSettings } from '../../user.service';
 
 const getSettingType = (key: SettingKey): InputType => {
     if (disabledKeys.includes(key)) return InputType.DISABLED;
@@ -92,9 +89,9 @@ export const UserSettingsModal = ({
     useruid,
     username,
 }: UserSettingsModalProps): JSX.Element => {
-    const [settings, setSettings] = useState<any>({});
-    const [groupedSettings, setGroupedSettings] = useState<any>();
-    const [initialUserSettings, setInitialUserSettings] = useState<any>({});
+    const [settings, setSettings] = useState<Settings>();
+    const [groupedSettings, setGroupedSettings] = useState<GroupedSetting>({});
+    const [initialUserSettings, setInitialUserSettings] = useState<Settings>();
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isButtonDisabled, setIsButtonDisabled] = useState<boolean>(true);
 
@@ -111,7 +108,7 @@ export const UserSettingsModal = ({
                         setSettings(settings);
                         const groupedList: GroupedSetting = getGroupedList();
 
-                        Object.entries({ ...settings }).forEach(
+                        Object.entries<string | number>({ ...settings }).forEach(
                             ([key, value]: [string, string | number]) => {
                                 const type = getSettingType(key as SettingKey);
                                 const group = getSettingGroup(key as SettingKey);
@@ -144,25 +141,32 @@ export const UserSettingsModal = ({
     }, [settings, initialUserSettings, isLoading]);
 
     const handleChangeUserSettings = useCallback(
-        (inputData: [string, number | string]) => {
-            const [name, value] = inputData;
-            setSettings({
-                ...settings,
-                [name]: convertToNumberIfNumeric(value as string),
-            });
-        },
-        [settings]
-    );
+        (inputData: [string, number | string, SettingKey?]) => {
+            const [name, value, group] = inputData;
 
-    const handleChangeGroupSettings = useCallback(
-        (inputData: [string, string, number | string]) => {
-            const [group, name, value] = inputData;
+            let changedSettings: any;
+
+            if (group && groupedSettings) {
+                groupedSettings[group].forEach((group) => {
+                    if (group.type === InputType.RADIO) {
+                        if (group.key !== name) {
+                            changedSettings = { ...changedSettings, [group.key]: 0 };
+                        }
+                    }
+                });
+            }
+
+            changedSettings = {
+                ...changedSettings,
+                [name]: convertToNumberIfNumeric(value as string),
+            };
+
             setSettings({
                 ...settings,
-                [name]: convertToNumberIfNumeric(value as string),
+                ...changedSettings,
             });
         },
-        [settings]
+        [settings, groupedSettings]
     );
 
     const handleSetUserSettings = async (): Promise<void> => {
@@ -224,9 +228,10 @@ export const UserSettingsModal = ({
                                                 id={key}
                                                 name={key}
                                                 title={title}
-                                                group={groupName}
-                                                currentValue={Number(value)}
-                                                action={handleChangeGroupSettings}
+                                                group={groupName as SettingKey}
+                                                //@ts-ignore
+                                                currentValue={Number(settings[key])}
+                                                action={handleChangeUserSettings}
                                             />
                                         )}
                                         {type === InputType.RANGE && (
