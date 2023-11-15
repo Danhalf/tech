@@ -229,8 +229,7 @@ export const UserSettingsModal = ({
                                                 name={key}
                                                 title={title}
                                                 group={groupName as SettingKey}
-                                                //@ts-ignore
-                                                currentValue={Number(settings[key])}
+                                                currentValue={Number(settings[key as SettingKey])}
                                                 action={handleChangeUserSettings}
                                             />
                                         )}

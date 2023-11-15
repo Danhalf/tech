@@ -8,10 +8,15 @@ export interface Settings {
     [SettingKey.STOCKNUM_SUFFIX]: string;
     [SettingKey.STOCKNUM_FIXED_DIGITS]: number;
     [SettingKey.STOCKNUM_SEQUENTIAL]: number;
-    [SettingKey.STOCKNUMTI_SEQUENTIAL]: number;
-    [SettingKey.STOCKNUMTI_FROM_SOLD_VEHICLE]: number;
     [SettingKey.STOCKNUM_LAST_6_OF_VIN]: number;
     [SettingKey.STOCKNUM_LAST_8_OF_VIN]: number;
+    [SettingKey.STOCKNUMTI_PREFIX]: string;
+    [SettingKey.STOCKNUMTI_SUFFIX]: string;
+    [SettingKey.STOCKNUMTI_SEQUENTIAL]: number;
+    [SettingKey.STOCKNUMTI_FROM_SOLD_VEHICLE]: number;
+    [SettingKey.STOCKNUMTI_LAST_6_OF_VIN]: number;
+    [SettingKey.STOCKNUMTI_LAST_8_OF_VIN]: number;
+    [SettingKey.STOCKNUMTI_FIXED_DIGITS]: number;
     [SettingKey.DEAL_TYPE]: number;
     [SettingKey.DEAL_STATUS]: number;
     [SettingKey.LEASE_TERM]: number;
