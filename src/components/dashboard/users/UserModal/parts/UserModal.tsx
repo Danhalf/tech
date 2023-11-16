@@ -5,12 +5,12 @@ import { HTMLInputTypeAttribute, useState } from 'react';
 import { createOrUpdateUser } from 'components/dashboard/users/user.service';
 import { TOAST_DURATION, useToast } from 'components/dashboard/helpers/renderToastHelper';
 import { AxiosError } from 'axios';
-import { User, UserInputData } from 'common/interfaces/UserData';
+import { User, UserInputData, UsersType } from 'common/interfaces/UserData';
+import { useQueryResponse } from 'common/core/QueryResponseProvider';
 
 interface UserModalProps {
     onClose: () => void;
     user?: User;
-    updateData?: () => void;
 }
 
 interface UserModalData extends UserInputData {
@@ -25,13 +25,14 @@ enum PassIcon {
     HIDDEN = 'ki-eye-slash',
 }
 
-export const UserModal = ({ onClose, user, updateData }: UserModalProps): JSX.Element => {
+export const UserModal = ({ onClose, user }: UserModalProps): JSX.Element => {
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
     const [passwordFieldType, setPasswordFieldType] = useState<HTMLInputTypeAttribute>('password');
     const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState<boolean>(false);
     const [confirmPasswordFieldType, setConfirmPasswordFieldType] =
         useState<HTMLInputTypeAttribute>('password');
     const [, setHasServerError] = useState<boolean>(false);
+    const { refetch } = useQueryResponse(UsersType.ACTIVE);
 
     const initialUserData: UserModalData = {
         username: user?.username || '',
@@ -106,7 +107,7 @@ export const UserModal = ({ onClose, user, updateData }: UserModalProps): JSX.El
                         type: 'success',
                     });
                     onClose();
-                    updateData && updateData();
+                    refetch();
                 } else {
                     setHasServerError(responseData.error);
                     setTimeout(() => {

@@ -4,5 +4,6 @@
       "listdealtypes",
       "listinventorystatuses",
       "listsaletypes"
+      "locationuid"
    ]
 }

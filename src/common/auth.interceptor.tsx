@@ -4,6 +4,7 @@ import { useToast } from 'components/dashboard/helpers/renderToastHelper';
 
 export const useAuthInterceptor = () => {
     const { handleShowToast } = useToast();
+
     axios.interceptors.response.use(
         (response) => {
             return response;

@@ -1,6 +1,7 @@
 export const API_URL = 'https://app.admss.com/api/v1/';
 export const LOC_STORAGE_USER = 'admss-admin-user';
 export const LOC_STORAGE_USER_STATE = 'admss-user-current-state';
+export const APPLICATION = 'admin';
 
 export const renamedKeys: Record<string, string> = {
     dealType: 'Deal Type',
