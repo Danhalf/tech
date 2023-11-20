@@ -26,19 +26,39 @@ interface TabSwitcherProps {
 }
 
 const TabSwitcher = ({ tabs, activeTab, handleTabClick }: TabSwitcherProps) => {
-    return (
-        <div className='d-flex justify-content-center mb-3'>
-            <div className='btn-group' role='group'>
-                {tabs.map((_, idx: number) => (
+    const renderTabs = () => {
+        const totalTabs = tabs.length;
+        const visibleTabs = [
+            0,
+            activeTab - 2,
+            activeTab - 1,
+            activeTab,
+            activeTab + 1,
+            activeTab + 2,
+            totalTabs - 1,
+        ];
+
+        return tabs.map((_, idx: number) => {
+            const isVisible = visibleTabs.includes(idx);
+            return (
+                isVisible && (
                     <button
                         key={idx}
                         type='button'
-                        className={`btn btn-secondary ${activeTab === idx} ? 'active' : ''}`}
+                        className={`btn btn-secondary ${activeTab === idx ? 'active' : ''}`}
                         onClick={() => handleTabClick(idx)}
                     >
                         {idx + 1}
                     </button>
-                ))}
+                )
+            );
+        });
+    };
+
+    return (
+        <div className='d-flex justify-content-center mb-3'>
+            <div className='btn-group' role='group'>
+                {renderTabs()}
             </div>
         </div>
     );
