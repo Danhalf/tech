@@ -6,7 +6,7 @@ import { renderTable } from 'components/dashboard/helpers/renderTableHelper';
 import { renamedKeys } from 'common/app-consts';
 
 interface RenderListArgs {
-    data: string[] | string;
+    data?: string[] | string;
     checkbox?: boolean;
     action?: (value: [string, number]) => void;
 }
@@ -143,7 +143,7 @@ export const TabDataWrapper = ({
                             <TabPanel activeTab={activeTab} tabName={ViewTypes.JSON}>
                                 <div className='card-body'>
                                     <pre className='fs-4'>{data}</pre>
-                                    {children}
+                                    {children && <pre className='fs-4'>{data}</pre>}
                                 </div>
                             </TabPanel>
                             <TabPanel activeTab={activeTab} tabName={ViewTypes.GENERAL}>
