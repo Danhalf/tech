@@ -74,17 +74,17 @@ export function DashboardHeader() {
                                             {
                                                 menuItemName: 'Data import',
                                                 icon: 'data',
-                                                menuItemAction: () => handleUserCardOpen(),
+                                                menuItemAction: () => navigate('data-import'),
                                             },
                                             {
                                                 menuItemName: 'Templates for reports',
                                                 icon: 'calendar-edit',
-                                                menuItemAction: () => handleEditUserModalOpen(),
+                                                menuItemAction: () => navigate('template-reports'),
                                             },
                                             {
                                                 menuItemName: 'Templates for printed forms',
                                                 icon: 'printer',
-                                                menuItemAction: () => signOut(),
+                                                menuItemAction: () => navigate('template-printed'),
                                             },
                                         ]}
                                     />

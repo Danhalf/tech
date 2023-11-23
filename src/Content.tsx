@@ -8,6 +8,9 @@ import { MenuComponent } from '_metronic/assets/ts/components';
 import { Users } from 'components/dashboard/users/Users';
 import { PrivateRouter } from 'router/privateRouter';
 import { useAuthInterceptor } from 'common/auth.interceptor';
+import { DataImport } from 'components/dashboard/common/DataImport';
+import { TemplatesReports } from 'components/dashboard/common/TemplatesReports';
+import { TemplatesPrinted } from 'components/dashboard/common/TemplatesPrinted';
 
 export function MasterInit() {
     const pluginsInitialization = () => {
@@ -34,6 +37,9 @@ const Content = () => {
                     <Route path='' element={<Microservices />} />
                     <Route path='microservices/:uid' element={<MicroserviceCard />} />
                     <Route path='users' element={<Users />} />
+                    <Route path='data-import' element={<DataImport />} />
+                    <Route path='template-reports' element={<TemplatesReports />} />
+                    <Route path='template-printed' element={<TemplatesPrinted />} />
                     <Route path='user/:id' element={<UserCard />} />
                 </Route>
             </Routes>
