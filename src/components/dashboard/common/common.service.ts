@@ -1,7 +1,7 @@
 import { fetchApiData } from 'common/api/fetchAPI';
 
 export const getImportList = (useruid?: string): Promise<any> => {
-    return fetchApiData<any>('GET', ` import/${useruid || 0}/list`);
+    return fetchApiData<any>('GET', `import/${useruid || 0}/list`);
 };
 
 export const deleteImportItem = (itemuid: string): Promise<any> => {
@@ -12,7 +12,7 @@ export const getImportItemInfo = (itemuid: string): Promise<any> => {
 };
 
 export const getTemplateReports = (): Promise<any> => {
-    return fetchApiData<any>('GET', ` reports/list`);
+    return fetchApiData<any>('GET', `reports/list`);
 };
 
 export const deleteReportsItem = (itemuid: string): Promise<any> => {
@@ -24,7 +24,7 @@ export const setReportsItemInfo = (itemuid: string): Promise<any> => {
 };
 
 export const getTemplatePrints = (): Promise<any> => {
-    return fetchApiData<any>('GET', ` print/list`);
+    return fetchApiData<any>('GET', `print/list`);
 };
 
 export const deletePrintItem = (itemuid: string): Promise<any> => {
