@@ -65,28 +65,53 @@ export function DashboardHeader() {
                                     <span className='menu-title w-0'>Users</span>
                                 </Link>
                             </div>
-                            <div className='menu-item me-lg-1 ms-auto'>
-                                <CustomDropdown
-                                    title={loginname}
-                                    weight={200}
-                                    items={[
-                                        {
-                                            menuItemName: `${loginname} card`,
-                                            icon: 'user-tick',
-                                            menuItemAction: () => handleUserCardOpen(),
-                                        },
-                                        {
-                                            menuItemName: 'Change password',
-                                            icon: 'lock-2',
-                                            menuItemAction: () => handleEditUserModalOpen(),
-                                        },
-                                        {
-                                            menuItemName: 'Log out',
-                                            icon: 'exit-right',
-                                            menuItemAction: () => signOut(),
-                                        },
-                                    ]}
-                                />
+                            <div className='d-flex align-items-center ms-auto gap-6'>
+                                <div className='menu-item me-lg-1'>
+                                    <CustomDropdown
+                                        title={'Common'}
+                                        weight={250}
+                                        items={[
+                                            {
+                                                menuItemName: 'Data import',
+                                                icon: 'data',
+                                                menuItemAction: () => handleUserCardOpen(),
+                                            },
+                                            {
+                                                menuItemName: 'Templates for reports',
+                                                icon: 'calendar-edit',
+                                                menuItemAction: () => handleEditUserModalOpen(),
+                                            },
+                                            {
+                                                menuItemName: 'Templates for printed forms',
+                                                icon: 'printer',
+                                                menuItemAction: () => signOut(),
+                                            },
+                                        ]}
+                                    />
+                                </div>
+                                <div className='menu-item me-lg-1'>
+                                    <CustomDropdown
+                                        title={loginname}
+                                        weight={200}
+                                        items={[
+                                            {
+                                                menuItemName: `${loginname} card`,
+                                                icon: 'user-tick',
+                                                menuItemAction: () => handleUserCardOpen(),
+                                            },
+                                            {
+                                                menuItemName: 'Change password',
+                                                icon: 'lock-2',
+                                                menuItemAction: () => handleEditUserModalOpen(),
+                                            },
+                                            {
+                                                menuItemName: 'Log out',
+                                                icon: 'exit-right',
+                                                menuItemAction: () => signOut(),
+                                            },
+                                        ]}
+                                    />
+                                </div>
                             </div>
                         </div>
                     </div>
