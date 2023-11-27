@@ -1,19 +1,19 @@
 import { useState, useEffect } from 'react';
 import { TableHead } from '../helpers/renderTableHelper';
-import { getTemplateReports } from './common.service';
+import { getTemplatePrints } from './common.service';
 
 export const TemplatesPrinted = (): JSX.Element => {
     const [templatesPrinted, setTemplatesPrinted] = useState();
 
     const updateTemplatesPrinted = (): void => {
-        getTemplateReports().then((response) => {
+        getTemplatePrints().then((response) => {
             setTemplatesPrinted(response);
         });
     };
 
     useEffect(() => {
         updateTemplatesPrinted();
-    });
+    }, []);
 
     return (
         <>

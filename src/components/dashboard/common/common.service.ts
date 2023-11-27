@@ -12,7 +12,7 @@ export const getImportItemInfo = (itemuid: string): Promise<any> => {
 };
 
 export const getTemplateReports = (): Promise<any> => {
-    return fetchApiData<any>('GET', `reports/list`);
+    return fetchApiData<any>('GET', `reports/0/list`);
 };
 
 export const deleteReportsItem = (itemuid: string): Promise<any> => {

@@ -31,6 +31,11 @@ interface CustomRangeInputProps extends CustomInputProps {
     action?: (inputData: [string, number]) => void;
 }
 
+interface CustomUploadInput extends Omit<CustomInputProps, 'currentValue'> {
+    currentValue: File | null;
+    filetype?: 'pdf';
+}
+
 export enum InputType {
     DISABLED = 'disabledInput',
     TEXT = 'textInput',
@@ -198,5 +203,30 @@ export const CustomRangeInput = ({
                 <span>{maxValue}</span>
             </div>
         </div>
+    );
+};
+
+export const CustomUploadInput = ({ id, name, filetype }: CustomUploadInput) => {
+    const [selectedFile, setSelectedFile] = useState<File | null>(null);
+
+    const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const [file] = event.target.files || [];
+        setSelectedFile(file || null);
+    };
+
+    return (
+        <>
+            <input
+                id={id}
+                name={name}
+                type='file'
+                accept={`application/${filetype}`}
+                className='invisible'
+                onChange={handleFileChange}
+            />
+            <label className='btn btn-primary' htmlFor={id}>
+                Upload
+            </label>
+        </>
     );
 };
