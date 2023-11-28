@@ -41,3 +41,10 @@ export const deletePrintItem = (itemuid: string): Promise<any> => {
 export const setPrintItemInfo = (itemuid: string): Promise<any> => {
     return fetchApiData<any>('POST', `print/${itemuid}/set`);
 };
+
+export const uploadPrintFile = (file: File, itemuid?: string): Promise<any> => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return fetchApiData<any>('POST', `print/${itemuid || 0}/add`, { data: formData });
+};
