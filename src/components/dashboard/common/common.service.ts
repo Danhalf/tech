@@ -1,4 +1,5 @@
 import { fetchApiData } from 'common/api/fetchAPI';
+import { TemplatesPrintedData } from 'common/interfaces/TemplatesPrintedData';
 
 export const getImportList = (useruid?: string): Promise<any> => {
     return fetchApiData<any>('GET', `import/${useruid || 0}/list`);
@@ -30,8 +31,8 @@ export const uploadReportsFile = (file: File, itemuid?: string): Promise<any> =>
     return fetchApiData<any>('POST', `reports/${itemuid || 0}/add`, { data: formData });
 };
 
-export const getTemplatePrints = (): Promise<any> => {
-    return fetchApiData<any>('GET', `print/list`);
+export const getTemplatePrints = (): Promise<TemplatesPrintedData> => {
+    return fetchApiData<TemplatesPrintedData>('GET', `print/list`);
 };
 
 export const deletePrintItem = (itemuid: string): Promise<any> => {

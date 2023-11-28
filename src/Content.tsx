@@ -10,7 +10,7 @@ import { PrivateRouter } from 'router/privateRouter';
 import { useAuthInterceptor } from 'common/auth.interceptor';
 import { DataImport } from 'components/dashboard/common/DataImport';
 import { TemplatesReports } from 'components/dashboard/common/TemplatesReports';
-import { TemplatesPrinted } from 'components/dashboard/common/TemplatesPrinted';
+import { TemplatesPrinted } from 'components/dashboard/common/TemplatesPrinted/TemplatesPrinted';
 
 export function MasterInit() {
     const pluginsInitialization = () => {
