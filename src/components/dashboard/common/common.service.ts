@@ -23,6 +23,13 @@ export const setReportsItemInfo = (itemuid: string): Promise<any> => {
     return fetchApiData<any>('POST', `reports/${itemuid}/set`);
 };
 
+export const uploadReportsFile = (file: File, itemuid?: string): Promise<any> => {
+    const formData = new FormData();
+    formData.append('file', file);
+
+    return fetchApiData<any>('POST', `reports/${itemuid || 0}/add`, { data: formData });
+};
+
 export const getTemplatePrints = (): Promise<any> => {
     return fetchApiData<any>('GET', `print/list`);
 };

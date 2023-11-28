@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { SettingKey } from 'common/interfaces/users/UserConsts';
 import { ChangeEvent, useEffect, useState } from 'react';
+import { PrimaryButton } from '../smallComponents/buttons/PrimaryButton';
+import clsx from 'clsx';
 
 interface CustomInputProps {
     currentValue: number;
@@ -31,8 +33,8 @@ interface CustomRangeInputProps extends CustomInputProps {
     action?: (inputData: [string, number]) => void;
 }
 
-interface CustomUploadInput extends Omit<CustomInputProps, 'currentValue'> {
-    currentValue: File | null;
+interface CustomUploadInputProps extends Omit<CustomInputProps, 'currentValue'> {
+    action: (file: File) => void;
     filetype?: 'pdf';
 }
 
@@ -206,27 +208,65 @@ export const CustomRangeInput = ({
     );
 };
 
-export const CustomUploadInput = ({ id, name, filetype }: CustomUploadInput) => {
+export const CustomUploadInput = ({
+    id,
+    name,
+    filetype,
+    action,
+    disabled,
+}: CustomUploadInputProps) => {
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
 
     const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
         const [file] = event.target.files || [];
-        setSelectedFile(file || null);
+        setSelectedFile(file);
+    };
+
+    const handleCancelClick = () => {
+        setSelectedFile(null);
+    };
+
+    const handleUploadClick = () => {
+        if (selectedFile) {
+            action(selectedFile);
+            setSelectedFile(null);
+        }
     };
 
     return (
         <>
-            <input
-                id={id}
-                name={name}
-                type='file'
-                accept={`application/${filetype}`}
-                className='invisible'
-                onChange={handleFileChange}
-            />
-            <label className='btn btn-primary' htmlFor={id}>
-                Upload
-            </label>
+            {!selectedFile && (
+                <>
+                    <input
+                        id={id}
+                        name={name}
+                        type='file'
+                        accept={`application/${filetype}`}
+                        className='invisible'
+                        onChange={handleFileChange}
+                        disabled={disabled}
+                    />
+                    <label
+                        className={clsx('btn btn-primary', {
+                            disabled,
+                        })}
+                        htmlFor={id}
+                    >
+                        Upload
+                    </label>
+                </>
+            )}
+
+            {selectedFile && (
+                <div className='d-flex gap-2'>
+                    <PrimaryButton appearance='light' buttonClickAction={handleCancelClick}>
+                        Cancel
+                    </PrimaryButton>
+                    <PrimaryButton appearance='primary' buttonClickAction={handleUploadClick}>
+                        Upload {selectedFile.name}
+                    </PrimaryButton>
+                </div>
+            )}
         </>
     );
 };
