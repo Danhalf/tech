@@ -51,6 +51,7 @@ export const TemplatesPrinted = (): JSX.Element => {
                         message: `<strong>${file.name}</strong> successfully uploaded`,
                         type: 'success',
                     });
+                    updateTemplatesPrinted();
                 }
             })
             .catch((err) => {
