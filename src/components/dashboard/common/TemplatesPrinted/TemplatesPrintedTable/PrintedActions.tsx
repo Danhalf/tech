@@ -1,9 +1,7 @@
 import { Status } from 'common/interfaces/ActionStatus';
 import { deletePrintItem, downloadPrintItem, setPrintItemInfo } from '../../common.service';
-import { AxiosError } from 'axios';
 import { useToast } from 'components/dashboard/helpers/renderToastHelper';
 
-/* eslint-disable no-console */
 export const PrintedActions = ({ itemuid }: { itemuid: string }) => {
     const { handleShowToast } = useToast();
     const handleInformationClick = () => {

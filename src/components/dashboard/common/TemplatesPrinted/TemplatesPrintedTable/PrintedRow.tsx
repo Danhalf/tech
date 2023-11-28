@@ -1,4 +1,3 @@
-// @ts-nocheck
 import clsx from 'clsx';
 import { Row } from 'react-table';
 import { TemplatesPrintedRecord } from 'common/interfaces/TemplatesPrintedData';
