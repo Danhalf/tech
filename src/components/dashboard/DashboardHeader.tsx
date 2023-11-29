@@ -70,7 +70,7 @@ export function DashboardHeader() {
                                     title={'Common'}
                                     background='none'
                                     iconBefore='gear'
-                                    weight={250}
+                                    width={250}
                                     items={[
                                         {
                                             menuItemName: 'Data import',
@@ -93,7 +93,7 @@ export function DashboardHeader() {
                             <div className='menu-item me-lg-1 ms-auto'>
                                 <CustomDropdown
                                     title={loginname}
-                                    weight={200}
+                                    width={200}
                                     items={[
                                         {
                                             menuItemName: `${loginname} card`,

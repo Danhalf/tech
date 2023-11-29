@@ -70,7 +70,6 @@ export const TemplatesPrinted = (): JSX.Element => {
     });
 
     return (
-        <>
             <div className='card'>
                 <div className='me-4 mt-4 ms-auto'>
                     <CustomUploadInput
@@ -107,6 +106,5 @@ export const TemplatesPrinted = (): JSX.Element => {
                     </div>
                 </div>
             </div>
-        </>
     );
 };

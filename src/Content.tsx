@@ -8,7 +8,7 @@ import { MenuComponent } from '_metronic/assets/ts/components';
 import { Users } from 'components/dashboard/users/Users';
 import { PrivateRouter } from 'router/privateRouter';
 import { useAuthInterceptor } from 'common/auth.interceptor';
-import { DataImport } from 'components/dashboard/common/DataImport';
+import { DataImport } from 'components/dashboard/common/DataImport/DataImport';
 import { TemplatesReports } from 'components/dashboard/common/TemplatesReports';
 import { TemplatesPrinted } from 'components/dashboard/common/TemplatesPrinted/TemplatesPrinted';
 

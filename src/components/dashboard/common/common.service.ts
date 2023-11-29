@@ -1,8 +1,9 @@
 import { fetchApiData } from 'common/api/fetchAPI';
+import { DataImportsResponse } from 'common/interfaces/DataImports';
 import { TemplatesPrintedData } from 'common/interfaces/TemplatesPrintedData';
 
-export const getImportList = (useruid?: string): Promise<any> => {
-    return fetchApiData<any>('GET', `import/${useruid || 0}/list`);
+export const getImportList = (useruid?: string): Promise<DataImportsResponse> => {
+    return fetchApiData<DataImportsResponse>('GET', `import/${useruid || 0}/list`);
 };
 
 export const deleteImportItem = (itemuid: string): Promise<any> => {
