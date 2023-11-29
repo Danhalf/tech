@@ -48,7 +48,7 @@ export const DataImportActions = ({ id }: { id: number | string }) => {
         <>
             {modalEnabled && (
                 <CustomModal onClose={() => setModalEnabled(false)} title={'Data Information'}>
-                    <TabDataWrapper data={JSON.stringify(dataItemInfo, null, 2)} />;
+                    <TabDataWrapper data={JSON.stringify(dataItemInfo, null, 2)} />
                 </CustomModal>
             )}
             <CustomDropdown

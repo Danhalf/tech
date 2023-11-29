@@ -13,7 +13,7 @@ export const DataImportRow = ({ row }: Props) => {
                 return (
                     <td
                         {...cell.getCellProps()}
-                        className={clsx({
+                        className={clsx('', {
                             'w-25': cell.column.id === 'datapath',
                         })}
                     >

@@ -57,7 +57,7 @@ export const DataImport = (): JSX.Element => {
                             </tr>
                         </thead>
                         <tbody className='text-gray-600 fw-bold' {...getTableBodyProps()}>
-                            {rows.map((row: Row<any>, i) => {
+                            {rows.map((row: Row<any>) => {
                                 prepareRow(row);
                                 return <DataImportRow row={row} key={`${row.id}`} />;
                             })}

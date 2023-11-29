@@ -10,7 +10,6 @@ export const DataImportsColumns = (): ReadonlyArray<Column<DataImportsRecord>> =
     {
         Header: 'Data path',
         accessor: 'datapath',
-        width: 200,
     },
     {
         Header: 'Mode',

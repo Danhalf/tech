@@ -32,16 +32,19 @@ export const CustomDropdown = ({
     return (
         <>
             <a
-                className={clsx('btn btn-sm', {
-                    'btn-light btn-active-light-primary': background === 'default',
-                    'fs-6 text-hover-primary fw-bold text-gray-700': background === 'none',
-                })}
+                className={clsx(
+                    'btn btn-sm d-flex justify-content-center align-items-center column-gap-1',
+                    {
+                        'btn-light btn-active-light-primary': background === 'default',
+                        'fs-6 text-hover-primary fw-bold text-gray-700': background === 'none',
+                    }
+                )}
                 data-kt-menu-trigger='click'
                 data-kt-menu-placement='bottom-end'
             >
                 {iconBefore && <i className={`ki-outline ki-${iconBefore} fs-2`} />}
                 <span className='menu-title'>{title}</span>
-                <i className='ki-duotone ki-down fs-5 m-0' />
+                <i className='ki-duotone ki-down fs-4 m-0' />
             </a>
             <div
                 className={`menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-bold fs-7 w-${
