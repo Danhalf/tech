@@ -34,7 +34,7 @@ export const CustomDropdown = ({
             <a
                 className={clsx('btn btn-sm', {
                     'btn-light btn-active-light-primary': background === 'default',
-                    'fs-6 text-hover-primary': background === 'none',
+                    'fs-6 text-hover-primary fw-bold text-gray-700': background === 'none',
                 })}
                 data-kt-menu-trigger='click'
                 data-kt-menu-placement='bottom-end'

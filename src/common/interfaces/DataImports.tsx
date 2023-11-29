@@ -36,4 +36,5 @@ export interface DataImportsInfoMetadata {
 export interface DataImportsInfoResponse {
     metadata: DataImportsInfoMetadata;
     status: Status;
+    error?: string;
 }

@@ -3,7 +3,7 @@ import { getImportList } from 'components/dashboard/common/common.service';
 import { DataImportsRecord } from 'common/interfaces/DataImports';
 import { Status } from 'common/interfaces/ActionStatus';
 import { DataImportsColumns } from './DataImportTable/DataImportColumns';
-import { ColumnInstance, Row, useTable } from 'react-table';
+import { ColumnInstance, Row, useFlexLayout, useResizeColumns, useTable } from 'react-table';
 import { DataImportHeader } from './DataImportTable/DataImportHeader';
 import { DataImportRow } from './DataImportTable/DataImportRow';
 
@@ -43,7 +43,7 @@ export const DataImport = (): JSX.Element => {
     return (
         <div className='card'>
             <div className='card-body'>
-                <div className='table-responsive position-relative '>
+                <div className='table-responsive'>
                     <table
                         id='kt_table_users'
                         className='table align-middle table-row-dashed fs-6 gy-3 no-footer'

@@ -1,5 +1,5 @@
 import { fetchApiData } from 'common/api/fetchAPI';
-import { DataImportsResponse } from 'common/interfaces/DataImports';
+import { DataImportsInfoResponse, DataImportsResponse } from 'common/interfaces/DataImports';
 import { TemplatesPrintedData } from 'common/interfaces/TemplatesPrintedData';
 
 export const getImportList = (useruid?: string): Promise<DataImportsResponse> => {

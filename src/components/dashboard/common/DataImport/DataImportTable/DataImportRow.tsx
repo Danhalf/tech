@@ -10,7 +10,16 @@ export const DataImportRow = ({ row }: Props) => {
     return (
         <tr {...row.getRowProps()}>
             {row.cells.map((cell) => {
-                return <td {...cell.getCellProps()}>{cell.render('Cell')}</td>;
+                return (
+                    <td
+                        {...cell.getCellProps()}
+                        className={clsx({
+                            'w-25': cell.column.id === 'datapath',
+                        })}
+                    >
+                        {cell.render('Cell')}
+                    </td>
+                );
             })}
         </tr>
     );
