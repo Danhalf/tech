@@ -9,10 +9,6 @@ export const PrintedActions = ({ itemuid }: { itemuid: string }) => {
         setPrintItemInfo(itemuid)
             .then((response) => {
                 if (response.status === Status.OK) {
-                    handleShowToast({
-                        message: `<strong>${itemuid}</strong> information successfully updated`,
-                        type: 'success',
-                    });
                 } else {
                     throw new Error(response.error);
                 }

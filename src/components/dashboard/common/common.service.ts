@@ -9,8 +9,8 @@ export const getImportList = (useruid?: string): Promise<DataImportsResponse> =>
 export const deleteImportItem = (itemuid: string): Promise<any> => {
     return fetchApiData<any>('POST', `import/${itemuid}/deleteitem`);
 };
-export const getImportItemInfo = (itemuid: string): Promise<any> => {
-    return fetchApiData<any>('GET', `import/${itemuid}/metadata`);
+export const getImportItemInfo = (itemuid: string): Promise<DataImportsInfoResponse> => {
+    return fetchApiData<DataImportsInfoResponse>('GET', `import/${itemuid}/metadata`);
 };
 
 export const getTemplateReports = (): Promise<any> => {

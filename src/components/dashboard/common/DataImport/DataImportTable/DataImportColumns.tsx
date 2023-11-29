@@ -35,8 +35,8 @@ export const DataImportsColumns = (): ReadonlyArray<Column<DataImportsRecord>> =
         Header: 'Actions',
         id: 'data-imports-actions',
         Cell: ({ ...props }) => {
-            const { id }: DataImportsRecord = props.data[props.row.index];
-            return <DataImportActions id={id} />;
+            const { id, useruid }: DataImportsRecord = props.data[props.row.index];
+            return <DataImportActions id={useruid} />;
         },
     },
 ];

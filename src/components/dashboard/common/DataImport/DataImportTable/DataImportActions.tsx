@@ -1,12 +1,12 @@
 import { Status } from 'common/interfaces/ActionStatus';
-import { deletePrintItem, setPrintItemInfo } from '../../common.service';
+import { deleteImportItem, getImportItemInfo } from '../../common.service';
 import { useToast } from 'components/dashboard/helpers/renderToastHelper';
 import { CustomDropdown } from 'components/dashboard/helpers/renderDropdownHelper';
 
-export const DataImportActions = ({ id }: { id: number }) => {
+export const DataImportActions = ({ id }: { id: number | string }) => {
     const { handleShowToast } = useToast();
     const handleInformationClick = () => {
-        setPrintItemInfo(String(id))
+        getImportItemInfo(String(id))
             .then((response) => {
                 if (response.status === Status.OK) {
                     handleShowToast({
@@ -23,7 +23,7 @@ export const DataImportActions = ({ id }: { id: number }) => {
     };
 
     const handleDeleteClick = () => {
-        deletePrintItem(String(id))
+        deleteImportItem(String(id))
             .then((response) => {
                 if (response.status === Status.OK) {
                     handleShowToast({
