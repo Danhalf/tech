@@ -8,19 +8,22 @@ type Method = 'GET' | 'POST';
 export const fetchApiData = async <T>(
     method: Method,
     url: string,
-    options?: { data?: unknown; params?: UserQuery }
+    options?: { data?: unknown; params?: UserQuery; contentType?: 'application/data' }
 ): Promise<T> => {
     const headers = {
         Authorization: `Bearer ${getToken()}`,
     };
-    const { data, params } = options || {};
+    const { data, params, contentType } = options || {};
     try {
         const response: AxiosResponse<T> = await axios({
             method,
             url: API_URL + url,
             data,
             params,
-            headers,
+            headers: {
+                ...headers,
+                'Content-Type': contentType || 'application/json',
+            },
         });
         return response.data;
     } catch (error) {
