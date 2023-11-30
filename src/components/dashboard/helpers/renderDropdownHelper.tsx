@@ -33,7 +33,7 @@ export const CustomDropdown = ({
         <>
             <a
                 className={clsx(
-                    'btn btn-sm d-flex justify-content-center align-items-center column-gap-1',
+                    'btn btn-sm d-inline-flex justify-content-center align-items-center column-gap-1',
                     {
                         'btn-light btn-active-light-primary': background === 'default',
                         'fs-6 text-hover-primary fw-bold text-gray-700': background === 'none',

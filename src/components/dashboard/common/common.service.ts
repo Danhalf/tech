@@ -50,7 +50,7 @@ export const downloadPrintItem = (itemuid: string): Promise<any> => {
 
 export const uploadPrintFile = (file: File, itemuid?: string): Promise<any> => {
     const formData = new FormData();
-    formData.append('file', file);
+    formData.append('data', file);
 
     return fetchApiData<any>('POST', `print/${itemuid || 0}/add`, {
         data: formData,
