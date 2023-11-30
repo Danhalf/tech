@@ -15,7 +15,7 @@ export const PrintedRow = ({ row }: Props) => {
                         {...cell.getCellProps()}
                         className={clsx({ 'min-w-100px': cell.column.id === 'actions' })}
                     >
-                        {cell.render('Cell')}
+                        {cell.column.id === 'actions' ? cell.render('Cell') : cell.render('Cell')}
                     </td>
                 );
             })}

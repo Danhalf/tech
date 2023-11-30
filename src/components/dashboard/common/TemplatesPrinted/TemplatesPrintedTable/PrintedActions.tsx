@@ -3,7 +3,12 @@ import { deletePrintItem, downloadPrintItem, setPrintItemInfo } from '../../comm
 import { useToast } from 'components/dashboard/helpers/renderToastHelper';
 import { CustomDropdown } from 'components/dashboard/helpers/renderDropdownHelper';
 
-export const PrintedActions = ({ itemuid }: { itemuid: string }) => {
+interface PrintedActionsProps {
+    itemuid: string;
+    updateAction?: () => void;
+}
+
+export const PrintedActions = ({ itemuid, updateAction }: PrintedActionsProps) => {
     const { handleShowToast } = useToast();
     const handleInformationClick = () => {
         setPrintItemInfo(itemuid)
@@ -22,6 +27,7 @@ export const PrintedActions = ({ itemuid }: { itemuid: string }) => {
         deletePrintItem(itemuid)
             .then((response) => {
                 if (response.status === Status.OK) {
+                    updateAction && updateAction();
                     handleShowToast({
                         message: `<strong>${itemuid}</strong> successfully deleted`,
                         type: 'success',

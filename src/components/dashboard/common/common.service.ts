@@ -7,7 +7,7 @@ export const getImportList = (useruid?: string): Promise<DataImportsResponse> =>
 };
 
 export const deleteImportItem = (itemuid: string): Promise<any> => {
-    return fetchApiData<any>('POST', `import/${itemuid}/deleteitem`);
+    return fetchApiData<any>('POST', `import/${itemuid}/delete`);
 };
 export const getImportItemInfo = (itemuid: string): Promise<DataImportsInfoResponse> => {
     return fetchApiData<DataImportsInfoResponse>('GET', `import/${itemuid}/metadata`);
@@ -18,7 +18,7 @@ export const getTemplateReports = (): Promise<any> => {
 };
 
 export const deleteReportsItem = (itemuid: string): Promise<any> => {
-    return fetchApiData<any>('POST', `reports/${itemuid}/deleteitem`);
+    return fetchApiData<any>('POST', `reports/${itemuid}/delete`);
 };
 
 export const setReportsItemInfo = (itemuid: string): Promise<any> => {
@@ -37,7 +37,7 @@ export const getTemplatePrints = (): Promise<TemplatesPrintedData> => {
 };
 
 export const deletePrintItem = (itemuid: string): Promise<any> => {
-    return fetchApiData<any>('POST', `print/${itemuid}/deleteitem`);
+    return fetchApiData<any>('POST', `print/${itemuid}/delete`);
 };
 
 export const setPrintItemInfo = (itemuid: string): Promise<any> => {

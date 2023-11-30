@@ -2,7 +2,9 @@ import { Column } from 'react-table';
 import { TemplatesPrintedRecord } from 'common/interfaces/TemplatesPrintedData';
 import { PrintedActions } from './PrintedActions';
 
-export const PrintedColumns = (): ReadonlyArray<Column<TemplatesPrintedRecord>> => [
+export const PrintedColumns = (
+    updateAction: () => void
+): ReadonlyArray<Column<TemplatesPrintedRecord>> => [
     {
         Header: 'Index',
         accessor: 'index',
@@ -36,7 +38,7 @@ export const PrintedColumns = (): ReadonlyArray<Column<TemplatesPrintedRecord>> 
         id: 'printed-actions',
         Cell: ({ ...props }) => {
             const { itemuid }: TemplatesPrintedRecord = props.data[props.row.index];
-            return <PrintedActions itemuid={itemuid} />;
+            return <PrintedActions itemuid={itemuid} updateAction={updateAction} />;
         },
     },
 ];

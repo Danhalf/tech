@@ -63,48 +63,46 @@ export const TemplatesPrinted = (): JSX.Element => {
             });
     };
 
-    const columns = useMemo(() => PrintedColumns(), []);
+    const columns = useMemo(() => PrintedColumns(updateTemplatesPrinted), []);
     const { getTableProps, getTableBodyProps, headers, rows, prepareRow } = useTable({
         columns,
         data: templatesPrinted,
     });
 
     return (
-            <div className='card'>
-                <div className='me-4 mt-4 ms-auto'>
-                    <CustomUploadInput
-                        id='reports-upload'
-                        name='reports-pdf'
-                        filetype='pdf'
-                        disabled={isDisabled}
-                        action={handleFileUpload}
-                    />
-                </div>
-                <div className='card-body'>
-                    <div className='table-responsive position-relative '>
-                        <table
-                            id='kt_table_users'
-                            className='table align-middle table-row-dashed fs-6 gy-3 no-footer'
-                            {...getTableProps()}
-                        >
-                            <thead>
-                                <tr className='text-start text-muted fw-bolder fs-7 text-uppercase gs-0'>
-                                    {headers.map(
-                                        (column: ColumnInstance<TemplatesPrintedRecord>) => (
-                                            <PrintedHeaderColumn key={column.id} column={column} />
-                                        )
-                                    )}
-                                </tr>
-                            </thead>
-                            <tbody className='text-gray-600 fw-bold' {...getTableBodyProps()}>
-                                {rows.map((row: Row<any>, i) => {
-                                    prepareRow(row);
-                                    return <PrintedRow row={row} key={`${row.id}`} />;
-                                })}
-                            </tbody>
-                        </table>
-                    </div>
+        <div className='card'>
+            <div className='me-4 mt-4 ms-auto'>
+                <CustomUploadInput
+                    id='reports-upload'
+                    name='reports-pdf'
+                    filetype='pdf'
+                    disabled={isDisabled}
+                    action={handleFileUpload}
+                />
+            </div>
+            <div className='card-body'>
+                <div className='table-responsive position-relative '>
+                    <table
+                        id='kt_table_users'
+                        className='table align-middle table-row-dashed fs-6 gy-3 no-footer'
+                        {...getTableProps()}
+                    >
+                        <thead>
+                            <tr className='text-start text-muted fw-bolder fs-7 text-uppercase gs-0'>
+                                {headers.map((column: ColumnInstance<TemplatesPrintedRecord>) => (
+                                    <PrintedHeaderColumn key={column.id} column={column} />
+                                ))}
+                            </tr>
+                        </thead>
+                        <tbody className='text-gray-600 fw-bold' {...getTableBodyProps()}>
+                            {rows.map((row: Row<any>, i) => {
+                                prepareRow(row);
+                                return <PrintedRow row={row} key={`${row.id}`} />;
+                            })}
+                        </tbody>
+                    </table>
                 </div>
             </div>
+        </div>
     );
 };
