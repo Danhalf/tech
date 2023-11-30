@@ -1,7 +1,6 @@
 /* eslint-disable no-unused-vars */
 import { SettingKey } from 'common/interfaces/users/UserConsts';
 import { ChangeEvent, useEffect, useState } from 'react';
-import { PrimaryButton } from '../smallComponents/buttons/PrimaryButton';
 import clsx from 'clsx';
 
 interface CustomInputProps {

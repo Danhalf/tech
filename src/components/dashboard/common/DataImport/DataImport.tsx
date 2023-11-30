@@ -3,7 +3,7 @@ import { getImportList } from 'components/dashboard/common/common.service';
 import { DataImportsRecord } from 'common/interfaces/DataImports';
 import { Status } from 'common/interfaces/ActionStatus';
 import { DataImportsColumns } from './DataImportTable/DataImportColumns';
-import { ColumnInstance, Row, useFlexLayout, useResizeColumns, useTable } from 'react-table';
+import { ColumnInstance, Row, useTable } from 'react-table';
 import { DataImportHeader } from './DataImportTable/DataImportHeader';
 import { DataImportRow } from './DataImportTable/DataImportRow';
 

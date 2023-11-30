@@ -9,6 +9,7 @@ interface RenderListArgs {
     data: string[] | string;
     checkbox?: boolean;
     action?: (value: [string, number]) => void;
+    isCard?: boolean;
 }
 
 interface TabValues {
@@ -98,6 +99,7 @@ export const TabDataWrapper = ({
     checkbox,
     action,
     children,
+    isCard = true,
 }: PropsWithChildren<RenderListArgs>) => {
     enum ViewTypes {
         JSON = 'JSON view',
@@ -124,38 +126,68 @@ export const TabDataWrapper = ({
 
     return (
         <>
-            <div className='row g-5 g-xl-10 mb-5 mb-xl-10'>
-                <div className='col-12'>
-                    <div className='card card-custom mb-5 vw-90 mx-auto'>
-                        <div className='card-header d-flex flex-column justify-content-end pb-0'>
-                            <ul className='nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder flex-nowrap'>
-                                {viewTypesArray.map((tab) => (
-                                    <TabNavigate
-                                        key={tab}
-                                        activeTab={activeTab}
-                                        tab={tab}
-                                        onTabClick={handleTabClick}
-                                    />
-                                ))}
-                            </ul>
-                        </div>
-                        <div className='tab-content' id='myTabContentInner'>
-                            <TabPanel activeTab={activeTab} tabName={ViewTypes.JSON}>
-                                <div className='card-body'>
-                                    <pre className='fs-4'>{data}</pre>
-                                    {children}
-                                </div>
-                            </TabPanel>
-                            <TabPanel activeTab={activeTab} tabName={ViewTypes.GENERAL}>
-                                <div className='card-body'>
-                                    {parsedData ? renderContent() : 'No data available'}
-                                    {children}
-                                </div>
-                            </TabPanel>
+            {isCard && (
+                <div className='row g-5 g-xl-10 mb-5 mb-xl-10'>
+                    <div className='col-12'>
+                        <div className='card card-custom mb-5 vw-90 mx-auto'>
+                            <div className='card-header d-flex flex-column justify-content-end pb-0'>
+                                <ul className='nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder flex-nowrap'>
+                                    {viewTypesArray.map((tab) => (
+                                        <TabNavigate
+                                            key={tab}
+                                            activeTab={activeTab}
+                                            tab={tab}
+                                            onTabClick={handleTabClick}
+                                        />
+                                    ))}
+                                </ul>
+                            </div>
+                            <div className='tab-content' id='myTabContentInner'>
+                                <TabPanel activeTab={activeTab} tabName={ViewTypes.JSON}>
+                                    <div className='card-body'>
+                                        <pre className='fs-4'>{data}</pre>
+                                        {children}
+                                    </div>
+                                </TabPanel>
+                                <TabPanel activeTab={activeTab} tabName={ViewTypes.GENERAL}>
+                                    <div className='card-body'>
+                                        {parsedData ? renderContent() : 'No data available'}
+                                        {children}
+                                    </div>
+                                </TabPanel>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            )}
+            {!isCard && (
+                <div className='col-12'>
+                    <ul className='nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder flex-nowrap'>
+                        {viewTypesArray.map((tab) => (
+                            <TabNavigate
+                                key={tab}
+                                activeTab={activeTab}
+                                tab={tab}
+                                onTabClick={handleTabClick}
+                            />
+                        ))}
+                    </ul>
+                    <div className='tab-content' id='myTabContentInner'>
+                        <TabPanel activeTab={activeTab} tabName={ViewTypes.JSON}>
+                            <div className='card-body'>
+                                <pre className='fs-4'>{data}</pre>
+                                {children}
+                            </div>
+                        </TabPanel>
+                        <TabPanel activeTab={activeTab} tabName={ViewTypes.GENERAL}>
+                            <div className='card-body'>
+                                {parsedData ? renderContent() : 'No data available'}
+                                {children}
+                            </div>
+                        </TabPanel>
+                    </div>
+                </div>
+            )}
         </>
     );
 };
