@@ -61,8 +61,12 @@ export const uploadPrintFile = (file: File, itemuid?: string): Promise<any> => {
     const formData = new FormData();
     formData.append('data', file);
 
-    return fetchApiData<any>('POST', `print/${itemuid || 0}/add`, {
-        data: formData,
-        contentType: 'application/data',
-    });
+    return fetchApiData<any>(
+        'POST',
+        `print/${itemuid || 0}/add`,
+        {
+            data: formData,
+        },
+        { 'Content-Type': 'application/data' }
+    );
 };

@@ -5,25 +5,30 @@ import { getToken } from 'common/utils';
 
 type Method = 'GET' | 'POST';
 
+interface FetchHeaders {
+    Authorization?: string;
+    'Content-Type'?: 'application/data' | 'application/json';
+}
+
+const defaultHeaders: FetchHeaders = {
+    Authorization: `Bearer ${getToken()}`,
+    'Content-Type': 'application/json',
+};
+
 export const fetchApiData = async <T>(
     method: Method,
     url: string,
-    options?: { data?: unknown; params?: UserQuery; contentType?: 'application/data' }
+    options?: { data?: unknown; params?: UserQuery },
+    headers?: FetchHeaders
 ): Promise<T> => {
-    const headers = {
-        Authorization: `Bearer ${getToken()}`,
-    };
-    const { data, params, contentType } = options || {};
+    const { data, params } = options || {};
     try {
         const response: AxiosResponse<T> = await axios({
             method,
             url: API_URL + url,
             data,
             params,
-            headers: {
-                ...headers,
-                'Content-Type': contentType || 'application/json',
-            },
+            headers: { ...defaultHeaders, ...headers },
         });
         return response.data;
     } catch (error) {
