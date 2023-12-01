@@ -1,6 +1,14 @@
 import { fetchApiData } from 'common/api/fetchAPI';
 import { DataImportsInfoResponse, DataImportsResponse } from 'common/interfaces/DataImports';
-import { TemplatesPrintedData } from 'common/interfaces/TemplatesPrintedData';
+import {
+    TemplatesPrintedData,
+    TemplatesPrintedRecord,
+} from 'common/interfaces/TemplatesPrintedData';
+
+export type PrintedItem = Pick<
+    TemplatesPrintedRecord,
+    'description' | 'name' | 'version' | 'itemuid'
+>;
 
 export const getImportList = (useruid?: string): Promise<DataImportsResponse> => {
     return fetchApiData<DataImportsResponse>('GET', `import/${useruid || 0}/list`);
@@ -40,8 +48,9 @@ export const deletePrintItem = (itemuid: string): Promise<any> => {
     return fetchApiData<any>('POST', `print/${itemuid}/delete`);
 };
 
-export const setPrintItemInfo = (itemuid: string): Promise<any> => {
-    return fetchApiData<any>('POST', `print/${itemuid}/set`);
+export const setPrintItemInfo = (data: PrintedItem): Promise<any> => {
+    const { itemuid, ...body } = data;
+    return fetchApiData<any>('POST', `print/${itemuid}/set`, { data: body });
 };
 
 export const downloadPrintItem = (itemuid: string): Promise<any> => {

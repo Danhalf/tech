@@ -37,8 +37,14 @@ export const PrintedColumns = (
         Header: 'Actions',
         id: 'printed-actions',
         Cell: ({ ...props }) => {
-            const { itemuid }: TemplatesPrintedRecord = props.data[props.row.index];
-            return <PrintedActions itemuid={itemuid} updateAction={updateAction} />;
+            const { itemuid, description, name, version }: TemplatesPrintedRecord =
+                props.data[props.row.index];
+            return (
+                <PrintedActions
+                    updateAction={updateAction}
+                    item={{ itemuid, description, name, version }}
+                />
+            );
         },
     },
 ];

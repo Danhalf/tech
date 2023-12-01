@@ -1,19 +1,31 @@
 import { Status } from 'common/interfaces/ActionStatus';
-import { deletePrintItem, downloadPrintItem, setPrintItemInfo } from '../../common.service';
+import {
+    PrintedItem,
+    deletePrintItem,
+    downloadPrintItem,
+    setPrintItemInfo,
+} from '../../common.service';
 import { useToast } from 'components/dashboard/helpers/renderToastHelper';
 import { CustomDropdown } from 'components/dashboard/helpers/renderDropdownHelper';
 
 interface PrintedActionsProps {
-    itemuid: string;
+    item: PrintedItem;
     updateAction?: () => void;
 }
 
-export const PrintedActions = ({ itemuid, updateAction }: PrintedActionsProps) => {
+export const PrintedActions = ({
+    item: { itemuid, name, description, version },
+    updateAction,
+}: PrintedActionsProps) => {
     const { handleShowToast } = useToast();
     const handleInformationClick = () => {
-        setPrintItemInfo(itemuid)
+        setPrintItemInfo({ itemuid, description, version, name })
             .then((response) => {
                 if (response.status === Status.OK) {
+                    handleShowToast({
+                        message: `<strong>${itemuid}</strong> successfully updated`,
+                        type: 'success',
+                    });
                 } else {
                     throw new Error(response.error);
                 }
