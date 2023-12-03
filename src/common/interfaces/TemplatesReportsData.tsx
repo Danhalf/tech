@@ -10,7 +10,7 @@ export interface TemplatesReportsRecord {
     version: string;
 }
 
-export interface TemplatesPrintedData {
+export interface TemplatesReportsData {
     documents: TemplatesReportsRecord[];
     status: Status;
 }

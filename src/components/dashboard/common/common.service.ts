@@ -4,9 +4,15 @@ import {
     TemplatesPrintedData,
     TemplatesPrintedRecord,
 } from 'common/interfaces/TemplatesPrintedData';
+import { TemplatesReportsRecord } from 'common/interfaces/TemplatesReportsData';
 
 export type PrintedItem = Pick<
     TemplatesPrintedRecord,
+    'description' | 'name' | 'version' | 'itemuid'
+>;
+
+export type ReportsItem = Pick<
+    TemplatesReportsRecord,
     'description' | 'name' | 'version' | 'itemuid'
 >;
 
@@ -29,8 +35,9 @@ export const deleteReportsItem = (itemuid: string): Promise<any> => {
     return fetchApiData<any>('POST', `reports/${itemuid}/delete`);
 };
 
-export const setReportsItemInfo = (itemuid: string): Promise<any> => {
-    return fetchApiData<any>('POST', `reports/${itemuid}/set`);
+export const setReportsItemInfo = (data: ReportsItem): Promise<any> => {
+    const { itemuid, ...body } = data;
+    return fetchApiData<any>('POST', `reports/${itemuid}/set`, { data: body });
 };
 
 export const uploadReportsFile = (file: File, itemuid?: string): Promise<any> => {
@@ -38,6 +45,10 @@ export const uploadReportsFile = (file: File, itemuid?: string): Promise<any> =>
     formData.append('file', file);
 
     return fetchApiData<any>('POST', `reports/${itemuid || 0}/add`, { data: formData });
+};
+
+export const downloadReportsItem = (itemuid: string): Promise<any> => {
+    return fetchApiData<any>('GET', `reports/${itemuid}/get`);
 };
 
 export const getTemplatePrints = (): Promise<TemplatesPrintedData> => {
