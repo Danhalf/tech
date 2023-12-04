@@ -1,6 +1,7 @@
 /* eslint-disable no-unused-vars */
 import { SettingKey } from 'common/interfaces/users/UserConsts';
 import { ChangeEvent, useEffect, useState } from 'react';
+import clsx from 'clsx';
 
 interface CustomInputProps {
     currentValue: number;
@@ -29,6 +30,11 @@ interface CustomRangeInputProps extends CustomInputProps {
     maxValue: number;
     step: number;
     action?: (inputData: [string, number]) => void;
+}
+
+interface CustomUploadInputProps extends Omit<CustomInputProps, 'currentValue'> {
+    action: (file: File) => void;
+    filetype?: 'pdf';
 }
 
 export enum InputType {
@@ -198,5 +204,43 @@ export const CustomRangeInput = ({
                 <span>{maxValue}</span>
             </div>
         </div>
+    );
+};
+
+export const CustomUploadInput = ({
+    id,
+    name,
+    filetype,
+    action,
+    disabled,
+}: CustomUploadInputProps) => {
+    const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
+        const [file] = event.target.files || [];
+
+        if (file && action) {
+            await action(file);
+        }
+    };
+
+    return (
+        <>
+            <input
+                id={id}
+                name={name}
+                type='file'
+                accept={`application/${filetype}`}
+                className='invisible'
+                onChange={handleFileChange}
+                disabled={disabled}
+            />
+            <label
+                className={clsx('btn btn-primary', {
+                    disabled,
+                })}
+                htmlFor={id}
+            >
+                Upload
+            </label>
+        </>
     );
 };
