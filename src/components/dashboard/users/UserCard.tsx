@@ -165,15 +165,15 @@ export function UserCard() {
 
     return (
         <div className='row g-5 g-xl-10 mb-5 mb-xl-10'>
-            <div className='col-12'>
-                <div className='card card-custom mb-5 vw-90 mx-auto'>
+            <div className='col-12 d-flex flex-lg-column'>
+                <div className='col-lg-12 col-3 card card-custom mb-5'>
                     <div className='card-header'>
                         <h3 className='card-title fw-bolder text-dark'>
                             {username && `${username}'s User Card`}
                         </h3>
                     </div>
-                    <div className='card-body d-flex flex-column justify-content-end pb-0'>
-                        <ul className='nav nav-stretch nav-line-tabs nav-line-tabs-2x border-transparent fs-5 fw-bolder flex-nowrap'>
+                    <div className='card-body d-flex flex-column pb-0'>
+                        <ul className='nav nav-stretch nav-line-tabs flex-column flex-lg-row border-transparent fs-5 fw-bolder flex-nowrap'>
                             {userCardTabsArray.map((tab) => (
                                 <TabNavigate
                                     key={tab}
@@ -186,7 +186,7 @@ export function UserCard() {
                     </div>
                 </div>
 
-                <div className='tab-content' id='myTabPanel'>
+                <div className='col-lg-12 col-9 tab-content' id='myTabPanel'>
                     <TabPanel activeTab={activeTab} tabName={UserCardTabs.Profile}>
                         <TabDataWrapper data={profileJson} />
                     </TabPanel>
