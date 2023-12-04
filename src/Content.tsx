@@ -9,8 +9,8 @@ import { Users } from 'components/dashboard/users/Users';
 import { PrivateRouter } from 'router/privateRouter';
 import { useAuthInterceptor } from 'common/auth.interceptor';
 import { DataImport } from 'components/dashboard/common/DataImport/DataImport';
-import { TemplatesReports } from 'components/dashboard/common/TemplatesReports/TemplatesRepors';
 import { TemplatesPrinted } from 'components/dashboard/common/TemplatesPrinted/TemplatesPrinted';
+import { TemplatesReports } from 'components/dashboard/common/TemplatesReports/TemplatesReports';
 
 export function MasterInit() {
     const pluginsInitialization = () => {

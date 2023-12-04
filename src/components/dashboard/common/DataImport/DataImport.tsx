@@ -34,7 +34,7 @@ export const DataImport = (): JSX.Element => {
         updateDataImports();
     }, []);
 
-    const columns = useMemo(() => DataImportsColumns(), []);
+    const columns = useMemo(() => DataImportsColumns(updateDataImports), []);
     const { getTableProps, getTableBodyProps, headers, rows, prepareRow } = useTable({
         columns,
         data: dataImports,

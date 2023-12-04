@@ -7,7 +7,12 @@ import { useState } from 'react';
 import { TabDataWrapper } from 'components/dashboard/helpers/helpers';
 import { DataImportsInfoMetadata } from 'common/interfaces/DataImports';
 
-export const DataImportActions = ({ id }: { id: number | string }) => {
+interface DataImportActionsProps {
+    id: number | string;
+    updateAction?: () => void;
+}
+
+export const DataImportActions = ({ id, updateAction }: DataImportActionsProps) => {
     const [modalEnabled, setModalEnabled] = useState<boolean>(false);
     const [dataItemInfo, setDataItemInfo] = useState<DataImportsInfoMetadata | null>(null);
     const { handleShowToast } = useToast();
@@ -31,6 +36,7 @@ export const DataImportActions = ({ id }: { id: number | string }) => {
         deleteImportItem(String(id))
             .then((response) => {
                 if (response.status === Status.OK) {
+                    updateAction && updateAction();
                     handleShowToast({
                         message: `<strong>${id}</strong> successfully deleted`,
                         type: 'success',

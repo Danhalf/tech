@@ -2,7 +2,9 @@ import { Column } from 'react-table';
 import { DataImportActions } from './DataImportActions';
 import { DataImportsRecord } from 'common/interfaces/DataImports';
 
-export const DataImportsColumns = (): ReadonlyArray<Column<DataImportsRecord>> => [
+export const DataImportsColumns = (
+    updateAction: () => void
+): ReadonlyArray<Column<DataImportsRecord>> => [
     {
         Header: 'Id',
         accessor: 'id',
@@ -36,7 +38,7 @@ export const DataImportsColumns = (): ReadonlyArray<Column<DataImportsRecord>> =
         id: 'data-imports-actions',
         Cell: ({ ...props }) => {
             const { useruid }: DataImportsRecord = props.data[props.row.index];
-            return <DataImportActions id={useruid} />;
+            return <DataImportActions updateAction={updateAction} id={useruid} />;
         },
     },
 ];

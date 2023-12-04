@@ -10,11 +10,6 @@ interface FetchHeaders {
     'Content-Type'?: 'application/data' | 'application/json';
 }
 
-const defaultHeaders: FetchHeaders = {
-    Authorization: `Bearer ${getToken()}`,
-    'Content-Type': 'application/json',
-};
-
 export const fetchApiData = async <T>(
     method: Method,
     url: string,
@@ -22,6 +17,10 @@ export const fetchApiData = async <T>(
     headers?: FetchHeaders
 ): Promise<T> => {
     const { data, params } = options || {};
+    const defaultHeaders: FetchHeaders = {
+        Authorization: `Bearer ${getToken()}`,
+        'Content-Type': 'application/json',
+    };
     try {
         const response: AxiosResponse<T> = await axios({
             method,
