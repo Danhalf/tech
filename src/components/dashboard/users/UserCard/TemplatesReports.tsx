@@ -20,7 +20,7 @@ const TemplatesReportsFormUploadInput = ({
 }: {
     action: (file: File) => void;
 }): JSX.Element => (
-    <div className='me-4 mt-4 ms-auto'>
+    <div className='m-4 ms-auto'>
         <CustomUploadInput id='reports-upload' name='reports-pdf' filetype='pdf' action={action} />
     </div>
 );
