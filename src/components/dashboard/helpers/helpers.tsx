@@ -155,6 +155,7 @@ export const TabDataWrapper = ({
                                         {children}
                                     </div>
                                 </TabPanel>
+                            </div>
                         </div>
                     </div>
                 </div>
