@@ -6,7 +6,7 @@ import { renderTable } from 'components/dashboard/helpers/renderTableHelper';
 import { renamedKeys } from 'common/app-consts';
 
 interface RenderListArgs {
-    data: string[] | string;
+    data?: string[] | string;
     checkbox?: boolean;
     action?: (value: [string, number]) => void;
     isCard?: boolean;
@@ -155,7 +155,6 @@ export const TabDataWrapper = ({
                                         {children}
                                     </div>
                                 </TabPanel>
-                            </div>
                         </div>
                     </div>
                 </div>
