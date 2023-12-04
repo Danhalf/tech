@@ -10,6 +10,7 @@ interface RenderListArgs {
     checkbox?: boolean;
     action?: (value: [string, number]) => void;
     isCard?: boolean;
+    headerElement?: JSX.Element;
 }
 
 interface TabValues {
@@ -103,6 +104,7 @@ export const TabDataWrapper = ({
     action,
     children,
     isCard = true,
+    headerElement,
 }: PropsWithChildren<RenderListArgs>) => {
     enum ViewTypes {
         JSON = 'JSON view',
@@ -143,12 +145,13 @@ export const TabDataWrapper = ({
                                             onTabClick={handleTabClick}
                                         />
                                     ))}
+                                    {headerElement}
                                 </ul>
                             </div>
                             <div className='tab-content' id='myTabContentInner'>
                                 <TabPanel activeTab={activeTab} tabName={ViewTypes.JSON}>
                                     <div className='card-body'>
-                                    <pre className='fs-md-4 fs-6'>{data}</pre>
+                                        <pre className='fs-md-4 fs-6'>{data}</pre>
                                         {children}
                                     </div>
                                 </TabPanel>
@@ -178,7 +181,7 @@ export const TabDataWrapper = ({
                     <div className='tab-content' id='myTabContentInner'>
                         <TabPanel activeTab={activeTab} tabName={ViewTypes.JSON}>
                             <div className='card-body'>
-                            <pre className='fs-md-4 fs-6'>{data}</pre>
+                                <pre className='fs-md-4 fs-6'>{data}</pre>
                                 {children}
                             </div>
                         </TabPanel>

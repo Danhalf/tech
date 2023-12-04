@@ -18,11 +18,11 @@ import {
 import { TabDataWrapper, TabNavigate, TabPanel } from 'components/dashboard/helpers/helpers';
 import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton';
 import { AxiosError } from 'axios';
-import { useToast } from '../helpers/renderToastHelper';
+import { useToast } from '../../helpers/renderToastHelper';
 import { Status } from 'common/interfaces/ActionStatus';
-import { UserStatistics } from './UserCard/UserStatistics';
-import { TemplatesReports } from './UserCard/TemplatesReports';
-import { TemplatesPrintedForm } from './UserCard/TemplatesPrintedForm';
+import { UserStatistics } from './UserStatistics';
+import { TemplatesReports } from './TemplatesReports';
+import { TemplatesPrintedForm } from './TemplatesPrintedForm';
 
 enum UserCardTabs {
     Profile = 'Profile',
