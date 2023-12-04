@@ -55,7 +55,7 @@ export function DashboardHeader() {
                                     className='menu-link py-3 text-hover-primary'
                                     to={'/dashboard'}
                                 >
-                                    <i className='ki-outline ki-gear fs-2 m-2'></i>
+                                    <i className='ki-outline ki-wrench fs-2 m-2'></i>
                                     <span className='menu-title'>Microservices</span>
                                 </Link>
                             </div>
@@ -65,10 +65,35 @@ export function DashboardHeader() {
                                     <span className='menu-title w-0'>Users</span>
                                 </Link>
                             </div>
+                            <div className='menu-item me-lg-1'>
+                                <CustomDropdown
+                                    title={'Common'}
+                                    background='none'
+                                    iconBefore='gear'
+                                    width={250}
+                                    items={[
+                                        {
+                                            menuItemName: 'Data import',
+                                            icon: 'data',
+                                            menuItemAction: () => navigate('data-import'),
+                                        },
+                                        {
+                                            menuItemName: 'Templates for reports',
+                                            icon: 'calendar-edit',
+                                            menuItemAction: () => navigate('template-reports'),
+                                        },
+                                        {
+                                            menuItemName: 'Templates for printed forms',
+                                            icon: 'printer',
+                                            menuItemAction: () => navigate('template-printed'),
+                                        },
+                                    ]}
+                                />
+                            </div>
                             <div className='menu-item me-lg-1 ms-auto'>
                                 <CustomDropdown
                                     title={loginname}
-                                    weight={200}
+                                    width={200}
                                     items={[
                                         {
                                             menuItemName: `${loginname} card`,

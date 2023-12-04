@@ -1,8 +1,9 @@
-import { PropsWithChildren } from 'react';
+import { PropsWithChildren, useCallback, useEffect } from 'react';
 
 type CustomModalProps = {
     onClose: () => void;
     title: string;
+    width?: number;
 };
 
 const UserModalHeader = ({ onClose, title }: CustomModalProps): JSX.Element => {
@@ -28,7 +29,26 @@ export const CustomModal = ({
     title,
     onClose,
     children,
+    width,
 }: PropsWithChildren<CustomModalProps>): JSX.Element => {
+    const handleKeyDown = useCallback(
+        (event: KeyboardEvent) => {
+            if (event.key === 'Escape') {
+                onClose();
+            }
+        },
+        [onClose]
+    );
+
+    useEffect(() => {
+        document.body.style.overflow = 'hidden';
+        document.addEventListener('keydown', handleKeyDown);
+
+        return () => {
+            document.body.style.overflow = '';
+            document.removeEventListener('keydown', handleKeyDown);
+        };
+    }, [handleKeyDown]);
     return (
         <>
             <div
@@ -38,7 +58,7 @@ export const CustomModal = ({
                 tabIndex={-1}
                 aria-modal='true'
             >
-                <div className='modal-dialog modal-dialog-centered mw-650px'>
+                <div className={`modal-dialog modal-dialog-centered mw-${width || 650}px`}>
                     <div className='modal-content'>
                         <UserModalHeader onClose={onClose} title={title} />
                         <div className='modal-body scroll-y mx-5 mx-xl-15 my-7'>{children}</div>
