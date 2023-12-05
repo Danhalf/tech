@@ -21,8 +21,8 @@ import { AxiosError } from 'axios';
 import { useToast } from '../../helpers/renderToastHelper';
 import { Status } from 'common/interfaces/ActionStatus';
 import { UserStatistics } from './UserStatistics';
-import { TemplatesReports } from './TemplatesReports';
-import { TemplatesPrintedForm } from './TemplatesPrintedForm';
+import { UserTemplatesReports } from './TemplatesReports';
+import { UserTemplatesPrintedForm } from './TemplatesPrintedForm';
 
 enum UserCardTabs {
     Profile = 'Profile',
@@ -232,12 +232,19 @@ export function UserCard() {
                     <TabPanel activeTab={activeTab} tabName={UserCardTabs.Statistics}>
                         <UserStatistics data={userStatisticsJSON} />
                     </TabPanel>
-                    <TabPanel activeTab={activeTab} tabName={UserCardTabs.TemplatesForReports}>
-                        <TemplatesReports data={''} />
-                    </TabPanel>
-                    <TabPanel activeTab={activeTab} tabName={UserCardTabs.TemplatesForPrintedForms}>
-                        <TemplatesPrintedForm data={''} />
-                    </TabPanel>
+                    {id && (
+                        <TabPanel activeTab={activeTab} tabName={UserCardTabs.TemplatesForReports}>
+                            <UserTemplatesReports useruid={id} />
+                        </TabPanel>
+                    )}
+                    {id && (
+                        <TabPanel
+                            activeTab={activeTab}
+                            tabName={UserCardTabs.TemplatesForPrintedForms}
+                        >
+                            <UserTemplatesPrintedForm useruid={id} />
+                        </TabPanel>
+                    )}
                 </div>
             </div>
         </div>

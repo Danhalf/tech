@@ -1,28 +1,19 @@
 import { useState, useEffect, useMemo } from 'react';
-import { getTemplatePrints, getTemplateReports, uploadPrintFile } from '../common.service';
+import { getTemplateReports, uploadPrintFile } from '../common.service';
 import { AxiosError } from 'axios';
 import { Status } from 'common/interfaces/ActionStatus';
 import { ColumnInstance, Row, useTable } from 'react-table';
 import { CustomUploadInput } from 'components/dashboard/helpers/renderInputsHelper';
 import { useToast } from 'components/dashboard/helpers/renderToastHelper';
-import { TemplatesReportsRecord } from 'common/interfaces/TemplatesReportsData';
+import {
+    TemplatesReportsRecord,
+    initialReportsState,
+} from 'common/interfaces/TemplatesReportsData';
 import { ReportsColumns } from './TemplatesReporsTable/ReportsColumns';
 import { ReportsRow } from './TemplatesReporsTable/ReportsRow';
 import { ReportsHeaderColumn } from './TemplatesReporsTable/ReportsHeaderColumn';
 
-const initialReportsState = [
-    {
-        description: '',
-        index: 0,
-        itemuid: '',
-        name: '',
-        state: '',
-        type: '',
-        version: '',
-    },
-];
-
-export const TemplatesReports = (): JSX.Element => {
+export const TemplatesReports = ({ useruid }: { useruid?: string }): JSX.Element => {
     const [templatesReports, setTemplatesReports] =
         useState<TemplatesReportsRecord[]>(initialReportsState);
 
@@ -31,7 +22,7 @@ export const TemplatesReports = (): JSX.Element => {
     const { handleShowToast } = useToast();
 
     const updateTemplatesReports = (): void => {
-        getTemplateReports().then((response) => {
+        getTemplateReports(useruid).then((response) => {
             if (response.status === Status.OK) {
                 setTemplatesReports(response.documents);
             }

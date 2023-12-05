@@ -22,7 +22,7 @@ const initialPrintedState = [
     },
 ];
 
-export const TemplatesPrinted = (): JSX.Element => {
+export const TemplatesPrinted = ({ useruid }: { useruid?: string }): JSX.Element => {
     const [templatesPrinted, setTemplatesPrinted] =
         useState<TemplatesPrintedRecord[]>(initialPrintedState);
 

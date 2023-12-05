@@ -6,7 +6,7 @@ import { renderTable } from 'components/dashboard/helpers/renderTableHelper';
 import { renamedKeys } from 'common/app-consts';
 
 interface RenderListArgs {
-    data?: string[] | string;
+    data?: string[] | string | JSX.Element;
     checkbox?: boolean;
     action?: (value: [string, number]) => void;
     isCard?: boolean;
@@ -119,7 +119,16 @@ export const TabDataWrapper = ({
         setActiveTab(tab);
     };
 
-    if (!data) return <></>;
+    if (!data)
+        return (
+            <div className='row g-5 g-xl-10 mb-5 mb-xl-10'>
+                <div className='col-12'>
+                    <div className='card card-custom mb-5'>
+                        <div className='card-body'>No data available</div>
+                    </div>
+                </div>
+            </div>
+        );
     const parsedData = typeof data === 'string' && JSON.parse(data);
     const renderContent = () => {
         if (typeof parsedData === 'object' && !Array.isArray(parsedData)) {
@@ -152,7 +161,6 @@ export const TabDataWrapper = ({
                                 <TabPanel activeTab={activeTab} tabName={ViewTypes.JSON}>
                                     <div className='card-body'>
                                         <pre className='fs-md-4 fs-6'>{data}</pre>
-                                        {children}
                                     </div>
                                 </TabPanel>
                                 <TabPanel activeTab={activeTab} tabName={ViewTypes.GENERAL}>

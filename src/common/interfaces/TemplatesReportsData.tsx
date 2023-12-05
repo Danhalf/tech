@@ -10,6 +10,18 @@ export interface TemplatesReportsRecord {
     version: string;
 }
 
+export const initialReportsState: TemplatesReportsRecord[] = [
+    {
+        description: '',
+        index: 0,
+        itemuid: '',
+        name: '',
+        state: '',
+        type: '',
+        version: '',
+    },
+];
+
 export interface TemplatesReportsData {
     documents: TemplatesReportsRecord[];
     status: Status;
