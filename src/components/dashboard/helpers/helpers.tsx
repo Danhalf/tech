@@ -104,7 +104,6 @@ export const TabDataWrapper = ({
     action,
     children,
     isCard = true,
-    headerElement,
 }: PropsWithChildren<RenderListArgs>) => {
     enum ViewTypes {
         JSON = 'JSON view',
@@ -154,7 +153,6 @@ export const TabDataWrapper = ({
                                             onTabClick={handleTabClick}
                                         />
                                     ))}
-                                    {headerElement}
                                 </ul>
                             </div>
                             <div className='tab-content' id='myTabContentInner'>
