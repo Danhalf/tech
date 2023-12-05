@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { getTemplatePrints, uploadPrintFile } from '../common.service';
+import { getTemplatePrints, getTemplateReports, uploadPrintFile } from '../common.service';
 import { AxiosError } from 'axios';
 import { Status } from 'common/interfaces/ActionStatus';
 import { ColumnInstance, Row, useTable } from 'react-table';
@@ -31,7 +31,7 @@ export const TemplatesReports = (): JSX.Element => {
     const { handleShowToast } = useToast();
 
     const updateTemplatesReports = (): void => {
-        getTemplatePrints().then((response) => {
+        getTemplateReports().then((response) => {
             if (response.status === Status.OK) {
                 setTemplatesReports(response.documents);
             }
