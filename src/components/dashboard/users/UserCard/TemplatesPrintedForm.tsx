@@ -1,5 +1,4 @@
 import { TemplatesPrinted } from 'components/dashboard/common/TemplatesPrinted/TemplatesPrinted';
-import { TabDataWrapper } from 'components/dashboard/helpers/helpers';
 
 interface TemplatesPrintedFormProps {
     useruid: string;
