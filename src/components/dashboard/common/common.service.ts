@@ -4,7 +4,10 @@ import {
     TemplatesPrintedData,
     TemplatesPrintedRecord,
 } from 'common/interfaces/TemplatesPrintedData';
-import { TemplatesReportsRecord } from 'common/interfaces/TemplatesReportsData';
+import {
+    TemplatesReportsData,
+    TemplatesReportsRecord,
+} from 'common/interfaces/TemplatesReportsData';
 
 export type PrintedItem = Pick<
     TemplatesPrintedRecord,
@@ -27,8 +30,8 @@ export const getImportItemInfo = (itemuid: string): Promise<DataImportsInfoRespo
     return fetchApiData<DataImportsInfoResponse>('GET', `import/${itemuid}/metadata`);
 };
 
-export const getTemplateReports = (): Promise<any> => {
-    return fetchApiData<any>('GET', `reports/0/list`);
+export const getTemplateReports = (useruid?: string): Promise<TemplatesReportsData> => {
+    return fetchApiData<TemplatesReportsData>('GET', `reports/${useruid || 0}/list`);
 };
 
 export const deleteReportsItem = (itemuid: string): Promise<any> => {
@@ -51,8 +54,8 @@ export const downloadReportsItem = (itemuid: string): Promise<any> => {
     return fetchApiData<any>('GET', `reports/${itemuid}/get`);
 };
 
-export const getTemplatePrints = (): Promise<TemplatesPrintedData> => {
-    return fetchApiData<TemplatesPrintedData>('GET', `print/list`);
+export const getTemplatePrints = (useruid?: string): Promise<TemplatesPrintedData> => {
+    return fetchApiData<TemplatesPrintedData>('GET', `print/${useruid || 0}/list`);
 };
 
 export const deletePrintItem = (itemuid: string): Promise<any> => {

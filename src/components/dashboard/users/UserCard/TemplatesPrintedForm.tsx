@@ -1,15 +1,13 @@
-import { TabDataWrapper } from 'components/dashboard/helpers/helpers';
+import { TemplatesPrinted } from 'components/dashboard/common/TemplatesPrinted/TemplatesPrinted';
 
 interface TemplatesPrintedFormProps {
-    data: string;
+    useruid: string;
 }
 
-const EmptyJSON = [
-    {
-        templatesPrintedFormData: 'empty',
-    },
-];
-
-export const TemplatesPrintedForm = ({ data }: TemplatesPrintedFormProps): JSX.Element => {
-    return <TabDataWrapper data={data || JSON.stringify(EmptyJSON)} />;
+export const UserTemplatesPrintedForm = ({ useruid }: TemplatesPrintedFormProps): JSX.Element => {
+    return (
+        <>
+            <TemplatesPrinted useruid={useruid} />
+        </>
+    );
 };

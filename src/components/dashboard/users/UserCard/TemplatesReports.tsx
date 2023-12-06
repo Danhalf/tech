@@ -1,15 +1,9 @@
-import { TabDataWrapper } from 'components/dashboard/helpers/helpers';
+import { TemplatesReports } from 'components/dashboard/common/TemplatesReports/TemplatesReports';
 
 interface TemplatesReportsProps {
-    data: string;
+    useruid: string;
 }
 
-const EmptyJSON = [
-    {
-        templatesReportsData: 'empty',
-    },
-];
-
-export const TemplatesReports = ({ data }: TemplatesReportsProps): JSX.Element => {
-    return <TabDataWrapper data={data || JSON.stringify(EmptyJSON)} />;
+export const UserTemplatesReports = ({ useruid }: TemplatesReportsProps): JSX.Element => {
+    return <TemplatesReports useruid={useruid} />;
 };

@@ -22,7 +22,7 @@ const initialPrintedState = [
     },
 ];
 
-export const TemplatesPrinted = (): JSX.Element => {
+export const TemplatesPrinted = ({ useruid }: { useruid?: string }): JSX.Element => {
     const [templatesPrinted, setTemplatesPrinted] =
         useState<TemplatesPrintedRecord[]>(initialPrintedState);
 
@@ -31,7 +31,7 @@ export const TemplatesPrinted = (): JSX.Element => {
     const { handleShowToast } = useToast();
 
     const updateTemplatesPrinted = (): void => {
-        getTemplatePrints().then((response) => {
+        getTemplatePrints(useruid).then((response) => {
             if (response.status === Status.OK) {
                 setTemplatesPrinted(response.documents);
             }

@@ -124,3 +124,11 @@ export const getDealsOptions = (deal: UserSettingDeals) => {
 export const getUserStatistics = (useruid: string): Promise<string> => {
     return fetchApiData<string>('GET', `user/${useruid}/statistics`);
 };
+
+export const getUserReports = (useruid: string): Promise<string> => {
+    return fetchApiData<string>('GET', `reports/${useruid}/list`);
+};
+
+export const getUserPrinted = (useruid: string): Promise<string> => {
+    return fetchApiData<string>('GET', `user/${useruid}/statistics`);
+};

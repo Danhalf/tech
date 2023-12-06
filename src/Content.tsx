@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { MicroserviceCard } from 'components/dashboard/microservices/MicroserviceCard';
 import { Microservices } from 'components/dashboard/microservices/Microservices';
-import { UserCard } from 'components/dashboard/users/UserCard';
+import { UserCard } from 'components/dashboard/users/UserCard/UserCard';
 import { Login } from 'components/Login';
 import { MenuComponent } from '_metronic/assets/ts/components';
 import { Users } from 'components/dashboard/users/Users';
