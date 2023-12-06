@@ -5,8 +5,9 @@ import { HTMLInputTypeAttribute, useState } from 'react';
 import { createOrUpdateUser } from 'components/dashboard/users/user.service';
 import { TOAST_DURATION, useToast } from 'components/dashboard/helpers/renderToastHelper';
 import { AxiosError } from 'axios';
-import { User, UserInputData, UsersType } from 'common/interfaces/UserData';
+import { User, UserErrorResponse, UserInputData, UsersType } from 'common/interfaces/UserData';
 import { useQueryResponse } from 'common/core/QueryResponseProvider';
+import { Status } from 'common/interfaces/ActionStatus';
 
 interface UserModalProps {
     onClose: () => void;
@@ -101,23 +102,18 @@ export const UserModal = ({ onClose, user }: UserModalProps): JSX.Element => {
                         ? `<strong>${username}</strong> password successfully updated`
                         : `User <strong>${username}</strong> successfully created`;
 
-                if (!responseData.error) {
+                if (responseData.status === Status.OK) {
                     handleShowToast({
                         message,
                         type: 'success',
                     });
                     onClose();
                     refetch();
-                } else {
-                    setHasServerError(responseData.error);
-                    setTimeout(() => {
-                        setHasServerError(false);
-                    }, TOAST_DURATION);
-                    throw new Error(responseData.error);
                 }
-            } catch (err) {
-                const { message } = err as Error | AxiosError;
-                handleShowToast({ message, type: 'danger' });
+            } catch (err: any) {
+                const { warning, error } = err.data;
+                const errorMessage = warning || error;
+                handleShowToast({ message: errorMessage, type: 'danger' });
             } finally {
                 setSubmitting(false);
             }

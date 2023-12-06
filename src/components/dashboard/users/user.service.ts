@@ -1,15 +1,22 @@
 import { fetchApiData } from 'common/api/fetchAPI';
 import { ActionStatus, Status } from 'common/interfaces/ActionStatus';
 import { UserQuery } from 'common/interfaces/QueriesParams';
-import { ShortUserInfo, User } from 'common/interfaces/UserData';
+import {
+    ShortUserInfo,
+    User,
+    UserErrorResponse,
+    UserSuccessResponse,
+} from 'common/interfaces/UserData';
 import { UserSettingsResponse, UserSettingDeals } from 'common/interfaces/users/UserSettings';
 
 export const createOrUpdateUser = (
     loginname: string,
     loginpassword: string,
     uid: string = '0'
-): Promise<any> => {
-    return fetchApiData('POST', `user/${uid}/user`, { data: { loginname, loginpassword } });
+): Promise<UserSuccessResponse | UserErrorResponse> => {
+    return fetchApiData<UserSuccessResponse | UserErrorResponse>('POST', `user/${uid}/user`, {
+        data: { loginname, loginpassword },
+    });
 };
 
 export const undeleteUser = (uid: string): Promise<ActionStatus> => {

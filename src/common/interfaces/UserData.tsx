@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
 
+import { Status } from './ActionStatus';
+
 export interface UserInputData {
     username: string;
     password: string;
@@ -15,6 +17,20 @@ export interface User {
     username: string;
     useruid: string;
     isadmin?: number;
+}
+
+export interface UserSuccessResponse {
+    user: User;
+    status: Status;
+}
+
+export interface UserErrorResponse {
+    error: string;
+    info: string;
+    loginexported: string;
+    status: Status;
+    useruid: string;
+    warning: string;
 }
 
 export interface ShortUserInfo {
