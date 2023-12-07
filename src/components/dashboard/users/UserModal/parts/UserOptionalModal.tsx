@@ -144,6 +144,7 @@ export const UserOptionalModal = ({
                     initialValues={option}
                     onSubmit={handleSetUserOptional}
                     validationSchema={UserOptionalSchema}
+                    key={index}
                 >
                     {({ errors, touched }) => (
                         <Form>
