@@ -28,7 +28,6 @@ export const UserOptionalModal = ({
     username,
 }: UserOptionalModalProps): JSX.Element => {
     const [optional, setOptional] = useState<Optional>([]);
-    const [activeTab, setActiveTab] = useState<number>(0);
     const [initialUserOptional, setInitialUserOptional] = useState<
         Record<string, string | number>[]
     >([]);
