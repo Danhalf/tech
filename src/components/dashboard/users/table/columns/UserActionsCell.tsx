@@ -18,26 +18,13 @@ import { useQueryResponse } from 'common/core/QueryResponseProvider';
 export const UserActionsCell = ({ useruid, username }: User) => {
     const [editUserModalEnabled, setEditUserModalEnabled] = useState<boolean>(false);
     const [userPermissionsModalEnabled, setUserPermissionsModalEnabled] = useState<boolean>(false);
-    const [userSettingsModalEnabled, setUserSettingssModalEnabled] = useState<boolean>(false);
+    const [userSettingsModalEnabled, setUserSettingsModalEnabled] = useState<boolean>(false);
     const [userOptionalModalEnabled, setUserOptionalsModalEnabled] = useState<boolean>(false);
 
     const { refetch } = useQueryResponse(UsersType.ACTIVE);
 
     const navigate = useNavigate();
     const { handleShowToast } = useToast();
-
-    const handleEditUserModalOpen = () => {
-        setEditUserModalEnabled(true);
-    };
-    const handleUserPermissonsModalOpen = () => {
-        setUserPermissionsModalEnabled(true);
-    };
-    const handleUserSettingsModalOpen = () => {
-        setUserSettingssModalEnabled(true);
-    };
-    const handleUserOptionalModalOpen = () => {
-        setUserOptionalsModalEnabled(true);
-    };
 
     useEffect(() => {
         MenuComponent.reinitialization();
@@ -125,11 +112,11 @@ export const UserActionsCell = ({ useruid, username }: User) => {
             )}
             {userSettingsModalEnabled && (
                 <CustomModal
-                    onClose={() => setUserSettingssModalEnabled(false)}
-                    title={`${username} user settings: `}
+                    onClose={() => setUserSettingsModalEnabled(false)}
+                    title={`Set ${username} user settings: `}
                 >
                     <UserSettingsModal
-                        onClose={() => setUserSettingssModalEnabled(false)}
+                        onClose={() => setUserSettingsModalEnabled(false)}
                         useruid={useruid}
                         username={username}
                     />
@@ -138,7 +125,7 @@ export const UserActionsCell = ({ useruid, username }: User) => {
             {userOptionalModalEnabled && (
                 <CustomModal
                     onClose={() => setUserOptionalsModalEnabled(false)}
-                    title={`${username} user settings: `}
+                    title={`Set ${username} optional data: `}
                 >
                     <UserOptionalModal
                         onClose={() => setUserOptionalsModalEnabled(false)}
@@ -152,7 +139,7 @@ export const UserActionsCell = ({ useruid, username }: User) => {
                 items={[
                     {
                         menuItemName: 'Change password',
-                        menuItemAction: () => handleEditUserModalOpen(),
+                        menuItemAction: () => setEditUserModalEnabled(true),
                     },
                     {
                         menuItemName: 'Copy user',
@@ -160,15 +147,15 @@ export const UserActionsCell = ({ useruid, username }: User) => {
                     },
                     {
                         menuItemName: 'Set user permissions',
-                        menuItemAction: () => handleUserPermissonsModalOpen(),
+                        menuItemAction: () => setUserPermissionsModalEnabled(true),
                     },
                     {
                         menuItemName: 'Set user settings',
-                        menuItemAction: () => handleUserSettingsModalOpen(),
+                        menuItemAction: () => setUserSettingsModalEnabled(true),
                     },
                     {
                         menuItemName: 'Set user optional data',
-                        menuItemAction: () => handleUserOptionalModalOpen(),
+                        menuItemAction: () => setUserOptionalsModalEnabled(true),
                     },
                     {
                         menuItemName: 'Delete user',
