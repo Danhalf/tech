@@ -226,7 +226,7 @@ export const UserModal = ({ onClose, user }: UserModalProps): JSX.Element => {
                         />
                     </div>
                 </div>
-                <div className='text-center pt-15'>
+                <div className='mt-12 d-flex justify-content-center align-content-center'>
                     <button
                         type='submit'
                         className='btn btn-primary'
