@@ -4,17 +4,21 @@ import { CustomDropdown } from 'components/dashboard/helpers/renderDropdownHelpe
 import { Status } from 'common/interfaces/ActionStatus';
 import { useToast } from 'components/dashboard/helpers/renderToastHelper';
 import { AxiosError } from 'axios';
-import { User } from 'common/interfaces/UserData';
+import { User, UsersType } from 'common/interfaces/UserData';
 import { undeleteUser } from '../../user.service';
+import { useQueryResponse } from 'common/core/QueryResponseProvider';
 
 export const DeletedUsersActionsCell = ({ useruid, username }: User) => {
     const { handleShowToast } = useToast();
+
+    const { refetch } = useQueryResponse(UsersType.DELETED);
 
     const handleRestoreUser = async (userId: string): Promise<void> => {
         try {
             if (userId) {
                 const response = await undeleteUser(userId);
                 if (response.status === Status.OK) {
+                    refetch();
                     handleShowToast({
                         message: `<strong>${username}</strong> successfully restored`,
                         type: 'success',
