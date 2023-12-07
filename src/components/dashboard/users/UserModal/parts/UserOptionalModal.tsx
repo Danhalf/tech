@@ -57,7 +57,7 @@ export const UserOptionalModal = ({
         setIsLoading(true);
         if (useruid) {
             getUserLocations(useruid).then(async (response: any) => {
-                const responseOptional: any[] = response.locations.slice(0, 1);
+                const responseOptional: any[] = response.locations;
 
                 const filteredOptional = responseOptional.map((option) => {
                     const filteredOption = Object.keys(option).reduce(
@@ -203,7 +203,7 @@ export const UserOptionalModal = ({
                                     );
                                 }
                             )}
-                            <div className='text-center mt-8'>
+                            <div className='mt-12 d-flex justify-content-center align-content-center'>
                                 <PrimaryButton
                                     icon='check'
                                     disabled={isButtonDisabled || !!Object.keys(errors).length}
