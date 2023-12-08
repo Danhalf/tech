@@ -75,7 +75,7 @@ export const PrintedActions = ({
             title='Actions'
             items={[
                 {
-                    menuItemName: 'Data info',
+                    menuItemName: 'Set data',
                     icon: 'information-2',
                     menuItemAction: () => handleInformationClick(),
                 },

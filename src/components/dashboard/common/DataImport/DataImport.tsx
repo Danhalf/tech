@@ -24,8 +24,10 @@ export const DataImport = (): JSX.Element => {
 
     const updateDataImports = (): void => {
         getImportList().then((response) => {
-            if (response.status === Status.OK) {
+            if (response.status === Status.OK && response.records) {
                 setDataImports(response.records);
+            } else {
+                setDataImports([]);
             }
         });
     };
