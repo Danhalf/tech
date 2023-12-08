@@ -269,14 +269,15 @@ export const UserSettingsModal = ({
                         </div>
                     );
                 })}
-
-            <PrimaryButton
-                icon='check'
-                disabled={isButtonDisabled}
-                buttonClickAction={handleSetUserSettings}
-            >
-                Save {username} settings
-            </PrimaryButton>
+            <div className='mt-12 d-flex justify-content-center align-content-center'>
+                <PrimaryButton
+                    icon='check'
+                    disabled={isButtonDisabled}
+                    buttonClickAction={handleSetUserSettings}
+                >
+                    Save {username} settings
+                </PrimaryButton>
+            </div>
         </>
     );
 };

@@ -96,13 +96,15 @@ export const UserPermissionsModal = ({
                     checkbox: true,
                     action: handleChangeUserPermissions,
                 })}
-            <PrimaryButton
-                icon='check'
-                disabled={isButtonDisabled}
-                buttonClickAction={handleSetUserPermissions}
-            >
-                Save {username} permissions
-            </PrimaryButton>
+            <div className='mt-12 d-flex justify-content-center align-content-center'>
+                <PrimaryButton
+                    icon='check'
+                    disabled={isButtonDisabled}
+                    buttonClickAction={handleSetUserPermissions}
+                >
+                    Save {username} permissions
+                </PrimaryButton>
+            </div>
         </>
     );
 };
