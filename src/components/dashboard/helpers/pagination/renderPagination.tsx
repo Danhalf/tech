@@ -28,7 +28,13 @@ export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
 
     useEffect(() => {
         const storedState = JSON.parse(localStorage.getItem(LOC_STORAGE_USER_STATE) || '{}');
-        updateState({ ...state, count: storedState.count, currentpage: storedState.currentpage });
+
+        // eslint-disable-next-line no-console
+        console.log(storedState);
+
+        updateState({ ...state, ...storedState });
+        // eslint-disable-next-line no-console
+        console.log(state);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
@@ -52,7 +58,6 @@ export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
 
             const updatedCurrentPage = Math.min(state.currentpage, calculatedTotalPages - 1);
             setCurrentPage(updatedCurrentPage);
-
             updateState({ ...state, currentpage: updatedCurrentPage });
 
             updateStateFromLocalStorage();
@@ -60,18 +65,18 @@ export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [list, state.count, state.currentpage]);
 
-    const handleSetCurrentPage = (page: number): void => {
-        setCurrentPage(page);
+    const handleSetCurrentPage = (currentpage: number): void => {
+        setCurrentPage(currentpage);
 
         localStorage.setItem(
             LOC_STORAGE_USER_STATE,
             JSON.stringify({
                 ...JSON.parse(localStorage.getItem(LOC_STORAGE_USER_STATE) || '{}'),
-                usersPage: page,
+                currentpage,
             })
         );
 
-        updateState({ ...state, currentpage: page });
+        updateState({ ...state, currentpage });
     };
 
     const handleChangeRecordsPerPage = (count: number): void => {
@@ -81,7 +86,7 @@ export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
             LOC_STORAGE_USER_STATE,
             JSON.stringify({
                 ...JSON.parse(localStorage.getItem(LOC_STORAGE_USER_STATE) || '{}'),
-                recordsOnPage: count,
+                count,
             })
         );
 

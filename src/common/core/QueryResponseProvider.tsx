@@ -57,7 +57,7 @@ export const QueryResponseProvider = ({
                     return getDeletedUsers(currentQuery);
             }
         },
-        { cacheTime: 0, keepPreviousData: true, refetchOnWindowFocus: false }
+        { cacheTime: 0, keepPreviousData: true, refetchOnWindowFocus: false, enabled: !!state }
     );
 
     useEffect(() => {
