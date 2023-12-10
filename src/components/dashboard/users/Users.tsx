@@ -15,10 +15,19 @@ export const Users = () => {
     const [activeTab, setActiveTab] = useState<UsersListType>(UsersType.ACTIVE);
     const [addUserModalEnabled, setAddUserModalEnabled] = useState<boolean>(false);
 
+    const [activeTabLoaded, setActiveTabLoaded] = useState<Record<string, boolean>>({
+        [UsersType.ACTIVE]: true,
+        [UsersType.DELETED]: false,
+    });
+
     const handleAddUserModalOpen = () => setAddUserModalEnabled(!addUserModalEnabled);
 
     const handleTabClick = (tab: string) => {
         setActiveTab(tab as UsersListType);
+
+        if (!activeTabLoaded[tab as UsersListType]) {
+            setActiveTabLoaded((prevState) => ({ ...prevState, [tab as UsersListType]: true }));
+        }
     };
     return (
         <QueryRequestProvider>
@@ -53,12 +62,16 @@ export const Users = () => {
                                     Add user
                                 </PrimaryButton>
                             </div>
-                            <TabPanel activeTab={activeTab} tabName={UsersType.ACTIVE}>
-                                <UsersTable list={UsersType.ACTIVE} />
-                            </TabPanel>
-                            <TabPanel activeTab={activeTab} tabName={UsersType.DELETED}>
-                                <UsersTable list={UsersType.DELETED} />
-                            </TabPanel>
+                            {activeTabLoaded[UsersType.ACTIVE] && activeTab === UsersType.ACTIVE && (
+                                <TabPanel activeTab={activeTab} tabName={UsersType.ACTIVE}>
+                                    <UsersTable list={UsersType.ACTIVE} />
+                                </TabPanel>
+                            )}
+                            {activeTabLoaded[UsersType.DELETED] && activeTab === UsersType.DELETED && (
+                                <TabPanel activeTab={activeTab} tabName={UsersType.DELETED}>
+                                    <UsersTable list={UsersType.DELETED} />
+                                </TabPanel>
+                            )}
                         </div>
                     </div>
                 </div>
