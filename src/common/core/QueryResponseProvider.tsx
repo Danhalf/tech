@@ -43,7 +43,7 @@ export const QueryResponseProvider = ({
         `${GET_LIST_TYPE()}`,
         () => {
             const currentQuery: UserQuery = {
-                skip: state.currentpage,
+                skip: state.currentpage * state.count,
                 top: state.count,
                 column: state.sort,
                 qry: state.search,
@@ -65,7 +65,7 @@ export const QueryResponseProvider = ({
             setQuery(updatedQuery);
             refetch();
         }
-    }, [updatedQuery]);
+    }, [updatedQuery, state]);
 
     const response: Response<User[]> = {
         data: axiosResponse,

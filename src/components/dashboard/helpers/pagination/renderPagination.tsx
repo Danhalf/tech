@@ -1,10 +1,7 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import clsx from 'clsx';
-import { useEffect, useMemo, useState } from 'react';
-import {
-    useQueryResponseDataLength,
-    useQueryResponseLoading,
-} from 'common/core/QueryResponseProvider';
+import { useEffect, useState } from 'react';
+import { useQueryResponseLoading } from 'common/core/QueryResponseProvider';
 import { useQueryRequest } from 'common/core/QueryRequestProvider';
 import { getLocalState } from '_metronic/helpers';
 import { UsersListType, UsersType } from 'common/interfaces/UserData';
@@ -17,85 +14,67 @@ interface UsersListPaginationProps {
     list: UsersListType;
 }
 
-const { usersPage } = getLocalState();
+const updatePageNumbers = (length: number): number[] => {
+    return Array.from({ length }, (_, index) => index);
+};
 
 export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
     const { state, updateState } = useQueryRequest();
-    const [currentPage, setCurrentPage] = useState<number>(usersPage || 0);
+    const [currentPage, setCurrentPage] = useState<number>(state.currentpage);
     const isLoading = useQueryResponseLoading(list);
-    const listLength = useQueryResponseDataLength(list);
     const [totalRecords, setTotalRecords] = useState<number>(0);
     const [pageNumbers, setPageNumbers] = useState<number[]>([]);
     const [totalPages, setTotalPages] = useState<number>(0);
 
-    const { count } = state;
-
-    const fetchTotalRecords = useMemo(
-        () => async () => {
-            const totalList = list === UsersType.ACTIVE ? 'list' : 'listdeleted';
-            const { total } = await getTotalUsersRecords(totalList);
-            setTotalRecords(total);
-        },
-        [list, setTotalRecords]
-    );
-
     useEffect(() => {
-        fetchTotalRecords();
-        const getPages = async (): Promise<number> => {
-            const res = await Math.ceil(totalRecords / count);
-            return res;
+        const updateStateFromLocalStorage = () => {
+            const storedState = JSON.parse(localStorage.getItem(LOC_STORAGE_USER_STATE) || '{}');
+            updateState({ ...state, ...storedState });
         };
-        getPages().then((res) => {
-            setTotalPages(res);
+
+        const totalList = list === UsersType.ACTIVE ? 'list' : 'listdeleted';
+        getTotalUsersRecords(totalList).then(({ total }) => {
+            setTotalRecords(total);
+            const calculatedTotalPages = Math.ceil(total / state.count);
+            setTotalPages(calculatedTotalPages);
+            const pages = updatePageNumbers(calculatedTotalPages);
+            setPageNumbers(pages);
+
+            const updatedCurrentPage = Math.min(state.currentpage, calculatedTotalPages - 1);
+            setCurrentPage(updatedCurrentPage);
+
+            updateState({ ...state, currentpage: updatedCurrentPage });
+
+            updateStateFromLocalStorage();
         });
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [totalRecords, count]);
-
-    const updatePageNumbers = (length: number): void => {
-        setPageNumbers(Array.from({ length }, (_, index) => index));
-    };
-
-    useEffect(() => {
-        const count = getLocalState().recordsOnPage;
-
-        if (count) {
-            updateState({ ...state, count });
-        }
-        const page = getLocalState().usersPage;
-        if (page) {
-            handleSetCurrentPage(page);
-        }
-
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [usersPage, totalRecords]);
-
-    useEffect(() => {
-        updatePageNumbers(totalPages);
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [totalPages, state, totalRecords]);
-
-    useEffect(() => {
-        if (!!state.search?.length) {
-            setTotalRecords(listLength);
-        }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [listLength, state.search, currentPage]);
+    }, [list, state.count, state.currentpage]);
 
     const handleSetCurrentPage = (page: number): void => {
         setCurrentPage(page);
+
         localStorage.setItem(
             LOC_STORAGE_USER_STATE,
-            JSON.stringify({ ...getLocalState(), usersPage: page })
+            JSON.stringify({
+                ...JSON.parse(localStorage.getItem(LOC_STORAGE_USER_STATE) || '{}'),
+                usersPage: page,
+            })
         );
+
         updateState({ ...state, currentpage: page });
     };
 
     const handleChangeRecordsPerPage = (count: number): void => {
         handleSetCurrentPage(0);
+
         localStorage.setItem(
             LOC_STORAGE_USER_STATE,
-            JSON.stringify({ ...getLocalState(), recordsOnPage: count })
+            JSON.stringify({
+                ...JSON.parse(localStorage.getItem(LOC_STORAGE_USER_STATE) || '{}'),
+                recordsOnPage: count,
+            })
         );
+
         updateState({ ...state, count });
     };
 
