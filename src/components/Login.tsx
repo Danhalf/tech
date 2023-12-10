@@ -5,7 +5,6 @@ import * as Yup from 'yup';
 import { useNavigate } from 'react-router-dom';
 import { login } from 'common/auth.service';
 import { LOC_STORAGE_USER, LOC_STORAGE_USER_STATE } from 'common/app-consts';
-import { getLocalState } from '_metronic/helpers';
 import { useTokenValidation } from 'common/hooks/useTokenValidation';
 import { getToken } from 'common/utils';
 import { Status } from 'common/interfaces/ActionStatus';

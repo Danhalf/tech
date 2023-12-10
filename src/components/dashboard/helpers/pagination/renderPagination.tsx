@@ -17,7 +17,7 @@ interface UsersListPaginationProps {
     list: UsersListType;
 }
 
-const { usersPage, recordsOnPage } = getLocalState();
+const { usersPage } = getLocalState();
 
 export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
     const { state, updateState } = useQueryRequest();

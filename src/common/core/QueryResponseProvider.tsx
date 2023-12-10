@@ -8,8 +8,6 @@ import {
     stringifyRequestQuery,
     QUERIES,
     Response,
-    initialQueryState,
-    getLocalState,
 } from '_metronic/helpers';
 import { getDeletedUsers, getUsers } from 'components/dashboard/users/user.service';
 import { User, UsersListType, UsersType } from 'common/interfaces/UserData';
@@ -44,19 +42,9 @@ export const QueryResponseProvider = ({
     } = useQuery(
         `${GET_LIST_TYPE()}`,
         () => {
-            const getPage = () => {
-                if (getLocalState().usersPage && getLocalState().recordsOnPage) {
-                    return getLocalState().usersPage * getLocalState().recordsOnPage;
-                }
-                if (state.search) {
-                    return state.currentpage;
-                }
-                return 0;
-            };
-
             const currentQuery: UserQuery = {
-                skip: getPage(),
-                top: getLocalState().recordsOnPage || state.count,
+                skip: state.currentpage,
+                top: state.count,
                 column: state.sort,
                 qry: state.search,
                 type: state.order,
