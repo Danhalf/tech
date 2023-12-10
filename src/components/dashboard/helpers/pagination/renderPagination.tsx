@@ -27,6 +27,16 @@ export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
     const [totalPages, setTotalPages] = useState<number>(0);
 
     useEffect(() => {
+        const storedState = JSON.parse(localStorage.getItem(LOC_STORAGE_USER_STATE) || '{}');
+        updateState({ ...state, count: storedState.count, currentpage: storedState.currentpage });
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
+
+    useEffect(() => {
+        localStorage.setItem(LOC_STORAGE_USER_STATE, JSON.stringify(state));
+    }, [state]);
+
+    useEffect(() => {
         const updateStateFromLocalStorage = () => {
             const storedState = JSON.parse(localStorage.getItem(LOC_STORAGE_USER_STATE) || '{}');
             updateState({ ...state, ...storedState });

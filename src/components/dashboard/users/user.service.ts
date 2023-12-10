@@ -25,11 +25,11 @@ export const setUserOptionalData = (uid: string, data: unknown): Promise<ActionS
 
 export const getUsers = (params?: UserQuery): Promise<User[]> => {
     const initialParams: UserQuery = {
-        column: params?.column || 'username',
-        type: params?.type || 'asc',
-        skip: params?.skip || 0,
-        qry: params?.qry || '',
-        top: params?.top || 10,
+        column: params?.column,
+        type: params?.type,
+        skip: params?.skip,
+        qry: params?.qry,
+        top: params?.top,
     };
 
     return fetchApiData<User[]>('GET', `user/0/list`, { params: initialParams });

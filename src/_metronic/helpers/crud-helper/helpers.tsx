@@ -34,24 +34,24 @@ export function parseRequestQuery(query: string): QueryState {
 }
 
 export interface LocalState {
-    usersPage: number;
+    currentpage: number;
     login: string;
-    recordsOnPage: number;
+    count: number;
 }
 
 export const getLocalState = (): LocalState => {
-    const defaultValues = { usersPage: 0, login: '', recordsOnPage: DefaultRecordsPerPage };
+    const defaultValues = { currentpage: 0, login: '', count: DefaultRecordsPerPage };
     const storage = localStorage.getItem(LOC_STORAGE_USER_STATE);
     if (storage !== null) {
         const parsedData = JSON.parse(storage);
         const result = { ...defaultValues };
 
         if (parsedData) {
-            if (parsedData.usersPage !== undefined) {
-                result.usersPage = parsedData.usersPage;
+            if (parsedData.currentpage !== undefined) {
+                result.currentpage = parsedData.currentpage;
             }
-            if (parsedData.recordsOnPage !== undefined) {
-                result.recordsOnPage = parsedData.recordsOnPage;
+            if (parsedData.count !== undefined) {
+                result.count = parsedData.count;
             }
 
             if (parsedData.login !== undefined) {

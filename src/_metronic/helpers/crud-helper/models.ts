@@ -42,8 +42,8 @@ export type QueryRequestContextProps = {
 };
 
 export const initialQueryState: QueryState = {
-    currentpage: getLocalState().usersPage || 0,
-    count: getLocalState().recordsOnPage || DefaultRecordsPerPage,
+    currentpage: getLocalState().currentpage || 0,
+    count: getLocalState().count || DefaultRecordsPerPage,
     sort: 'username',
     order: 'asc',
     search: '',

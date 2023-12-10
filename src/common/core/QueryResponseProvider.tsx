@@ -46,7 +46,7 @@ export const QueryResponseProvider = ({
                 skip: state.currentpage * state.count,
                 top: state.count,
                 column: state.sort,
-                qry: state.search,
+                qry: state.search && `${state.search}.${state.sort}`,
                 type: state.order,
             };
 
@@ -87,11 +87,6 @@ export const useQueryResponseData = (dataType: UsersListType) => {
     }
 
     return response?.data || [];
-};
-
-export const useQueryResponseDataLength = (dataType: UsersListType): number => {
-    const { response } = useQueryResponse(dataType);
-    return response?.data?.length || 0;
 };
 
 export const useQueryResponseLoading = (dataType: UsersListType): boolean => {
