@@ -3,7 +3,6 @@ import clsx from 'clsx';
 import { useEffect, useState } from 'react';
 import { useQueryResponseLoading } from 'common/core/QueryResponseProvider';
 import { useQueryRequest } from 'common/core/QueryRequestProvider';
-import { getLocalState } from '_metronic/helpers';
 import { UsersListType, UsersType } from 'common/interfaces/UserData';
 import { LOC_STORAGE_USER_STATE } from 'common/app-consts';
 import { getTotalUsersRecords } from 'components/dashboard/users/user.service';
@@ -29,12 +28,7 @@ export const UsersListPagination = ({ list }: UsersListPaginationProps) => {
     useEffect(() => {
         const storedState = JSON.parse(localStorage.getItem(LOC_STORAGE_USER_STATE) || '{}');
 
-        // eslint-disable-next-line no-console
-        console.log(storedState);
-
         updateState({ ...state, ...storedState });
-        // eslint-disable-next-line no-console
-        console.log(state);
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 

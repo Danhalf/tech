@@ -41,8 +41,10 @@ export type QueryRequestContextProps = {
     updateState: (updates: Partial<QueryState>) => void;
 };
 
+const getCurrentPage = (): number => getLocalState().currentpage || 0;
+
 export const initialQueryState: QueryState = {
-    currentpage: getLocalState().currentpage || 0,
+    currentpage: getCurrentPage(),
     count: getLocalState().count || DefaultRecordsPerPage,
     sort: 'username',
     order: 'asc',

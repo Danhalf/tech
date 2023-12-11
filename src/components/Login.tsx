@@ -70,7 +70,7 @@ export function Login() {
 
                         localStorage.setItem(
                             LOC_STORAGE_USER_STATE,
-                            JSON.stringify({ login, usersPage: 0 })
+                            JSON.stringify({ login, currentpage: 0 })
                         );
 
                         navigate('/dashboard');
