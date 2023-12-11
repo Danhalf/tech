@@ -4,7 +4,7 @@ interface ConfirmModalProps {
     show: boolean;
     onConfirm: () => void;
     onCancel: () => void;
-    itemName: string;
+    itemName: string | number;
 }
 
 export const ConfirmModal = ({

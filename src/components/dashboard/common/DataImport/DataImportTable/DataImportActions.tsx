@@ -6,6 +6,7 @@ import { CustomModal } from 'components/dashboard/helpers/modal/renderModalHelpe
 import { useState } from 'react';
 import { TabDataWrapper } from 'components/dashboard/helpers/helpers';
 import { DataImportsInfoMetadata } from 'common/interfaces/DataImports';
+import { ConfirmModal } from 'components/dashboard/helpers/modal/confirmModal';
 
 interface DataImportActionsProps {
     id: number | string;
@@ -16,6 +17,8 @@ export const DataImportActions = ({ id, updateAction }: DataImportActionsProps) 
     const [modalEnabled, setModalEnabled] = useState<boolean>(false);
     const [dataItemInfo, setDataItemInfo] = useState<DataImportsInfoMetadata | null>(null);
     const { handleShowToast } = useToast();
+
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState<boolean>(false);
 
     const handleInformationClick = () => {
         getImportItemInfo(String(id))
@@ -32,7 +35,8 @@ export const DataImportActions = ({ id, updateAction }: DataImportActionsProps) 
             });
     };
 
-    const handleDeleteClick = () => {
+    const handleDeleteConfirm = () => {
+        setShowDeleteConfirm(false);
         deleteImportItem(String(id))
             .then((response) => {
                 if (response.status === Status.OK) {
@@ -72,9 +76,15 @@ export const DataImportActions = ({ id, updateAction }: DataImportActionsProps) 
                     {
                         menuItemName: 'Delete',
                         icon: 'file-deleted',
-                        menuItemAction: () => handleDeleteClick(),
+                        menuItemAction: () => setShowDeleteConfirm(true),
                     },
                 ]}
+            />
+            <ConfirmModal
+                show={showDeleteConfirm}
+                onConfirm={handleDeleteConfirm}
+                onCancel={() => setShowDeleteConfirm(false)}
+                itemName={id}
             />
         </>
     );
