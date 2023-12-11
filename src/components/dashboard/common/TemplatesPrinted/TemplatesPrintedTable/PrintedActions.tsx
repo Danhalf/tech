@@ -1,12 +1,14 @@
+import { useState } from 'react';
 import { Status } from 'common/interfaces/ActionStatus';
 import {
     PrintedItem,
     deletePrintItem,
     downloadPrintItem,
     setPrintItemInfo,
-} from '../../common.service';
+} from 'components/dashboard/common/common.service';
 import { useToast } from 'components/dashboard/helpers/renderToastHelper';
 import { CustomDropdown } from 'components/dashboard/helpers/renderDropdownHelper';
+import { ConfirmModal } from 'components/dashboard/helpers/modal/confirmModal';
 
 interface PrintedActionsProps {
     item: PrintedItem;
@@ -18,6 +20,8 @@ export const PrintedActions = ({
     updateAction,
 }: PrintedActionsProps) => {
     const { handleShowToast } = useToast();
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState<boolean>(false);
+
     const handleInformationClick = () => {
         setPrintItemInfo({ itemuid, description, version, name })
             .then((response) => {
@@ -35,7 +39,9 @@ export const PrintedActions = ({
             });
     };
 
-    const handleDeleteClick = () => {
+    const handleDeleteConfirm = () => {
+        setShowDeleteConfirm(false);
+
         deletePrintItem(itemuid)
             .then((response) => {
                 if (response.status === Status.OK) {
@@ -71,25 +77,34 @@ export const PrintedActions = ({
     };
 
     return (
-        <CustomDropdown
-            title='Actions'
-            items={[
-                {
-                    menuItemName: 'Set data',
-                    icon: 'information-2',
-                    menuItemAction: () => handleInformationClick(),
-                },
-                {
-                    menuItemName: 'Delete',
-                    icon: 'file-deleted',
-                    menuItemAction: () => handleDeleteClick(),
-                },
-                {
-                    menuItemName: 'Download',
-                    icon: 'file-down',
-                    menuItemAction: () => handleDownloadClick(),
-                },
-            ]}
-        />
+        <>
+            <CustomDropdown
+                title='Actions'
+                items={[
+                    {
+                        menuItemName: 'Set data',
+                        icon: 'information-2',
+                        menuItemAction: () => handleInformationClick(),
+                    },
+                    {
+                        menuItemName: 'Delete',
+                        icon: 'file-deleted',
+                        menuItemAction: () => setShowDeleteConfirm(true),
+                    },
+                    {
+                        menuItemName: 'Download',
+                        icon: 'file-down',
+                        menuItemAction: () => handleDownloadClick(),
+                    },
+                ]}
+            />
+
+            <ConfirmModal
+                show={showDeleteConfirm}
+                onConfirm={handleDeleteConfirm}
+                onCancel={() => setShowDeleteConfirm(false)}
+                itemName={itemuid}
+            />
+        </>
     );
 };
