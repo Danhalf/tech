@@ -1,23 +1,8 @@
 import { AxiosError } from 'axios';
-import clsx from 'clsx';
 import { useToast } from 'components/dashboard/helpers/renderToastHelper';
 import { clearCache } from 'components/dashboard/users/user.service';
-import { useEffect, useState } from 'react';
 
 export const ClearCache = () => {
-    const [windowWidth, setWindowWidth] = useState(window.innerWidth);
-
-    useEffect(() => {
-        const handleWindowResize = () => {
-            setWindowWidth(window.innerWidth);
-        };
-
-        window.addEventListener('resize', handleWindowResize);
-
-        return () => {
-            window.removeEventListener('resize', handleWindowResize);
-        };
-    });
     const handleClearCache = async () => {
         try {
             const response = await clearCache();
@@ -35,16 +20,21 @@ export const ClearCache = () => {
 
     const { handleShowToast } = useToast();
     return (
-        <button
-            className={clsx(
-                'fixed-bottom mw-50 col-sm-2 px-2 text-nowrap ms-auto me-sm-4 mb-sm-4 btn btn-warning font-weight-bold',
-                {
-                    'transform-90': windowWidth < 576,
-                }
-            )}
-            onClick={handleClearCache}
-        >
-            Clear server cache
-        </button>
+        <>
+            <button
+                className='d-none d-sm-inline fixed-bottom text-nowrap ms-auto me-4 mb-4 btn btn-warning font-weight-bold'
+                onClick={handleClearCache}
+            >
+                <span className='d-none d-sm-inline'>Clear server cache</span>
+            </button>
+            <button
+                className='d-sm-none fixed-bottom text-nowrap btn-icon ms-auto me-8 mb-8 btn btn-warning font-weight-bold rounded-circle'
+                onClick={handleClearCache}
+            >
+                <div title='Clear server cache'>
+                    <i className='ki-solid ki-trash fs-1' />
+                </div>
+            </button>
+        </>
     );
 };
