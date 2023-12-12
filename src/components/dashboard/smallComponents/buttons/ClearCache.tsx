@@ -21,7 +21,7 @@ export const ClearCache = () => {
     const { handleShowToast } = useToast();
     return (
         <button
-            className='fixed-bottom col-sm-2 text-nowrap  ms-auto me-4 mb-4 btn btn-warning font-weight-bold'
+            className='fixed-bottom col-sm-2 text-nowrap ms-auto me-sm-4 mb-sm-4 btn btn-warning font-weight-bold'
             onClick={handleClearCache}
         >
             Clear server cache

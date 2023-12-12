@@ -40,6 +40,7 @@ export const PrintedActions = ({
     };
 
     const handleDeleteConfirm = () => {
+        setShowDeleteConfirm(false);
         deletePrintItem(itemuid)
             .then((response) => {
                 if (response.status === Status.OK) {
