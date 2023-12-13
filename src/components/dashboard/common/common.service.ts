@@ -68,7 +68,7 @@ export const setPrintItemInfo = (data: PrintedItem): Promise<any> => {
 };
 
 export const downloadPrintItem = (itemuid: string): Promise<any> => {
-    return fetchApiData<any>('GET', `print/${itemuid}/get`);
+    return fetchApiData<any>('GET', `print/${itemuid}/get`, { responseType: 'blob' });
 };
 
 export const uploadPrintFile = (file: File, itemuid?: string): Promise<any> => {

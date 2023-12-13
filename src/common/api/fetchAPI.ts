@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosResponse, ResponseType as AxiosResponseType } from 'axios';
 import { API_URL } from 'common/app-consts';
 import { UserQuery } from 'common/interfaces/QueriesParams';
 import { getToken } from 'common/utils';
@@ -13,20 +13,22 @@ interface FetchHeaders {
 export const fetchApiData = async <T>(
     method: Method,
     url: string,
-    options?: { data?: unknown; params?: UserQuery },
+    options?: { data?: unknown; params?: UserQuery; responseType?: AxiosResponseType },
     headers?: FetchHeaders
 ): Promise<T> => {
-    const { data, params } = options || {};
+    const { data, params, responseType } = options || {};
     const defaultHeaders: FetchHeaders = {
         Authorization: `Bearer ${getToken()}`,
         'Content-Type': 'application/json',
     };
+
     try {
         const response: AxiosResponse<T> = await axios({
             method,
             url: API_URL + url,
             data,
             params,
+            responseType,
             headers: { ...defaultHeaders, ...headers },
         });
         return response.data;
