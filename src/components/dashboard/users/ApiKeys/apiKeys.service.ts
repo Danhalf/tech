@@ -1,5 +1,5 @@
 import { fetchApiData } from 'common/api/fetchAPI';
-import { ApiKeyRecord } from 'common/interfaces/UserApiKeys';
+import { ApiKeyRecord, ApiTypesResponse } from 'common/interfaces/UserApiKeys';
 
 export const getUserApiKeysList = (useruid: string): Promise<ApiKeyRecord[]> => {
     return fetchApiData<ApiKeyRecord[]>('GET', `user/${useruid}/apikeys`);
@@ -9,8 +9,8 @@ export const getApiKey = (keyuid: string): Promise<any[]> => {
     return fetchApiData<any[]>('GET', `user/${keyuid}/apikey`);
 };
 
-export const getApiKeysTypes = (): Promise<any[]> => {
-    return fetchApiData<any[]>('GET', 'user/listapikeys');
+export const getApiKeysTypes = (): Promise<ApiTypesResponse> => {
+    return fetchApiData<ApiTypesResponse>('GET', 'user/listapikeys');
 };
 
 // export const deleteUser = (uid: string): Promise<ActionStatus> => {

@@ -27,11 +27,12 @@ export const ApiKeysColumns = (updateAction: () => void): ReadonlyArray<Column<A
         Header: 'Actions',
         id: 'api-key-actions',
         Cell: ({ ...props }) => {
-            const { itemuid, enabled, apitype, apikey }: ApiKeyRecord = props.data[props.row.index];
+            const { itemuid, enabled, apitype, apikey, notes }: ApiKeyRecord =
+                props.data[props.row.index];
             return (
                 <ApiKeysActions
                     updateAction={updateAction}
-                    item={{ itemuid, enabled, apitype, apikey }}
+                    item={{ itemuid, enabled, apitype, apikey, notes }}
                 />
             );
         },

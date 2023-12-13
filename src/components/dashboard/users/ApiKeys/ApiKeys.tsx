@@ -15,13 +15,14 @@ const initialApiKeysState = [
         issuedate: '',
         expirationdate: '',
         lastused: '',
-        flags: '',
-        enabled: '',
+        flags: 0,
+        enabled: 0,
         apitype: '',
         useruid: '',
         itemuid: '',
         apikey: '',
         notes: '',
+        id: 0,
     },
 ];
 
