@@ -11,6 +11,7 @@ import { useAuthInterceptor } from 'common/auth.interceptor';
 import { DataImport } from 'components/dashboard/common/DataImport/DataImport';
 import { TemplatesPrinted } from 'components/dashboard/common/TemplatesPrinted/TemplatesPrinted';
 import { TemplatesReports } from 'components/dashboard/common/TemplatesReports/TemplatesReports';
+import { ApiKeys } from 'components/dashboard/users/ApiKeys/ApiKeys';
 
 export function MasterInit() {
     const pluginsInitialization = () => {
@@ -37,6 +38,7 @@ const Content = () => {
                     <Route path='' element={<Microservices />} />
                     <Route path='microservices/:uid' element={<MicroserviceCard />} />
                     <Route path='users' element={<Users />} />
+                    <Route path='api-keys' element={<ApiKeys />} />
                     <Route path='data-import' element={<DataImport />} />
                     <Route path='template-reports' element={<TemplatesReports />} />
                     <Route path='template-printed' element={<TemplatesPrinted />} />
