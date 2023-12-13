@@ -7,6 +7,8 @@ import {
 } from '../../common.service';
 import { useToast } from 'components/dashboard/helpers/renderToastHelper';
 import { CustomDropdown } from 'components/dashboard/helpers/renderDropdownHelper';
+import { ConfirmModal } from 'components/dashboard/helpers/modal/confirmModal';
+import { useState } from 'react';
 
 interface ReportsActionsProps {
     item: ReportsItem;
@@ -18,6 +20,7 @@ export const ReportsActions = ({
     updateAction,
 }: ReportsActionsProps) => {
     const { handleShowToast } = useToast();
+    const [showDeleteConfirm, setShowDeleteConfirm] = useState<boolean>(false);
     const handleInformationClick = () => {
         setReportsItemInfo({ itemuid, description, version, name })
             .then((response) => {
@@ -71,25 +74,33 @@ export const ReportsActions = ({
     };
 
     return (
-        <CustomDropdown
-            title='Actions'
-            items={[
-                {
-                    menuItemName: 'Data info',
-                    icon: 'information-2',
-                    menuItemAction: () => handleInformationClick(),
-                },
-                {
-                    menuItemName: 'Delete',
-                    icon: 'file-deleted',
-                    menuItemAction: () => handleDeleteClick(),
-                },
-                {
-                    menuItemName: 'Download',
-                    icon: 'file-down',
-                    menuItemAction: () => handleDownloadClick(),
-                },
-            ]}
-        />
+        <>
+            <CustomDropdown
+                title='Actions'
+                items={[
+                    {
+                        menuItemName: 'Set data',
+                        icon: 'information-2',
+                        menuItemAction: () => handleInformationClick(),
+                    },
+                    {
+                        menuItemName: 'Delete',
+                        icon: 'file-deleted',
+                        menuItemAction: () => setShowDeleteConfirm(true),
+                    },
+                    {
+                        menuItemName: 'Download',
+                        icon: 'file-down',
+                        menuItemAction: () => handleDownloadClick(),
+                    },
+                ]}
+            />
+            <ConfirmModal
+                show={showDeleteConfirm}
+                onConfirm={handleDeleteClick}
+                onCancel={() => setShowDeleteConfirm(false)}
+                itemName={itemuid}
+            />
+        </>
     );
 };
