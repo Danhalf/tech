@@ -16,4 +16,5 @@ export interface ServiceCheckDBResponse extends ServiceResponse {}
 
 export interface ActionStatus {
     status: Status;
+    warning?: string;
 }
