@@ -1,11 +1,11 @@
-import { TemplatesPrintedRecord } from 'common/interfaces/TemplatesPrintedData';
+import { ApiKeyRecord } from 'common/interfaces/UserApiKeys';
 import { ColumnInstance } from 'react-table';
 
 type ColumnHeaderProps = {
-    column: ColumnInstance<TemplatesPrintedRecord>;
+    column: ColumnInstance<ApiKeyRecord>;
 };
 
-export const PrintedHeaderColumn = ({ column }: ColumnHeaderProps) => (
+export const ApiKeysHeaderColumn = ({ column }: ColumnHeaderProps) => (
     <>
         {column.Header && typeof column.Header === 'string' ? (
             <th {...column.getHeaderProps()}>{column.render('Header')}</th>

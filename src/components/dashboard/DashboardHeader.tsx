@@ -66,6 +66,15 @@ export function DashboardHeader() {
                                 </Link>
                             </div>
                             <div className='menu-item me-lg-1'>
+                                <Link
+                                    className='menu-link py-3 text-hover-primary'
+                                    to={`user/${useruid}/api-keys`}
+                                >
+                                    <i className='ki-outline ki-key fs-2 m-2'></i>
+                                    <span className='menu-title w-0'>API keys</span>
+                                </Link>
+                            </div>
+                            <div className='menu-item me-lg-1'>
                                 <CustomDropdown
                                     title={'Common'}
                                     background='none'
@@ -90,12 +99,7 @@ export function DashboardHeader() {
                                     ]}
                                 />
                             </div>
-                            <div className='menu-item me-lg-1'>
-                                <Link className='menu-link py-3 text-hover-primary' to={'api-keys'}>
-                                    <i className='ki-outline ki-key fs-2 m-2'></i>
-                                    <span className='menu-title w-0'>API keys</span>
-                                </Link>
-                            </div>
+
                             <div className='menu-item me-lg-1 ms-auto'>
                                 <CustomDropdown
                                     title={loginname}

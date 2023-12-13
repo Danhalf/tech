@@ -1,12 +1,14 @@
 import { useState, useEffect, useMemo } from 'react';
 import { ColumnInstance, Row, useTable } from 'react-table';
-import { PrintedHeaderColumn } from './TemplatesPrintedTable/PrintedHeaderColumn';
-import { TemplatesPrintedRecord } from 'common/interfaces/TemplatesPrintedData';
-import { PrintedColumns } from './TemplatesPrintedTable/PrintedColumns';
+import { ApiKeysHeaderColumn } from './ApiKeysTable/ApiKeysHeaderColumn';
+import { ApiKeysColumns } from './ApiKeysTable/ApiKeysColumns';
 import { useToast } from 'components/dashboard/helpers/renderToastHelper';
-import { PrintedRow } from './TemplatesPrintedTable/PrintedRow';
+import { ApiKeysRow } from './ApiKeysTable/ApiKeysRow';
+import { ApiKeyRecord } from 'common/interfaces/UserApiKeys';
+import { getUserApiKeys } from './apiKeys.service';
+import { useParams } from 'react-router-dom';
 
-const initialPrintedState = [
+const initialApiKeysState = [
     {
         created: '',
         deleted: '',
@@ -24,21 +26,26 @@ const initialPrintedState = [
     },
 ];
 
-export const ApiKeys = (): JSX.Element => {
-    const [templatesPrinted, setTemplatesPrinted] = useState<any[]>(initialPrintedState);
+export const ApiKeys = ({ useruid }: { useruid?: string }): JSX.Element => {
+    const { id } = useParams();
+    const [apiKeys, setApiKeys] = useState<ApiKeyRecord[]>(initialApiKeysState);
 
     const { handleShowToast } = useToast();
 
-    const updateTemplatesPrinted = (): void => {};
+    const updateApiKeys = (): void => {
+        getUserApiKeys(useruid || id).then((response: any) => {
+            setApiKeys(response);
+        });
+    };
 
     useEffect(() => {
-        updateTemplatesPrinted();
+        updateApiKeys();
     }, []);
 
-    const columns = useMemo(() => PrintedColumns(updateTemplatesPrinted), []);
+    const columns = useMemo(() => ApiKeysColumns(updateApiKeys), []);
     const { getTableProps, getTableBodyProps, headers, rows, prepareRow } = useTable({
         columns,
-        data: templatesPrinted,
+        data: apiKeys,
     });
 
     return (
@@ -52,15 +59,15 @@ export const ApiKeys = (): JSX.Element => {
                     >
                         <thead>
                             <tr className='text-start text-muted fw-bolder fs-7 text-uppercase gs-0'>
-                                {headers.map((column: ColumnInstance<TemplatesPrintedRecord>) => (
-                                    <PrintedHeaderColumn key={column.id} column={column} />
+                                {headers.map((column: ColumnInstance<ApiKeyRecord>) => (
+                                    <ApiKeysHeaderColumn key={column.id} column={column} />
                                 ))}
                             </tr>
                         </thead>
                         <tbody className='text-gray-600 fw-bold' {...getTableBodyProps()}>
                             {rows.map((row: Row<any>) => {
                                 prepareRow(row);
-                                return <PrintedRow row={row} key={`${row.id}`} />;
+                                return <ApiKeysRow row={row} key={`${row.id}`} />;
                             })}
                         </tbody>
                     </table>

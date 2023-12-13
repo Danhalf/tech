@@ -1,12 +1,12 @@
 import clsx from 'clsx';
+import { ApiKeyRecord } from 'common/interfaces/UserApiKeys';
 import { Row } from 'react-table';
-import { TemplatesPrintedRecord } from 'common/interfaces/TemplatesPrintedData';
 
 type Props = {
-    row: Row<TemplatesPrintedRecord>;
+    row: Row<ApiKeyRecord>;
 };
 
-export const PrintedRow = ({ row }: Props) => {
+export const ApiKeysRow = ({ row }: Props) => {
     return (
         <tr {...row.getRowProps()}>
             {row.cells.map((cell) => {
