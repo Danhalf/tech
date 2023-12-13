@@ -5,8 +5,7 @@ import { ApiKeysColumns } from './ApiKeysTable/ApiKeysColumns';
 import { useToast } from 'components/dashboard/helpers/renderToastHelper';
 import { ApiKeysRow } from './ApiKeysTable/ApiKeysRow';
 import { ApiKeyRecord } from 'common/interfaces/UserApiKeys';
-import { getUserApiKeys } from './apiKeys.service';
-import { useParams } from 'react-router-dom';
+import { getUserApiKeysList } from './apiKeys.service';
 
 const initialApiKeysState = [
     {
@@ -26,14 +25,13 @@ const initialApiKeysState = [
     },
 ];
 
-export const ApiKeys = ({ useruid }: { useruid?: string }): JSX.Element => {
-    const { id } = useParams();
+export const ApiKeys = ({ useruid }: { useruid: string }): JSX.Element => {
     const [apiKeys, setApiKeys] = useState<ApiKeyRecord[]>(initialApiKeysState);
 
     const { handleShowToast } = useToast();
 
     const updateApiKeys = (): void => {
-        getUserApiKeys(useruid || id).then((response: any) => {
+        getUserApiKeysList(useruid).then((response: any) => {
             setApiKeys(response);
         });
     };
