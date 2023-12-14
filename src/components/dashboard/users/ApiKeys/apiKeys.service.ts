@@ -13,18 +13,14 @@ export const getApiKeysTypes = (): Promise<ApiTypesResponse> => {
     return fetchApiData<ApiTypesResponse>('GET', 'user/listapikeys');
 };
 
-export const setUserApiKey = (uid: string, data: unknown): Promise<any> => {
-    return fetchApiData('POST', `user/${uid}/permissions`, { data });
+export const setUserApiKey = (uid: string, data?: Partial<ApiKeyRecord>): Promise<any> => {
+    return fetchApiData('POST', `user/${uid}/apikeyset`, { data });
 };
 
-// export const deleteUser = (uid: string): Promise<ActionStatus> => {
-//     return fetchApiData<ActionStatus>('POST', `user/${uid}/delete`);
-// };
+export const deleteUserApiKey = (keyuid: string): Promise<any> => {
+    return fetchApiData('POST', `user/${keyuid}/apikeydelete`);
+};
 
-// export const setUserPermissions = (uid: string, data: unknown): Promise<ActionStatus> => {
-//     return fetchApiData('POST', `user/${uid}/permissions`, { data });
-// };
-
-// export const getUserPermissions = (uid: string): Promise<string> => {
-//     return fetchApiData<string>('GET', `user/${uid}/permissions`);
-// };
+export const undeleteUserApiKey = (keyuid: string): Promise<any> => {
+    return fetchApiData('POST', `user/${keyuid}/apikeyundelete`);
+};

@@ -61,7 +61,7 @@ export const ApiKeys = ({ useruid }: { useruid: string }): JSX.Element => {
                             </tr>
                         </thead>
                         <tbody className='text-gray-600 fw-bold' {...getTableBodyProps()}>
-                            {rows.map((row: Row<any>) => {
+                            {rows.map((row: Row<ApiKeyRecord>) => {
                                 prepareRow(row);
                                 return <ApiKeysRow row={row} key={`${row.id}`} />;
                             })}

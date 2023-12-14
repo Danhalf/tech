@@ -3,6 +3,7 @@ import { useToast } from 'components/dashboard/helpers/renderToastHelper';
 import { CustomDropdown } from 'components/dashboard/helpers/renderDropdownHelper';
 import { ApiKeyRecord } from 'common/interfaces/UserApiKeys';
 import { ApiKeyModal } from '../ApiKeysModal/ApiKeyModal';
+import { deleteUserApiKey } from '../apiKeys.service';
 
 interface ApiKeysActionsProps {
     item: Partial<ApiKeyRecord>;
@@ -10,19 +11,21 @@ interface ApiKeysActionsProps {
 }
 
 export const ApiKeysActions = ({ item, updateAction }: ApiKeysActionsProps) => {
-    const { handleShowToast } = useToast();
     const [addKeyModalEnabled, setAddKeyModalEnabled] = useState<boolean>(false);
     const [editKeyModalEnabled, setEditKeyModalEnabled] = useState<boolean>(false);
     const [showDeleteConfirm, setShowDeleteConfirm] = useState<boolean>(false);
     const [apiKey, setApiKey] = useState<boolean | null>(null);
 
-    const handleDeleteClick = () => {};
+    const handleDeleteClick = () => {
+        deleteUserApiKey(item.itemuid as string)
+        updateAction && updateAction()
+    };
 
     return (
         <>
             {addKeyModalEnabled && <ApiKeyModal onClose={() => setAddKeyModalEnabled(false)} />}
             {editKeyModalEnabled && (
-                <ApiKeyModal onClose={() => setEditKeyModalEnabled(false)} apiKey={item} />
+                <ApiKeyModal onClose={() => setEditKeyModalEnabled(false)} updateAction={updateAction} apiKey={item} />
             )}
             <CustomDropdown
                 title='Actions'
@@ -45,12 +48,6 @@ export const ApiKeysActions = ({ item, updateAction }: ApiKeysActionsProps) => {
                 ]}
             />
 
-            {/* <ConfirmModal
-                show={showDeleteConfirm}
-                onConfirm={handleDeleteConfirm}
-                onCancel={() => setShowDeleteConfirm(false)}
-                itemName={itemuid}
-            /> */}
         </>
     );
 };
