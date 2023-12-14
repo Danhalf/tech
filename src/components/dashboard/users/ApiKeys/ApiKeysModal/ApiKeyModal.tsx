@@ -35,6 +35,7 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
 
     useEffect(() => {
         getApiTypes();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleApiKeyTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
