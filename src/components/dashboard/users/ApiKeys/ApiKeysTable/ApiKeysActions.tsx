@@ -1,13 +1,7 @@
 import { useState } from 'react';
-import { Status } from 'common/interfaces/ActionStatus';
 import { useToast } from 'components/dashboard/helpers/renderToastHelper';
 import { CustomDropdown } from 'components/dashboard/helpers/renderDropdownHelper';
-import { ConfirmModal } from 'components/dashboard/helpers/modal/confirmModal';
-import { ApiKeyRecord, ApiTypes } from 'common/interfaces/UserApiKeys';
-import { getApiKey, getApiKeysTypes } from '../apiKeys.service';
-import { CustomModal } from 'components/dashboard/helpers/modal/renderModalHelper';
-import { Form, InputGroup } from 'react-bootstrap';
-import { CustomCheckbox, CustomTextInput } from 'components/dashboard/helpers/renderInputsHelper';
+import { ApiKeyRecord } from 'common/interfaces/UserApiKeys';
 import { ApiKeyModal } from '../ApiKeysModal/ApiKeyModal';
 
 interface ApiKeysActionsProps {

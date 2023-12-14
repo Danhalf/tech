@@ -11,7 +11,6 @@ import { useAuthInterceptor } from 'common/auth.interceptor';
 import { DataImport } from 'components/dashboard/common/DataImport/DataImport';
 import { TemplatesPrinted } from 'components/dashboard/common/TemplatesPrinted/TemplatesPrinted';
 import { TemplatesReports } from 'components/dashboard/common/TemplatesReports/TemplatesReports';
-import { ApiKeys } from 'components/dashboard/users/ApiKeys/ApiKeys';
 
 export function MasterInit() {
     const pluginsInitialization = () => {

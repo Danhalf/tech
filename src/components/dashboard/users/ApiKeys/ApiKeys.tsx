@@ -2,9 +2,8 @@ import { useState, useEffect, useMemo } from 'react';
 import { ColumnInstance, Row, useTable } from 'react-table';
 import { ApiKeysHeaderColumn } from './ApiKeysTable/ApiKeysHeaderColumn';
 import { ApiKeysColumns } from './ApiKeysTable/ApiKeysColumns';
-import { useToast } from 'components/dashboard/helpers/renderToastHelper';
 import { ApiKeysRow } from './ApiKeysTable/ApiKeysRow';
-import { ApiKeyRecord } from 'common/interfaces/UserApiKeys';
+import { ApiKeyRecord, ApiTypeName } from 'common/interfaces/UserApiKeys';
 import { getUserApiKeysList } from './apiKeys.service';
 
 const initialApiKeysState = [
@@ -17,7 +16,7 @@ const initialApiKeysState = [
         lastused: '',
         flags: 0,
         enabled: 0,
-        apitype: '',
+        apitype: ApiTypeName.DEFAULT,
         useruid: '',
         itemuid: '',
         apikey: '',
@@ -27,9 +26,7 @@ const initialApiKeysState = [
 ];
 
 export const ApiKeys = ({ useruid }: { useruid: string }): JSX.Element => {
-    const [apiKeys, setApiKeys] = useState<ApiKeyRecord[]>(initialApiKeysState);
-
-    const { handleShowToast } = useToast();
+    const [apiKeys, setApiKeys] = useState<ApiKeyRecord[]>(initialApiKeysState as ApiKeyRecord[]);
 
     const updateApiKeys = (): void => {
         getUserApiKeysList(useruid).then((response: any) => {

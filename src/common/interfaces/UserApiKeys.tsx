@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 import { Status } from './ActionStatus';
 
+export type ApiKeyEnabled = 0 | 1;
+
 export interface ApiKeyRecord {
     created: string;
     deleted: string;
@@ -9,8 +11,8 @@ export interface ApiKeyRecord {
     expirationdate: string;
     lastused: string;
     flags: number;
-    enabled: number;
-    apitype: string;
+    enabled: ApiKeyEnabled;
+    apitype: ApiTypeName;
     useruid: string;
     itemuid: string;
     apikey: string;
@@ -18,7 +20,7 @@ export interface ApiKeyRecord {
     id: number;
 }
 
-enum ApiTypeName {
+export enum ApiTypeName {
     DEFAULT = 'Default',
     KBB = 'KBB',
     EDMUNDS = 'Edmunds',
