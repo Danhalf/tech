@@ -128,13 +128,16 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
                     />
                 </Form.Group>
 
-                <Form.Select value={apiKeyType} onChange={handleApiKeyTypeChange}>
-                    {apiKeyTypes?.map(({ id, name }) => (
-                        <option key={String(id)} value={id}>
-                            {name}
-                        </option>
-                    ))}
-                </Form.Select>
+                <Form.Group>
+                    <label className='form-label mb-0'>API key type</label>
+                    <Form.Select value={apiKeyType} onChange={handleApiKeyTypeChange}>
+                        {apiKeyTypes?.map(({ id, name }) => (
+                            <option key={String(id)} value={id}>
+                                {name}
+                            </option>
+                        ))}
+                    </Form.Select>
+                </Form.Group>
                 <Form.Group>
                     <label className='form-label mb-0'>User uID</label>
                     <Form.Control

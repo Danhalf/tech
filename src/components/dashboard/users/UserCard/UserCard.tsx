@@ -46,7 +46,7 @@ const userCardTabsArray: string[] = Object.values(UserCardTabs) as string[];
 
 export function UserCard() {
     const { id } = useParams();
-    const [activeTab, setActiveTab] = useState<UserCardTabs>(UserCardTabs.ApiKeys);
+    const [activeTab, setActiveTab] = useState<UserCardTabs>(UserCardTabs.Profile);
     const [profileJson, setProfileJson] = useState<string>('');
     const [extendedInfoJSON, setExtendedInfoJSON] = useState<string>('');
     const [shortInfoJSON, setShortInfoJSON] = useState<string>('');
@@ -117,7 +117,7 @@ export function UserCard() {
                 const updatedJsonObject = { [fieldName]: fieldValue, ...jsonObject };
                 return JSON.stringify(updatedJsonObject, null, 2);
             }
-        } catch (err) { }
+        } catch (err) {}
 
         return jsonString;
     };
