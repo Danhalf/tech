@@ -5,12 +5,16 @@ export const getUserApiKeysList = (useruid: string): Promise<ApiKeyRecord[]> => 
     return fetchApiData<ApiKeyRecord[]>('GET', `user/${useruid}/apikeys`);
 };
 
-export const getApiKey = (keyuid: string): Promise<any[]> => {
-    return fetchApiData<any[]>('GET', `user/${keyuid}/apikey`);
+export const getApiKey = (keyuid: string): Promise<ApiKeyRecord[]> => {
+    return fetchApiData<ApiKeyRecord[]>('GET', `user/${keyuid}/apikey`);
 };
 
 export const getApiKeysTypes = (): Promise<ApiTypesResponse> => {
     return fetchApiData<ApiTypesResponse>('GET', 'user/listapikeys');
+};
+
+export const setUserApiKey = (uid: string, data: unknown): Promise<any> => {
+    return fetchApiData('POST', `user/${uid}/permissions`, { data });
 };
 
 // export const deleteUser = (uid: string): Promise<ActionStatus> => {
