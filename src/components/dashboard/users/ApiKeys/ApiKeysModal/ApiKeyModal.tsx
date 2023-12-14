@@ -6,23 +6,30 @@ import { Form } from 'react-bootstrap';
 import { getApiKeysTypes, setUserApiKey } from '../apiKeys.service';
 import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton';
 import { useParams } from 'react-router-dom';
+import { Status } from 'common/interfaces/ActionStatus';
 
 interface ApiKeyModalProps {
     onClose: () => void;
     apiKey?: Partial<ApiKeyRecord>;
-    updateAction?: () => void
+    updateAction?: () => void;
 }
 
 export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps): JSX.Element => {
-    const { id: useruid } = useParams()
+    const { id: useruid } = useParams();
     const [apiKeyTypes, setApiKeyTypes] = useState<ApiTypes[] | null>(null);
-    const [apiKeyType, setApiKeyType] = useState<ApiTypeName | undefined>(apiKey?.apitype);
-    const [apiKeyNotes, setApiKeyNotes] = useState<string | undefined>(apiKey?.notes);
+    const [apiKeyType, setApiKeyType] = useState<ApiTypeName>(
+        apiKey?.apitype || ApiTypeName.DEFAULT
+    );
+    const [apiKeyValue, setApiKeyValue] = useState<string>(apiKey?.apikey || '');
+    const [apiKeyIssue, setApiKeyIssue] = useState<string>(apiKey?.issuedate || '');
+    const [apiKeyExpiration, setApiKeyExpiration] = useState<string>(apiKey?.expirationdate || '');
+    const [apiKeyNotes, setApiKeyNotes] = useState<string>(apiKey?.notes || '');
     const [apiKeyEnabled, setApiKeyEnabled] = useState<ApiKeyEnabled | 0>(apiKey?.enabled || 0);
 
     const getApiTypes = () => {
         getApiKeysTypes().then((res) => {
             setApiKeyTypes(res.api_types);
+            updateAction && updateAction();
         });
     };
 
@@ -34,45 +41,93 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
         setApiKeyType(e.target.value as ApiTypeName);
     };
 
-    const handleApiKeyNotesChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-        setApiKeyNotes(e.target.value);
-    };
-
     const handleApiKeyEnabledChange = () => {
         setApiKeyEnabled((prevEnabled) => (prevEnabled ? 0 : 1));
     };
 
     const handleSave = () => {
+        setUserApiKey(useruid as string, {
+            ...apiKey,
+            issuedate: apiKeyIssue,
+            expirationdate: apiKeyExpiration,
+            enabled: apiKeyEnabled,
+            apitype: apiKeyType,
+            notes: apiKeyNotes,
+            apikey: apiKeyValue,
+        }).then((res) => {
+            if (res.status === Status.OK) updateAction && updateAction();
+        });
+
         onClose();
     };
-
-    const handleCreate = () => {
-        setUserApiKey(useruid as string, { apitype: apiKeyType, notes: apiKeyNotes }).then((res: any) => {
-
-        })
-        updateAction && updateAction()
-        onClose();
-    }
 
     return (
         <CustomModal onClose={onClose} width={800} title={`${apiKey ? 'Edit' : 'Add'} API key`}>
             <Form.Group className='d-flex flex-column row-gap-4'>
-                {apiKey && (
-                    <>
-                        <CustomCheckbox
-                            currentValue={apiKeyEnabled}
-                            id={apiKey.apikey || 'apikey'}
-                            name={apiKey.apikey || 'api_key'}
-                            title='API key enabled'
-                            action={handleApiKeyEnabledChange}
-                        /><Form.Control
-                            value={apiKey.apikey as string}
-                            disabled
-                            id={apiKey?.itemuid as string}
-                            name='Current API key'
-                        />
-                    </>
-                )}
+                <Form.Group>
+                    <label className='form-label mb-0'>Created API key</label>
+                    <Form.Control
+                        value={apiKey?.created as string}
+                        disabled
+                        id={apiKey?.created as string}
+                        name='Created API key'
+                    />
+                </Form.Group>
+                <Form.Group>
+                    <label className='form-label mb-0'>Deleted API key</label>
+                    <Form.Control
+                        value={apiKey?.deleted as string}
+                        disabled
+                        id={apiKey?.deleted as string}
+                        name='Deleted API key'
+                    />
+                </Form.Group>
+                <Form.Group>
+                    <label className='form-label mb-0'>Updated API key</label>
+                    <Form.Control
+                        value={apiKey?.updated as string}
+                        disabled
+                        id={apiKey?.updated as string}
+                        name='Updated API key'
+                    />
+                </Form.Group>
+                <Form.Group>
+                    <label className='form-label mb-0'>Issue date API key</label>
+                    <Form.Control
+                        value={apiKeyIssue}
+                        id={apiKeyIssue}
+                        onChange={({ target }) => setApiKeyIssue(target.value)}
+                        name='Issue API key'
+                    />
+                </Form.Group>
+                <Form.Group>
+                    <label className='form-label mb-0'>Expiration date API key</label>
+                    <Form.Control
+                        value={apiKeyExpiration}
+                        id={apiKeyExpiration}
+                        onChange={({ target }) => setApiKeyExpiration(target.value)}
+                        name='Expiration API key'
+                    />
+                </Form.Group>
+                <Form.Group>
+                    <label className='form-label mb-0'>Last used date API key</label>
+                    <Form.Control
+                        value={apiKey?.lastused as string}
+                        disabled
+                        id={apiKey?.lastused as string}
+                        name='Last used API key'
+                    />
+                </Form.Group>
+                <Form.Group>
+                    <label className='form-label mb-0'>Flags API key</label>
+                    <Form.Control
+                        value={apiKey?.flags as number}
+                        disabled
+                        id={String(apiKey?.flags)}
+                        name='Flags API key'
+                    />
+                </Form.Group>
+
                 <Form.Select value={apiKeyType} onChange={handleApiKeyTypeChange}>
                     {apiKeyTypes?.map(({ id, name }) => (
                         <option key={String(id)} value={id}>
@@ -80,21 +135,60 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
                         </option>
                     ))}
                 </Form.Select>
-                <Form.Control
-                    as='textarea'
-                    value={apiKeyNotes}
-                    onChange={handleApiKeyNotesChange}
-                    placeholder='Leave notes here'
+                <Form.Group>
+                    <label className='form-label mb-0'>User uID</label>
+                    <Form.Control
+                        value={apiKey?.useruid}
+                        disabled
+                        id={String(apiKey?.useruid)}
+                        name='User uid'
+                    />
+                </Form.Group>
+                <Form.Group>
+                    <label className='form-label mb-0'>Item uID</label>
+                    <Form.Control
+                        value={apiKey?.itemuid}
+                        disabled
+                        id={String(apiKey?.itemuid)}
+                        name='Item uid'
+                    />
+                </Form.Group>
+                <Form.Group>
+                    <label className='form-label mb-0'>Api key</label>
+                    <Form.Control
+                        as='textarea'
+                        value={apiKeyValue}
+                        onChange={({ target }) => setApiKeyValue(target.value)}
+                        placeholder='Api key value'
+                    />
+                </Form.Group>
+                <Form.Group>
+                    <label className='form-label mb-0'>Api notes</label>
+                    <Form.Control
+                        as='textarea'
+                        value={apiKeyNotes}
+                        onChange={({ target }) => setApiKeyNotes(target.value)}
+                        placeholder='Leave notes here'
+                    />
+                </Form.Group>
+                <CustomCheckbox
+                    currentValue={apiKeyEnabled}
+                    id={apiKey?.apikey as string}
+                    name='API key enabled'
+                    title='API key enabled'
+                    action={handleApiKeyEnabledChange}
                 />
+
                 <div className='mt-12 d-flex justify-content-center align-content-center'>
-                    {apiKey
-                        ? <PrimaryButton type='button' buttonClickAction={handleSave}>
+                    {apiKey ? (
+                        <PrimaryButton type='button' buttonClickAction={handleSave}>
                             Save changes
                         </PrimaryButton>
-                        : <PrimaryButton type='button' buttonClickAction={handleCreate}>
+                    ) : (
+                        <PrimaryButton type='button' buttonClickAction={handleSave}>
                             Create
-                        </PrimaryButton>}
-
+                        </PrimaryButton>
+                    )}
                 </div>
             </Form.Group>
         </CustomModal>

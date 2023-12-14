@@ -5,6 +5,8 @@ import { ApiKeysColumns } from './ApiKeysTable/ApiKeysColumns';
 import { ApiKeysRow } from './ApiKeysTable/ApiKeysRow';
 import { ApiKeyRecord, ApiTypeName } from 'common/interfaces/UserApiKeys';
 import { getUserApiKeysList } from './apiKeys.service';
+import { ApiKeyModal } from './ApiKeysModal/ApiKeyModal';
+import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton';
 
 const initialApiKeysState = [
     {
@@ -27,6 +29,7 @@ const initialApiKeysState = [
 
 export const ApiKeys = ({ useruid }: { useruid: string }): JSX.Element => {
     const [apiKeys, setApiKeys] = useState<ApiKeyRecord[]>(initialApiKeysState as ApiKeyRecord[]);
+    const [addKeyModalEnabled, setAddKeyModalEnabled] = useState<boolean>(false);
 
     const updateApiKeys = (): void => {
         getUserApiKeysList(useruid).then((response: any) => {
@@ -46,6 +49,11 @@ export const ApiKeys = ({ useruid }: { useruid: string }): JSX.Element => {
 
     return (
         <div className='card'>
+            <div className='me-4 mt-4 ms-auto'>
+                <PrimaryButton icon='plus' buttonClickAction={() => setAddKeyModalEnabled(true)}>
+                    Add API key
+                </PrimaryButton>
+            </div>
             <div className='card-body'>
                 <div className='table-responsive position-relative '>
                     <table
@@ -69,6 +77,13 @@ export const ApiKeys = ({ useruid }: { useruid: string }): JSX.Element => {
                     </table>
                 </div>
             </div>
+
+            {addKeyModalEnabled && (
+                <ApiKeyModal
+                    updateAction={updateApiKeys}
+                    onClose={() => setAddKeyModalEnabled(false)}
+                />
+            )}
         </div>
     );
 };
