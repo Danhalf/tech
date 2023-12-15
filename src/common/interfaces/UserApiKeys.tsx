@@ -7,8 +7,8 @@ export interface ApiKeyRecord {
     created: string;
     deleted: string;
     updated: string;
-    issuedate: string;
-    expirationdate: string;
+    issuedate: number;
+    expirationdate: number;
     lastused: string;
     flags: number;
     enabled: ApiKeyEnabled;

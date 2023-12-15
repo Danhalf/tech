@@ -14,6 +14,8 @@ interface ApiKeyModalProps {
     updateAction?: () => void;
 }
 
+const defaultDate = new Date().getTime();
+
 export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps): JSX.Element => {
     const { id: useruid } = useParams();
     const [apiKeyTypes, setApiKeyTypes] = useState<ApiTypes[] | null>(null);
@@ -21,8 +23,10 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
         apiKey?.apitype || ApiTypeName.DEFAULT
     );
     const [apiKeyValue, setApiKeyValue] = useState<string>(apiKey?.apikey || '');
-    const [apiKeyIssue, setApiKeyIssue] = useState<any>(apiKey?.issuedate || '');
-    const [apiKeyExpiration, setApiKeyExpiration] = useState<any>(apiKey?.expirationdate || '');
+    const [apiKeyIssue, setApiKeyIssue] = useState<number | Date>(apiKey?.issuedate || defaultDate);
+    const [apiKeyExpiration, setApiKeyExpiration] = useState<number | Date>(
+        apiKey?.expirationdate || defaultDate
+    );
     const [apiKeyNotes, setApiKeyNotes] = useState<string>(apiKey?.notes || '');
     const [apiKeyEnabled, setApiKeyEnabled] = useState<ApiKeyEnabled | 0>(apiKey?.enabled || 0);
 
@@ -49,8 +53,8 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
     const handleSave = () => {
         setUserApiKey(useruid as string, {
             ...apiKey,
-            issuedate: apiKeyIssue,
-            expirationdate: apiKeyExpiration,
+            issuedate: Number(apiKeyIssue),
+            expirationdate: Number(apiKeyExpiration),
             enabled: apiKeyEnabled,
             apitype: apiKeyType,
             notes: apiKeyNotes,
@@ -61,11 +65,6 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
 
         onClose();
     };
-
-    useEffect(() => {
-        // eslint-disable-next-line no-console
-        console.log(apiKeyIssue);
-    }, [apiKeyIssue]);
 
     return (
         <CustomModal onClose={onClose} width={800} title={`${apiKey ? 'Edit' : 'Add'} API key`}>
@@ -104,7 +103,9 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
                         className='form-control'
                         name='Issue API key'
                         value={new Date(apiKeyIssue).toISOString().split('T')[0]}
-                        onChange={({ target }) => setApiKeyIssue(target.valueAsNumber)}
+                        onChange={({ target }) =>
+                            setApiKeyIssue(target.valueAsNumber || defaultDate)
+                        }
                     />
                 </Form.Group>
                 <Form.Group>
@@ -114,7 +115,9 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
                         className='form-control'
                         name='Expiration API key'
                         value={new Date(apiKeyExpiration).toISOString().split('T')[0]}
-                        onChange={({ target }) => setApiKeyExpiration(target.valueAsNumber)}
+                        onChange={({ target }) =>
+                            setApiKeyExpiration(target.valueAsNumber || defaultDate)
+                        }
                     />
                 </Form.Group>
                 <Form.Group>

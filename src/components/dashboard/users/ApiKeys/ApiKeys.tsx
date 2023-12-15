@@ -9,13 +9,15 @@ import { getUserApiKeysList } from './apiKeys.service';
 import { ApiKeyModal } from './ApiKeysModal/ApiKeyModal';
 import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton';
 
+const defaultDate = new Date().getTime();
+
 const initialApiKeysState: ApiKeyRecord[] = [
     {
         created: '',
         deleted: '',
         updated: '',
-        issuedate: '',
-        expirationdate: '',
+        issuedate: defaultDate,
+        expirationdate: defaultDate,
         lastused: '',
         flags: 0,
         enabled: 0,
