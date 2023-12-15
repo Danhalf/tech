@@ -14,6 +14,13 @@ interface ApiKeyModalProps {
     updateAction?: () => void;
 }
 
+const formatDateToInputString = (date: Date) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+};
+
 const defaultDate = new Date().getTime();
 
 export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps): JSX.Element => {
@@ -102,10 +109,8 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
                         type='date'
                         className='form-control'
                         name='Issue API key'
-                        value={new Date(apiKeyIssue).toISOString().split('T')[0]}
-                        onChange={({ target }) =>
-                            setApiKeyIssue(target.valueAsNumber || defaultDate)
-                        }
+                        value={formatDateToInputString(new Date(apiKeyIssue))}
+                        onChange={({ target }) => setApiKeyIssue(new Date(target.value).getTime())}
                     />
                 </Form.Group>
                 <Form.Group>
@@ -114,9 +119,9 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
                         type='date'
                         className='form-control'
                         name='Expiration API key'
-                        value={new Date(apiKeyExpiration).toISOString().split('T')[0]}
+                        value={formatDateToInputString(new Date(apiKeyExpiration))}
                         onChange={({ target }) =>
-                            setApiKeyExpiration(target.valueAsNumber || defaultDate)
+                            setApiKeyExpiration(new Date(target.value).getTime())
                         }
                     />
                 </Form.Group>
