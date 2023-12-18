@@ -40,7 +40,7 @@ const Content = () => {
                     <Route path='data-import' element={<DataImport />} />
                     <Route path='template-reports' element={<TemplatesReports />} />
                     <Route path='template-printed' element={<TemplatesPrinted />} />
-                    <Route path='user/:id' element={<UserCard />} />
+                    <Route path='user/:id' element={<UserCard />} />\
                 </Route>
             </Routes>
         </div>

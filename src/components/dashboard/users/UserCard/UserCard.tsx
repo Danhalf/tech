@@ -23,6 +23,7 @@ import { Status } from 'common/interfaces/ActionStatus';
 import { UserStatistics } from './UserStatistics';
 import { UserTemplatesReports } from './TemplatesReports';
 import { UserTemplatesPrintedForm } from './TemplatesPrintedForm';
+import { ApiKeys } from '../ApiKeys/ApiKeys';
 
 enum UserCardTabs {
     Profile = 'Profile',
@@ -38,13 +39,14 @@ enum UserCardTabs {
     Statistics = 'Statistics',
     TemplatesForReports = 'Templates for reports',
     TemplatesForPrintedForms = 'Templates for printed forms',
+    ApiKeys = 'Api Keys',
 }
 
 const userCardTabsArray: string[] = Object.values(UserCardTabs) as string[];
 
 export function UserCard() {
     const { id } = useParams();
-    const [activeTab, setActiveTab] = useState('Statistics');
+    const [activeTab, setActiveTab] = useState<UserCardTabs>(UserCardTabs.Profile);
     const [profileJson, setProfileJson] = useState<string>('');
     const [extendedInfoJSON, setExtendedInfoJSON] = useState<string>('');
     const [shortInfoJSON, setShortInfoJSON] = useState<string>('');
@@ -160,7 +162,7 @@ export function UserCard() {
     };
 
     const handleTabClick = (tab: string) => {
-        setActiveTab(tab);
+        setActiveTab(tab as UserCardTabs);
     };
 
     return (
@@ -233,17 +235,23 @@ export function UserCard() {
                         <UserStatistics data={userStatisticsJSON} />
                     </TabPanel>
                     {id && (
-                        <TabPanel activeTab={activeTab} tabName={UserCardTabs.TemplatesForReports}>
-                            <UserTemplatesReports useruid={id} />
-                        </TabPanel>
-                    )}
-                    {id && (
-                        <TabPanel
-                            activeTab={activeTab}
-                            tabName={UserCardTabs.TemplatesForPrintedForms}
-                        >
-                            <UserTemplatesPrintedForm useruid={id} />
-                        </TabPanel>
+                        <>
+                            <TabPanel
+                                activeTab={activeTab}
+                                tabName={UserCardTabs.TemplatesForReports}
+                            >
+                                <UserTemplatesReports useruid={id} />
+                            </TabPanel>
+                            <TabPanel
+                                activeTab={activeTab}
+                                tabName={UserCardTabs.TemplatesForPrintedForms}
+                            >
+                                <UserTemplatesPrintedForm useruid={id} />
+                            </TabPanel>
+                            <TabPanel activeTab={activeTab} tabName={UserCardTabs.ApiKeys}>
+                                <ApiKeys useruid={id} />
+                            </TabPanel>
+                        </>
                     )}
                 </div>
             </div>
