@@ -51,7 +51,7 @@ export const uploadReportsFile = (file: File, itemuid?: string): Promise<any> =>
 };
 
 export const downloadReportsItem = (itemuid: string): Promise<any> => {
-    return fetchApiData<any>('GET', `reports/${itemuid}/get`);
+    return fetchApiData<any>('GET', `reports/${itemuid}/get`, { responseType: 'blob' });
 };
 
 export const getTemplatePrints = (useruid?: string): Promise<TemplatesPrintedData> => {
