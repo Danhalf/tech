@@ -44,7 +44,7 @@ export const TemplatesPrinted = ({ useruid }: { useruid?: string }): JSX.Element
 
     const handleFileUpload = (file: File) => {
         setIsDisabled(true);
-        uploadPrintFile(file)
+        uploadPrintFile(file, useruid)
             .then((response) => {
                 if (response.status === Status.OK) {
                     handleShowToast({
