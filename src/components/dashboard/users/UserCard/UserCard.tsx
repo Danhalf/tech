@@ -24,6 +24,8 @@ import { UserStatistics } from './UserStatistics';
 import { UserTemplatesReports } from './TemplatesReports';
 import { UserTemplatesPrintedForm } from './TemplatesPrintedForm';
 import { ApiKeys } from '../ApiKeys/ApiKeys';
+import { LOC_STORAGE_USER } from 'common/app-consts';
+import { LoginResponse } from 'common/auth.service';
 
 enum UserCardTabs {
     Profile = 'Profile',
@@ -46,6 +48,7 @@ const userCardTabsArray: string[] = Object.values(UserCardTabs) as string[];
 
 export function UserCard() {
     const { id } = useParams();
+    const { useruid }: LoginResponse = JSON.parse(localStorage.getItem(LOC_STORAGE_USER) ?? '');
     const [activeTab, setActiveTab] = useState<UserCardTabs>(UserCardTabs.Profile);
     const [profileJson, setProfileJson] = useState<string>('');
     const [extendedInfoJSON, setExtendedInfoJSON] = useState<string>('');
@@ -240,13 +243,13 @@ export function UserCard() {
                                 activeTab={activeTab}
                                 tabName={UserCardTabs.TemplatesForReports}
                             >
-                                <UserTemplatesReports useruid={id} />
+                                <UserTemplatesReports useruid={useruid} />
                             </TabPanel>
                             <TabPanel
                                 activeTab={activeTab}
                                 tabName={UserCardTabs.TemplatesForPrintedForms}
                             >
-                                <UserTemplatesPrintedForm useruid={id} />
+                                <UserTemplatesPrintedForm useruid={useruid} />
                             </TabPanel>
                             <TabPanel activeTab={activeTab} tabName={UserCardTabs.ApiKeys}>
                                 <ApiKeys useruid={id} />
