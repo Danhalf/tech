@@ -90,6 +90,7 @@ export function DashboardHeader() {
                                     ]}
                                 />
                             </div>
+
                             <div className='menu-item me-lg-1 ms-auto'>
                                 <CustomDropdown
                                     title={loginname}
