@@ -5,12 +5,16 @@ export enum Status {
     ERROR = 'Error',
 }
 
-export interface ServiceStopResponse {
+export interface ServiceResponse {
     error: string;
     info: string;
     status: string;
 }
 
+export interface ServiceStopResponse extends ServiceResponse {}
+export interface ServiceCheckDBResponse extends ServiceResponse {}
+
 export interface ActionStatus {
     status: Status;
+    warning?: string;
 }

@@ -3,14 +3,14 @@ import * as Yup from 'yup';
 import { useFormik } from 'formik';
 import { HTMLInputTypeAttribute, useState } from 'react';
 import { createOrUpdateUser } from 'components/dashboard/users/user.service';
-import { TOAST_DURATION, useToast } from 'components/dashboard/helpers/renderToastHelper';
-import { AxiosError } from 'axios';
-import { User, UserInputData } from 'common/interfaces/UserData';
+import { useToast } from 'components/dashboard/helpers/renderToastHelper';
+import { User, UserInputData, UsersType } from 'common/interfaces/UserData';
+import { useQueryResponse } from 'common/core/QueryResponseProvider';
+import { Status } from 'common/interfaces/ActionStatus';
 
 interface UserModalProps {
     onClose: () => void;
     user?: User;
-    updateData?: () => void;
 }
 
 interface UserModalData extends UserInputData {
@@ -25,13 +25,13 @@ enum PassIcon {
     HIDDEN = 'ki-eye-slash',
 }
 
-export const UserModal = ({ onClose, user, updateData }: UserModalProps): JSX.Element => {
+export const UserModal = ({ onClose, user }: UserModalProps): JSX.Element => {
     const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
     const [passwordFieldType, setPasswordFieldType] = useState<HTMLInputTypeAttribute>('password');
     const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState<boolean>(false);
     const [confirmPasswordFieldType, setConfirmPasswordFieldType] =
         useState<HTMLInputTypeAttribute>('password');
-    const [, setHasServerError] = useState<boolean>(false);
+    const { refetch } = useQueryResponse(UsersType.ACTIVE);
 
     const initialUserData: UserModalData = {
         username: user?.username || '',
@@ -100,23 +100,18 @@ export const UserModal = ({ onClose, user, updateData }: UserModalProps): JSX.El
                         ? `<strong>${username}</strong> password successfully updated`
                         : `User <strong>${username}</strong> successfully created`;
 
-                if (!responseData.error) {
+                if (responseData.status === Status.OK) {
                     handleShowToast({
                         message,
                         type: 'success',
                     });
                     onClose();
-                    updateData && updateData();
-                } else {
-                    setHasServerError(responseData.error);
-                    setTimeout(() => {
-                        setHasServerError(false);
-                    }, TOAST_DURATION);
-                    throw new Error(responseData.error);
+                    refetch();
                 }
-            } catch (err) {
-                const { message } = err as Error | AxiosError;
-                handleShowToast({ message, type: 'danger' });
+            } catch (err: any) {
+                const { warning, error } = err.data;
+                const errorMessage = warning || error;
+                handleShowToast({ message: errorMessage, type: 'danger' });
             } finally {
                 setSubmitting(false);
             }
@@ -231,7 +226,7 @@ export const UserModal = ({ onClose, user, updateData }: UserModalProps): JSX.El
                         />
                     </div>
                 </div>
-                <div className='text-center pt-15'>
+                <div className='mt-12 d-flex justify-content-center align-content-center'>
                     <button
                         type='submit'
                         className='btn btn-primary'

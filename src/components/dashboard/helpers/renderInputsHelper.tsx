@@ -1,28 +1,50 @@
+/* eslint-disable no-unused-vars */
+import { SettingKey } from 'common/interfaces/users/UserConsts';
 import { ChangeEvent, useEffect, useState } from 'react';
+import clsx from 'clsx';
 
 interface CustomInputProps {
     currentValue: number;
     id: string;
     name: string;
-    title: string;
+    title?: string;
     disabled?: boolean;
 }
 
 interface CustomCheckboxProps extends CustomInputProps {
     action?: (value: [string, number]) => void;
 }
-interface CustomTextInputProps extends CustomInputProps {
-    action?: (event: ChangeEvent<HTMLInputElement>) => void;
+interface CustomTextInputProps extends Omit<CustomInputProps, 'currentValue'> {
+    currentValue: string;
+    action?: (inputData: [string, string]) => void;
 }
 
 interface CustomRadioButtonProps extends CustomInputProps {
-    options: RadioButtonOption[];
-    action: (value: [string, string]) => void;
+    action?: (inputData: [string, number, SettingKey]) => void;
+    group: SettingKey;
 }
 
-interface RadioButtonOption {
-    value: number;
-    label: string;
+interface CustomRangeInputProps extends CustomInputProps {
+    group: string;
+    minValue: number;
+    maxValue: number;
+    step: number;
+    action?: (inputData: [string, number]) => void;
+}
+
+interface CustomUploadInputProps extends Omit<CustomInputProps, 'currentValue'> {
+    action: (file: File) => void;
+    filetype?: 'pdf';
+}
+
+export enum InputType {
+    DISABLED = 'disabledInput',
+    TEXT = 'textInput',
+    CHECKBOX = 'checkboxInput',
+    RANGE = 'rangeInput',
+    RADIO = 'radioInput',
+    SELECT = 'selectInput',
+    DEFAULT = 'defaultInput',
 }
 
 export const CustomCheckbox = ({ currentValue, id, name, title, action }: CustomCheckboxProps) => {
@@ -73,10 +95,12 @@ export const CustomTextInput = ({
     action,
     disabled,
 }: CustomTextInputProps): JSX.Element => {
-    const handleInputAction = (event: ChangeEvent<HTMLInputElement>) => {
-        if (disabled) return;
+    const [inputValue, setInputValue] = useState(currentValue);
+    const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const newValue = String(event.target.value).replace(/[^0-9.,]/g, '');
         if (action) {
-            action(event);
+            setInputValue(newValue);
+            action([name, newValue]);
         }
     };
     return (
@@ -92,8 +116,8 @@ export const CustomTextInput = ({
                     className='form-control bg-transparent'
                     name={name}
                     type={'text'}
-                    value={currentValue}
-                    onChange={handleInputAction}
+                    value={inputValue}
+                    onChange={handleInputChange}
                 />
             </div>
         </div>
@@ -101,54 +125,122 @@ export const CustomTextInput = ({
 };
 
 export const CustomRadioButton = ({
+    id,
+    group,
     currentValue,
+    name,
+    title,
+    action,
+}: CustomRadioButtonProps) => {
+    const handleRadioChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const newValue = event.target.value ? 1 : 0;
+        if (action) {
+            action([name, newValue, group]);
+        }
+    };
+    return (
+        <div className='mb-4'>
+            <div key={id}>
+                <div className='form-check form-check-custom form-check-solid'>
+                    <div className='me-10' key={id}>
+                        <input
+                            className='form-check-input cursor-pointer'
+                            type='radio'
+                            checked={currentValue === 1}
+                            name={group}
+                            id={`radio-${id}-${currentValue}`}
+                            onChange={handleRadioChange}
+                        />
+                        <label
+                            className='form-check-label cursor-pointer'
+                            htmlFor={`radio-${id}-${currentValue}`}
+                        >
+                            {title}
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export const CustomRangeInput = ({
     id,
     name,
     title,
-    options,
+    minValue,
+    maxValue,
+    step,
+    currentValue,
     action,
-}: CustomRadioButtonProps) => {
-    const [selectedValue, setSelectedValue] = useState<number>(currentValue);
-    const [isLoading, setIsLoading] = useState(false);
-
-    const handleRadioChange = (event: ChangeEvent<HTMLInputElement>) => {
-        const newValue = event.target.value;
-        setSelectedValue(Number(newValue));
-
+}: CustomRangeInputProps) => {
+    const [inputValue, setInputValue] = useState(currentValue);
+    const handleRangeChange = (event: ChangeEvent<HTMLInputElement>) => {
+        const newValue = Number(event.target.value);
         if (action) {
-            setIsLoading(true);
+            setInputValue(newValue);
             action([name, newValue]);
         }
     };
 
-    useEffect(() => {
-        setIsLoading(false);
-    }, [name, selectedValue, action]);
-
     return (
         <div className='mb-4'>
-            <span className='d-inline-block mb-2 form-check-label'>{title}</span>
-            <div className='form-check form-check-custom form-check-solid'>
-                {options.map((option, key) => (
-                    <div className='me-10' key={id + key}>
-                        <input
-                            className='form-check-input cursor-pointer'
-                            type='radio'
-                            value={option.value}
-                            checked={selectedValue === option.value}
-                            onChange={handleRadioChange}
-                            id={`radio-${id}-${option.value}`}
-                            disabled={isLoading}
-                        />
-                        <label
-                            className='form-check-label cursor-pointer'
-                            htmlFor={`radio-${id}-${option.value}`}
-                        >
-                            {option.label}
-                        </label>
-                    </div>
-                ))}
+            <label htmlFor={`range-${id}`} className='form-label fs-6 fw-bolder'>
+                {title}: {inputValue}
+            </label>
+            <input
+                type='range'
+                className='form-range'
+                id={`range-${id}`}
+                name={name}
+                min={minValue}
+                max={maxValue}
+                step={step}
+                value={inputValue}
+                onChange={handleRangeChange}
+            />
+            <div className='d-flex justify-content-between'>
+                <span>{minValue}</span>
+                <span>{maxValue}</span>
             </div>
         </div>
+    );
+};
+
+export const CustomUploadInput = ({
+    id,
+    name,
+    filetype,
+    action,
+    disabled,
+}: CustomUploadInputProps) => {
+    const handleFileChange = async (event: ChangeEvent<HTMLInputElement>) => {
+        const [file] = event.target.files || [];
+
+        if (file && action) {
+            await action(file);
+        }
+    };
+
+    return (
+        <>
+            <input
+                id={id}
+                name={name}
+                type='file'
+                accept={`application/${filetype}`}
+                className='invisible'
+                onChange={handleFileChange}
+                disabled={disabled}
+            />
+            <label
+                className={clsx('btn btn-primary', {
+                    disabled,
+                })}
+                htmlFor={id}
+            >
+                Upload
+            </label>
+        </>
     );
 };

@@ -72,6 +72,9 @@ export const UserPermissionsModal = ({
         try {
             if (useruid) {
                 const response = await setUserPermissions(useruid, JSON.parse(userPermissionsJSON));
+                if (response.warning) {
+                    throw new Error(response.warning);
+                }
                 if (response.status === Status.OK) {
                     handleShowToast({
                         message: `<strong>${username}</strong> permissions successfully saved`,
@@ -96,13 +99,15 @@ export const UserPermissionsModal = ({
                     checkbox: true,
                     action: handleChangeUserPermissions,
                 })}
-            <PrimaryButton
-                icon='check'
-                disabled={isButtonDisabled}
-                buttonClickAction={handleSetUserPermissions}
-            >
-                Save {username} permissions
-            </PrimaryButton>
+            <div className='mt-12 d-flex justify-content-center align-content-center'>
+                <PrimaryButton
+                    icon='check'
+                    disabled={isButtonDisabled}
+                    buttonClickAction={handleSetUserPermissions}
+                >
+                    Save {username} permissions
+                </PrimaryButton>
+            </div>
         </>
     );
 };

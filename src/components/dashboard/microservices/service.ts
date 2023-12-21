@@ -3,7 +3,7 @@ import {
     MicroserviceCounters,
     MicroserviceServerData,
 } from 'common/interfaces/MicroserviceServerData';
-import { ServiceStopResponse } from 'common/interfaces/ActionStatus';
+import { ServiceCheckDBResponse, ServiceStopResponse } from 'common/interfaces/ActionStatus';
 import { ServicesSortParams } from 'common/interfaces/QueriesParams';
 import { fetchApiData } from 'common/api/fetchAPI';
 
@@ -38,4 +38,8 @@ export const getServiceCounters = (uid: string): Promise<MicroserviceCounters[]>
 
 export const stopService = (id: string): Promise<ServiceStopResponse> => {
     return fetchApiData<ServiceStopResponse>('POST', `services/${id}/stop`);
+};
+
+export const checkServiceDB = (id: string): Promise<ServiceCheckDBResponse> => {
+    return fetchApiData<ServiceCheckDBResponse>('POST', `services/${id}/checkdb`);
 };

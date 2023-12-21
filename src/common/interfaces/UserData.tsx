@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
 
+import { Status } from './ActionStatus';
+
 export interface UserInputData {
     username: string;
     password: string;
@@ -17,6 +19,20 @@ export interface User {
     isadmin?: number;
 }
 
+export interface UserSuccessResponse {
+    user: User;
+    status: Status;
+}
+
+export interface UserErrorResponse {
+    error: string;
+    info: string;
+    loginexported: string;
+    status: Status;
+    useruid: string;
+    warning: string;
+}
+
 export interface ShortUserInfo {
     firstName: string;
     lastName: string;
@@ -27,10 +43,7 @@ export interface ShortUserInfo {
     useruid: string;
     warning: string;
 }
-export interface UserSettingsResponse {
-    settings: Record<string, string | number>;
-    status: string;
-}
+
 export enum UsersType {
     ACTIVE = 'Users',
     DELETED = 'Deleted users',
