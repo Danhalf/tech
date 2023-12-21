@@ -31,6 +31,7 @@ export const TemplatesReports = ({ useruid }: { useruid?: string }): JSX.Element
 
     useEffect(() => {
         updateTemplatesReports();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleFileUpload = (file: File) => {
@@ -54,6 +55,7 @@ export const TemplatesReports = ({ useruid }: { useruid?: string }): JSX.Element
             });
     };
 
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     const columns = useMemo(() => ReportsColumns(updateTemplatesReports), []);
     const { getTableProps, getTableBodyProps, headers, rows, prepareRow } = useTable({
         columns,
