@@ -1,4 +1,8 @@
-import { useQueryResponseData, useQueryResponseLoading } from 'common/core/QueryResponseProvider';
+import {
+    useQueryResponse,
+    useQueryResponseData,
+    useQueryResponseLoading,
+} from 'common/core/QueryResponseProvider';
 import { useEffect, useMemo, useState } from 'react';
 import { useTable, ColumnInstance, Row } from 'react-table';
 import { CustomHeaderColumn } from './columns/CustomHeaderColumn';
@@ -20,10 +24,13 @@ export const UsersTable = ({ list }: UsersTableProps) => {
     const { state, updateState } = useQueryRequest();
 
     useEffect(() => {
+        if (state.search) {
+            return setListLength(users.length);
+        }
         getTotalUsersRecords(list === UsersType.ACTIVE ? 'list' : 'listdeleted').then((response) =>
             setListLength(response.total)
         );
-    }, [list]);
+    }, [list, state.search, users.length]);
 
     const handlePageChange = (page: number) => {
         updateState({ ...state, currentpage: page * state.count });

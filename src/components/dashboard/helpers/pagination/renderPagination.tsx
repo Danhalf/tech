@@ -38,7 +38,10 @@ export const CustomPagination = ({
         const total = Math.ceil(records / recordsPerPage);
         setTotalPages(total);
         setPageNumbers(updatePageNumbers(total));
-    }, [records, count, recordsPerPage]);
+        if (currentPage > totalPages) {
+            setCurrentPage(total - 1);
+        }
+    }, [records, count, recordsPerPage, totalPages, currentPage]);
 
     const handlePageChange = (pageNumber: number) => {
         if (onPageChange) {
