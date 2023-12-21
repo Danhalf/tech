@@ -21,12 +21,14 @@ export const fetchApiData = async <T>(
         Authorization: `Bearer ${getToken()}`,
         'Content-Type': 'application/json',
     };
+
     try {
         const response: AxiosResponse<T> = await axios({
             method,
             url: API_URL + url,
             data,
             params,
+
             headers: { ...defaultHeaders, ...headers },
         });
         return response.data;

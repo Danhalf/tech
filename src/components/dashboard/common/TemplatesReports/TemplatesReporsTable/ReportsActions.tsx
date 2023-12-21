@@ -39,6 +39,7 @@ export const ReportsActions = ({
     };
 
     const handleDeleteClick = () => {
+        setShowDeleteConfirm(false);
         deleteReportsItem(itemuid)
             .then((response) => {
                 if (response.status === Status.OK) {
