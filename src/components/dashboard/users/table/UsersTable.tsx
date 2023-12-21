@@ -4,7 +4,6 @@ import { useTable, ColumnInstance, Row } from 'react-table';
 import { CustomHeaderColumn } from './columns/CustomHeaderColumn';
 import { CustomRow } from './columns/CustomRow';
 import { usersColumns } from './columns/_columns';
-import { UsersListPagination } from 'components/dashboard/helpers/pagination/renderPagination';
 import { UsersListType, User } from 'common/interfaces/UserData';
 
 interface UsersTableProps {
@@ -61,7 +60,6 @@ export const UsersTable = ({ list }: UsersTableProps) => {
                     </tbody>
                 </table>
             </div>
-            <UsersListPagination list={list} />
         </>
     );
 };
