@@ -1,4 +1,3 @@
-import { getLocalState } from '_metronic/helpers';
 import { SortType } from 'common/interfaces/QueriesParams';
 import { DefaultRecordsPerPage, RecordsPerPage } from 'common/settings/settings';
 import { ReactNode } from 'react';
@@ -41,11 +40,9 @@ export type QueryRequestContextProps = {
     updateState: (updates: Partial<QueryState>) => void;
 };
 
-const getCurrentPage = (): number => getLocalState().currentpage || 0;
-
 export const initialQueryState: QueryState = {
-    currentpage: getCurrentPage(),
-    count: getLocalState().count || DefaultRecordsPerPage,
+    currentpage: 0,
+    count: DefaultRecordsPerPage,
     sort: 'username',
     order: 'asc',
     search: '',

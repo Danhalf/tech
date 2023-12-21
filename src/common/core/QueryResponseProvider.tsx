@@ -43,7 +43,7 @@ export const QueryResponseProvider = ({
         `${GET_LIST_TYPE()}`,
         () => {
             const currentQuery: UserQuery = {
-                skip: state.currentpage * state.count,
+                skip: state.currentpage,
                 top: state.count,
                 column: state.sort,
                 qry: state.search && `${state.search}.${state.sort}`,
