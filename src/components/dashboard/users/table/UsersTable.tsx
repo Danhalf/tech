@@ -22,6 +22,7 @@ export const UsersTable = ({ list }: UsersTableProps) => {
     const users = useQueryResponseData(list);
 
     const { state, updateState } = useQueryRequest();
+    const { refetch } = useQueryResponse(list);
 
     useEffect(() => {
         if (state.search) {
@@ -30,7 +31,11 @@ export const UsersTable = ({ list }: UsersTableProps) => {
         getTotalUsersRecords(list === UsersType.ACTIVE ? 'list' : 'listdeleted').then((response) =>
             setListLength(response.total)
         );
-    }, [list, state.search, users.length]);
+    }, [list, state.search, state.count, state.currentpage]);
+
+    useEffect(() => {
+        refetch();
+    }, [state.count, state.currentpage, refetch]);
 
     const handlePageChange = (page: number) => {
         updateState({ ...state, currentpage: page * state.count });
@@ -57,7 +62,7 @@ export const UsersTable = ({ list }: UsersTableProps) => {
                 )}
                 <table
                     id='kt_table_users'
-                    className='table align-middle table-row-dashed fs-6 gy-3 dataTable no-footer'
+                    className='table align-middle table-row-dashed fs-6 gy-3 no-footer'
                     {...getTableProps()}
                 >
                     <thead>
