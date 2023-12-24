@@ -35,26 +35,32 @@ export const CustomPagination = ({
     const [recordsPerPage, setRecordsPerPage] = useState<number>(count);
 
     useEffect(() => {
+        setIsLoading(true);
         const total = Math.ceil(records / recordsPerPage);
         setTotalPages(total);
         setPageNumbers(updatePageNumbers(total));
         if (currentPage > totalPages) {
             setCurrentPage(total - 1);
         }
+        setIsLoading(false);
     }, [records, count, recordsPerPage, totalPages, currentPage]);
 
     const handlePageChange = (pageNumber: number) => {
+        setIsLoading(true);
         if (onPageChange) {
             onPageChange(pageNumber);
         }
         setCurrentPage(pageNumber);
+        setIsLoading(false);
     };
 
     const handleCountChange = (countNumber: RecordsPerPage) => {
+        setIsLoading(true);
         if (onCountChange) {
             onCountChange(countNumber);
         }
         setRecordsPerPage(countNumber);
+        setIsLoading(false);
     };
 
     return (
@@ -143,7 +149,9 @@ export const CustomPagination = ({
                             aria-label='records-per-page'
                             className='w-50'
                             value={recordsPerPage}
-                            onChange={({ target }) => handleCountChange(Number(target.value))}
+                            onChange={({ target }) =>
+                                handleCountChange(Number(target.value) as RecordsPerPage)
+                            }
                         >
                             {RecordsPerPageSteps.map((value) => (
                                 <option key={value} value={value}>

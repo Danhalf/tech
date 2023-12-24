@@ -2,7 +2,6 @@ import { createContext } from 'react';
 import qs from 'qs';
 import { QueryResponseContextProps, QueryState } from './models';
 import { LOC_STORAGE_USER_STATE } from 'common/app-consts';
-import { DefaultRecordsPerPage } from 'common/settings/settings';
 
 export function createResponseContext<T>(initialState: QueryResponseContextProps<T>) {
     return createContext(initialState);
@@ -34,26 +33,17 @@ export function parseRequestQuery(query: string): QueryState {
 }
 
 export interface LocalState {
-    currentpage: number;
     login: string;
-    count: number;
 }
 
 export const getLocalState = (): LocalState => {
-    const defaultValues = { currentpage: 0, login: '', count: DefaultRecordsPerPage };
+    const defaultValues = { login: '' };
     const storage = localStorage.getItem(LOC_STORAGE_USER_STATE);
     if (storage !== null) {
         const parsedData = JSON.parse(storage);
         const result = { ...defaultValues };
 
         if (parsedData) {
-            if (parsedData.currentpage !== undefined) {
-                result.currentpage = parsedData.currentpage;
-            }
-            if (parsedData.count !== undefined) {
-                result.count = parsedData.count;
-            }
-
             if (parsedData.login !== undefined) {
                 result.login = parsedData.login;
             }
