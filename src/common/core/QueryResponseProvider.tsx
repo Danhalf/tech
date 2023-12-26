@@ -8,8 +8,6 @@ import {
     stringifyRequestQuery,
     QUERIES,
     Response,
-    initialQueryState,
-    getLocalState,
 } from '_metronic/helpers';
 import { getDeletedUsers, getUsers } from 'components/dashboard/users/user.service';
 import { User, UsersListType, UsersType } from 'common/interfaces/UserData';
@@ -44,20 +42,11 @@ export const QueryResponseProvider = ({
     } = useQuery(
         `${GET_LIST_TYPE()}`,
         () => {
-            const getPage = () => {
-                if (state.search) {
-                    return state.currentpage;
-                }
-                if (getLocalState().usersPage) {
-                    return getLocalState().usersPage * initialQueryState.count;
-                }
-            };
-
             const currentQuery: UserQuery = {
-                skip: getPage(),
+                skip: state.currentpage,
                 top: state.count,
                 column: state.sort,
-                qry: state.search,
+                qry: state.search && `${state.search}.${state.sort}`,
                 type: state.order,
             };
 
@@ -68,7 +57,7 @@ export const QueryResponseProvider = ({
                     return getDeletedUsers(currentQuery);
             }
         },
-        { cacheTime: 0, keepPreviousData: true, refetchOnWindowFocus: false }
+        { cacheTime: 0, keepPreviousData: true, refetchOnWindowFocus: false, enabled: !!state }
     );
 
     useEffect(() => {
@@ -76,7 +65,7 @@ export const QueryResponseProvider = ({
             setQuery(updatedQuery);
             refetch();
         }
-    }, [updatedQuery]);
+    }, [updatedQuery, state]);
 
     const response: Response<User[]> = {
         data: axiosResponse,
@@ -98,11 +87,6 @@ export const useQueryResponseData = (dataType: UsersListType) => {
     }
 
     return response?.data || [];
-};
-
-export const useQueryResponseDataLength = (dataType: UsersListType): number => {
-    const { response } = useQueryResponse(dataType);
-    return response?.data?.length || 0;
 };
 
 export const useQueryResponseLoading = (dataType: UsersListType): boolean => {

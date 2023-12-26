@@ -32,18 +32,18 @@ export function parseRequestQuery(query: string): QueryState {
     return cache as QueryState;
 }
 
-export const getLocalState = (): { usersPage: number; login: string } => {
-    const defaultValues = { usersPage: 0, login: '' };
+export interface LocalState {
+    login: string;
+}
+
+export const getLocalState = (): LocalState => {
+    const defaultValues = { login: '' };
     const storage = localStorage.getItem(LOC_STORAGE_USER_STATE);
     if (storage !== null) {
         const parsedData = JSON.parse(storage);
         const result = { ...defaultValues };
 
         if (parsedData) {
-            if (parsedData.usersPage !== undefined) {
-                result.usersPage = parsedData.usersPage;
-            }
-
             if (parsedData.login !== undefined) {
                 result.login = parsedData.login;
             }
