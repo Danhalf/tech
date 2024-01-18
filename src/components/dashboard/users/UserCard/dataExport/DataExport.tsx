@@ -9,6 +9,7 @@ import { DataExportRecord } from 'common/interfaces/DataExport';
 import { exportUserDataExport, getDataExports } from './DataExport.service';
 import { ActionStatus, Status } from 'common/interfaces/ActionStatus';
 import { AxiosError } from 'axios';
+import { ConfirmModal } from 'components/dashboard/helpers/modal/confirmModal';
 
 const initialDataExportsState: DataExportRecord[] = [
     {
@@ -25,6 +26,7 @@ const initialDataExportsState: DataExportRecord[] = [
 
 export const DataExports = ({ useruid }: { useruid: string }): JSX.Element => {
     const [dataExports, setDataExports] = useState<DataExportRecord[]>(initialDataExportsState);
+    const [showConfirm, setShowConfirm] = useState<boolean>(false);
     const [loading, setLoading] = useState<boolean>(false);
     const updateDataExports = (): void => {
         getDataExports(useruid).then((response: any) => {
@@ -39,6 +41,7 @@ export const DataExports = ({ useruid }: { useruid: string }): JSX.Element => {
     const handleExportData = () => {
         exportUserDataExport(useruid)
             .then((response: ActionStatus) => {
+                setShowConfirm(false);
                 if (response.status === Status.OK) {
                     setLoading(true);
                     setTimeout(() => {
@@ -62,7 +65,7 @@ export const DataExports = ({ useruid }: { useruid: string }): JSX.Element => {
                 <PrimaryButton
                     disabled={loading}
                     icon={loading ? '' : 'file-up'}
-                    buttonClickAction={handleExportData}
+                    buttonClickAction={() => setShowConfirm(true)}
                 >
                     {loading && <label className='spinner-border me-2' role='status' />}
                     Export
@@ -91,6 +94,15 @@ export const DataExports = ({ useruid }: { useruid: string }): JSX.Element => {
                     </table>
                 </div>
             </div>
+            <ConfirmModal
+                show={showConfirm}
+                message='Are you sure?'
+                secondaryButtonText='No'
+                primaryButtonText='Yes'
+                primaryButtonVariant='primary'
+                onConfirm={handleExportData}
+                onCancel={() => setShowConfirm(false)}
+            />
         </div>
     );
 };
