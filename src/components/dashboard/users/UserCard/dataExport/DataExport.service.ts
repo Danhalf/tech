@@ -8,7 +8,7 @@ export const getDataExports = (useruid: string): Promise<DataExportRecord[]> => 
 
 export const exportUserDataExport = (useruid: string): Promise<ActionStatus> => {
     const data = { type: 1, useruid };
-    return fetchApiData<ActionStatus>('POST', 'user/0/DataExportset', { data });
+    return fetchApiData<ActionStatus>('POST', 'external/0/add', { data });
 };
 
 export const deleteUserDataExport = (taskuid: string): Promise<ActionStatus> => {

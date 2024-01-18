@@ -7,15 +7,18 @@ import { DataExportsRow } from './dataExportTable/DataExportRow';
 import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton';
 import { DataExportRecord } from 'common/interfaces/DataExport';
 import { exportUserDataExport, getDataExports } from './DataExport.service';
+import { ActionStatus, Status } from 'common/interfaces/ActionStatus';
+import { AxiosError } from 'axios';
 
 const initialDataExportsState: DataExportRecord[] = [
     {
-        datapath: '',
-        id: 0,
-        mode: '',
+        clientuid: '',
+        created: '',
+        objects_count: 0,
         size: 0,
-        timestamp: '',
-        username: '',
+        taskuid: '',
+        type: '',
+        updated: '',
         useruid: '',
     },
 ];
@@ -34,8 +37,10 @@ export const DataExports = ({ useruid }: { useruid: string }): JSX.Element => {
 
     const handleExportData = () => {
         exportUserDataExport(useruid)
-            .then((response: any) => {})
-            .catch((error: any) => {});
+            .then((response: ActionStatus) => {
+                if (response.status === Status.OK) updateDataExports();
+            })
+            .catch((error: AxiosError) => {});
     };
 
     const columns = useMemo(() => DataExportsColumns(updateDataExports), []);

@@ -1,12 +1,13 @@
 import { Status } from './ActionStatus';
 
 export interface DataExportRecord {
-    datapath: string;
-    id: number;
-    mode: string;
+    clientuid: string;
+    created: string;
+    objects_count: number;
     size: number;
-    timestamp: string;
-    username: string;
+    taskuid: string;
+    type: string;
+    updated: string;
     useruid: string;
 }
 

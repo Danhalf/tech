@@ -1,27 +1,36 @@
 import { CustomDropdown } from 'components/dashboard/helpers/renderDropdownHelper';
-import { Status } from 'common/interfaces/ActionStatus';
+import { deleteUserDataExport, resetUserDataExport } from '../DataExport.service';
+import { DataExportRecord } from 'common/interfaces/DataExport';
 
 interface DataExportsActionsProps {
-    dataExport: Partial<any>;
-    // DataExport: Partial<DataExportRecord>;
+    dataExport: DataExportRecord;
     updateAction?: () => void;
 }
 
 export const DataExportsActions = ({ dataExport, updateAction }: DataExportsActionsProps) => {
+    const handleDeleteItem = () => {
+        deleteUserDataExport(dataExport.taskuid);
+        updateAction && updateAction();
+    };
+    const handleRestartItem = () => {
+        resetUserDataExport(dataExport.taskuid);
+        updateAction && updateAction();
+    };
+
     return (
         <>
             <CustomDropdown
                 title='Actions'
                 items={[
                     {
-                        menuItemName: 'Edit key',
-                        icon: 'key',
-                        // menuItemAction: () => setEditKeyModalEnabled(true),
+                        menuItemName: 'Delete',
+                        icon: 'minus-circle',
+                        menuItemAction: handleDeleteItem,
                     },
                     {
-                        menuItemName: 'Delete key',
-                        icon: 'minus-circle',
-                        // menuItemAction: () => handleDeleteClick(),
+                        menuItemName: 'Restart',
+                        icon: 'arrows-circle',
+                        menuItemAction: handleRestartItem,
                     },
                 ]}
             />

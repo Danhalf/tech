@@ -7,12 +7,12 @@ export const DataExportsColumns = (
     // ): ReadonlyArray<Column<DataExportRecord>> => [
 ): ReadonlyArray<Column<any>> => [
     {
-        Header: 'Index',
-        accessor: 'itemuid',
+        Header: 'Taskuid',
+        accessor: 'taskuid',
     },
     {
-        Header: 'API type',
-        accessor: 'apitype',
+        Header: 'Type',
+        accessor: 'type',
     },
     {
         Header: 'Created',
@@ -23,8 +23,12 @@ export const DataExportsColumns = (
         accessor: 'updated',
     },
     {
-        Header: 'Expiration time',
-        accessor: 'expirationdate',
+        Header: 'Objects count',
+        accessor: 'objects_count',
+    },
+    {
+        Header: 'Size',
+        accessor: 'size',
     },
     {
         Header: 'Actions',
