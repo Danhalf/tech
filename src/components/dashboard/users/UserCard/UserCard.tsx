@@ -26,6 +26,7 @@ import { UserTemplatesPrintedForm } from './TemplatesPrintedForm';
 import { ApiKeys } from '../ApiKeys/ApiKeys';
 import { LOC_STORAGE_USER } from 'common/app-consts';
 import { LoginResponse } from 'common/auth.service';
+import { DataExports } from './dataExport/DataExport';
 
 enum UserCardTabs {
     Profile = 'Profile',
@@ -42,6 +43,7 @@ enum UserCardTabs {
     TemplatesForReports = 'Templates for reports',
     TemplatesForPrintedForms = 'Templates for printed forms',
     ApiKeys = 'Api Keys',
+    DataExport = 'Data Export',
 }
 
 const userCardTabsArray: string[] = Object.values(UserCardTabs) as string[];
@@ -253,6 +255,9 @@ export function UserCard() {
                             </TabPanel>
                             <TabPanel activeTab={activeTab} tabName={UserCardTabs.ApiKeys}>
                                 <ApiKeys useruid={id} />
+                            </TabPanel>
+                            <TabPanel activeTab={activeTab} tabName={UserCardTabs.DataExport}>
+                                <DataExports useruid={id} />
                             </TabPanel>
                         </>
                     )}
