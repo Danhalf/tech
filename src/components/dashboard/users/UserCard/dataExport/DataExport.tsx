@@ -24,7 +24,8 @@ const initialDataExportsState: DataExportRecord[] = [
 ];
 
 export const DataExports = ({ useruid }: { useruid: string }): JSX.Element => {
-    const [DataExports, setDataExports] = useState<DataExportRecord[]>(initialDataExportsState);
+    const [dataExports, setDataExports] = useState<DataExportRecord[]>(initialDataExportsState);
+    const [loading, setLoading] = useState<boolean>(false);
     const updateDataExports = (): void => {
         getDataExports(useruid).then((response: any) => {
             setDataExports(response);
@@ -38,7 +39,13 @@ export const DataExports = ({ useruid }: { useruid: string }): JSX.Element => {
     const handleExportData = () => {
         exportUserDataExport(useruid)
             .then((response: ActionStatus) => {
-                if (response.status === Status.OK) updateDataExports();
+                if (response.status === Status.OK) {
+                    setLoading(true);
+                    setTimeout(() => {
+                        updateDataExports();
+                        setLoading(false);
+                    }, 3000);
+                }
             })
             .catch((error: AxiosError) => {});
     };
@@ -46,13 +53,18 @@ export const DataExports = ({ useruid }: { useruid: string }): JSX.Element => {
     const columns = useMemo(() => DataExportsColumns(updateDataExports), []);
     const { getTableProps, getTableBodyProps, headers, rows, prepareRow } = useTable({
         columns,
-        data: DataExports,
+        data: dataExports,
     });
 
     return (
         <div className='card'>
             <div className='me-4 mt-4 ms-auto'>
-                <PrimaryButton icon='plus' buttonClickAction={handleExportData}>
+                <PrimaryButton
+                    disabled={loading}
+                    icon={loading ? '' : 'file-up'}
+                    buttonClickAction={handleExportData}
+                >
+                    {loading && <label className='spinner-border me-2' role='status' />}
                     Export
                 </PrimaryButton>
             </div>

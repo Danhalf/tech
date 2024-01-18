@@ -17,11 +17,11 @@ export const PrimaryButton = ({
     return (
         <button
             type={type || 'button'}
-            className={`btn btn-${appearance}`}
+            className={`btn btn-${appearance} d-flex align-items-center`}
             onClick={buttonClickAction}
             disabled={disabled}
         >
-            {icon && <i className={`ki-duotone ki-${icon} fs-2`}></i>}
+            {icon && <i className={`ki-outline ki-${icon} me-2 fs-2`}></i>}
             {children}
         </button>
     );
