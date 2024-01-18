@@ -1,9 +1,8 @@
-// import { DataExportRecord } from 'common/interfaces/UserDataExports';
+import { DataExportRecord } from 'common/interfaces/DataExport';
 import { ColumnInstance } from 'react-table';
 
 type ColumnHeaderProps = {
-    column: ColumnInstance<any>;
-    // column: ColumnInstance<DataExportRecord>;
+    column: ColumnInstance<DataExportRecord>;
 };
 
 export const DataExportsHeaderColumn = ({ column }: ColumnHeaderProps) => (

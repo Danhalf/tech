@@ -1,9 +1,9 @@
 import clsx from 'clsx';
+import { DataExportRecord } from 'common/interfaces/DataExport';
 import { Row } from 'react-table';
 
 type Props = {
-    // row: Row<DataExportRecord>;
-    row: Row<any>;
+    row: Row<DataExportRecord>;
 };
 
 export const DataExportsRow = ({ row }: Props) => {
