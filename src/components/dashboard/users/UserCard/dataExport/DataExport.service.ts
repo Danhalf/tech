@@ -1,6 +1,6 @@
 import { DataExportRecord } from 'common/interfaces/DataExport';
 import { fetchApiData } from 'common/api/fetchAPI';
-import { ActionStatus, Status } from 'common/interfaces/ActionStatus';
+import { ActionStatus } from 'common/interfaces/ActionStatus';
 
 export const getDataExports = (useruid: string): Promise<DataExportRecord[]> => {
     return fetchApiData<DataExportRecord[]>('GET', `external/${useruid}/shared`);
@@ -15,6 +15,6 @@ export const deleteUserDataExport = (taskuid: string): Promise<ActionStatus> => 
     return fetchApiData<ActionStatus>('POST', `external/${taskuid}/deleteshared`);
 };
 
-export const resetUserDataExport = (taskuid: string): Promise<Status> => {
-    return fetchApiData<Status>('POST', `external/${taskuid}/resetshared`);
+export const resetUserDataExport = (taskuid: string): Promise<ActionStatus> => {
+    return fetchApiData<ActionStatus>('POST', `external/${taskuid}/resetshared`);
 };

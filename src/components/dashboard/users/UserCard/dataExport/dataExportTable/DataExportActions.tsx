@@ -1,6 +1,7 @@
 import { CustomDropdown } from 'components/dashboard/helpers/renderDropdownHelper';
 import { deleteUserDataExport, resetUserDataExport } from '../DataExport.service';
 import { DataExportRecord } from 'common/interfaces/DataExport';
+import { Status } from 'common/interfaces/ActionStatus';
 
 interface DataExportsActionsProps {
     dataExport: DataExportRecord;
@@ -9,12 +10,14 @@ interface DataExportsActionsProps {
 
 export const DataExportsActions = ({ dataExport, updateAction }: DataExportsActionsProps) => {
     const handleDeleteItem = () => {
-        deleteUserDataExport(dataExport.taskuid);
-        updateAction && updateAction();
+        deleteUserDataExport(dataExport.taskuid).then((res) => {
+            if (res.status === Status.OK && updateAction) updateAction();
+        });
     };
-    const handleRestartItem = () => {
-        resetUserDataExport(dataExport.taskuid);
-        updateAction && updateAction();
+    const handleResetItem = () => {
+        resetUserDataExport(dataExport.taskuid).then((res) => {
+            if (res.status === Status.OK && updateAction) updateAction();
+        });
     };
 
     return (
@@ -28,9 +31,9 @@ export const DataExportsActions = ({ dataExport, updateAction }: DataExportsActi
                         menuItemAction: handleDeleteItem,
                     },
                     {
-                        menuItemName: 'Restart',
+                        menuItemName: 'Reset',
                         icon: 'arrows-circle',
-                        menuItemAction: handleRestartItem,
+                        menuItemAction: handleResetItem,
                     },
                 ]}
             />
