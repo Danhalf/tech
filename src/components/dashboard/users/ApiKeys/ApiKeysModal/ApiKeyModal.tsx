@@ -39,6 +39,9 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
     const [apiKeyNotes, setApiKeyNotes] = useState<string>(apiKey?.notes || '');
     const [apiKeyEnabled, setApiKeyEnabled] = useState<ApiKeyEnabled | 0>(apiKey?.enabled || 0);
     const [apiHost, setApiHost] = useState<string>(apiKey?.host || '');
+    const [apiPort, setApiPort] = useState<string>(String(apiKey?.port) || '');
+    const [apiUserLogin, setApiUserLogin] = useState<string>(apiKey?.userlogin || '');
+    const [apiUserPassword, setApiUserPassword] = useState<string>(apiKey?.userpassword || '');
 
     const getApiTypes = () => {
         getApiKeysTypes().then((res) => {
@@ -69,6 +72,10 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
             apitype: apiKeyType,
             notes: apiKeyNotes,
             apikey: apiKeyValue,
+            host: apiHost,
+            port: Number(apiPort),
+            userlogin: apiUserLogin,
+            userpassword: apiUserPassword,
         }).then((res) => {
             if (res.status === Status.OK) updateAction && updateAction();
         });
@@ -81,30 +88,15 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
             <Form.Group className='d-flex flex-column row-gap-4'>
                 <Form.Group>
                     <label className='form-label mb-0'>Created API key</label>
-                    <Form.Control
-                        value={apiKey?.created as string}
-                        disabled
-                        id={apiKey?.created as string}
-                        name='Created API key'
-                    />
+                    <Form.Control value={apiKey?.created} disabled name='Created API key' />
                 </Form.Group>
                 <Form.Group>
                     <label className='form-label mb-0'>Deleted API key</label>
-                    <Form.Control
-                        value={apiKey?.deleted as string}
-                        disabled
-                        id={apiKey?.deleted as string}
-                        name='Deleted API key'
-                    />
+                    <Form.Control value={apiKey?.deleted} disabled name='Deleted API key' />
                 </Form.Group>
                 <Form.Group>
                     <label className='form-label mb-0'>Updated API key</label>
-                    <Form.Control
-                        value={apiKey?.updated as string}
-                        disabled
-                        id={apiKey?.updated as string}
-                        name='Updated API key'
-                    />
+                    <Form.Control value={apiKey?.updated} disabled name='Updated API key' />
                 </Form.Group>
                 <Form.Group>
                     <label className='form-label mb-0'>Issue date API key</label>
@@ -130,21 +122,11 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
                 </Form.Group>
                 <Form.Group>
                     <label className='form-label mb-0'>Last used date API key</label>
-                    <Form.Control
-                        value={apiKey?.lastused as string}
-                        disabled
-                        id={apiKey?.lastused as string}
-                        name='Last used API key'
-                    />
+                    <Form.Control value={apiKey?.lastused} disabled name='Last used API key' />
                 </Form.Group>
                 <Form.Group>
                     <label className='form-label mb-0'>Flags API key</label>
-                    <Form.Control
-                        value={apiKey?.flags as number}
-                        disabled
-                        id={String(apiKey?.flags)}
-                        name='Flags API key'
-                    />
+                    <Form.Control value={apiKey?.flags as number} disabled name='Flags API key' />
                 </Form.Group>
 
                 <Form.Group>
@@ -157,23 +139,27 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
                         ))}
                     </Form.Select>
                 </Form.Group>
+
                 <Form.Group>
-                    <label className='form-label mb-0'>Host</label>
+                    <label className='form-label mb-0'>User login</label>
                     <Form.Control
-                        value={apiKey?.host}
-                        id={apiHost}
-                        name='Host'
-                        onChange={({ target }) => setApiHost(target.value)}
+                        value={apiUserLogin}
+                        name='User login'
+                        onChange={({ target }) => setApiUserLogin(target.value)}
+                    />
+                </Form.Group>
+                <Form.Group>
+                    <label className='form-label mb-0'>User password</label>
+                    <Form.Control
+                        value={apiUserPassword}
+                        name='User password'
+                        type='password'
+                        onChange={({ target }) => setApiUserPassword(target.value)}
                     />
                 </Form.Group>
                 <Form.Group>
                     <label className='form-label mb-0'>User uID</label>
-                    <Form.Control
-                        value={apiKey?.useruid}
-                        disabled
-                        id={String(apiKey?.useruid)}
-                        name='User uid'
-                    />
+                    <Form.Control value={apiKey?.useruid} disabled name='User uid' />
                 </Form.Group>
                 <Form.Group>
                     <label className='form-label mb-0'>Item uID</label>
@@ -200,6 +186,22 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
                         value={apiKeyNotes}
                         onChange={({ target }) => setApiKeyNotes(target.value)}
                         placeholder='Leave notes here'
+                    />
+                </Form.Group>
+                <Form.Group>
+                    <label className='form-label mb-0'>Host</label>
+                    <Form.Control
+                        value={apiHost}
+                        name='Host'
+                        onChange={({ target }) => setApiHost(target.value)}
+                    />
+                </Form.Group>
+                <Form.Group>
+                    <label className='form-label mb-0'>Port</label>
+                    <Form.Control
+                        value={apiPort}
+                        name='Port'
+                        onChange={({ target }) => setApiPort(target.value)}
                     />
                 </Form.Group>
                 <CustomCheckbox
