@@ -30,12 +30,15 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
         apiKey?.apitype || ApiTypeName.DEFAULT
     );
     const [apiKeyValue, setApiKeyValue] = useState<string>(apiKey?.apikey || '');
-    const [apiKeyIssue, setApiKeyIssue] = useState<number | Date>(apiKey?.issuedate || defaultDate);
-    const [apiKeyExpiration, setApiKeyExpiration] = useState<number | Date>(
+    const [apiKeyIssue, setApiKeyIssue] = useState<number | string | Date>(
+        apiKey?.issuedate || defaultDate
+    );
+    const [apiKeyExpiration, setApiKeyExpiration] = useState<number | string | Date>(
         apiKey?.expirationdate || defaultDate
     );
     const [apiKeyNotes, setApiKeyNotes] = useState<string>(apiKey?.notes || '');
     const [apiKeyEnabled, setApiKeyEnabled] = useState<ApiKeyEnabled | 0>(apiKey?.enabled || 0);
+    const [apiHost, setApiHost] = useState<string>(apiKey?.host || '');
 
     const getApiTypes = () => {
         getApiKeysTypes().then((res) => {
@@ -60,8 +63,8 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
     const handleSave = () => {
         setUserApiKey(useruid as string, {
             ...apiKey,
-            issuedate: Number(apiKeyIssue),
-            expirationdate: Number(apiKeyExpiration),
+            issuedate: apiKeyIssue as string,
+            expirationdate: apiKeyExpiration as string,
             enabled: apiKeyEnabled,
             apitype: apiKeyType,
             notes: apiKeyNotes,
@@ -153,6 +156,15 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
                             </option>
                         ))}
                     </Form.Select>
+                </Form.Group>
+                <Form.Group>
+                    <label className='form-label mb-0'>Host</label>
+                    <Form.Control
+                        value={apiKey?.host}
+                        id={apiHost}
+                        name='Host'
+                        onChange={({ target }) => setApiHost(target.value)}
+                    />
                 </Form.Group>
                 <Form.Group>
                     <label className='form-label mb-0'>User uID</label>
