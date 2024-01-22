@@ -42,3 +42,8 @@ export interface ApiTypesResponse {
     api_types: ApiTypes[];
     status: Status;
 }
+
+export interface ApiItemUid {
+    itemuid: string;
+    status: Status;
+}

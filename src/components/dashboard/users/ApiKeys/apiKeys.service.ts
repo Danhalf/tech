@@ -1,6 +1,6 @@
 import { fetchApiData } from 'common/api/fetchAPI';
 import { ActionStatus, Status } from 'common/interfaces/ActionStatus';
-import { ApiKeyRecord, ApiTypesResponse } from 'common/interfaces/UserApiKeys';
+import { ApiItemUid, ApiKeyRecord, ApiTypesResponse } from 'common/interfaces/UserApiKeys';
 
 export const getUserApiKeysList = (useruid: string): Promise<ApiKeyRecord[]> => {
     return fetchApiData<ApiKeyRecord[]>('GET', `user/${useruid}/apikeys`);
@@ -26,6 +26,6 @@ export const undeleteUserApiKey = (keyuid: string): Promise<Status> => {
     return fetchApiData<Status>('POST', `user/${keyuid}/apikeyundelete`);
 };
 
-export const getClientUid = (): Promise<Record<string, string>[]> => {
-    return fetchApiData<Record<string, string>[]>('GET', 'user/getuid');
+export const getClientUid = (): Promise<ApiItemUid> => {
+    return fetchApiData<ApiItemUid>('GET', 'user/getuid');
 };

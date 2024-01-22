@@ -39,7 +39,7 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
     const [apiKeyNotes, setApiKeyNotes] = useState<string>(apiKey?.notes || '');
     const [apiKeyEnabled, setApiKeyEnabled] = useState<ApiKeyEnabled | 0>(apiKey?.enabled || 0);
     const [apiHost, setApiHost] = useState<string>(apiKey?.host || '');
-    const [apiPort, setApiPort] = useState<string>(String(apiKey?.port) || '');
+    const [apiPort, setApiPort] = useState<number>(apiKey?.port || 0);
     const [apiUserLogin, setApiUserLogin] = useState<string>(apiKey?.userlogin || '');
     const [apiUserPassword, setApiUserPassword] = useState<string>(apiKey?.userpassword || '');
     const [apiClientUid, setApiClientUid] = useState<string>(apiKey?.clientuid || '');
@@ -58,8 +58,8 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
 
     const handleGetUid = () => {
         getClientUid().then((res) => {
-            if (res) {
-                setApiClientUid(res[0].useruid);
+            if (res.status === Status.OK) {
+                setApiClientUid(res.itemuid);
             }
         });
     };
@@ -82,7 +82,7 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
             notes: apiKeyNotes,
             apikey: apiKeyValue,
             host: apiHost,
-            port: Number(apiPort),
+            port: apiPort,
             userlogin: apiUserLogin,
             userpassword: apiUserPassword,
         }).then((res) => {
@@ -217,8 +217,10 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
                     <label className='form-label mb-0'>Port</label>
                     <Form.Control
                         value={apiPort}
-                        name='Port'
-                        onChange={({ target }) => setApiPort(target.value)}
+                        type='number'
+                        min={0}
+                        max={65535}
+                        onChange={({ target }) => setApiPort(+target.value)}
                     />
                 </Form.Group>
                 <CustomCheckbox
