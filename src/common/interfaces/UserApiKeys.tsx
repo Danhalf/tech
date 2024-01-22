@@ -4,20 +4,25 @@ import { Status } from './ActionStatus';
 export type ApiKeyEnabled = 0 | 1;
 
 export interface ApiKeyRecord {
+    apikey: string;
+    apitype: ApiTypeName;
+    clientuid: string;
     created: string;
     deleted: string;
-    updated: string;
-    issuedate: number;
-    expirationdate: number;
-    lastused: string;
-    flags: number;
     enabled: ApiKeyEnabled;
-    apitype: ApiTypeName;
-    useruid: string;
-    itemuid: string;
-    apikey: string;
-    notes: string;
+    expirationdate: string;
+    flags: number;
+    host: string;
     id: number;
+    issuedate: string;
+    itemuid: string;
+    lastused: string;
+    notes: string;
+    port: number;
+    updated: string;
+    userlogin: string;
+    userpassword: string;
+    useruid: string;
 }
 
 export enum ApiTypeName {
@@ -35,5 +40,10 @@ export interface ApiTypes {
 
 export interface ApiTypesResponse {
     api_types: ApiTypes[];
+    status: Status;
+}
+
+export interface ApiItemUid {
+    itemuid: string;
     status: Status;
 }
