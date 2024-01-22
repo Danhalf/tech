@@ -25,3 +25,7 @@ export const deleteUserApiKey = (keyuid: string): Promise<ActionStatus> => {
 export const undeleteUserApiKey = (keyuid: string): Promise<Status> => {
     return fetchApiData<Status>('POST', `user/${keyuid}/apikeyundelete`);
 };
+
+export const getClientUid = (): Promise<Record<string, string>[]> => {
+    return fetchApiData<Record<string, string>[]>('GET', 'user/getuid');
+};

@@ -2,8 +2,8 @@ import { ApiKeyEnabled, ApiKeyRecord, ApiTypeName, ApiTypes } from 'common/inter
 import { CustomModal } from 'components/dashboard/helpers/modal/renderModalHelper';
 import { CustomCheckbox } from 'components/dashboard/helpers/renderInputsHelper';
 import { useEffect, useState } from 'react';
-import { Form } from 'react-bootstrap';
-import { getApiKeysTypes, setUserApiKey } from '../apiKeys.service';
+import { Button, Form } from 'react-bootstrap';
+import { getApiKeysTypes, getClientUid, setUserApiKey } from '../apiKeys.service';
 import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton';
 import { useParams } from 'react-router-dom';
 import { Status } from 'common/interfaces/ActionStatus';
@@ -42,6 +42,7 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
     const [apiPort, setApiPort] = useState<string>(String(apiKey?.port) || '');
     const [apiUserLogin, setApiUserLogin] = useState<string>(apiKey?.userlogin || '');
     const [apiUserPassword, setApiUserPassword] = useState<string>(apiKey?.userpassword || '');
+    const [apiClientUid, setApiClientUid] = useState<string>(apiKey?.clientuid || '');
 
     const getApiTypes = () => {
         getApiKeysTypes().then((res) => {
@@ -54,6 +55,14 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
         getApiTypes();
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
+
+    const handleGetUid = () => {
+        getClientUid().then((res) => {
+            if (res) {
+                setApiClientUid(res[0].useruid);
+            }
+        });
+    };
 
     const handleApiKeyTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
         setApiKeyType(e.target.value as ApiTypeName);
@@ -139,7 +148,15 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
                         ))}
                     </Form.Select>
                 </Form.Group>
-
+                <Form.Group>
+                    <label className='form-label mb-0'>Client UID</label>
+                    <div className='d-flex'>
+                        <Form.Control value={apiClientUid} name='Client UID' disabled />
+                        <Button className='w-25 ms-4' onClick={handleGetUid}>
+                            Get uid
+                        </Button>
+                    </div>
+                </Form.Group>
                 <Form.Group>
                     <label className='form-label mb-0'>User login</label>
                     <Form.Control
