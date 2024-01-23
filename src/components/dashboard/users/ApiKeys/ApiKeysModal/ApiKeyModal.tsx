@@ -156,7 +156,7 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
                             onChange={({ target }) => setApiClientUid(target.value)}
                         />
                         <Button className='w-25 ms-4' onClick={handleGetUid}>
-                            Create uid
+                            Create
                         </Button>
                     </div>
                 </Form.Group>
