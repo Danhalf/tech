@@ -4,7 +4,7 @@ import { ColumnInstance, Row, useTable } from 'react-table';
 import { ApiKeysHeaderColumn } from './ApiKeysTable/ApiKeysHeaderColumn';
 import { ApiKeysColumns } from './ApiKeysTable/ApiKeysColumns';
 import { ApiKeysRow } from './ApiKeysTable/ApiKeysRow';
-import { ApiKeyRecord, ApiTypeName } from 'common/interfaces/UserApiKeys';
+import { ApiKeyRecord } from 'common/interfaces/UserApiKeys';
 import { getUserApiKeysList } from './apiKeys.service';
 import { ApiKeyModal } from './ApiKeysModal/ApiKeyModal';
 import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton';
@@ -26,7 +26,7 @@ const initialApiKeysState: ApiKeyRecord[] = [
         lastused: '',
         flags: 0,
         enabled: 0,
-        apitype: ApiTypeName.DEFAULT,
+        apitype: '',
         useruid: '',
         itemuid: '',
         apikey: '',

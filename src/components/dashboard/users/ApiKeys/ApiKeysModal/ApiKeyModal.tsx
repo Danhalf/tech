@@ -1,4 +1,4 @@
-import { ApiKeyEnabled, ApiKeyRecord, ApiTypeName, ApiTypes } from 'common/interfaces/UserApiKeys';
+import { ApiKeyEnabled, ApiKeyRecord, ApiTypes } from 'common/interfaces/UserApiKeys';
 import { CustomModal } from 'components/dashboard/helpers/modal/renderModalHelper';
 import { CustomCheckbox } from 'components/dashboard/helpers/renderInputsHelper';
 import { useEffect, useState } from 'react';
@@ -26,9 +26,7 @@ const defaultDate = new Date().getTime();
 export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps): JSX.Element => {
     const { id: useruid } = useParams();
     const [apiKeyTypes, setApiKeyTypes] = useState<ApiTypes[] | null>(null);
-    const [apiKeyType, setApiKeyType] = useState<ApiTypeName>(
-        apiKey?.apitype || ApiTypeName.DEFAULT
-    );
+    const [apiKeyType, setApiKeyType] = useState<string>(apiKey?.apitype || '');
     const [apiKeyValue, setApiKeyValue] = useState<string>(apiKey?.apikey || '');
     const [apiKeyIssue, setApiKeyIssue] = useState<number | string | Date>(
         apiKey?.issuedate || defaultDate
@@ -46,7 +44,7 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
 
     const getApiTypes = () => {
         getApiKeysTypes().then((res) => {
-            setApiKeyTypes(res.api_types);
+            res.status === Status.OK && setApiKeyTypes(res.api_types);
             updateAction && updateAction();
         });
     };
@@ -65,7 +63,7 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
     };
 
     const handleApiKeyTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        setApiKeyType(e.target.value as ApiTypeName);
+        setApiKeyType(e.target.value);
     };
 
     const handleApiKeyEnabledChange = () => {
@@ -142,7 +140,7 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
                     <label className='form-label mb-0'>API key type</label>
                     <Form.Select value={apiKeyType} onChange={handleApiKeyTypeChange}>
                         {apiKeyTypes?.map(({ id, name }) => (
-                            <option key={String(id)} value={id}>
+                            <option key={id} value={name}>
                                 {name}
                             </option>
                         ))}
