@@ -83,6 +83,7 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
             port: apiPort,
             userlogin: apiUserLogin,
             userpassword: apiUserPassword,
+            clientuid: apiClientUid,
         }).then((res) => {
             if (res.status === Status.OK) updateAction && updateAction();
         });
@@ -149,7 +150,11 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
                 <Form.Group>
                     <label className='form-label mb-0'>Client UID</label>
                     <div className='d-flex'>
-                        <Form.Control value={apiClientUid} name='Client UID' disabled />
+                        <Form.Control
+                            value={apiClientUid}
+                            name='Client UID'
+                            onChange={({ target }) => setApiClientUid(target.value)}
+                        />
                         <Button className='w-25 ms-4' onClick={handleGetUid}>
                             Get uid
                         </Button>
@@ -174,7 +179,7 @@ export const ApiKeyModal = ({ apiKey, onClose, updateAction }: ApiKeyModalProps)
                 </Form.Group>
                 <Form.Group>
                     <label className='form-label mb-0'>User uID</label>
-                    <Form.Control value={apiKey?.useruid} disabled name='User uid' />
+                    <Form.Control value={apiKey?.useruid || useruid} disabled name='User uid' />
                 </Form.Group>
                 <Form.Group>
                     <label className='form-label mb-0'>Item uID</label>
