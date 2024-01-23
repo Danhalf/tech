@@ -5,7 +5,7 @@ export type ApiKeyEnabled = 0 | 1;
 
 export interface ApiKeyRecord {
     apikey: string;
-    apitype: ApiTypeName;
+    apitype: string;
     clientuid: string;
     created: string;
     deleted: string;
@@ -25,17 +25,9 @@ export interface ApiKeyRecord {
     useruid: string;
 }
 
-export enum ApiTypeName {
-    DEFAULT = 'Default',
-    KBB = 'KBB',
-    EDMUNDS = 'Edmunds',
-    CARS = 'Cars',
-    AUTOTRADER = 'Autotrader',
-}
-
 export interface ApiTypes {
     id: number;
-    name: ApiTypeName;
+    name: string;
 }
 
 export interface ApiTypesResponse {
