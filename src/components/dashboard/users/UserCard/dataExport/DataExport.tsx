@@ -45,7 +45,6 @@ export const DataExports = ({ useruid }: { useruid: string }): JSX.Element => {
                 if (response.status === Status.OK) {
                     setLoading(true);
                     setTimeout(() => {
-                        updateDataExports();
                         setLoading(false);
                     }, 3000);
                 }
