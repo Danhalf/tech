@@ -18,3 +18,7 @@ export const deleteUserDataExport = (taskuid: string): Promise<ActionStatus> => 
 export const resetUserDataExport = (taskuid: string): Promise<ActionStatus> => {
     return fetchApiData<ActionStatus>('POST', `external/${taskuid}/resetshared`);
 };
+
+export const getDataSharedMeta = (taskuid: string): Promise<ActionStatus> => {
+    return fetchApiData<ActionStatus>('GET', `external/${taskuid}/sharedmeta`);
+};
