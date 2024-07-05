@@ -23,7 +23,7 @@ export const TemplatesReports = ({ useruid }: { useruid?: string }): JSX.Element
 
     const updateTemplatesReports = (): void => {
         getTemplateReports(useruid).then((response) => {
-            if (response.status === Status.OK) {
+            if (response.status === Status.OK && response.documents) {
                 setTemplatesReports(response.documents);
             }
         });
