@@ -173,30 +173,6 @@ export class MenuComponent {
         return null;
     };
 
-    // Get item parent elements
-    private _getItemParentElements = (item: HTMLElement) => {
-        const parents: Array<HTMLElement> = [];
-        let parent: HTMLElement | null;
-        let i = 0;
-        let buffer: HTMLElement = item;
-
-        do {
-            parent = this._getItemParentElement(buffer);
-            if (parent) {
-                parents.push(parent);
-                buffer = parent as HTMLElement;
-            }
-
-            i++;
-        } while (parent !== null && i < 20);
-
-        if (this.triggerElement) {
-            parents.unshift(this.triggerElement);
-        }
-
-        return parents;
-    };
-
     // Prepare popper config for dropdown(see: https://popper.js.org/docs/v2/)
     private _getDropdownPopperConfig = (item: HTMLElement) => {
         // Placement
@@ -872,7 +848,6 @@ export class MenuComponent {
                     const menuObj = MenuComponent.getInstance(item) as MenuComponent;
                     if (menuObj && menuObj.getItemSubType(item) === 'dropdown') {
                         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                        const menu = menuObj.getElement();
                         const sub = menuObj.getItemSubElement(item) as HTMLElement;
                         if (item === e.target || item.contains(e.target as HTMLElement)) {
                             continue;
