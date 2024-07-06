@@ -1,4 +1,3 @@
-import { OffsetModel } from './models/OffsetModel';
 import { ViewPortModel } from './models/ViewPortModel';
 import { ElementStyleUtil } from './_ElementStyleUtil';
 import { DataUtil } from './_DataUtil';

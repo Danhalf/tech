@@ -32,7 +32,7 @@ export const TemplatesPrinted = ({ useruid }: { useruid?: string }): JSX.Element
 
     const updateTemplatesPrinted = (): void => {
         getTemplatePrints(useruid).then((response) => {
-            if (response.status === Status.OK) {
+            if (response.status === Status.OK && response.documents) {
                 setTemplatesPrinted(response.documents);
             }
         });
