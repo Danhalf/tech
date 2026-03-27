@@ -22,7 +22,7 @@ export const ClearCache = () => {
     return (
         <>
             <button
-                className='d-none d-sm-inline fixed-bottom text-nowrap ms-auto me-4 mb-4 btn btn-warning font-weight-bold'
+                className='d-none d-sm-inline fixed-bottom col-sm-2 text-nowrap ms-auto me-4 mb-4 btn btn-warning font-weight-bold'
                 onClick={handleClearCache}
             >
                 <span className='d-none d-sm-inline'>Clear server cache</span>

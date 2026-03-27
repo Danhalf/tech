@@ -27,27 +27,28 @@ export const DataExportsActions = ({ dataExport, updateAction }: DataExportsActi
         });
     };
 
-    const items = [
-        {
-            menuItemName: 'Metadata',
-            icon: 'arrow-down-refraction',
-            menuItemAction: handleGetMetaData,
-        },
-        {
-            menuItemName: 'Delete',
-            icon: 'minus-circle',
-            menuItemAction: handleDeleteItem,
-        },
-        {
-            menuItemName: 'Reset',
-            icon: 'arrows-circle',
-            menuItemAction: handleResetItem,
-        },
-    ];
-
     return (
         <>
-            <CustomDropdown title='Actions' items={items} />
+            <CustomDropdown
+                title='Actions'
+                items={[
+                    {
+                        menuItemName: 'Metadata',
+                        icon: 'arrow-down-refraction',
+                        menuItemAction: handleGetMetaData,
+                    },
+                    {
+                        menuItemName: 'Delete',
+                        icon: 'minus-circle',
+                        menuItemAction: handleDeleteItem,
+                    },
+                    {
+                        menuItemName: 'Reset',
+                        icon: 'arrows-circle',
+                        menuItemAction: handleResetItem,
+                    },
+                ]}
+            />
         </>
     );
 };

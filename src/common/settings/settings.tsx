@@ -1,4 +1,4 @@
-export const RecordsPerPageSteps = [5, 10, 15, 20] as const;
+export const RecordsPerPageSteps: ReadonlyArray<number> = [5, 10, 15, 20];
 
 export type RecordsPerPage = typeof RecordsPerPageSteps[number];
 export const DefaultRecordsPerPage: RecordsPerPage = RecordsPerPageSteps[1];

@@ -40,7 +40,6 @@ export const TemplatesPrinted = ({ useruid }: { useruid?: string }): JSX.Element
 
     useEffect(() => {
         updateTemplatesPrinted();
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     const handleFileUpload = (file: File) => {
@@ -64,7 +63,6 @@ export const TemplatesPrinted = ({ useruid }: { useruid?: string }): JSX.Element
             });
     };
 
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     const columns = useMemo(() => PrintedColumns(updateTemplatesPrinted), []);
     const { getTableProps, getTableBodyProps, headers, rows, prepareRow } = useTable({
         columns,
