@@ -5,8 +5,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CustomPagination } from '../helpers/pagination/renderPagination';
 import { useToast } from '../helpers/renderToastHelper';
-import { PrimaryButton } from '../smallComponents/buttons/PrimaryButton';
 import { convertLead, deleteLead, getLeads, updateLeadStatus } from './leads.service';
+import { LeadsActionsCell } from './LeadsActionsCell';
 
 const statusOptions: Array<{ value: LeadStatusApi; label: string }> = [
     { value: 'submitted', label: 'Submitted' },
@@ -26,15 +26,6 @@ const statusByCode: Record<number, LeadStatusApi> = {
     5: 'converted',
 };
 
-const statusLabelByValue: Record<LeadStatusApi, string> = {
-    submitted: 'Submitted',
-    in_review: 'In Review',
-    approved: 'Approved',
-    rejected: 'Rejected',
-    closed: 'Closed',
-    converted: 'Converted',
-};
-
 const normalizeStatus = (lead: Lead): LeadStatusApi => {
     if (lead.lead_status) {
         return lead.lead_status;
@@ -47,10 +38,11 @@ const normalizeStatus = (lead: Lead): LeadStatusApi => {
 
 const isConvertible = (lead: Lead): boolean => normalizeStatus(lead) === 'approved';
 const getLeadUid = (lead: Lead): string => {
-    const candidate = (lead as Lead & { uid?: string; id?: string; lead_uid?: string }).id
-        || (lead as Lead & { uid?: string; id?: string; lead_uid?: string }).uid
-        || (lead as Lead & { uid?: string; id?: string; lead_uid?: string }).id
-        || (lead as Lead & { uid?: string; id?: string; lead_uid?: string }).lead_uid;
+    const candidate =
+        (lead as Lead & { uid?: string; id?: string; lead_uid?: string }).id ||
+        (lead as Lead & { uid?: string; id?: string; lead_uid?: string }).uid ||
+        (lead as Lead & { uid?: string; id?: string; lead_uid?: string }).id ||
+        (lead as Lead & { uid?: string; id?: string; lead_uid?: string }).lead_uid;
 
     return candidate ? String(candidate) : '';
 };
@@ -177,13 +169,13 @@ export const Leads = () => {
                         <thead>
                             <tr className='text-start text-muted fw-bolder fs-7 text-uppercase gs-0'>
                                 <th>Created</th>
-                                <th>Status</th>
                                 <th>Company Name</th>
                                 <th>Email</th>
                                 <th>Phone</th>
                                 <th>City/State</th>
                                 <th>Dealer Type</th>
                                 <th>Source</th>
+                                <th style={{ width: '110px' }}>Status</th>
                                 <th>Actions</th>
                             </tr>
                         </thead>
@@ -193,30 +185,20 @@ export const Leads = () => {
                                     const leaduid = getLeadUid(lead);
 
                                     return (
-                                    <tr key={leaduid || lead.created}>
-                                        <td>{lead.created}</td>
-                                        <td>{statusLabelByValue[normalizeStatus(lead)]}</td>
-                                        <td>{lead.company_name}</td>
-                                        <td>{lead.email}</td>
-                                        <td>{lead.phone}</td>
-                                        <td>{`${lead.city || ''}${lead.city && lead.state ? ', ' : ''}${
-                                            lead.state || ''
-                                        }`}</td>
-                                        <td>{lead.dealer_type}</td>
-                                        <td>{lead.source}</td>
-                                        <td>
-                                            <div className='d-flex gap-2 flex-wrap'>
-                                                <PrimaryButton
-                                                    icon='eye'
-                                                    disabled={!leaduid}
-                                                    buttonClickAction={() =>
-                                                        navigate(`/dashboard/lead/${leaduid}`)
-                                                    }
-                                                >
-                                                    Open
-                                                </PrimaryButton>
+                                        <tr key={leaduid || lead.created}>
+                                            <td>{lead.created}</td>
+                                            <td>{lead.company_name}</td>
+                                            <td>{lead.email}</td>
+                                            <td>{lead.phone}</td>
+                                            <td>{`${lead.city || ''}${
+                                                lead.city && lead.state ? ', ' : ''
+                                            }${lead.state || ''}`}</td>
+                                            <td>{lead.dealer_type}</td>
+                                            <td>{lead.source}</td>
+                                            <td>
                                                 <select
-                                                    className='form-select form-select-sm w-140px'
+                                                    className='form-select form-select-sm'
+                                                    style={{ width: '110px' }}
                                                     disabled={!leaduid}
                                                     value={normalizeStatus(lead)}
                                                     onChange={(event) =>
@@ -235,28 +217,20 @@ export const Leads = () => {
                                                         </option>
                                                     ))}
                                                 </select>
-                                                <PrimaryButton
-                                                    icon='switch'
-                                                    disabled={!leaduid || !isConvertible(lead)}
-                                                    buttonClickAction={() =>
-                                                        void handleConvert(leaduid)
+                                            </td>
+                                            <td>
+                                                <LeadsActionsCell
+                                                    leaduid={leaduid}
+                                                    isConvertible={isConvertible(lead)}
+                                                    onOpen={() =>
+                                                        navigate(`/dashboard/lead/${leaduid}`)
                                                     }
-                                                >
-                                                    Convert
-                                                </PrimaryButton>
-                                                <PrimaryButton
-                                                    icon='trash'
-                                                    disabled={!leaduid}
-                                                    buttonClickAction={() =>
-                                                        void handleDelete(leaduid)
-                                                    }
-                                                >
-                                                    Delete
-                                                </PrimaryButton>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                );
+                                                    onConvert={() => void handleConvert(leaduid)}
+                                                    onDelete={() => void handleDelete(leaduid)}
+                                                />
+                                            </td>
+                                        </tr>
+                                    );
                                 })
                             ) : (
                                 <tr>
