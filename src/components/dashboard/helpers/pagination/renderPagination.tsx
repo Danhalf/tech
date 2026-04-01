@@ -35,6 +35,14 @@ export const CustomPagination = ({
     const [recordsPerPage, setRecordsPerPage] = useState<number>(count);
 
     useEffect(() => {
+        setCurrentPage(initialCurrentPage);
+    }, [initialCurrentPage]);
+
+    useEffect(() => {
+        setRecordsPerPage(count);
+    }, [count]);
+
+    useEffect(() => {
         setIsLoading(true);
         const total = Math.ceil(records / recordsPerPage);
         setTotalPages(total);

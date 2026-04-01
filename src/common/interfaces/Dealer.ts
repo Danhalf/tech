@@ -1,3 +1,15 @@
+export type DealerStatusParam = 'pre_approved' | 'active' | 'suspended' | 'expired';
+
+export interface DealersListResponse {
+    dealers: Dealer[];
+    total: number;
+}
+
+export interface DealerLinkedUser {
+    useruid: string;
+    username: string;
+}
+
 export interface Dealer {
     id: string;
     dealer_status: string;
