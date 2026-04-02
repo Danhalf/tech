@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { Link, useParams } from 'react-router-dom';
 import { useCallback, useEffect, useState } from 'react';
 import {
@@ -11,7 +10,7 @@ import {
     listUserSessions,
 } from 'components/dashboard/users/user.service';
 import { LOC_STORAGE_USER } from 'common/app-consts';
-import { LoginResponse } from 'common/auth.service';
+import { LoginResponse } from 'common/interfaces/UserData';
 import { ShortUserInfo } from 'common/interfaces/UserData';
 import { renderTable } from 'components/dashboard/microservices/MicroserviceCard';
 
