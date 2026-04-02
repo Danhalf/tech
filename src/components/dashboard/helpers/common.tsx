@@ -21,8 +21,8 @@ export const deepEqual = (first: any, second: any): boolean => {
             return false;
         }
 
-        for (let i = 0; i < first.length; i++) {
-            if (!deepEqual(first[i], second[i])) {
+        for (let index = 0; index < first.length; index++) {
+            if (!deepEqual(first[index], second[index])) {
                 return false;
             }
         }
@@ -54,12 +54,17 @@ export const convertToNumberIfNumeric = (str: string): number | string => {
     return parsedNumber;
 };
 
-const formatIntlDateTime = (date: Date): string =>
-    new Intl.DateTimeFormat(undefined, {
-        dateStyle: 'medium',
-        timeStyle: 'short',
-        hour12: false,
-    }).format(date);
+const padTwoDigits = (value: number): string => String(value).padStart(2, '0');
+
+const formatDisplayDateTime = (date: Date): string => {
+    const dayPart = padTwoDigits(date.getDate());
+    const monthPart = padTwoDigits(date.getMonth() + 1);
+    const yearPart = date.getFullYear();
+    const hoursPart = padTwoDigits(date.getHours());
+    const minutesPart = padTwoDigits(date.getMinutes());
+    const secondsPart = padTwoDigits(date.getSeconds());
+    return `${dayPart}/${monthPart}/${yearPart} ${hoursPart}:${minutesPart}:${secondsPart}`;
+};
 
 const normalizeServerDateInput = (raw: string): string => {
     let normalizedString = raw.trim();
@@ -79,13 +84,13 @@ export const formatServerDateForDisplay = (input: unknown): string => {
         return '';
     }
     if (input instanceof Date) {
-        return Number.isNaN(input.getTime()) ? '' : formatIntlDateTime(input);
+        return Number.isNaN(input.getTime()) ? '' : formatDisplayDateTime(input);
     }
     if (typeof input === 'number') {
         const parsedFromNumber = new Date(input);
         return Number.isNaN(parsedFromNumber.getTime())
             ? String(input)
-            : formatIntlDateTime(parsedFromNumber);
+            : formatDisplayDateTime(parsedFromNumber);
     }
     if (typeof input !== 'string') {
         return String(input);
@@ -95,5 +100,5 @@ export const formatServerDateForDisplay = (input: unknown): string => {
     if (Number.isNaN(parsedFromString.getTime())) {
         return input.trim();
     }
-    return formatIntlDateTime(parsedFromString);
+    return formatDisplayDateTime(parsedFromString);
 };
