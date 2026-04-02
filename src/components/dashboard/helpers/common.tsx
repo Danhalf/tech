@@ -53,3 +53,47 @@ export const convertToNumberIfNumeric = (str: string): number | string => {
 
     return parsedNumber;
 };
+
+const formatIntlDateTime = (date: Date): string =>
+    new Intl.DateTimeFormat(undefined, {
+        dateStyle: 'medium',
+        timeStyle: 'short',
+        hour12: false,
+    }).format(date);
+
+const normalizeServerDateInput = (raw: string): string => {
+    let normalizedString = raw.trim();
+    if (!normalizedString) {
+        return normalizedString;
+    }
+    if (/^\d{4}-\d{2}-\d{2} \d/.test(normalizedString)) {
+        normalizedString = normalizedString.replace(' ', 'T');
+    }
+    normalizedString = normalizedString.replace(/(\.\d{3})\d+(?=Z|[+-]|$)/, '$1');
+    normalizedString = normalizedString.replace(/\+00(:00)?$/i, 'Z');
+    return normalizedString;
+};
+
+export const formatServerDateForDisplay = (input: unknown): string => {
+    if (input === null || input === undefined) {
+        return '';
+    }
+    if (input instanceof Date) {
+        return Number.isNaN(input.getTime()) ? '' : formatIntlDateTime(input);
+    }
+    if (typeof input === 'number') {
+        const parsedFromNumber = new Date(input);
+        return Number.isNaN(parsedFromNumber.getTime())
+            ? String(input)
+            : formatIntlDateTime(parsedFromNumber);
+    }
+    if (typeof input !== 'string') {
+        return String(input);
+    }
+    const normalized = normalizeServerDateInput(input);
+    const parsedFromString = new Date(normalized);
+    if (Number.isNaN(parsedFromString.getTime())) {
+        return input.trim();
+    }
+    return formatIntlDateTime(parsedFromString);
+};
