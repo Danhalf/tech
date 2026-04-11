@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useToast } from '../helpers/renderToastHelper';
 import { deleteLead, getLead } from './leads.service';
 import { PrimaryButton } from '../smallComponents/buttons/PrimaryButton';
+import { ConfirmModal } from '../helpers/modal/confirmModal';
 
 const isEmpty = (value: unknown): boolean => {
     if (value === null || value === undefined) return true;
@@ -72,6 +73,7 @@ export const LeadCard = () => {
     const { id } = useParams();
     const [leadRecord, setLeadRecord] = useState<Record<string, unknown> | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
     const { handleShowToast } = useToast();
     const navigate = useNavigate();
     const fetchLead = useCallback(async (): Promise<void> => {
@@ -106,10 +108,11 @@ export const LeadCard = () => {
         return 'unknown';
     }, [leadRecord]);
 
-    const handleDelete = async () => {
+    const handleDeleteConfirm = async () => {
         if (!id) return;
         try {
             await deleteLead(id);
+            setIsDeleteModalOpen(false);
             handleShowToast({
                 message: 'Lead successfully deleted',
                 type: 'success',
@@ -123,6 +126,12 @@ export const LeadCard = () => {
 
     return (
         <div className='card mb-5 mb-xl-10'>
+            <ConfirmModal
+                show={isDeleteModalOpen}
+                onConfirm={() => void handleDeleteConfirm()}
+                onCancel={() => setIsDeleteModalOpen(false)}
+                message={`Are you sure you want to delete lead "${leadCompanyName}"?`}
+            />
             <div className='card-header'>
                 <div className='w-100 py-4'>
                     <h3 className='fw-bolder m-0 my-6'>Lead {leadCompanyName}</h3>
@@ -143,7 +152,7 @@ export const LeadCard = () => {
                         <PrimaryButton
                             className='ms-auto'
                             icon='trash'
-                            buttonClickAction={handleDelete}
+                            buttonClickAction={() => setIsDeleteModalOpen(true)}
                             appearance='danger'
                         >
                             Delete
