@@ -2,9 +2,10 @@ import { AxiosError } from 'axios';
 import { leadsKeys } from 'common/app-consts';
 import { formatServerDateForDisplay } from 'components/dashboard/helpers/common';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useToast } from '../helpers/renderToastHelper';
-import { getLead } from './leads.service';
+import { deleteLead, getLead } from './leads.service';
+import { PrimaryButton } from '../smallComponents/buttons/PrimaryButton';
 
 const isEmpty = (value: unknown): boolean => {
     if (value === null || value === undefined) return true;
@@ -54,14 +55,10 @@ const LEAD_FIELD_ORDER: string[] = [
 ];
 
 const humanizeKey = (key: string): string =>
-    key
-        .replace(/_/g, ' ')
-        .replace(/\b\w/g, (char) => char.toUpperCase());
+    key.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
 
 const sortLeadKeys = (keys: string[]): string[] => {
-    const orderMap = new Map(
-        LEAD_FIELD_ORDER.map((fieldKey, index) => [fieldKey, index])
-    );
+    const orderMap = new Map(LEAD_FIELD_ORDER.map((fieldKey, index) => [fieldKey, index]));
     const unknownRank = LEAD_FIELD_ORDER.length;
     return [...keys].sort((leftKey, rightKey) => {
         const rankLeft = orderMap.has(leftKey) ? orderMap.get(leftKey)! : unknownRank;
@@ -76,7 +73,7 @@ export const LeadCard = () => {
     const [leadRecord, setLeadRecord] = useState<Record<string, unknown> | null>(null);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const { handleShowToast } = useToast();
-
+    const navigate = useNavigate();
     const fetchLead = useCallback(async (): Promise<void> => {
         if (!id) return;
         setIsLoading(true);
@@ -103,15 +100,55 @@ export const LeadCard = () => {
             .map((key) => ({ key, value: leadRecord[key] }))
             .filter(({ value }) => !isEmpty(value));
     }, [leadRecord]);
+    const leadCompanyName = useMemo(() => {
+        const companyName = leadRecord?.company_name;
+        if (typeof companyName === 'string' && companyName.trim() !== '') return companyName;
+        return 'unknown';
+    }, [leadRecord]);
+
+    const handleDelete = async () => {
+        if (!id) return;
+        try {
+            await deleteLead(id);
+            handleShowToast({
+                message: 'Lead successfully deleted',
+                type: 'success',
+            });
+            navigate('/dashboard/leads');
+        } catch (err) {
+            const { message } = err as Error | AxiosError;
+            handleShowToast({ message, type: 'danger' });
+        }
+    };
 
     return (
         <div className='card mb-5 mb-xl-10'>
             <div className='card-header'>
-                <div className='card-title m-0 d-flex align-items-center justify-content-between flex-wrap gap-3'>
-                    <h3 className='fw-bolder m-0'>Lead</h3>
-                    <Link to='/dashboard/leads' className='btn btn-sm btn-light'>
-                        Back to leads
-                    </Link>
+                <div className='w-100 py-4'>
+                    <h3 className='fw-bolder m-0 my-6'>Lead {leadCompanyName}</h3>
+                    <div className='d-flex align-items-center flex-wrap gap-3'>
+                        <PrimaryButton
+                            icon='arrow-left'
+                            buttonClickAction={() => navigate('/dashboard/leads')}
+                            appearance='light'
+                        >
+                            Back to leads
+                        </PrimaryButton>
+                        <PrimaryButton
+                            icon='arrows-circle'
+                            buttonClickAction={() => void fetchLead()}
+                        >
+                            Refresh
+                        </PrimaryButton>
+                        <PrimaryButton
+                            className='ms-auto'
+                            icon='trash'
+                            buttonClickAction={handleDelete}
+                            appearance='danger'
+                        >
+                            Delete
+                        </PrimaryButton>
+                    </div>
                 </div>
             </div>
             <div className='card-body p-9 position-relative'>
