@@ -1,12 +1,46 @@
+import { useCallback } from 'react';
 import { Link } from 'react-router-dom';
 
+const SIDEBAR_MINIMIZE_KEY = 'sidebar-minimize';
+
 const Sidebar = () => {
+    const handleToggle = useCallback(() => {
+        const body = document.body;
+        const isMinimized = body.getAttribute('data-kt-app-sidebar-minimize') === 'on';
+
+        if (isMinimized) {
+            body.removeAttribute('data-kt-app-sidebar-minimize');
+            localStorage.removeItem(SIDEBAR_MINIMIZE_KEY);
+        } else {
+            body.setAttribute('data-kt-app-sidebar-minimize', 'on');
+            localStorage.setItem(SIDEBAR_MINIMIZE_KEY, 'on');
+        }
+    }, []);
+
     return (
         <div className='app-sidebar flex-column'>
             <div className='app-sidebar-logo px-6'>
                 <Link to='/dashboard'>
-                    <img src='/logo/admss_logo.png' className='logo mb-0' alt='ADMSS' />
+                    <img
+                        src='/logo/admss_logo.png'
+                        className='logo mb-0 app-sidebar-logo-default'
+                        alt='ADMSS'
+                    />
+                    <img
+                        src='/logo/admss_logo.png'
+                        className='logo-minimize mb-0 app-sidebar-logo-minimize'
+                        alt='ADMSS'
+                    />
                 </Link>
+                <div
+                    className='app-sidebar-toggle btn btn-icon btn-shadow btn-sm btn-color-muted btn-active-color-primary h-30px w-30px position-absolute top-50 start-100 translate-middle rotate'
+                    onClick={handleToggle}
+                >
+                    <i className='ki-duotone ki-black-left-line fs-3 rotate-180'>
+                        <span className='path1'></span>
+                        <span className='path2'></span>
+                    </i>
+                </div>
             </div>
             <div className='app-sidebar-menu overflow-hidden flex-column-fluid'>
                 <div className='app-sidebar-wrapper hover-scroll-overlay-y my-5'>

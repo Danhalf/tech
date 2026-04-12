@@ -22,8 +22,45 @@
     margin-bottom: 10px;
 }
 
+.logo-minimize {
+    width: 35px;
+    height: 35px;
+    object-fit: contain;
+}
+
 .menu-item .menu-title {
     font-size: 1.1rem;
+}
+
+.app-sidebar-toggle {
+    cursor: pointer;
+    z-index: 105;
+    transition: all 0.3s ease;
+}
+
+.app-sidebar-toggle:hover {
+    opacity: 0.8;
+}
+
+.app-sidebar-toggle .rotate-180 {
+    transition: transform 0.3s ease;
+}
+
+[data-kt-app-sidebar-minimize="on"] .app-sidebar-toggle .rotate-180 {
+    transform: rotateZ(0deg);
+}
+
+[data-kt-app-sidebar-hoverable="true"][data-kt-app-sidebar-minimize="on"] .app-sidebar:hover .app-sidebar-logo-default {
+    display: inline-block !important;
+}
+
+[data-kt-app-sidebar-hoverable="true"][data-kt-app-sidebar-minimize="on"] .app-sidebar:hover .app-sidebar-logo-minimize {
+    display: none !important;
+}
+
+[data-kt-app-sidebar-hoverable="true"][data-kt-app-sidebar-minimize="on"] .app-sidebar:hover .menu-content,
+[data-kt-app-sidebar-hoverable="true"][data-kt-app-sidebar-minimize="on"] .app-sidebar:hover .menu-title {
+    opacity: 1 !important;
 }
 
 .sign-in-bg {
