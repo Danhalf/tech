@@ -1,21 +1,27 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { Link } from 'react-router-dom';
 
 const SIDEBAR_MINIMIZE_KEY = 'sidebar-minimize';
 
 const Sidebar = () => {
+    const [isMinimized, setIsMinimized] = useState(
+        () => localStorage.getItem(SIDEBAR_MINIMIZE_KEY) === 'on'
+    );
+
     const handleToggle = useCallback(() => {
         const body = document.body;
-        const isMinimized = body.getAttribute('data-kt-app-sidebar-minimize') === 'on';
+        const nextIsMinimized = !isMinimized;
+        setIsMinimized(nextIsMinimized);
 
-        if (isMinimized) {
-            body.removeAttribute('data-kt-app-sidebar-minimize');
-            localStorage.removeItem(SIDEBAR_MINIMIZE_KEY);
-        } else {
+        if (nextIsMinimized) {
             body.setAttribute('data-kt-app-sidebar-minimize', 'on');
             localStorage.setItem(SIDEBAR_MINIMIZE_KEY, 'on');
+            return;
         }
-    }, []);
+
+        body.removeAttribute('data-kt-app-sidebar-minimize');
+        localStorage.removeItem(SIDEBAR_MINIMIZE_KEY);
+    }, [isMinimized]);
 
     return (
         <div className='app-sidebar flex-column'>
@@ -33,10 +39,16 @@ const Sidebar = () => {
                     />
                 </Link>
                 <div
-                    className='app-sidebar-toggle btn btn-icon btn-shadow btn-sm btn-color-muted btn-active-color-primary h-30px w-30px position-absolute top-50 start-100 translate-middle rotate'
+                    className={`app-sidebar-toggle btn btn-icon btn-shadow btn-sm btn-color-muted btn-active-color-primary h-30px w-30px position-absolute top-50 start-100 translate-middle rotate ${
+                        isMinimized ? 'active' : ''
+                    }`}
                     onClick={handleToggle}
                 >
-                    <i className='ki-duotone ki-black-left-line fs-3 rotate-180'>
+                    <i
+                        className={`ki-duotone ki-black-left-line fs-3 sidebar-toggle-icon ${
+                            isMinimized ? 'sidebar-toggle-icon--closed' : ''
+                        }`}
+                    >
                         <span className='path1'></span>
                         <span className='path2'></span>
                     </i>

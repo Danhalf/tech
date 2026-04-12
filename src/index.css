@@ -42,12 +42,15 @@
     opacity: 0.8;
 }
 
-.app-sidebar-toggle .rotate-180 {
-    transition: transform 0.3s ease;
+[data-kt-app-sidebar-minimize='on'] .app-sidebar-toggle.active .sidebar-toggle-icon,
+[data-kt-app-sidebar-minimize='on'] .app-sidebar-toggle .sidebar-toggle-icon--closed {
+    transform: scaleX(1);
 }
 
-[data-kt-app-sidebar-minimize="on"] .app-sidebar-toggle .rotate-180 {
-    transform: rotateZ(0deg);
+.sidebar-toggle-icon {
+    transform: scaleX(-1);
+    transform-origin: center center;
+    transition: transform 0.2s ease;
 }
 
 [data-kt-app-sidebar-hoverable="true"][data-kt-app-sidebar-minimize="on"] .app-sidebar:hover .app-sidebar-logo-default {
