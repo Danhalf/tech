@@ -15,8 +15,8 @@ import { DeletedDealers } from './components/dashboard/users/DeletedDealers';
 import { Tab } from 'bootstrap';
 import { ErrorPage } from './components/Error';
 import { Dealers } from './components/dashboard/dealers';
-import { Leads } from './components/dashboard/leads/Leads';
-import { LeadCard } from './components/dashboard/leads/LeadCard';
+import { Leads } from './components/dashboard/leads/form/Leads';
+import { LeadCard } from './components/dashboard/leads/form/LeadCard';
 
 export function MasterInit() {
     const pluginsInitialization = () => {

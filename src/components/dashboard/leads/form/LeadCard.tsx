@@ -5,17 +5,17 @@ import { ShowEmptyLeadFields } from 'common/settings/settings';
 import { formatServerDateForDisplay } from 'components/dashboard/helpers/common';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useToast } from '../helpers/renderToastHelper';
+import { useToast } from '../../helpers/renderToastHelper';
 import {
     buildConvertLeadPayload,
     convertLead,
     deleteLead,
     getLead,
     updateLeadStatus,
-} from './leads.service';
-import { PrimaryButton } from '../smallComponents/buttons/PrimaryButton';
-import { ConfirmModal } from '../helpers/modal/confirmModal';
-import { LEAD_STATUS_BY_CODE, STATUS_OPTIONS } from './constants/leads.constants';
+} from '../leads.service';
+import { PrimaryButton } from '../../smallComponents/buttons/PrimaryButton';
+import { ConfirmModal } from '../../helpers/modal/confirmModal';
+import { LEAD_STATUS_BY_CODE, STATUS_OPTIONS } from '../constants/leads.constants';
 
 const isEmpty = (value: unknown): boolean => {
     if (value === null || value === undefined) return true;
@@ -70,7 +70,9 @@ const LEAD_FIELD_ORDER: LeadField[] = [
 ];
 
 const humanizeKey = (key: string): string =>
-    key.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
+    key
+        .replace(/_/g, ' ')
+        .replace(/\b\w/g, (char, index) => (index === 0 ? char.toUpperCase() : char));
 
 const sortLeadKeys = (keys: string[]): string[] => {
     const orderMap = new Map(LEAD_FIELD_ORDER.map((fieldKey, index) => [fieldKey, index]));
@@ -125,7 +127,6 @@ const conversionFields: LeadField[] = [
     'converted_by_user_uid',
     'converted_by_user_id',
     'converted_by_username',
-    'reviewed_by_user_uid',
     'converted_to_dealer_uid',
 ];
 
@@ -266,7 +267,8 @@ export const LeadCard = () => {
         const leadData = leadRecord as Partial<Lead> | null;
         const hasFirstName =
             typeof leadData?.first_name === 'string' && leadData.first_name.trim() !== '';
-        const hasLastName = typeof leadData?.last_name === 'string' && leadData.last_name.trim() !== '';
+        const hasLastName =
+            typeof leadData?.last_name === 'string' && leadData.last_name.trim() !== '';
         if (!hasFirstName || !hasLastName) {
             handleShowToast({
                 message: 'Lead must have first name and last name before conversion',
