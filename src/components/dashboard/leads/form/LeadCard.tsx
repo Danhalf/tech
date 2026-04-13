@@ -39,7 +39,9 @@ const formatFieldValue = (fieldKey: string, value: unknown): string => {
     return String(value);
 };
 
-const LEAD_FIELD_ORDER: string[] = [
+type LeadField = keyof Lead;
+
+const LEAD_FIELD_ORDER: LeadField[] = [
     'id',
     'created',
     'updated',
@@ -68,14 +70,20 @@ const LEAD_FIELD_ORDER: string[] = [
 ];
 
 const humanizeKey = (key: string): string =>
-    key.replace(/_/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
+    key
+        .replace(/_/g, ' ')
+        .replace(/\b\w/g, (char, index) => (index === 0 ? char.toUpperCase() : char));
 
 const sortLeadKeys = (keys: string[]): string[] => {
     const orderMap = new Map(LEAD_FIELD_ORDER.map((fieldKey, index) => [fieldKey, index]));
     const unknownRank = LEAD_FIELD_ORDER.length;
     return [...keys].sort((leftKey, rightKey) => {
-        const rankLeft = orderMap.has(leftKey) ? orderMap.get(leftKey)! : unknownRank;
-        const rankRight = orderMap.has(rightKey) ? orderMap.get(rightKey)! : unknownRank;
+        const rankLeft = orderMap.has(leftKey as LeadField)
+            ? orderMap.get(leftKey as LeadField)!
+            : unknownRank;
+        const rankRight = orderMap.has(rightKey as LeadField)
+            ? orderMap.get(rightKey as LeadField)!
+            : unknownRank;
         if (rankLeft !== rankRight) return rankLeft - rankRight;
         return leftKey.localeCompare(rightKey);
     });
@@ -99,9 +107,9 @@ const normalizeLeadStatus = (leadRecord: Record<string, unknown> | null): LeadSt
 const formatStatusLabel = (status: LeadStatusApi): string =>
     STATUS_OPTIONS.find((option) => option.value === status)?.label || status;
 
-const companyFields = ['company_name', 'company_address', 'city', 'state', 'zip'];
-const contactFields = ['first_name', 'last_name', 'email', 'phone'];
-const generalFields = [
+const companyFields: LeadField[] = ['company_name', 'company_address', 'city', 'state', 'zip'];
+const contactFields: LeadField[] = ['first_name', 'last_name', 'email', 'phone'];
+const generalFields: LeadField[] = [
     'status',
     'lead_status',
     'source',
@@ -112,14 +120,14 @@ const generalFields = [
     'updated',
     'reviewed_at',
 ];
-const conversionFields = [
+const conversionFields: LeadField[] = [
     'dealer_id',
     'converted_at',
     'converted_by',
     'converted_by_user_uid',
     'converted_by_user_id',
     'converted_by_username',
-    'reviewed_by_user_uid',
+    'converted_to_dealer_uid',
 ];
 
 export const LeadCard = () => {
@@ -174,15 +182,21 @@ export const LeadCard = () => {
         return 'unknown';
     }, [leadRecord]);
     const conversionRows = useMemo(
-        () => rows.filter(({ key }) => conversionFields.includes(key)),
+        () => rows.filter(({ key }) => conversionFields.includes(key as keyof Lead)),
         [rows]
     );
     const displayedSectionKeys = useMemo(
-        () => new Set([...companyFields, ...contactFields, ...generalFields, ...conversionFields]),
+        () =>
+            new Set<LeadField>([
+                ...companyFields,
+                ...contactFields,
+                ...generalFields,
+                ...conversionFields,
+            ]),
         []
     );
     const otherRows = useMemo(
-        () => rows.filter(({ key }) => !displayedSectionKeys.has(key)),
+        () => rows.filter(({ key }) => !displayedSectionKeys.has(key as LeadField)),
         [rows, displayedSectionKeys]
     );
     const canConvert = status === 'approved' && !isLoading && !isActionLoading;
@@ -198,7 +212,7 @@ export const LeadCard = () => {
         [leadRecord, status]
     );
 
-    const renderSection = (title: string, fieldKeys: string[]) => {
+    const renderSection = (title: string, fieldKeys: LeadField[]) => {
         const sectionRows = fieldKeys
             .map((fieldKey) => ({ key: fieldKey, value: getFieldValue(fieldKey) }))
             .filter(({ value }) => shouldDisplayField(value));
@@ -253,7 +267,8 @@ export const LeadCard = () => {
         const leadData = leadRecord as Partial<Lead> | null;
         const hasFirstName =
             typeof leadData?.first_name === 'string' && leadData.first_name.trim() !== '';
-        const hasLastName = typeof leadData?.last_name === 'string' && leadData.last_name.trim() !== '';
+        const hasLastName =
+            typeof leadData?.last_name === 'string' && leadData.last_name.trim() !== '';
         if (!hasFirstName || !hasLastName) {
             handleShowToast({
                 message: 'Lead must have first name and last name before conversion',
