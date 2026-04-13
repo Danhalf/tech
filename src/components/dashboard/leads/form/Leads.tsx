@@ -4,17 +4,17 @@ import { DefaultRecordsPerPage, RecordsPerPage } from 'common/settings/settings'
 import { formatServerDateForDisplay } from 'components/dashboard/helpers/common';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CustomPagination } from '../helpers/pagination/renderPagination';
-import { useToast } from '../helpers/renderToastHelper';
+import { CustomPagination } from '../../helpers/pagination/renderPagination';
+import { useToast } from '../../helpers/renderToastHelper';
 import {
     buildConvertLeadPayload,
     convertLead,
     deleteLead,
     getLeads,
     updateLeadStatus,
-} from './leads.service';
-import { LeadsActionsCell } from './form/LeadsActionsCell';
-import { LEAD_STATUS_BY_CODE, STATUS_OPTIONS } from './constants/leads.constants';
+} from '../leads.service';
+import { LeadsActionsCell } from './LeadsActionsCell';
+import { LEAD_STATUS_BY_CODE, STATUS_OPTIONS } from '../constants/leads.constants';
 
 const normalizeStatus = (lead: Lead): LeadStatusApi => {
     if (lead.lead_status) {
@@ -224,9 +224,7 @@ export const Leads = () => {
                                                     onOpen={() =>
                                                         navigate(`/dashboard/lead/${leaduid}`)
                                                     }
-                                                    onConvert={() =>
-                                                        void handleConvert(lead, leaduid)
-                                                    }
+                                                    onConvert={() => void handleConvert(lead, leaduid)}
                                                     onDelete={() => void handleDelete(leaduid)}
                                                 />
                                             </td>

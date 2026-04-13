@@ -5,17 +5,17 @@ import { ShowEmptyLeadFields } from 'common/settings/settings';
 import { formatServerDateForDisplay } from 'components/dashboard/helpers/common';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useToast } from '../helpers/renderToastHelper';
+import { useToast } from '../../helpers/renderToastHelper';
 import {
     buildConvertLeadPayload,
     convertLead,
     deleteLead,
     getLead,
     updateLeadStatus,
-} from './leads.service';
-import { PrimaryButton } from '../smallComponents/buttons/PrimaryButton';
-import { ConfirmModal } from '../helpers/modal/confirmModal';
-import { LEAD_STATUS_BY_CODE, STATUS_OPTIONS } from './constants/leads.constants';
+} from '../leads.service';
+import { PrimaryButton } from '../../smallComponents/buttons/PrimaryButton';
+import { ConfirmModal } from '../../helpers/modal/confirmModal';
+import { LEAD_STATUS_BY_CODE, STATUS_OPTIONS } from '../constants/leads.constants';
 
 const isEmpty = (value: unknown): boolean => {
     if (value === null || value === undefined) return true;
