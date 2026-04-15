@@ -4,11 +4,16 @@ import { DefaultRecordsPerPage, RecordsPerPage } from 'common/settings/settings'
 import { formatServerDateForDisplay } from 'components/dashboard/helpers/common';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { CustomPagination } from '../../helpers/pagination/renderPagination';
-import { useToast } from '../../helpers/renderToastHelper';
-import { ActionButton } from '../../smallComponents/buttons/ActionButton';
-import { deleteLead, getLeads, updateLeadStatus } from '../leads.service';
-import { LEAD_STATUS_BY_CODE, STATUS_OPTIONS } from '../constants/leads.constants';
+import { CustomModal } from 'components/dashboard/helpers/modal/renderModalHelper';
+import { CustomPagination } from 'components/dashboard/helpers/pagination/renderPagination';
+import { useToast } from 'components/dashboard/helpers/renderToastHelper';
+import { ActionButton } from 'components/dashboard/smallComponents/buttons/ActionButton';
+import { deleteLead, getLeads, updateLeadStatus } from 'components/dashboard/leads/leads.service';
+import {
+    LEAD_STATUS_BY_CODE,
+    STATUS_OPTIONS,
+} from 'components/dashboard/leads/constants/leads.constants';
+import { LeadCreateModal } from 'components/dashboard/leads/form/LeadCreateModal';
 
 const normalizeStatus = (lead: Lead): LeadStatusApi => {
     if (lead.lead_status) {
@@ -35,6 +40,7 @@ export const Leads = () => {
     const [total, setTotal] = useState<number>(0);
     const [statusFilter, setStatusFilter] = useState<LeadStatusApi | ''>('');
     const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [currentCount, setCurrentCount] = useState<RecordsPerPage>(DefaultRecordsPerPage);
     const navigate = useNavigate();
@@ -106,10 +112,29 @@ export const Leads = () => {
 
     return (
         <div className='card'>
+            {isCreateModalOpen && (
+                <CustomModal
+                    onClose={() => setIsCreateModalOpen(false)}
+                    title='Create lead'
+                    width={900}
+                >
+                    <LeadCreateModal
+                        onClose={() => setIsCreateModalOpen(false)}
+                        onCreated={() => void loadLeads()}
+                    />
+                </CustomModal>
+            )}
             <div className='card-body'>
                 <div className='d-flex justify-content-between align-items-center mb-5'>
                     <h3 className='m-0'>Leads</h3>
                     <div className='d-flex align-items-center gap-3'>
+                        <ActionButton
+                            icon='plus'
+                            appearance='primary'
+                            buttonClickAction={() => setIsCreateModalOpen(true)}
+                        >
+                            Add lead
+                        </ActionButton>
                         <label className='mb-0 text-muted fw-bold'>Status</label>
                         <select
                             className='form-select form-select-sm w-200px'

@@ -1,10 +1,26 @@
 import { fetchApiData } from 'common/api/fetchAPI';
-import { Lead, LeadStatusApi, LeadsListResponse } from 'common/interfaces/Lead';
+import { DealerType, Lead, LeadStatusApi, LeadsListResponse } from 'common/interfaces/Lead';
 
 interface GetLeadsParams {
     top?: number;
     skip?: number;
     status?: LeadStatusApi;
+}
+
+export interface CreateLeadPayload {
+    email: string;
+    company_name: string;
+    company_address: string;
+    city: string;
+    state: string;
+    zip: string;
+    first_name: string;
+    last_name: string;
+    phone: string;
+    dealer_type: DealerType;
+    referral_code?: string;
+    notes?: string;
+    source_details?: string;
 }
 
 const leadStatusToCode: Record<LeadStatusApi, number> = {
@@ -41,13 +57,21 @@ export const getLead = (id: string): Promise<Lead> => {
     return fetchApiData<Lead>('GET', `lead/${id}`);
 };
 
+export const createLead = (data: CreateLeadPayload): Promise<{ id: string }> => {
+    return fetchApiData<{ id: string }>('POST', 'lead/submit', { data });
+};
+
 export const updateLeadStatus = (
     leaduid: string,
     status: LeadStatusApi
 ): Promise<{ id: string; lead_status: LeadStatusApi }> => {
-    return fetchApiData<{ id: string; lead_status: LeadStatusApi }>('PATCH', `lead/${leaduid}/review`, {
-        data: { status },
-    });
+    return fetchApiData<{ id: string; lead_status: LeadStatusApi }>(
+        'PATCH',
+        `lead/${leaduid}/review`,
+        {
+            data: { status },
+        }
+    );
 };
 
 export interface ConvertLeadPayload {
