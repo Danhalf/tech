@@ -4,6 +4,7 @@ import { DefaultRecordsPerPage, RecordsPerPage } from 'common/settings/settings'
 import { formatServerDateForDisplay } from 'components/dashboard/helpers/common';
 import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ConfirmModal } from 'components/dashboard/helpers/modal/confirmModal';
 import { CustomModal } from 'components/dashboard/helpers/modal/renderModalHelper';
 import { CustomPagination } from 'components/dashboard/helpers/pagination/renderPagination';
 import { useToast } from 'components/dashboard/helpers/renderToastHelper';
@@ -36,6 +37,14 @@ const getLeadUid = (lead: Lead): string => {
     return candidate ? String(candidate) : '';
 };
 
+const getLeadDeleteLabel = (lead: Lead): string => {
+    const name = lead.company_name?.trim();
+    if (name) return name;
+    const email = lead.email?.trim();
+    if (email) return email;
+    return 'this lead';
+};
+
 export const Leads = () => {
     const [leads, setLeads] = useState<Lead[]>([]);
     const [total, setTotal] = useState<number>(0);
@@ -45,6 +54,9 @@ export const Leads = () => {
     const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
     const [currentPage, setCurrentPage] = useState<number>(0);
     const [currentCount, setCurrentCount] = useState<RecordsPerPage>(DefaultRecordsPerPage);
+    const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
+    const [pendingDeleteUid, setPendingDeleteUid] = useState<string>('');
+    const [pendingDeleteLabel, setPendingDeleteLabel] = useState<string>('');
     const navigate = useNavigate();
     const { handleShowToast } = useToast();
 
@@ -112,9 +124,19 @@ export const Leads = () => {
         }
     };
 
-    const handleDelete = async (leaduid: string): Promise<void> => {
+    const openDeleteConfirm = (lead: Lead, leaduid: string): void => {
+        setPendingDeleteUid(leaduid);
+        setPendingDeleteLabel(getLeadDeleteLabel(lead));
+        setIsDeleteModalOpen(true);
+    };
+
+    const handleDeleteConfirm = async (): Promise<void> => {
+        if (!pendingDeleteUid) return;
         try {
-            await deleteLead(leaduid);
+            await deleteLead(pendingDeleteUid);
+            setIsDeleteModalOpen(false);
+            setPendingDeleteUid('');
+            setPendingDeleteLabel('');
             await loadLeads();
             handleShowToast({
                 message: 'Lead successfully deleted',
@@ -128,6 +150,16 @@ export const Leads = () => {
 
     return (
         <div className='card'>
+            <ConfirmModal
+                show={isDeleteModalOpen}
+                onConfirm={() => void handleDeleteConfirm()}
+                onCancel={() => {
+                    setIsDeleteModalOpen(false);
+                    setPendingDeleteUid('');
+                    setPendingDeleteLabel('');
+                }}
+                message={`Are you sure you want to delete lead "${pendingDeleteLabel}"?`}
+            />
             {isCreateModalOpen && (
                 <CustomModal
                     onClose={() => setIsCreateModalOpen(false)}
@@ -280,7 +312,7 @@ export const Leads = () => {
                                                             appearance='danger'
                                                             className='btn-sm'
                                                             buttonClickAction={() =>
-                                                                void handleDelete(leaduid)
+                                                                openDeleteConfirm(lead, leaduid)
                                                             }
                                                             aria-label='Delete lead'
                                                             title='Delete'
