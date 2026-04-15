@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { CustomModal } from 'components/dashboard/helpers/modal/renderModalHelper';
 import { CustomPagination } from 'components/dashboard/helpers/pagination/renderPagination';
 import { useToast } from 'components/dashboard/helpers/renderToastHelper';
+import { CustomDropdown } from 'components/dashboard/helpers/renderDropdownHelper';
 import { ActionButton } from 'components/dashboard/smallComponents/buttons/ActionButton';
 import { deleteLead, getLeads, updateLeadStatus } from 'components/dashboard/leads/leads.service';
 import {
@@ -38,7 +39,8 @@ const getLeadUid = (lead: Lead): string => {
 export const Leads = () => {
     const [leads, setLeads] = useState<Lead[]>([]);
     const [total, setTotal] = useState<number>(0);
-    const [statusFilter, setStatusFilter] = useState<LeadStatusApi | ''>('');
+    const [statusFilter, setStatusFilter] = useState<LeadStatusApi[]>([]);
+    const [draftStatusFilter, setDraftStatusFilter] = useState<LeadStatusApi[]>([]);
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
     const [currentPage, setCurrentPage] = useState<number>(0);
@@ -52,7 +54,7 @@ export const Leads = () => {
             const response = await getLeads({
                 top: currentCount,
                 skip: currentPage * currentCount,
-                status: statusFilter || undefined,
+                status: statusFilter.length > 0 ? statusFilter : undefined,
             });
             setLeads(response.leads || []);
             setTotal(response.total || 0);
@@ -77,8 +79,22 @@ export const Leads = () => {
         setCurrentPage(0);
     };
 
-    const handleFilterChange = (value: LeadStatusApi | '') => {
-        setStatusFilter(value);
+    const handleStatusFilterToggle = (status: LeadStatusApi) => {
+        setDraftStatusFilter((current) =>
+            current.includes(status)
+                ? current.filter((item) => item !== status)
+                : [...current, status]
+        );
+    };
+
+    const handleApplyFilters = () => {
+        setStatusFilter(draftStatusFilter);
+        setCurrentPage(0);
+    };
+
+    const handleResetFilters = () => {
+        setDraftStatusFilter([]);
+        setStatusFilter([]);
         setCurrentPage(0);
     };
 
@@ -135,21 +151,51 @@ export const Leads = () => {
                         >
                             Add lead
                         </ActionButton>
-                        <label className='mb-0 text-muted fw-bold'>Status</label>
-                        <select
-                            className='form-select form-select-sm w-200px'
-                            value={statusFilter}
-                            onChange={(event) =>
-                                handleFilterChange(event.target.value as LeadStatusApi | '')
+                        <CustomDropdown
+                            title={
+                                statusFilter.length > 0
+                                    ? `Status (${statusFilter.length})`
+                                    : 'Status'
                             }
+                            iconBefore='filter'
+                            width={220}
                         >
-                            <option value=''>All statuses</option>
-                            {STATUS_OPTIONS.map((option) => (
-                                <option key={option.value} value={option.value}>
-                                    {option.label}
-                                </option>
-                            ))}
-                        </select>
+                            <div className='px-5 py-3'>
+                                {STATUS_OPTIONS.map((option) => (
+                                    <label
+                                        key={option.value}
+                                        className='form-check form-check-sm form-check-custom form-check-solid mb-3'
+                                    >
+                                        <input
+                                            className='form-check-input'
+                                            type='checkbox'
+                                            checked={draftStatusFilter.includes(option.value)}
+                                            onChange={() => handleStatusFilterToggle(option.value)}
+                                        />
+                                        <span className='form-check-label text-gray-700 ms-2'>
+                                            {option.label}
+                                        </span>
+                                    </label>
+                                ))}
+                            </div>
+                            <div className='separator my-1'></div>
+                            <div className='d-flex justify-content-end gap-2 px-5 pt-3 pb-2'>
+                                <button
+                                    type='button'
+                                    className='btn btn-sm btn-light'
+                                    onClick={handleResetFilters}
+                                >
+                                    Reset
+                                </button>
+                                <button
+                                    type='button'
+                                    className='btn btn-sm btn-primary'
+                                    onClick={handleApplyFilters}
+                                >
+                                    Apply
+                                </button>
+                            </div>
+                        </CustomDropdown>
                     </div>
                 </div>
 

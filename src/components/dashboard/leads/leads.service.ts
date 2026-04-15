@@ -4,7 +4,7 @@ import { DealerType, Lead, LeadStatusApi, LeadsListResponse } from 'common/inter
 interface GetLeadsParams {
     top?: number;
     skip?: number;
-    status?: LeadStatusApi;
+    status?: LeadStatusApi | LeadStatusApi[];
 }
 
 export interface CreateLeadPayload {
@@ -41,7 +41,11 @@ const buildLeadsQuery = ({ top, skip, status }: GetLeadsParams): string => {
     if (typeof skip === 'number') {
         query.set('skip', String(skip));
     }
-    if (status) {
+    if (Array.isArray(status)) {
+        status.forEach((statusValue) => {
+            query.append('status', String(leadStatusToCode[statusValue]));
+        });
+    } else if (status) {
         query.set('status', String(leadStatusToCode[status]));
     }
 
