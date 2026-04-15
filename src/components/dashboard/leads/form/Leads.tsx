@@ -6,14 +6,8 @@ import { useCallback, useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { CustomPagination } from '../../helpers/pagination/renderPagination';
 import { useToast } from '../../helpers/renderToastHelper';
-import {
-    buildConvertLeadPayload,
-    convertLead,
-    deleteLead,
-    getLeads,
-    updateLeadStatus,
-} from '../leads.service';
-import { LeadsActionsCell } from './LeadsActionsCell';
+import { ActionButton } from '../../smallComponents/buttons/ActionButton';
+import { deleteLead, getLeads, updateLeadStatus } from '../leads.service';
 import { LEAD_STATUS_BY_CODE, STATUS_OPTIONS } from '../constants/leads.constants';
 
 const normalizeStatus = (lead: Lead): LeadStatusApi => {
@@ -26,7 +20,6 @@ const normalizeStatus = (lead: Lead): LeadStatusApi => {
     return 'submitted';
 };
 
-const isConvertible = (lead: Lead): boolean => normalizeStatus(lead) === 'approved';
 const getLeadUid = (lead: Lead): string => {
     const candidate =
         (lead as Lead & { uid?: string; id?: string; lead_uid?: string }).id ||
@@ -89,29 +82,6 @@ export const Leads = () => {
             await loadLeads();
             handleShowToast({
                 message: 'Lead status successfully updated',
-                type: 'success',
-            });
-        } catch (err) {
-            const { message } = err as Error | AxiosError;
-            handleShowToast({ message, type: 'danger' });
-        }
-    };
-
-    const handleConvert = async (lead: Lead, leaduid: string): Promise<void> => {
-        const hasFirstName = typeof lead.first_name === 'string' && lead.first_name.trim() !== '';
-        const hasLastName = typeof lead.last_name === 'string' && lead.last_name.trim() !== '';
-        if (!hasFirstName || !hasLastName) {
-            handleShowToast({
-                message: 'Lead must have first name and last name before conversion',
-                type: 'danger',
-            });
-            return;
-        }
-        try {
-            await convertLead(leaduid, buildConvertLeadPayload(lead));
-            await loadLeads();
-            handleShowToast({
-                message: 'Lead successfully converted',
                 type: 'success',
             });
         } catch (err) {
@@ -218,15 +188,36 @@ export const Leads = () => {
                                                 </select>
                                             </td>
                                             <td>
-                                                <LeadsActionsCell
-                                                    leaduid={leaduid}
-                                                    isConvertible={isConvertible(lead)}
-                                                    onOpen={() =>
-                                                        navigate(`/dashboard/lead/${leaduid}`)
-                                                    }
-                                                    onConvert={() => void handleConvert(lead, leaduid)}
-                                                    onDelete={() => void handleDelete(leaduid)}
-                                                />
+                                                {leaduid ? (
+                                                    <div className='d-flex align-items-center gap-2'>
+                                                        <ActionButton
+                                                            icon='pencil'
+                                                            iconOnly
+                                                            appearance='light'
+                                                            className='btn-sm'
+                                                            buttonClickAction={() =>
+                                                                navigate(
+                                                                    `/dashboard/lead/${leaduid}`
+                                                                )
+                                                            }
+                                                            aria-label='Edit lead'
+                                                            title='Edit'
+                                                        />
+                                                        <ActionButton
+                                                            icon='trash'
+                                                            iconOnly
+                                                            appearance='danger'
+                                                            className='btn-sm'
+                                                            buttonClickAction={() =>
+                                                                void handleDelete(leaduid)
+                                                            }
+                                                            aria-label='Delete lead'
+                                                            title='Delete'
+                                                        />
+                                                    </div>
+                                                ) : (
+                                                    <span className='text-muted'>-</span>
+                                                )}
                                             </td>
                                         </tr>
                                     );

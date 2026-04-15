@@ -4,7 +4,7 @@ import { ColumnInstance, Row, useTable } from 'react-table';
 import { DataExportsHeaderColumn } from './dataExportTable/DataExportHeaderColumn';
 import { DataExportsColumns } from './dataExportTable/DataExportColumns';
 import { DataExportsRow } from './dataExportTable/DataExportRow';
-import { PrimaryButton } from 'components/dashboard/smallComponents/buttons/PrimaryButton';
+import { ActionButton } from 'components/dashboard/smallComponents/buttons/ActionButton';
 import { DataExportRecord } from 'common/interfaces/DataExport';
 import { exportUserDataExport, getDataExports } from './DataExport.service';
 import { ActionStatus, Status } from 'common/interfaces/ActionStatus';
@@ -62,14 +62,14 @@ export const DataExports = ({ useruid }: { useruid: string }): JSX.Element => {
     return (
         <div className='card'>
             <div className='me-4 mt-4 ms-auto'>
-                <PrimaryButton
+                <ActionButton
                     disabled={loading}
                     icon={loading ? '' : 'file-up'}
                     buttonClickAction={() => setShowConfirm(true)}
                 >
                     {loading && <label className='spinner-border me-2' role='status' />}
                     Export
-                </PrimaryButton>
+                </ActionButton>
             </div>
             <div className='card-body'>
                 <div className='table-responsive position-relative '>

@@ -13,7 +13,7 @@ import {
     getLead,
     updateLeadStatus,
 } from '../leads.service';
-import { PrimaryButton } from '../../smallComponents/buttons/PrimaryButton';
+import { ActionButton } from '../../smallComponents/buttons/ActionButton';
 import { ConfirmModal } from '../../helpers/modal/confirmModal';
 import { LEAD_STATUS_BY_CODE, STATUS_OPTIONS } from '../constants/leads.constants';
 
@@ -342,21 +342,21 @@ export const LeadCard = () => {
                         </div>
                     </div>
                     <div className='d-flex align-items-center flex-wrap gap-3'>
-                        <PrimaryButton
+                        <ActionButton
                             icon='arrow-left'
                             buttonClickAction={() => navigate('/dashboard/leads')}
                             appearance='light'
                         >
                             Back to leads
-                        </PrimaryButton>
-                        <PrimaryButton
+                        </ActionButton>
+                        <ActionButton
                             icon='arrows-circle'
                             buttonClickAction={() => void fetchLead()}
                             disabled={isLoading || isActionLoading}
                         >
                             Refresh
-                        </PrimaryButton>
-                        <PrimaryButton
+                        </ActionButton>
+                        <ActionButton
                             icon='check-circle'
                             buttonClickAction={() => void handleConvert()}
                             appearance='primary'
@@ -368,8 +368,8 @@ export const LeadCard = () => {
                             }
                         >
                             Convert
-                        </PrimaryButton>
-                        <PrimaryButton
+                        </ActionButton>
+                        <ActionButton
                             className='ms-auto'
                             icon='trash'
                             buttonClickAction={() => setIsDeleteModalOpen(true)}
@@ -377,7 +377,7 @@ export const LeadCard = () => {
                             disabled={!id || isLoading || isActionLoading}
                         >
                             Delete
-                        </PrimaryButton>
+                        </ActionButton>
                     </div>
                 </div>
             </div>
