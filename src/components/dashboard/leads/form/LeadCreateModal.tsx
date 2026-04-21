@@ -226,7 +226,7 @@ export const LeadCreateModal = ({ onClose, onCreated }: LeadCreateModalProps): J
                     />
                     {renderError('zip')}
                 </div>
-                <div className='col-md-6'>
+                <div className='col-md-12'>
                     <label className='form-label fw-bolder text-dark'>Notes</label>
                     <input
                         type='text'
@@ -237,24 +237,6 @@ export const LeadCreateModal = ({ onClose, onCreated }: LeadCreateModalProps): J
                         })}
                     />
                     {renderError('notes')}
-                </div>
-                <div className='col-md-6'>
-                    <label className='form-label fw-bolder text-dark'>Referral code</label>
-                    <input
-                        type='text'
-                        autoComplete='off'
-                        {...formik.getFieldProps('referral_code')}
-                        className='form-control'
-                    />
-                </div>
-                <div className='col-md-12'>
-                    <label className='form-label fw-bolder text-dark'>Source details</label>
-                    <input
-                        type='text'
-                        autoComplete='off'
-                        {...formik.getFieldProps('source_details')}
-                        className='form-control'
-                    />
                 </div>
             </div>
             <div className='mt-10 d-flex justify-content-center gap-3'>
