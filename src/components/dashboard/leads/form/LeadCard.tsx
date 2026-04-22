@@ -1,7 +1,8 @@
-import { AxiosError } from 'axios';
 import { Lead, LeadStatusApi } from 'common/interfaces/Lead';
 import { leadsKeys } from 'common/app-consts';
+import { getApiErrorMessage } from 'common/error-utils';
 import { ShowEmptyLeadFields } from 'common/settings/settings';
+import { humanizeSnakeCase, isEmptyValue, toStringOrEmpty } from 'common/utils';
 import { formatServerDateForDisplay } from 'components/dashboard/helpers/common';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -11,23 +12,19 @@ import {
     convertLead,
     deleteLead,
     getLead,
+    updateLead,
+    UpdateLeadPayload,
     updateLeadStatus,
 } from '../leads.service';
 import { ActionButton } from '../../smallComponents/buttons/ActionButton';
 import { ConfirmModal } from '../../helpers/modal/confirmModal';
 import { LEAD_STATUS_BY_CODE, STATUS_OPTIONS } from '../constants/leads.constants';
 
-const isEmpty = (value: unknown): boolean => {
-    if (value === null || value === undefined) return true;
-    if (typeof value === 'string' && value.trim() === '') return true;
-    return false;
-};
-
 const isDateLikeFieldKey = (fieldKey: string): boolean =>
     fieldKey === 'created' || fieldKey === 'updated' || fieldKey.endsWith('_at');
 
 const formatFieldValue = (fieldKey: string, value: unknown): string => {
-    if (isEmpty(value)) {
+    if (isEmptyValue(value)) {
         return '-';
     }
     if (typeof value === 'boolean') {
@@ -69,11 +66,6 @@ const LEAD_FIELD_ORDER: LeadField[] = [
     'review_notes',
 ];
 
-const humanizeKey = (key: string): string =>
-    key
-        .replace(/_/g, ' ')
-        .replace(/\b\w/g, (char, index) => (index === 0 ? char.toUpperCase() : char));
-
 const sortLeadKeys = (keys: string[]): string[] => {
     const orderMap = new Map(LEAD_FIELD_ORDER.map((fieldKey, index) => [fieldKey, index]));
     const unknownRank = LEAD_FIELD_ORDER.length;
@@ -109,6 +101,24 @@ const formatStatusLabel = (status: LeadStatusApi): string =>
 
 const companyFields: LeadField[] = ['company_name', 'company_address', 'city', 'state', 'zip'];
 const contactFields: LeadField[] = ['first_name', 'last_name', 'email', 'phone'];
+
+const editableFields: LeadField[] = [...companyFields, ...contactFields];
+const requiredEditableFields: LeadField[] = ['company_name', 'email'];
+
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+const inputTypeByFieldKey = (fieldKey: LeadField): string => {
+    if (fieldKey === 'email') return 'email';
+    if (fieldKey === 'phone') return 'tel';
+    return 'text';
+};
+
+const buildDraftFromRecord = (record: Record<string, unknown> | null): Record<string, string> => {
+    return editableFields.reduce<Record<string, string>>((acc, fieldKey) => {
+        acc[fieldKey] = toStringOrEmpty(record?.[fieldKey]);
+        return acc;
+    }, {});
+};
 const generalFields: LeadField[] = [
     'status',
     'lead_status',
@@ -136,6 +146,10 @@ export const LeadCard = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [isDeleteModalOpen, setIsDeleteModalOpen] = useState<boolean>(false);
     const [isActionLoading, setIsActionLoading] = useState<boolean>(false);
+    const [editDraft, setEditDraft] = useState<Record<string, string>>({});
+    const [editErrors, setEditErrors] = useState<Record<string, string>>({});
+    const [isSaving, setIsSaving] = useState<boolean>(false);
+    const [pendingStatus, setPendingStatus] = useState<LeadStatusApi | null>(null);
     const { handleShowToast } = useToast();
     const navigate = useNavigate();
     const showToastRef = useRef(handleShowToast);
@@ -144,6 +158,12 @@ export const LeadCard = () => {
         showToastRef.current = handleShowToast;
     }, [handleShowToast]);
 
+    useEffect(() => {
+        setEditDraft(buildDraftFromRecord(leadRecord));
+        setEditErrors({});
+        setPendingStatus(null);
+    }, [leadRecord]);
+
     const fetchLead = useCallback(async (): Promise<void> => {
         if (!id) return;
         setIsLoading(true);
@@ -151,8 +171,10 @@ export const LeadCard = () => {
             const data = await getLead(id);
             setLeadRecord(data as unknown as Record<string, unknown>);
         } catch (err) {
-            const { message } = err as Error | AxiosError;
-            showToastRef.current({ message, type: 'danger' });
+            showToastRef.current({
+                message: getApiErrorMessage(err, 'Failed to load lead'),
+                type: 'danger',
+            });
             setLeadRecord(null);
         } finally {
             setIsLoading(false);
@@ -160,7 +182,7 @@ export const LeadCard = () => {
     }, [id]);
 
     const shouldDisplayField = useCallback(
-        (value: unknown): boolean => ShowEmptyLeadFields || !isEmpty(value),
+        (value: unknown): boolean => ShowEmptyLeadFields || !isEmptyValue(value),
         []
     );
 
@@ -199,23 +221,101 @@ export const LeadCard = () => {
         () => rows.filter(({ key }) => !displayedSectionKeys.has(key as LeadField)),
         [rows, displayedSectionKeys]
     );
+    const selectedStatus = pendingStatus ?? status;
     const canConvert = status === 'approved' && !isLoading && !isActionLoading;
     const showConversionInfo = status === 'converted' || conversionRows.length > 0;
 
     const getFieldValue = useCallback(
         (fieldKey: string): unknown => {
             if (fieldKey === 'lead_status') {
-                return formatStatusLabel(status);
+                return formatStatusLabel(selectedStatus);
             }
             return leadRecord?.[fieldKey];
         },
-        [leadRecord, status]
+        [leadRecord, selectedStatus]
     );
 
-    const renderSection = (title: string, fieldKeys: LeadField[]) => {
+    const handleDraftChange = (fieldKey: string, value: string) => {
+        setEditDraft((prev) => ({ ...prev, [fieldKey]: value }));
+        if (editErrors[fieldKey]) {
+            setEditErrors((prev) => {
+                const next = { ...prev };
+                delete next[fieldKey];
+                return next;
+            });
+        }
+    };
+
+    const validateDraft = (): Record<string, string> => {
+        const errors: Record<string, string> = {};
+        editableFields.forEach((fieldKey) => {
+            const raw = (editDraft[fieldKey] ?? '').trim();
+            if (requiredEditableFields.includes(fieldKey) && !raw) {
+                errors[fieldKey] = `${
+                    leadsKeys[fieldKey] ?? humanizeSnakeCase(fieldKey)
+                } is required`;
+                return;
+            }
+            if (fieldKey === 'email' && raw && !EMAIL_PATTERN.test(raw)) {
+                errors[fieldKey] = 'Invalid email format';
+            }
+        });
+        return errors;
+    };
+
+    const originalDraft = useMemo(() => buildDraftFromRecord(leadRecord), [leadRecord]);
+    const hasEditableChanges = useMemo(
+        () =>
+            editableFields.some(
+                (fieldKey) => (editDraft[fieldKey] ?? '') !== originalDraft[fieldKey]
+            ),
+        [editDraft, originalDraft]
+    );
+    const hasStatusChanges = pendingStatus !== null && pendingStatus !== status;
+    const isDirty = hasEditableChanges || hasStatusChanges;
+
+    const handleSave = async () => {
+        if (!id) return;
+        const errors = validateDraft();
+        if (Object.keys(errors).length > 0) {
+            setEditErrors(errors);
+            return;
+        }
+        try {
+            setIsSaving(true);
+            if (hasEditableChanges) {
+                const payload: UpdateLeadPayload = editableFields.reduce<UpdateLeadPayload>(
+                    (acc, fieldKey) => {
+                        const raw = (editDraft[fieldKey] ?? '').trim();
+                        (acc as Record<string, string>)[fieldKey] = raw;
+                        return acc;
+                    },
+                    {}
+                );
+                await updateLead(id, payload);
+            }
+            if (hasStatusChanges && pendingStatus) {
+                await updateLeadStatus(id, pendingStatus);
+            }
+            await fetchLead();
+            handleShowToast({
+                message: 'Lead successfully updated',
+                type: 'success',
+            });
+        } catch (err) {
+            handleShowToast({
+                message: getApiErrorMessage(err, 'Failed to update lead'),
+                type: 'danger',
+            });
+        } finally {
+            setIsSaving(false);
+        }
+    };
+
+    const renderSection = (title: string, fieldKeys: LeadField[], editable = false) => {
         const sectionRows = fieldKeys
             .map((fieldKey) => ({ key: fieldKey, value: getFieldValue(fieldKey) }))
-            .filter(({ value }) => shouldDisplayField(value));
+            .filter(({ value }) => editable || shouldDisplayField(value));
 
         return (
             <div className='card shadow-sm mb-6'>
@@ -226,40 +326,63 @@ export const LeadCard = () => {
                     {sectionRows.length === 0 ? (
                         <div className='text-muted'>No data available.</div>
                     ) : (
-                        sectionRows.map(({ key, value }) => (
-                            <div className='row mb-5' key={key}>
-                                <label className='col-lg-4 fw-bold text-muted'>
-                                    {leadsKeys[key] ?? humanizeKey(key)}
-                                </label>
-                                <div className='col-lg-8'>
-                                    <span className='fw-bolder fs-6 text-dark'>
-                                        {formatFieldValue(key, value)}
-                                    </span>
+                        sectionRows.map(({ key, value }) => {
+                            const label = leadsKeys[key] ?? humanizeSnakeCase(key);
+                            if (editable) {
+                                const isRequired = requiredEditableFields.includes(key);
+                                const errorMessage = editErrors[key];
+                                return (
+                                    <div className='row mb-5 col-md-6' key={key}>
+                                        <label
+                                            className={`col-lg-4 fw-bold text-muted ${
+                                                isRequired ? 'required' : ''
+                                            }`}
+                                        >
+                                            {label}
+                                        </label>
+                                        <div className='col-lg-8'>
+                                            <input
+                                                type={inputTypeByFieldKey(key)}
+                                                autoComplete='off'
+                                                className={`form-control form-control-sm ${
+                                                    errorMessage ? 'is-invalid' : ''
+                                                }`}
+                                                value={editDraft[key] ?? ''}
+                                                onChange={(event) =>
+                                                    handleDraftChange(key, event.target.value)
+                                                }
+                                                disabled={isSaving || isLoading || isActionLoading}
+                                            />
+                                            {errorMessage && (
+                                                <div className='fv-plugins-message-container'>
+                                                    <span role='alert' className='text-danger'>
+                                                        {errorMessage}
+                                                    </span>
+                                                </div>
+                                            )}
+                                        </div>
+                                    </div>
+                                );
+                            }
+                            return (
+                                <div className='row mb-5 col-md-6' key={key}>
+                                    <label className='col-lg-4 fw-bold text-muted'>{label}</label>
+                                    <div className='col-lg-8'>
+                                        <span className='fw-bolder fs-6 text-dark'>
+                                            {formatFieldValue(key, value)}
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                        ))
+                            );
+                        })
                     )}
                 </div>
             </div>
         );
     };
 
-    const handleStatusChange = async (newStatus: LeadStatusApi) => {
-        if (!id || !leadRecord || newStatus === status) return;
-        try {
-            setIsActionLoading(true);
-            await updateLeadStatus(id, newStatus);
-            await fetchLead();
-            handleShowToast({
-                message: 'Lead status successfully updated',
-                type: 'success',
-            });
-        } catch (err) {
-            const { message } = err as Error | AxiosError;
-            handleShowToast({ message, type: 'danger' });
-        } finally {
-            setIsActionLoading(false);
-        }
+    const handleStatusChange = (newStatus: LeadStatusApi) => {
+        setPendingStatus(newStatus === status ? null : newStatus);
     };
 
     const handleConvert = async () => {
@@ -285,8 +408,10 @@ export const LeadCard = () => {
                 type: 'success',
             });
         } catch (err) {
-            const { message } = err as Error | AxiosError;
-            handleShowToast({ message, type: 'danger' });
+            handleShowToast({
+                message: getApiErrorMessage(err, 'Failed to convert lead'),
+                type: 'danger',
+            });
         } finally {
             setIsActionLoading(false);
         }
@@ -304,8 +429,10 @@ export const LeadCard = () => {
             });
             navigate('/dashboard/leads');
         } catch (err) {
-            const { message } = err as Error | AxiosError;
-            handleShowToast({ message, type: 'danger' });
+            handleShowToast({
+                message: getApiErrorMessage(err, 'Failed to delete lead'),
+                type: 'danger',
+            });
         } finally {
             setIsActionLoading(false);
         }
@@ -327,10 +454,10 @@ export const LeadCard = () => {
                             <label className='text-muted fw-bold mb-0'>Status</label>
                             <select
                                 className='form-select form-select-sm w-175px'
-                                value={status}
-                                disabled={!id || isLoading || isActionLoading}
+                                value={selectedStatus}
+                                disabled={!id || isLoading || isActionLoading || isSaving}
                                 onChange={(event) =>
-                                    void handleStatusChange(event.target.value as LeadStatusApi)
+                                    handleStatusChange(event.target.value as LeadStatusApi)
                                 }
                             >
                                 {STATUS_OPTIONS.map((option) => (
@@ -344,6 +471,7 @@ export const LeadCard = () => {
                     <div className='d-flex align-items-center flex-wrap gap-3'>
                         <ActionButton
                             icon='arrow-left'
+                            className='w-175px'
                             buttonClickAction={() => navigate('/dashboard/leads')}
                             appearance='light'
                         >
@@ -351,6 +479,7 @@ export const LeadCard = () => {
                         </ActionButton>
                         <ActionButton
                             icon='arrows-circle'
+                            className='w-175px'
                             buttonClickAction={() => void fetchLead()}
                             disabled={isLoading || isActionLoading}
                         >
@@ -358,6 +487,7 @@ export const LeadCard = () => {
                         </ActionButton>
                         <ActionButton
                             icon='check-circle'
+                            className='w-175px'
                             buttonClickAction={() => void handleConvert()}
                             appearance='primary'
                             disabled={!canConvert}
@@ -370,11 +500,20 @@ export const LeadCard = () => {
                             Convert
                         </ActionButton>
                         <ActionButton
-                            className='ms-auto'
+                            className='ms-auto w-175px'
+                            icon='check'
+                            buttonClickAction={() => void handleSave()}
+                            appearance='primary'
+                            disabled={!id || isLoading || isActionLoading || isSaving || !isDirty}
+                        >
+                            {isSaving ? 'Saving...' : 'Save'}
+                        </ActionButton>
+                        <ActionButton
                             icon='trash'
+                            className='w-175px'
                             buttonClickAction={() => setIsDeleteModalOpen(true)}
                             appearance='danger'
-                            disabled={!id || isLoading || isActionLoading}
+                            disabled={!id || isLoading || isActionLoading || isSaving}
                         >
                             Delete
                         </ActionButton>
@@ -393,8 +532,8 @@ export const LeadCard = () => {
                 )}
                 {leadRecord && (
                     <>
-                        {renderSection('Company', companyFields)}
-                        {renderSection('Contact', contactFields)}
+                        {renderSection('Company', companyFields, true)}
+                        {renderSection('Contact', contactFields, true)}
                         {renderSection('General', generalFields)}
                         {showConversionInfo && (
                             <div className='card shadow-sm mb-6'>
@@ -408,9 +547,9 @@ export const LeadCard = () => {
                                         </div>
                                     ) : (
                                         conversionRows.map(({ key, value }) => (
-                                            <div className='row mb-5' key={key}>
+                                            <div className='row mb-5 col-md-6' key={key}>
                                                 <label className='col-lg-4 fw-bold text-muted'>
-                                                    {leadsKeys[key] ?? humanizeKey(key)}
+                                                    {leadsKeys[key] ?? humanizeSnakeCase(key)}
                                                 </label>
                                                 <div className='col-lg-8'>
                                                     <span className='fw-bolder fs-6 text-dark'>
@@ -430,9 +569,9 @@ export const LeadCard = () => {
                                 </div>
                                 <div className='card-body py-6'>
                                     {otherRows.map(({ key, value }) => (
-                                        <div className='row mb-5' key={key}>
+                                        <div className='row mb-5 col-md-6' key={key}>
                                             <label className='col-lg-4 fw-bold text-muted'>
-                                                {leadsKeys[key] ?? humanizeKey(key)}
+                                                {leadsKeys[key] ?? humanizeSnakeCase(key)}
                                             </label>
                                             <div className='col-lg-8'>
                                                 <span className='fw-bolder fs-6 text-dark'>

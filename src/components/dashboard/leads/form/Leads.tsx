@@ -1,5 +1,5 @@
-import { AxiosError } from 'axios';
 import { Lead, LeadStatusApi } from 'common/interfaces/Lead';
+import { getApiErrorMessage } from 'common/error-utils';
 import { DefaultRecordsPerPage, RecordsPerPage } from 'common/settings/settings';
 import { formatServerDateForDisplay } from 'components/dashboard/helpers/common';
 import { useCallback, useEffect, useState } from 'react';
@@ -71,8 +71,10 @@ export const Leads = () => {
             setLeads(response.leads || []);
             setTotal(response.total || 0);
         } catch (err) {
-            const { message } = err as Error | AxiosError;
-            handleShowToast({ message, type: 'danger' });
+            handleShowToast({
+                message: getApiErrorMessage(err, 'Failed to load leads'),
+                type: 'danger',
+            });
         } finally {
             setIsLoading(false);
         }
@@ -119,8 +121,10 @@ export const Leads = () => {
                 type: 'success',
             });
         } catch (err) {
-            const { message } = err as Error | AxiosError;
-            handleShowToast({ message, type: 'danger' });
+            handleShowToast({
+                message: getApiErrorMessage(err, 'Failed to update lead status'),
+                type: 'danger',
+            });
         }
     };
 
@@ -143,8 +147,10 @@ export const Leads = () => {
                 type: 'success',
             });
         } catch (err) {
-            const { message } = err as Error | AxiosError;
-            handleShowToast({ message, type: 'danger' });
+            handleShowToast({
+                message: getApiErrorMessage(err, 'Failed to delete lead'),
+                type: 'danger',
+            });
         }
     };
 

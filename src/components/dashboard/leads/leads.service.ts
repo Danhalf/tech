@@ -1,5 +1,6 @@
 import { fetchApiData } from 'common/api/fetchAPI';
 import { DealerType, Lead, LeadStatusApi, LeadsListResponse } from 'common/interfaces/Lead';
+import { trimToUndefined } from 'common/utils';
 
 interface GetLeadsParams {
     top?: number;
@@ -78,6 +79,22 @@ export const updateLeadStatus = (
     );
 };
 
+export interface UpdateLeadPayload {
+    company_name?: string;
+    company_address?: string;
+    city?: string;
+    state?: string;
+    zip?: string;
+    first_name?: string;
+    last_name?: string;
+    email?: string;
+    phone?: string;
+}
+
+export const updateLead = (leaduid: string, data: UpdateLeadPayload): Promise<Lead> => {
+    return fetchApiData<Lead>('PATCH', `lead/${leaduid}`, { data });
+};
+
 export interface ConvertLeadPayload {
     admin_username?: string;
     first_name?: string;
@@ -94,20 +111,14 @@ export interface ConvertLeadPayload {
     notes?: string;
 }
 
-const normalizeString = (value: unknown): string | undefined => {
-    if (typeof value !== 'string') return undefined;
-    const normalized = value.trim();
-    return normalized ? normalized : undefined;
-};
-
 export const buildConvertLeadPayload = (lead: Partial<Lead>): ConvertLeadPayload => {
-    const firstName = normalizeString(lead.first_name);
-    const lastName = normalizeString(lead.last_name);
-    const email = normalizeString(lead.email);
+    const firstName = trimToUndefined(lead.first_name);
+    const lastName = trimToUndefined(lead.last_name);
+    const email = trimToUndefined(lead.email);
     const emailLocalPart = email?.split('@')[0];
-    const leadId = normalizeString(lead.id);
+    const leadId = trimToUndefined(lead.id);
     const leadBasedUsername = leadId ? `lead_${leadId.replace(/[^a-zA-Z0-9_]/g, '_')}` : undefined;
-    const adminUsername = normalizeString(
+    const adminUsername = trimToUndefined(
         [firstName, lastName].filter(Boolean).join('.').toLowerCase() ||
             emailLocalPart ||
             leadBasedUsername ||
@@ -119,15 +130,15 @@ export const buildConvertLeadPayload = (lead: Partial<Lead>): ConvertLeadPayload
         first_name: firstName,
         last_name: lastName,
         email,
-        phone: normalizeString(lead.phone),
-        company_name: normalizeString(lead.company_name),
-        company_address: normalizeString(lead.company_address),
-        city: normalizeString(lead.city),
-        state: normalizeString(lead.state),
-        zip: normalizeString(lead.zip),
-        dealer_type: normalizeString(lead.dealer_type),
-        referral_code: normalizeString(lead.referral_code),
-        notes: normalizeString(lead.notes),
+        phone: trimToUndefined(lead.phone),
+        company_name: trimToUndefined(lead.company_name),
+        company_address: trimToUndefined(lead.company_address),
+        city: trimToUndefined(lead.city),
+        state: trimToUndefined(lead.state),
+        zip: trimToUndefined(lead.zip),
+        dealer_type: trimToUndefined(lead.dealer_type),
+        referral_code: trimToUndefined(lead.referral_code),
+        notes: trimToUndefined(lead.notes),
     };
 };
 

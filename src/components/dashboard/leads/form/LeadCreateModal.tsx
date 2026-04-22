@@ -1,6 +1,7 @@
 import clsx from 'clsx';
 import { useFormik } from 'formik';
 import { DealerType } from 'common/interfaces/Lead';
+import { getApiErrorMessage } from 'common/error-utils';
 import { useToast } from 'components/dashboard/helpers/renderToastHelper';
 import * as Yup from 'yup';
 import { createLead, CreateLeadPayload } from 'components/dashboard/leads/leads.service';
@@ -79,10 +80,8 @@ export const LeadCreateModal = ({ onClose, onCreated }: LeadCreateModalProps): J
                     onClose();
                 }
             } catch (err: any) {
-                const warning = err?.response?.data?.warning as string | undefined;
-                const errorText = err?.response?.data?.error as string | undefined;
                 handleShowToast({
-                    message: warning || errorText || 'Failed to create lead',
+                    message: getApiErrorMessage(err, 'Failed to create lead'),
                     type: 'danger',
                 });
             } finally {
