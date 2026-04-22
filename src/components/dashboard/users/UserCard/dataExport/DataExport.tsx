@@ -1,12 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { useState, useEffect, useMemo } from 'react';
 import { ColumnInstance, Row, useTable } from 'react-table';
-import { DataExportsHeaderColumn } from './dataExportTable/DataExportHeaderColumn';
-import { DataExportsColumns } from './dataExportTable/DataExportColumns';
-import { DataExportsRow } from './dataExportTable/DataExportRow';
+import { DataExportsHeaderColumn } from 'components/dashboard/users/UserCard/dataExport/dataExportTable/DataExportHeaderColumn';
+import { DataExportsColumns } from 'components/dashboard/users/UserCard/dataExport/dataExportTable/DataExportColumns';
+import { DataExportsRow } from 'components/dashboard/users/UserCard/dataExport/dataExportTable/DataExportRow';
 import { ActionButton } from 'components/dashboard/smallComponents/buttons/ActionButton';
 import { DataExportRecord } from 'common/interfaces/DataExport';
-import { exportUserDataExport, getDataExports } from './DataExport.service';
+import {
+    exportUserDataExport,
+    getDataExports,
+} from 'components/dashboard/users/UserCard/dataExport/DataExport.service';
 import { ActionStatus, Status } from 'common/interfaces/ActionStatus';
 import { AxiosError } from 'axios';
 import { ConfirmModal } from 'components/dashboard/helpers/modal/confirmModal';

@@ -6,7 +6,7 @@ import { humanizeSnakeCase, isEmptyValue, toStringOrEmpty } from 'common/utils';
 import { formatServerDateForDisplay } from 'components/dashboard/helpers/common';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useToast } from '../../helpers/renderToastHelper';
+import { useToast } from 'components/dashboard/helpers/renderToastHelper';
 import {
     buildConvertLeadPayload,
     convertLead,
@@ -15,10 +15,13 @@ import {
     updateLead,
     UpdateLeadPayload,
     updateLeadStatus,
-} from '../leads.service';
-import { ActionButton } from '../../smallComponents/buttons/ActionButton';
-import { ConfirmModal } from '../../helpers/modal/confirmModal';
-import { LEAD_STATUS_BY_CODE, STATUS_OPTIONS } from '../constants/leads.constants';
+} from 'components/dashboard/leads/leads.service';
+import { ActionButton } from 'components/dashboard/smallComponents/buttons/ActionButton';
+import { ConfirmModal } from 'components/dashboard/helpers/modal/confirmModal';
+import {
+    LEAD_STATUS_BY_CODE,
+    STATUS_OPTIONS,
+} from 'components/dashboard/leads/constants/leads.constants';
 
 const isDateLikeFieldKey = (fieldKey: string): boolean =>
     fieldKey === 'created' || fieldKey === 'updated' || fieldKey.endsWith('_at');

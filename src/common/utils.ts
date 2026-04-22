@@ -1,4 +1,4 @@
-import { LOC_STORAGE_USER } from './app-consts';
+import { LOC_STORAGE_USER } from 'common/app-consts';
 
 export function getToken(): string | null {
     const userLocalStorage = localStorage.getItem(LOC_STORAGE_USER);

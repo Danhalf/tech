@@ -2,11 +2,11 @@ import { QueryRequestProvider } from 'common/core/QueryRequestProvider';
 import { QueryResponseProvider } from 'common/core/QueryResponseProvider';
 import { UsersListType, UsersType } from 'common/interfaces/UserData';
 import { useState } from 'react';
-import { CustomModal } from '../helpers/modal/renderModalHelper';
-import { ActionButton } from '../smallComponents/buttons/ActionButton';
-import { UsersListSearchComponent } from '../smallComponents/search/Search';
-import { UserModal } from './UserModal/parts/UserModal';
-import { UsersTable } from './table/UsersTable';
+import { CustomModal } from 'components/dashboard/helpers/modal/renderModalHelper';
+import { ActionButton } from 'components/dashboard/smallComponents/buttons/ActionButton';
+import { UsersListSearchComponent } from 'components/dashboard/smallComponents/search/Search';
+import { UserModal } from 'components/dashboard/users/UserModal/parts/UserModal';
+import { UsersTable } from 'components/dashboard/users/table/UsersTable';
 
 export const Users = () => {
     const [activeTab] = useState<UsersListType>(UsersType.ACTIVE);
