@@ -330,7 +330,9 @@ export const DealerCard = () => {
                         <DealerVerificationCard dealer={dealer} />
                         <DealerUsersCard
                             users={users}
+                            dealerId={id}
                             onOpenUser={(useruid) => navigate(`/dashboard/user/${useruid}`)}
+                            onUserCreated={() => void fetchUsers()}
                         />
                         <DealerLicensesCard licenses={licenses} />
                     </>
