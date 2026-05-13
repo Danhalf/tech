@@ -32,6 +32,7 @@ import {
     EMAIL_PATTERN,
     fieldLabel,
     getDealerName,
+    isEditableDateFieldKey,
     licenseFields,
     normalizeStatus,
     requiredEditableFields,
@@ -177,6 +178,11 @@ export const DealerCard = () => {
             if ((fieldKey === 'email_company' || fieldKey === 'email_contact') && raw) {
                 if (!EMAIL_PATTERN.test(raw)) {
                     errors[fieldKey] = 'Invalid email format';
+                }
+            }
+            if (isEditableDateFieldKey(fieldKey) && raw) {
+                if (!/^\d{4}-\d{2}-\d{2}$/.test(raw)) {
+                    errors[fieldKey] = 'Use yyyy-mm-dd format';
                 }
             }
         });
