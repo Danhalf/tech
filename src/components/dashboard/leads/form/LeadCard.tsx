@@ -45,7 +45,6 @@ const LEAD_FIELD_ORDER: LeadField[] = [
     'id',
     'created',
     'updated',
-    'status',
     'lead_status',
     'status_code',
     'source',
@@ -123,7 +122,6 @@ const buildDraftFromRecord = (record: Record<string, unknown> | null): Record<st
     }, {});
 };
 const generalFields: LeadField[] = [
-    'status',
     'lead_status',
     'source',
     'referral_code',
@@ -221,7 +219,10 @@ export const LeadCard = () => {
         []
     );
     const otherRows = useMemo(
-        () => rows.filter(({ key }) => !displayedSectionKeys.has(key as LeadField)),
+        () =>
+            rows.filter(
+                ({ key }) => !displayedSectionKeys.has(key as LeadField) && key !== 'status'
+            ),
         [rows, displayedSectionKeys]
     );
     const selectedStatus = pendingStatus ?? status;
