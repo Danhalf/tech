@@ -70,6 +70,11 @@
     background-image: url('_metronic/assets/images/sign-in-bg.png');
 }
 
+.table-responsive:not(.table-responsive-horizontal) {
+    height: min(1200px, 64vh);
+    overflow-y: auto;
+}
+
 .table-row-dashed tbody tr {
     transition: background-color 0.15s ease;
 }
