@@ -69,7 +69,7 @@ export const CustomPagination = ({
     };
 
     return (
-        <div className='w-100 py-6 col-sm-12 col-md-7 d-flex align-items-center justify-content-center'>
+        <div className='table-card-pagination w-100 py-6 col-sm-12 col-md-7 d-flex align-items-center justify-content-center'>
             <div id='kt_table_users_paginate'>
                 <ul className='pagination'>
                     <li
